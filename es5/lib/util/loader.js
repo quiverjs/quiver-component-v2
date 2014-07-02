@@ -28,6 +28,8 @@ var loadHandleable = (function(config, key, builder) {
   if (handleable)
     return resolve(handleable);
   return builder(config).then((function(handleable) {
+    if (!handleable)
+      return reject(new Error('handleable is not defined in builder result'));
     handlerMap.set(key, handleable);
     return handleable;
   }));

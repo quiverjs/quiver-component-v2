@@ -3,13 +3,18 @@ import 'traceur'
 import { resolve } from 'quiver-promise'
 import { streamableToText, textToStreamable } from 'quiver-stream-util'
 
-import { SimpleHandler } from '../lib/simple-handler.js'
+import { 
+  SimpleHandler, SimpleHandlerBuilder 
+} from '../lib/simple-handler.js'
+
 import { StreamFilter } from '../lib/filter.js'
 import { TransformFilter } from '../lib/transform-filter.js'
 
 import { 
   ArgsFilter, ArgsBuilderFilter, ErrorFilter 
 } from '../lib/simple-filter.js'
+
+import { InputHandlerMiddleware } from '../lib/input-handler.js'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
@@ -134,5 +139,38 @@ describe('filter test', () => {
 
     return handlerComponent.loadHandler({}).then(handler =>
       handler({})).should.eventually.equal('error caught from filter')
+  })
+
+  it('input handler', () => {
+    var builder = config => {
+      var inHandler = config.inHandler
+      should.exist(inHandler)
+
+      return (args, input) =>
+        inHandler(args, input).then(result => ({
+          status: 'ok',
+          result
+        }))
+    }
+
+    var handlerComponent = new SimpleHandlerBuilder(builder, 
+      { inType: 'text', outType: 'json' })
+
+    var inputHandler = (args, input) => 
+      input.toUpperCase() + '!'
+
+    var inputComponent = new SimpleHandler(inputHandler, 
+      { inType: 'text', outType: 'text' })
+
+    var filterComponent = new InputHandlerMiddleware(inputComponent,
+      { toConfig: 'inHandler' })
+
+    handlerComponent.addMiddleware(filterComponent)
+
+    return handlerComponent.loadHandler({}).then(handler =>
+      handler({}, 'hello').then(json => {
+        json.status.should.equal('ok')
+        json.result.should.equal('HELLO!')
+      }))
   })
 })

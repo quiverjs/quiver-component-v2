@@ -4,13 +4,16 @@ var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     streamableToText = $__0.streamableToText,
     textToStreamable = $__0.textToStreamable;
-var SimpleHandler = $traceurRuntime.assertObject(require('../lib/simple-handler.js')).SimpleHandler;
+var $__0 = $traceurRuntime.assertObject(require('../lib/simple-handler.js')),
+    SimpleHandler = $__0.SimpleHandler,
+    SimpleHandlerBuilder = $__0.SimpleHandlerBuilder;
 var StreamFilter = $traceurRuntime.assertObject(require('../lib/filter.js')).StreamFilter;
 var TransformFilter = $traceurRuntime.assertObject(require('../lib/transform-filter.js')).TransformFilter;
 var $__0 = $traceurRuntime.assertObject(require('../lib/simple-filter.js')),
     ArgsFilter = $__0.ArgsFilter,
     ArgsBuilderFilter = $__0.ArgsBuilderFilter,
     ErrorFilter = $__0.ErrorFilter;
+var InputHandlerMiddleware = $traceurRuntime.assertObject(require('../lib/input-handler.js')).InputHandlerMiddleware;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -123,5 +126,38 @@ describe('filter test', (function() {
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({});
     })).should.eventually.equal('error caught from filter');
+  }));
+  it('input handler', (function() {
+    var builder = (function(config) {
+      var inHandler = config.inHandler;
+      should.exist(inHandler);
+      return (function(args, input) {
+        return inHandler(args, input).then((function(result) {
+          return ({
+            status: 'ok',
+            result: result
+          });
+        }));
+      });
+    });
+    var handlerComponent = new SimpleHandlerBuilder(builder, {
+      inType: 'text',
+      outType: 'json'
+    });
+    var inputHandler = (function(args, input) {
+      return input.toUpperCase() + '!';
+    });
+    var inputComponent = new SimpleHandler(inputHandler, {
+      inType: 'text',
+      outType: 'text'
+    });
+    var filterComponent = new InputHandlerMiddleware(inputComponent, {toConfig: 'inHandler'});
+    handlerComponent.addMiddleware(filterComponent);
+    return handlerComponent.loadHandler({}).then((function(handler) {
+      return handler({}, 'hello').then((function(json) {
+        json.status.should.equal('ok');
+        json.result.should.equal('HELLO!');
+      }));
+    }));
   }));
 }));
