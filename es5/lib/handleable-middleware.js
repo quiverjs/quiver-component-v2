@@ -6,8 +6,9 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
-var MiddlewareComponent = $traceurRuntime.assertObject(require('./middleware.js')).MiddlewareComponent;
+var MiddlewareComponent = $traceurRuntime.assertObject(require('./component.js')).MiddlewareComponent;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var combineMiddlewares = $traceurRuntime.assertObject(require('./util/middleware.js')).combineMiddlewares;
 var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._rawHandleableMiddleware = handleableMiddleware;

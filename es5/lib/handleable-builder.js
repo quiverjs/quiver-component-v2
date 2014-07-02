@@ -10,7 +10,7 @@ Object.defineProperties(exports, {
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
-var HandlerComponent = $traceurRuntime.assertObject(require('./handler.js')).HandlerComponent;
+var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
 var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var combineBuilderWithMiddleware = $traceurRuntime.assertObject(require('./util/middleware.js')).combineBuilderWithMiddleware;

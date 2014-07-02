@@ -5,6 +5,7 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
+var MiddlewareComponent = $traceurRuntime.assertObject(require('./component.js')).MiddlewareComponent;
 var combineMiddlewareComponents = $traceurRuntime.assertObject(require('./util/middleware.js')).combineMiddlewareComponents;
 var mixinMiddlewareExtensible = (function(Class) {
   var proto = Class.prototype;
