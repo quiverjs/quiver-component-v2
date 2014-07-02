@@ -6,6 +6,11 @@ var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     textToStreamable = $__0.textToStreamable;
 var SimpleHandler = $traceurRuntime.assertObject(require('../lib/simple-handler.js')).SimpleHandler;
 var StreamFilter = $traceurRuntime.assertObject(require('../lib/filter.js')).StreamFilter;
+var TransformFilter = $traceurRuntime.assertObject(require('../lib/transform-filter.js')).TransformFilter;
+var $__0 = $traceurRuntime.assertObject(require('../lib/simple-filter.js')),
+    ArgsFilter = $__0.ArgsFilter,
+    ArgsBuilderFilter = $__0.ArgsBuilderFilter,
+    ErrorFilter = $__0.ErrorFilter;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -38,5 +43,85 @@ describe('filter test', (function() {
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({}, 'hello');
     })).should.eventually.equal('GOODBYE!');
+  }));
+  it('transform filter', (function() {
+    var handler = (function(args, input) {
+      input.should.equal('HELLO!');
+      return 'goodbye';
+    });
+    var handlerComponent = new SimpleHandler(handler, {
+      inType: 'text',
+      outType: 'text'
+    });
+    var transformHandler = (function(args, input) {
+      return input.toUpperCase() + '!';
+    });
+    var transformComponent = new SimpleHandler(transformHandler, {
+      inType: 'text',
+      outType: 'text'
+    });
+    var filterComponent = new TransformFilter(transformComponent, {transformMode: 'inout'});
+    handlerComponent.addMiddleware(filterComponent);
+    return handlerComponent.loadHandler({}).then((function(handler) {
+      return handler({}, 'hello');
+    })).should.eventually.equal('GOODBYE!');
+  }));
+  it('args filter', (function() {
+    var handler = (function(args) {
+      args.foo.should.equal('bar');
+      return 'foo';
+    });
+    var handlerComponent = new SimpleHandler(handler, {
+      inType: 'void',
+      outType: 'text'
+    });
+    var argsFilter = (function(args) {
+      args.foo = 'bar';
+      return args;
+    });
+    var filterComponent = new ArgsFilter(argsFilter);
+    handlerComponent.addMiddleware(filterComponent);
+    return handlerComponent.loadHandler({}).then((function(handler) {
+      return handler({});
+    })).should.eventually.equal('foo');
+  }));
+  it('args builder filter', (function() {
+    var handler = (function(args) {
+      args.foo.should.equal('bar');
+      return 'foo';
+    });
+    var handlerComponent = new SimpleHandler(handler, {
+      inType: 'void',
+      outType: 'text'
+    });
+    var argsBuilder = (function(config) {
+      var fooValue = config.fooValue;
+      return (function(args) {
+        args.foo = fooValue;
+        return args;
+      });
+    });
+    var filterComponent = new ArgsBuilderFilter(argsBuilder);
+    handlerComponent.addMiddleware(filterComponent);
+    return handlerComponent.loadHandler({fooValue: 'bar'}).then((function(handler) {
+      return handler({});
+    })).should.eventually.equal('foo');
+  }));
+  it('error filter', (function() {
+    var handler = (function(args) {
+      throw new Error('error in handler');
+    });
+    var handlerComponent = new SimpleHandler(handler, {
+      inType: 'void',
+      outType: 'text'
+    });
+    var errorFilter = (function(err) {
+      return textToStreamable('error caught from filter');
+    });
+    var filterComponent = new ErrorFilter(errorFilter);
+    handlerComponent.addMiddleware(filterComponent);
+    return handlerComponent.loadHandler({}).then((function(handler) {
+      return handler({});
+    })).should.eventually.equal('error caught from filter');
   }));
 }));

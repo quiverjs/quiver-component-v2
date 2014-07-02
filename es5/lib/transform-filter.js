@@ -5,58 +5,65 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var StreamFilter = $traceurRuntime.assertObject(require('./filter.js')).StreamFilter;
-var HandlerComponent = $traceurRuntime.assertObject(require('./handler.js')).HandlerComponent;
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
-    copy = $__1.copy,
-    assertDefined = $__1.assertDefined;
-var validModes = ['in', 'out', 'inout'];
-var streamHandlerLoader = (function(handlerComponent, loadOptions) {
-  if (handlerComponent.loadStreamHandler)
-    return (function(config) {
-      return handlerComponent.loadStreamHandler(config, loadOptions);
-    });
-  return (function(config) {
-    return handlerComponent.loadHandleable(config, loadOptions).then((function(handleable) {
-      return assertDefined(handleable.streamHandler);
-    }));
-  });
-});
+var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
+var StreamFilter = $traceurRuntime.assertObject(require('./filter.js')).StreamFilter;
+var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
+var loadStreamHandler = $traceurRuntime.assertObject(require('./util/loader.js')).loadStreamHandler;
+var validModes = {
+  'in': true,
+  'out': true,
+  'inout': true
+};
 var echoHandler = (function(args, streamable) {
   return resolve(streamable);
 });
+var wrapHandler = (function(handler) {
+  return (function(args) {
+    for (var restArgs = [],
+        $__1 = 1; $__1 < arguments.length; $__1++)
+      restArgs[$__1 - 1] = arguments[$__1];
+    return handler.apply(null, $traceurRuntime.spread([copy(args)], restArgs));
+  });
+});
 var inTransformHandler = (function(handler, mode) {
-  return mode == 'out' ? echoHandler : handler;
+  return mode != 'out' ? wrapHandler(handler) : echoHandler;
+});
+var wrapMainHandler = (function(handler, mode) {
+  return mode == 'in' ? handler : wrapHandler(handler);
 });
 var outTransformHandler = (function(handler, mode) {
-  return mode == 'in' ? echoHandler : ahandler;
+  return mode != 'in' ? handler : echoHandler;
 });
 var TransformFilter = function TransformFilter(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   if (!(handlerComponent instanceof HandlerComponent)) {
     throw new TypeError('input handler component must be of type HandlerComponent');
   }
+  this._transformComponent = handlerComponent;
   var transformMode = $traceurRuntime.assertObject(options).transformMode;
-  if (validModes.indexOf(transformMode) == -1) {
+  if (!validModes[transformMode]) {
     throw new TypeError('invalid transform mode provided in options');
   }
   var loadOptions = $traceurRuntime.assertObject(options).loadOptions;
-  var loadStreamHandler = streamHandlerLoader(handlerComponent, loadOptions);
   var streamFilter = (function(config, handler) {
-    return loadStreamHandler(config).then((function(transformHandler) {
+    return loadStreamHandler(config, handlerComponent, handlerComponent.handleableBuilder).then((function(transformHandler) {
       var transformIn = inTransformHandler(transformHandler, transformMode);
+      var mainHandler = wrapMainHandler(handler, transformMode);
       var transformOut = outTransformHandler(transformHandler, transformMode);
       return (function(args, streamable) {
-        return transformIn(copy(args), streamable).then((function(transformedIn) {
-          return handler(copy(args), transformedIn).then((function(resultStreamable) {
+        return transformIn(args, streamable).then((function(transformedIn) {
+          return mainHandler(args, transformedIn).then((function(resultStreamable) {
             return transformOut(args, resultStreamable);
           }));
         }));
       });
     }));
   });
+  options.safeWrapped = true;
   $traceurRuntime.superCall(this, $TransformFilter.prototype, "constructor", [streamFilter, options]);
 };
 var $TransformFilter = TransformFilter;
-($traceurRuntime.createClass)(TransformFilter, {}, {}, StreamFilter);
+($traceurRuntime.createClass)(TransformFilter, {get transformComponent() {
+    return this._transformComponent;
+  }}, {}, StreamFilter);
