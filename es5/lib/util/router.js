@@ -7,74 +7,52 @@ Object.defineProperties(exports, {
 });
 var error = $traceurRuntime.assertObject(require('quiver-error')).error;
 var parseUrl = $traceurRuntime.assertObject(require('url')).parse;
+var reject = $traceurRuntime.assertObject(require('quiver-promise')).reject;
 var getPathFromRequestHead = function(requestHead) {
   if (!requestHead.args)
     requestHead.args = {};
-  if (requestHead.args.path) {
+  if (requestHead.args.path)
     return requestHead.args.path;
-  }
   var path = parseUrl(requestHead.url, true).pathname;
   requestHead.args.path = path;
 };
-var getHandlerFromPath = (function(routeIndex, path) {
+var getHandlerFromPath = (function(routeIndex, path, args) {
   var staticHandler = routeIndex.staticRoutes[path];
-  if (staticHandler) {
-    return {
-      matchedArgs: {},
-      handler: staticHandler
-    };
-  }
+  if (staticHandler)
+    return staticHandler;
   var dynamicRoutes = routeIndex.dynamicRoutes;
   for (var $__0 = dynamicRoutes[Symbol.iterator](),
       $__1; !($__1 = $__0.next()).done; ) {
     var route = $__1.value;
     {
-      var matchedArgs = route.matcher(path);
-      if (matchedArgs) {
-        return {
-          matchedArgs: matchedArgs,
-          handler: dynamicRoutes[i].handler
-        };
-      }
+      var matched = route.matcher(path, args);
+      if (matched)
+        return route.handler;
     }
   }
-  if (routeIndex.defaultRoute) {
-    return {
-      matchedArgs: {},
-      handler: routeIndex.defaultRoute
-    };
-  }
+  if (routeIndex.defaultRoute)
+    return routeIndex.defaultRoute;
   return null;
 });
 var httpRouterHandler = (function(routeIndex) {
   return (function(requestHead, requestStreamable) {
     var path = getPathFromRequestHead(requestHead);
-    var result = getHandlerFromPath(path, routeIndex);
-    if (!result)
+    var args = $traceurRuntime.assertObject(requestHead).args;
+    var handler = getHandlerFromPath(routeIndex, path, args);
+    if (!handler)
       return reject(error(404, 'not found'));
-    var $__2 = $traceurRuntime.assertObject(result),
-        handler = $__2.handler,
-        matchedArgs = $__2.matchedArgs;
-    var args = requestHead.args;
-    for (var key in matchedArgs) {
-      args[key] = matchedArgs[key];
-    }
     return handler(requestHead, requestStreamable);
   });
 });
 var streamRouterHandler = (function(routeIndex) {
-  return (function(args, inputStreamable) {
-    var path = args.path || '/';
-    var result = getHandlerFromPath(path, routeIndex);
-    if (!result)
+  return (function(args, streamable) {
+    var $__3;
+    var $__2 = $traceurRuntime.assertObject(args),
+        path = ($__3 = $__2.path) === void 0 ? '/' : $__3;
+    var handler = getHandlerFromPath(routeIndex, path, args);
+    if (!handler)
       return reject(error(404, 'not found'));
-    var $__2 = $traceurRuntime.assertObject(result),
-        handler = $__2.handler,
-        matchedArgs = $__2.matchedArgs;
-    for (var key in matchedArgs) {
-      args[key] = matchedArgs[key];
-    }
-    return handler(args, inputStreamable);
+    return handler(args, streamable);
   });
 });
 var routerHandleable = (function(indexes) {

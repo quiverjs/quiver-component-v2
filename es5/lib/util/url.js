@@ -9,25 +9,29 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var combineUrlBuilders = (function(urlBuilder1, urlBuilder2) {
-  if (!url1 || !url2)
+  if (!urlBuilder1 || !urlBuilder2)
     return null;
   return (function(args) {
-    var path1 = urlBuilder2(args);
-    var oldPath = args.path;
-    args.path = path;
-    var path2 = urlBuilder1(args);
-    args.path = oldPath;
-    return path2;
+    var restPath = arguments[1] !== (void 0) ? arguments[1] : '/';
+    var newRestPath = urlBuilder2(args, restPath);
+    return urlBuilder1(args, newRestPath);
   });
 });
-var urlManagedBuilder = (function(handlerBuilder, urlBuilder) {
+var loaderBuilder = (function(component) {
+  return (function(config) {
+    return component.loadHandleable(config);
+  });
+});
+var urlManagedBuilder = (function(component, urlBuilder) {
   if (!urlBuilder)
-    return handlerBuilder;
+    return loaderBuilder(component);
   return (function(config) {
     var newUrlBuilder = combineUrlBuilders(config.urlBuilder, urlBuilder);
     config.urlBuilder = newUrlBuilder;
-    return handlerBuilder(config).then((function(handleable) {
-      handleable.urlBuilder = urlBuilder;
+    return component.loadHandleable(config).then((function(handleable) {
+      if (!handleable.urlBuilder) {
+        handleable.urlBuilder = newUrlBuilder;
+      }
       return handleable;
     }));
   });

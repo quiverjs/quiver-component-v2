@@ -11,7 +11,6 @@ Object.defineProperties(exports, {
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var combineBuilderWithMiddleware = $traceurRuntime.assertObject(require('./util/middleware.js')).combineBuilderWithMiddleware;
 var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
@@ -30,12 +29,6 @@ var $HandleableBuilder = HandleableBuilder;
     var builder = this._handleableBuilder;
     var middleware = this.extendMiddleware;
     return combineBuilderWithMiddleware(builder, middleware);
-  },
-  loadHandleable: function(config, options) {
-    return loadHandleable(config, this, this.handleableBuilder, options);
-  },
-  loadHandler: function(config, options) {
-    return loadHandleable(config, options);
   }
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(HandleableBuilder);

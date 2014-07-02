@@ -11,6 +11,7 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
+var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
 var Component = function Component() {
   var $__2;
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
@@ -37,9 +38,9 @@ var $HandlerComponent = HandlerComponent;
     throw new Error('unimplemented in abstract class');
   },
   loadHandleable: function(config, options) {
-    throw new Error('unimplemented in abstract class');
+    return loadHandleable(config, this, this.handleableBuilder, options);
   },
   loadHandler: function(config, options) {
-    throw new Error('unimplemented in abstract class');
+    return loadHandleable(config, options);
   }
 }, {}, Component);
