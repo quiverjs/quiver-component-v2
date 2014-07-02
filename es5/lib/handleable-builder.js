@@ -9,22 +9,22 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
+var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var HandlerComponent = $traceurRuntime.assertObject(require('./handler.js')).HandlerComponent;
+var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var combineBuilderWithMiddleware = $traceurRuntime.assertObject(require('./util/middleware.js')).combineBuilderWithMiddleware;
-var HandleableBuilder = function HandleableBuilder(handleableBuilder, options) {
-  if (typeof(handleableBuilder) != 'function') {
-    throw new Error('handleable builder must be of type function');
-  }
-  this._handleableBuilder = handleableBuilder;
+var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._rawHandleableBuilder = handleableBuilder;
+  this._handleableBuilder = safeHandler(handleableBuilder, options);
   this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $HandleableBuilder.prototype, "constructor", [options]);
 };
 var $HandleableBuilder = HandleableBuilder;
 ($traceurRuntime.createClass)(HandleableBuilder, {
   get rawHandleableBuilder() {
-    return this._handleableBuilder;
+    return this._rawHandleableBuilder;
   },
   get handleableBuilder() {
     var builder = this._handleableBuilder;
@@ -39,10 +39,12 @@ var $HandleableBuilder = HandleableBuilder;
   }
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(HandleableBuilder);
-var Handleable = function Handleable(handleable, options) {
+var Handleable = function Handleable(handleable) {
+  var option = arguments[1] !== (void 0) ? arguments[1] : {};
   var builder = (function(config) {
     return resolve(handleable);
   });
+  options.safeWrapped = true;
   $traceurRuntime.superCall(this, $Handleable.prototype, "constructor", [builder, options]);
 };
 var $Handleable = Handleable;

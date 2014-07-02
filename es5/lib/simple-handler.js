@@ -13,6 +13,9 @@ var $__2 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
     simpleToStreamHandler = $__2.simpleToStreamHandler,
     streamToSimpleHandler = $__2.streamToSimpleHandler,
     validateSimpleTypes = $__2.validateSimpleTypes;
+var $__2 = $traceurRuntime.assertObject(require('./util/wrap.js')),
+    safeBuilder = $__2.safeBuilder,
+    safeHandler = $__2.safeHandler;
 var $__2 = $traceurRuntime.assertObject(require('./stream-handler.js')),
     StreamHandler = $__2.StreamHandler,
     StreamHandlerBuilder = $__2.StreamHandlerBuilder;
@@ -25,6 +28,7 @@ var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder) {
   this._inType = inType;
   this._outType = outType;
   this._simpleHandlerBuilder = simpleHandlerBuilder;
+  simpleHandlerBuilder = safeBuilder(simpleHandlerBuilder, options);
   var streamHandlerBuilder = (function(config) {
     return resolve(simpleHandlerBuilder(config)).then((function(simpleHandler) {
       return simpleToStreamHandler(simpleHandler, inType, outType);
@@ -41,10 +45,8 @@ var $SimpleHandlerBuilder = SimpleHandlerBuilder;
   }}, {}, StreamHandlerBuilder);
 var SimpleHandler = function SimpleHandler(simpleHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  if (typeof(simpleHandler) != 'function') {
-    throw new TypeError('must construct with simple handler function');
-  }
   this._simpleHandler = simpleHandler;
+  simpleHandler = safeHandler(simpleHandler, options);
   var simpleHandlerBuilder = (function(config) {
     return resolve(simpleHandler);
   });

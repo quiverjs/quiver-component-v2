@@ -1,8 +1,5 @@
 "use strict";
 Object.defineProperties(exports, {
-  httpToHandleableBuilder: {get: function() {
-      return httpToHandleableBuilder;
-    }},
   HttpHandlerBuilder: {get: function() {
       return HttpHandlerBuilder;
     }},
@@ -13,6 +10,9 @@ Object.defineProperties(exports, {
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var loadHttpHandler = $traceurRuntime.assertObject(require('./util/loader.js')).loadHttpHandler;
+var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
+    safeBuilder = $__1.safeBuilder,
+    safeHandler = $__1.safeHandler;
 var HandleableBuilder = $traceurRuntime.assertObject(require('./handleable-builder.js')).HandleableBuilder;
 var httpToHandleableBuilder = (function(httpBuilder) {
   return (function(config) {
@@ -24,25 +24,28 @@ var httpToHandleableBuilder = (function(httpBuilder) {
   });
 });
 var HttpHandlerBuilder = function HttpHandlerBuilder(httpHandlerBuilder) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._httpHandlerBuilder = httpHandlerBuilder;
+  httpHandlerBuilder = safeBuilder(httpHandlerBuilder, options);
   var handleableBuilder = httpToHandleableBuilder(httpHandlerBuilder);
-  $traceurRuntime.superCall(this, $HttpHandlerBuilder.prototype, "constructor", [handleableBuilder]);
+  $traceurRuntime.superCall(this, $HttpHandlerBuilder.prototype, "constructor", [handleableBuilder, options]);
 };
 var $HttpHandlerBuilder = HttpHandlerBuilder;
 ($traceurRuntime.createClass)(HttpHandlerBuilder, {
   get httpHandlerBuilder() {
     return this._httpHandlerBuilder;
   },
-  loadHttpHandler: function(config) {
-    var options = arguments[1] !== (void 0) ? arguments[1] : {};
-    return loadHttpHandler(config, this, options);
+  loadHttpHandler: function(config, options) {
+    return loadHttpHandler(config, this, this.handleableBuilder, options);
   },
   loadHandler: function(config, options) {
-    return loadHttpHandler(config, options);
+    return this.loadHttpHandler(config, options);
   }
 }, {}, HandleableBuilder);
-var HttpHandler = function HttpHandler(httpHandler, options) {
+var HttpHandler = function HttpHandler(httpHandler) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._httpHandler = httpHandler;
+  httpHandler = safeHandler(httpHandler, options);
   var httpHandlerBuilder = (function(config) {
     return resolve(httpHandler);
   });

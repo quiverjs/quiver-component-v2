@@ -10,6 +10,9 @@ Object.defineProperties(exports, {
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var loadStreamHandler = $traceurRuntime.assertObject(require('./util/loader.js')).loadStreamHandler;
+var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
+    safeBuilder = $__1.safeBuilder,
+    safeHandler = $__1.safeHandler;
 var HandleableBuilder = $traceurRuntime.assertObject(require('./handleable-builder.js')).HandleableBuilder;
 var streamToHandleableBuilder = (function(streamBuilder) {
   return (function(config) {
@@ -21,9 +24,11 @@ var streamToHandleableBuilder = (function(streamBuilder) {
   });
 });
 var StreamHandlerBuilder = function StreamHandlerBuilder(streamHandlerBuilder) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._streamHandlerBuilder = streamHandlerBuilder;
+  streamHandlerBuilder = safeBuilder(streamHandlerBuilder, options);
   var handleableBuilder = streamToHandleableBuilder(streamHandlerBuilder);
-  $traceurRuntime.superCall(this, $StreamHandlerBuilder.prototype, "constructor", [handleableBuilder]);
+  $traceurRuntime.superCall(this, $StreamHandlerBuilder.prototype, "constructor", [handleableBuilder, options]);
 };
 var $StreamHandlerBuilder = StreamHandlerBuilder;
 ($traceurRuntime.createClass)(StreamHandlerBuilder, {
@@ -37,8 +42,10 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
     return this.loadStreamHandler(config, options);
   }
 }, {}, HandleableBuilder);
-var StreamHandler = function StreamHandler(streamHandler, options) {
+var StreamHandler = function StreamHandler(streamHandler) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._streamHandler = streamHandler;
+  streamHandler = safeHandler(streamHandler, options);
   var streamHandlerBuilder = (function(config) {
     return resolve(streamHandler);
   });

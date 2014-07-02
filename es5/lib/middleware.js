@@ -6,8 +6,8 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var Component = $traceurRuntime.assertObject(require('./component.js')).Component;
-var MiddlewareComponent = function MiddlewareComponent(options) {
-  $traceurRuntime.superCall(this, $MiddlewareComponent.prototype, "constructor", [options]);
+var MiddlewareComponent = function MiddlewareComponent() {
+  $traceurRuntime.defaultSuperCall(this, $MiddlewareComponent.prototype, arguments);
 };
 var $MiddlewareComponent = MiddlewareComponent;
 ($traceurRuntime.createClass)(MiddlewareComponent, {get handleableMiddleware() {
