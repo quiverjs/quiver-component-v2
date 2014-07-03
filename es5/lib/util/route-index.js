@@ -34,6 +34,7 @@ var createHandlerRouteIndex = (function(handlerKey) {
   return {
     addStaticRoute: addStaticRoute,
     addDynamicRoute: addDynamicRoute,
+    setDefaultRoute: setDefaultRoute,
     routeIndex: routeIndex
   };
 });
