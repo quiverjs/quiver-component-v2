@@ -35,8 +35,7 @@ describe('filter test', () => {
       return 'goodbye'
     }
 
-    var handlerComponent = new SimpleHandler(handler, 
-      { inType: 'text', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
 
     var filter = (config, handler) =>
       (args, streamable) =>
@@ -57,14 +56,12 @@ describe('filter test', () => {
       return 'goodbye'
     }
 
-    var handlerComponent = new SimpleHandler(handler, 
-      { inType: 'text', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
 
     var transformHandler = (args, input) =>
       input.toUpperCase() + '!'
 
-    var transformComponent = new SimpleHandler(transformHandler, 
-      { inType: 'text', outType: 'text' })
+    var transformComponent = new SimpleHandler(transformHandler, 'text', 'text')
 
     var filterComponent = new TransformFilter(transformComponent, {
       transformMode: 'inout'
@@ -82,8 +79,7 @@ describe('filter test', () => {
       return 'foo'
     }
 
-    var handlerComponent = new SimpleHandler(handler, 
-      { inType: 'void', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'void', 'text')
 
     var argsFilter = args => {
       args.foo = 'bar'
@@ -103,8 +99,7 @@ describe('filter test', () => {
       return 'foo'
     }
 
-    var handlerComponent = new SimpleHandler(handler, 
-      { inType: 'void', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'void', 'text')
 
     var argsBuilder = config => {
       var fooValue = config.fooValue
@@ -128,8 +123,7 @@ describe('filter test', () => {
       throw new Error('error in handler')
     }
 
-    var handlerComponent = new SimpleHandler(handler, 
-      { inType: 'void', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'void', 'text')
 
     var errorFilter = err =>
       textToStreamable('error caught from filter')
@@ -153,17 +147,14 @@ describe('filter test', () => {
         }))
     }
 
-    var handlerComponent = new SimpleHandlerBuilder(builder, 
-      { inType: 'text', outType: 'json' })
+    var handlerComponent = new SimpleHandlerBuilder(builder, 'text', 'json')
 
     var inputHandler = (args, input) => 
       input.toUpperCase() + '!'
 
-    var inputComponent = new SimpleHandler(inputHandler, 
-      { inType: 'text', outType: 'text' })
+    var inputComponent = new SimpleHandler(inputHandler, 'text', 'text')
 
-    var filterComponent = new InputHandlerMiddleware(inputComponent,
-      { toConfig: 'inHandler' })
+    var filterComponent = new InputHandlerMiddleware(inputComponent, 'inHandler')
 
     handlerComponent.addMiddleware(filterComponent)
 

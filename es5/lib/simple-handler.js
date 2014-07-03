@@ -19,12 +19,11 @@ var $__2 = $traceurRuntime.assertObject(require('./util/wrap.js')),
 var $__2 = $traceurRuntime.assertObject(require('./stream-handler.js')),
     StreamHandler = $__2.StreamHandler,
     StreamHandlerBuilder = $__2.StreamHandlerBuilder;
-var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder) {
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__2 = $traceurRuntime.assertObject(options),
-      inType = $__2.inType,
-      outType = $__2.outType;
-  validateSimpleTypes([inType, outType]);
+var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, inType, outType) {
+  var options = arguments[3] !== (void 0) ? arguments[3] : {};
+  var err = validateSimpleTypes([inType, outType]);
+  if (err)
+    throw err;
   this._inType = inType;
   this._outType = outType;
   this._simpleHandlerBuilder = simpleHandlerBuilder;
@@ -43,14 +42,14 @@ var $SimpleHandlerBuilder = SimpleHandlerBuilder;
       return streamToSimpleHandler(streamHandler, $__0._inType, $__0._outType);
     }));
   }}, {}, StreamHandlerBuilder);
-var SimpleHandler = function SimpleHandler(simpleHandler) {
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+var SimpleHandler = function SimpleHandler(simpleHandler, inType, outType) {
+  var options = arguments[3] !== (void 0) ? arguments[3] : {};
   this._simpleHandler = simpleHandler;
   simpleHandler = safeHandler(simpleHandler, options);
   var simpleHandlerBuilder = (function(config) {
     return resolve(simpleHandler);
   });
-  $traceurRuntime.superCall(this, $SimpleHandler.prototype, "constructor", [simpleHandlerBuilder, options]);
+  $traceurRuntime.superCall(this, $SimpleHandler.prototype, "constructor", [simpleHandlerBuilder, inType, outType, options]);
 };
 var $SimpleHandler = SimpleHandler;
 ($traceurRuntime.createClass)(SimpleHandler, {}, {}, SimpleHandlerBuilder);

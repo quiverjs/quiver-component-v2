@@ -21,16 +21,17 @@ var $__2 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
     streamToSimpleHandler = $__2.streamToSimpleHandler,
     validateSimpleTypes = $__2.validateSimpleTypes;
 var getHandlerMap = $traceurRuntime.assertObject(require('./config.js')).getHandlerMap;
-var loadHandleable = (function(config, key, builder) {
-  var options = arguments[3] !== (void 0) ? arguments[3] : {};
+var loadHandleable = (function(config, component) {
+  var options = arguments[2] !== (void 0) ? arguments[2] : {};
   var handlerMap = getHandlerMap(config);
-  var handleable = handlerMap.get(key);
+  var handleable = handlerMap.get(component);
   if (handleable)
     return resolve(handleable);
+  var builder = component.handleableBuilder;
   return builder(config).then((function(handleable) {
     if (!handleable)
       return reject(new Error('handleable is not defined in builder result'));
-    handlerMap.set(key, handleable);
+    handlerMap.set(component, handleable);
     return handleable;
   }));
 });
@@ -56,15 +57,11 @@ var loadHttpHandler = (function() {
     return handler;
   }));
 });
-var loadSimpleHandler = (function(config, key, builder) {
-  var options = arguments[3] !== (void 0) ? arguments[3] : {};
-  var $__2 = $traceurRuntime.assertObject(options),
-      inType = $__2.inType,
-      outType = $__2.outType;
+var loadSimpleHandler = (function(config, component, inType, outType, options) {
   var err = validateSimpleTypes([inType, outType]);
   if (err)
     return reject(err);
-  return loadStreamHandler(config, key, builder, options).then((function(handler) {
+  return loadStreamHandler(config, component, options).then((function(handler) {
     return streamToSimpleHandler(handler, inType, outType);
   }));
 });

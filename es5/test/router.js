@@ -13,24 +13,17 @@ var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var should = chai.should();
-describe.only('router component test', (function() {
+describe('router component test', (function() {
   it('static route', (function() {
     var handler = (function(args, input) {
       input.should.equal('hello');
       return 'goodbye';
     });
-    var handlerComponent = new SimpleHandler(handler, {
-      inType: 'text',
-      outType: 'text'
-    });
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
     var route = new StaticRoute(handlerComponent, '/foo');
     var router = new Router();
     router.addRoute(route);
-    var builder = router.handleableBuilder;
-    return loadSimpleHandler({}, router, builder, {
-      inType: 'text',
-      outType: 'text'
-    }).then((function(handler) {
+    return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
       var p1 = handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye');
       var p2 = handler({path: '/bar'}, 'nothing').should.be.rejected;
       return Promise.all([p1, p2]);
@@ -41,18 +34,11 @@ describe.only('router component test', (function() {
       input.should.equal('hello');
       return 'goodbye, ' + args.name;
     });
-    var handlerComponent = new SimpleHandler(handler, {
-      inType: 'text',
-      outType: 'text'
-    });
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
     var route = new RegexRoute(handlerComponent, /^\/(\w+)$/, ['name']);
     var router = new Router();
     router.addRoute(route);
-    var builder = router.handleableBuilder;
-    return loadSimpleHandler({}, router, builder, {
-      inType: 'text',
-      outType: 'text'
-    }).then((function(handler) {
+    return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
       return handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye, foo');
     }));
   }));
@@ -61,18 +47,11 @@ describe.only('router component test', (function() {
       input.should.equal('hello');
       return 'goodbye, ' + args.name;
     });
-    var handlerComponent = new SimpleHandler(handler, {
-      inType: 'text',
-      outType: 'text'
-    });
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
     var route = new ParamRoute(handlerComponent, '/:name');
     var router = new Router();
     router.addRoute(route);
-    var builder = router.handleableBuilder;
-    return loadSimpleHandler({}, router, builder, {
-      inType: 'text',
-      outType: 'text'
-    }).then((function(handler) {
+    return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
       return handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye, foo');
     }));
   }));

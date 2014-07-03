@@ -36,10 +36,10 @@ var $HttpHandlerBuilder = HttpHandlerBuilder;
     return this._httpHandlerBuilder;
   },
   loadHttpHandler: function(config, options) {
-    return loadHttpHandler(config, this, this.handleableBuilder, options);
+    return loadHttpHandler(config, this, options);
   },
   loadHandler: function(config, options) {
-    return this.loadHttpHandler(config, options);
+    return loadHttpHandler(config, this, options);
   }
 }, {}, HandleableBuilder);
 var HttpHandler = function HttpHandler(httpHandler) {

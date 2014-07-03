@@ -36,8 +36,7 @@ describe('handler test', () => {
       return 'goodbye'
     }
 
-    var component = new SimpleHandler(handler, 
-      { inType: 'text', outType: 'text' })
+    var component = new SimpleHandler(handler, 'text', 'text')
 
     return component.loadHandler({}).then(handler =>
       handler({}, 'hello').should.eventually.equal('goodbye'))

@@ -36,10 +36,10 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
     return this._streamHandlerBuilder;
   },
   loadStreamHandler: function(config, options) {
-    return loadStreamHandler(config, this, this.handleableBuilder, options);
+    return loadStreamHandler(config, this, options);
   },
   loadHandler: function(config, options) {
-    return this.loadStreamHandler(config, options);
+    return loadStreamHandler(config, this, options);
   }
 }, {}, HandleableBuilder);
 var StreamHandler = function StreamHandler(streamHandler) {

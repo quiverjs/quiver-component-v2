@@ -12,25 +12,21 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var should = chai.should()
 
-describe.only('router component test', () => {
+describe('router component test', () => {
   it('static route', () => {
     var handler = (args, input) => {
       input.should.equal('hello')
       return 'goodbye'
     }
 
-    var handlerComponent = new SimpleHandler(handler,
-      { inType: 'text', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
 
     var route = new StaticRoute(handlerComponent, '/foo')
 
     var router = new Router()
     router.addRoute(route)
 
-    var builder = router.handleableBuilder
-
-    return loadSimpleHandler({}, router, builder,
-      { inType: 'text', outType: 'text' })
+    return loadSimpleHandler({}, router, 'text', 'text')
       .then(handler => {
         var p1 = handler({ path: '/foo' }, 'hello')
           .should.eventually.equal('goodbye')
@@ -48,8 +44,7 @@ describe.only('router component test', () => {
       return 'goodbye, ' + args.name
     }
 
-    var handlerComponent = new SimpleHandler(handler,
-      { inType: 'text', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
 
     var route = new RegexRoute(handlerComponent,
       /^\/(\w+)$/, ['name'])
@@ -57,10 +52,7 @@ describe.only('router component test', () => {
     var router = new Router()
     router.addRoute(route)
 
-    var builder = router.handleableBuilder
-
-    return loadSimpleHandler({}, router, builder,
-      { inType: 'text', outType: 'text' })
+    return loadSimpleHandler({}, router, 'text', 'text')
       .then(handler => 
         handler({ path: '/foo' }, 'hello')
           .should.eventually.equal('goodbye, foo'))
@@ -72,18 +64,14 @@ describe.only('router component test', () => {
       return 'goodbye, ' + args.name
     }
 
-    var handlerComponent = new SimpleHandler(handler,
-      { inType: 'text', outType: 'text' })
+    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
 
     var route = new ParamRoute(handlerComponent, '/:name')
 
     var router = new Router()
     router.addRoute(route)
 
-    var builder = router.handleableBuilder
-
-    return loadSimpleHandler({}, router, builder,
-      { inType: 'text', outType: 'text' })
+    return loadSimpleHandler({}, router, 'text', 'text')
       .then(handler => 
         handler({ path: '/foo' }, 'hello')
           .should.eventually.equal('goodbye, foo'))

@@ -38,9 +38,9 @@ var $HandlerComponent = HandlerComponent;
     throw new Error('unimplemented in abstract class');
   },
   loadHandleable: function(config, options) {
-    return loadHandleable(config, this, this.handleableBuilder, options);
+    return loadHandleable(config, this, options);
   },
   loadHandler: function(config, options) {
-    return loadHandleable(config, options);
+    return loadHandleable(config, this, options);
   }
 }, {}, Component);

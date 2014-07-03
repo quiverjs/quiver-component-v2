@@ -47,7 +47,7 @@ var TransformFilter = function TransformFilter(handlerComponent) {
   }
   var loadOptions = $traceurRuntime.assertObject(options).loadOptions;
   var streamFilter = (function(config, handler) {
-    return loadStreamHandler(config, handlerComponent, handlerComponent.handleableBuilder).then((function(transformHandler) {
+    return loadStreamHandler(config, handlerComponent).then((function(transformHandler) {
       var transformIn = inTransformHandler(transformHandler, transformMode);
       var mainHandler = wrapMainHandler(handler, transformMode);
       var transformOut = outTransformHandler(transformHandler, transformMode);

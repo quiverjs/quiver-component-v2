@@ -7,16 +7,14 @@ Object.defineProperties(exports, {
 });
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
 var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
-var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent) {
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__1 = $traceurRuntime.assertObject(options),
-      loadOptions = $__1.loadOptions,
-      toConfig = $__1.toConfig;
+var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, toConfig) {
+  var options = arguments[2] !== (void 0) ? arguments[2] : {};
+  var loadOptions = $traceurRuntime.assertObject(options).loadOptions;
   if (!(handlerComponent instanceof HandlerComponent)) {
     throw new TypeError('input handler component must be of type HandlerComponent');
   }
   if (typeof(toConfig) != 'string') {
-    throw new TypeError('options.toConfig required to be string');
+    throw new TypeError('toConfig required to be string');
   }
   this._inputHandlerComponent = handlerComponent;
   var middleware = (function(config, builder) {
