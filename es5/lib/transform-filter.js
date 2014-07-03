@@ -42,6 +42,7 @@ var TransformFilter = function TransformFilter(handlerComponent, transformMode) 
   this._transformComponent = handlerComponent;
   if (!validModes[transformMode])
     throw new TypeError('invalid transform mode provided in options');
+  this._transformMode = transformMode;
   var loadOptions = $traceurRuntime.assertObject(options).loadOptions;
   var streamFilter = (function(config, handler) {
     return loadStreamHandler(config, handlerComponent).then((function(transformHandler) {
@@ -61,6 +62,20 @@ var TransformFilter = function TransformFilter(handlerComponent, transformMode) 
   $traceurRuntime.superCall(this, $TransformFilter.prototype, "constructor", [streamFilter, options]);
 };
 var $TransformFilter = TransformFilter;
-($traceurRuntime.createClass)(TransformFilter, {get transformComponent() {
+($traceurRuntime.createClass)(TransformFilter, {
+  get transformComponent() {
     return this._transformComponent;
-  }}, {}, StreamFilter);
+  },
+  get transformMode() {
+    return this._transformMode;
+  },
+  get type() {
+    return 'transform filter';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $TransformFilter.prototype, "toJson", []);
+    json.transformMode = this.transformMode;
+    json.transformHandler = this.transformComponent.toJson();
+    return json;
+  }
+}, {}, StreamFilter);

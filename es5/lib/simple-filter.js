@@ -66,9 +66,14 @@ var ArgsFilter = function ArgsFilter(argsHandler) {
   $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [streamFilter, options]);
 };
 var $ArgsFilter = ArgsFilter;
-($traceurRuntime.createClass)(ArgsFilter, {get argsFilter() {
+($traceurRuntime.createClass)(ArgsFilter, {
+  get argsFilter() {
     return this._argsFilter;
-  }}, {}, StreamFilter);
+  },
+  get type() {
+    return 'args filter';
+  }
+}, {}, StreamFilter);
 var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsBuilder = argsBuilder;
@@ -80,7 +85,9 @@ var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
   $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [streamFilter, options]);
 };
 var $ArgsBuilderFilter = ArgsBuilderFilter;
-($traceurRuntime.createClass)(ArgsBuilderFilter, {}, {}, StreamFilter);
+($traceurRuntime.createClass)(ArgsBuilderFilter, {get type() {
+    return 'args builder filter';
+  }}, {}, StreamFilter);
 var createErrorFilterClass = (function(ParentClass) {
   return (function($__super) {
     var ErrorFilter = function ErrorFilter(errorHandler) {
@@ -90,9 +97,14 @@ var createErrorFilterClass = (function(ParentClass) {
       var streamFilter = errorToFilter(errorHandler);
       $traceurRuntime.superCall(this, ErrorFilter.prototype, "constructor", [streamFilter, options]);
     };
-    return ($traceurRuntime.createClass)(ErrorFilter, {get errorFilter() {
+    return ($traceurRuntime.createClass)(ErrorFilter, {
+      get errorFilter() {
         return this._errorFilter;
-      }}, {}, $__super);
+      },
+      get type() {
+        return 'error filter';
+      }
+    }, {}, $__super);
   }(ParentClass));
 });
 var createErrorBuilderFilterClass = (function(ParentClass) {
@@ -104,9 +116,14 @@ var createErrorBuilderFilterClass = (function(ParentClass) {
       var streamFilter = builderFilterConvert(errorBuilder, errorToFilter);
       $traceurRuntime.superCall(this, ErrorBuilderFilter.prototype, "constructor", [streamFilter, options]);
     };
-    return ($traceurRuntime.createClass)(ErrorBuilderFilter, {get errorBuilder() {
+    return ($traceurRuntime.createClass)(ErrorBuilderFilter, {
+      get errorBuilder() {
         return this._errorBuilder;
-      }}, {}, $__super);
+      },
+      get type() {
+        return 'error builder filter';
+      }
+    }, {}, $__super);
   }(ParentClass));
 });
 var ErrorFilter = createErrorFilterClass(StreamFilter);

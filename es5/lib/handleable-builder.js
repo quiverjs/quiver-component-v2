@@ -29,6 +29,14 @@ var $HandleableBuilder = HandleableBuilder;
     var builder = this._handleableBuilder;
     var middleware = this.extendMiddleware;
     return combineBuilderWithMiddleware(builder, middleware);
+  },
+  get type() {
+    return 'handleable builder';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $HandleableBuilder.prototype, "toJson", []);
+    json.middlewares = this.middlewareJson();
+    return json;
   }
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(HandleableBuilder);
@@ -41,4 +49,6 @@ var Handleable = function Handleable(handleable) {
   $traceurRuntime.superCall(this, $Handleable.prototype, "constructor", [builder, options]);
 };
 var $Handleable = Handleable;
-($traceurRuntime.createClass)(Handleable, {}, {}, HandleableBuilder);
+($traceurRuntime.createClass)(Handleable, {get type() {
+    return 'handleable';
+  }}, {}, HandleableBuilder);

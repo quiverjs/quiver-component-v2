@@ -26,6 +26,16 @@ var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, t
   $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "constructor", [middleware, options]);
 };
 var $InputHandlerMiddleware = InputHandlerMiddleware;
-($traceurRuntime.createClass)(InputHandlerMiddleware, {get inputHandlerComponent() {
+($traceurRuntime.createClass)(InputHandlerMiddleware, {
+  get inputHandlerComponent() {
     return this._inputHandlerComponent;
-  }}, {}, HandleableMiddleware);
+  },
+  get type() {
+    return 'input handler middleware';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "toJson", []);
+    json.inputHandler = this.inputHandlerComponent.toJson();
+    return json;
+  }
+}, {}, HandleableMiddleware);

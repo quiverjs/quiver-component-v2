@@ -49,6 +49,19 @@ var $RouteList = RouteList;
       }));
     }));
     return Promise.all(promises);
+  },
+  get type() {
+    return 'route list';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $RouteList.prototype, "toJson", []);
+    var routes = this.routes;
+    if (routes.length > 0)
+      json.routes = this.routes.map((function(route) {
+        return route.toJson();
+      }));
+    json.middlewares = this.middlewareJson();
+    return json;
   }
 }, {}, Component);
 mixinMiddlewareExtensible(RouteList);
@@ -77,20 +90,26 @@ var $Router = Router;
       throw new TypeError('route list must be instance of RouteList');
     this._routeLists.push(routeList);
   },
+  get routeLists() {
+    return $traceurRuntime.spread([this._defaultRouteList], this._routeLists);
+  },
+  get defaultHandler() {
+    return this._defaultHandler;
+  },
   setDefaultHandler: function(handlerComponent) {
-    if (this._defaultRoute)
+    if (this._defaultHandler)
       throw new Error('router component already has default route');
-    this._defaultRoute = handlerComponent;
+    this._defaultHandler = handlerComponent;
   },
   get handleableBuilder() {
     var $__0 = this;
-    var routeLists = $traceurRuntime.spread([this._defaultRouteList], this._routeLists);
+    var routeLists = this.routeLists;
     return (function(config) {
       var routeIndex = createRouteIndex();
       var promises = routeLists.map((function(routeList) {
         return routeList.buildRoutes(config, routeIndex);
       }));
-      var defaultHandler = $__0._defaultRoute;
+      var defaultHandler = $__0.defaultHandler;
       if (defaultHandler) {
         promises.push(loadDefaultRoute(config, defaultHandler, routeIndex));
       }
@@ -98,6 +117,20 @@ var $Router = Router;
         return routerHandleable(routeIndex);
       }));
     });
+  },
+  get type() {
+    return 'router';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $Router.prototype, "toJson", []);
+    json.routeLists = this.routeLists.map((function(routeList) {
+      return routeList.toJson();
+    }));
+    var defaultHandler = this.defaultHandler;
+    if (defaultHandler)
+      json.defaultHandler = defaultHandler.toJson();
+    json.middlewares = this.middlewareJson();
+    return json;
   }
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(Router);

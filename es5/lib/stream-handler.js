@@ -40,6 +40,9 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
   },
   loadHandler: function(config, options) {
     return loadStreamHandler(config, this, options);
+  },
+  get type() {
+    return 'stream handler builder';
   }
 }, {}, HandleableBuilder);
 var StreamHandler = function StreamHandler(streamHandler) {
@@ -52,6 +55,11 @@ var StreamHandler = function StreamHandler(streamHandler) {
   $traceurRuntime.superCall(this, $StreamHandler.prototype, "constructor", [streamHandlerBuilder, options]);
 };
 var $StreamHandler = StreamHandler;
-($traceurRuntime.createClass)(StreamHandler, {get streamHandler() {
+($traceurRuntime.createClass)(StreamHandler, {
+  get streamHandler() {
     return this._streamHandler;
-  }}, {}, StreamHandlerBuilder);
+  },
+  get type() {
+    return 'stream handler';
+  }
+}, {}, StreamHandlerBuilder);

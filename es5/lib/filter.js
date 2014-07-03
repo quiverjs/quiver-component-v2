@@ -30,7 +30,7 @@ var HandleableFilter = function HandleableFilter(handleableFilter) {
 };
 var $HandleableFilter = HandleableFilter;
 ($traceurRuntime.createClass)(HandleableFilter, {}, {}, HandleableMiddleware);
-var handlerFilterClass = (function(filterKey, handlerKeys) {
+var handlerFilterClass = (function(filterType, filterKey, handlerKeys) {
   return (function($__super) {
     var HandlerFilter = function HandlerFilter(filter) {
       var $__2;
@@ -55,8 +55,10 @@ var handlerFilterClass = (function(filterKey, handlerKeys) {
       });
       $traceurRuntime.superCall(this, HandlerFilter.prototype, "constructor", [handleableFilter, options]);
     };
-    return ($traceurRuntime.createClass)(HandlerFilter, {}, {}, $__super);
+    return ($traceurRuntime.createClass)(HandlerFilter, {get type() {
+        return filterType;
+      }}, {}, $__super);
   }(HandleableFilter));
 });
-var StreamFilter = handlerFilterClass('_streamFilter', ['streamHandler']);
-var HttpFilter = handlerFilterClass('_httpFilter', ['httpHandler']);
+var StreamFilter = handlerFilterClass('stream filter', '_streamFilter', ['streamHandler']);
+var HttpFilter = handlerFilterClass('http filter', '_httpFilter', ['httpHandler']);

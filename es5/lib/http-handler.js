@@ -40,6 +40,9 @@ var $HttpHandlerBuilder = HttpHandlerBuilder;
   },
   loadHandler: function(config, options) {
     return loadHttpHandler(config, this, options);
+  },
+  get type() {
+    return 'http handler builder';
   }
 }, {}, HandleableBuilder);
 var HttpHandler = function HttpHandler(httpHandler) {
@@ -52,6 +55,11 @@ var HttpHandler = function HttpHandler(httpHandler) {
   $traceurRuntime.superCall(this, $HttpHandler.prototype, "constructor", [httpHandlerBuilder, options]);
 };
 var $HttpHandler = HttpHandler;
-($traceurRuntime.createClass)(HttpHandler, {get httpHandler() {
+($traceurRuntime.createClass)(HttpHandler, {
+  get httpHandler() {
     return this._httpHandler;
-  }}, {}, HttpHandlerBuilder);
+  },
+  get type() {
+    return 'http handler';
+  }
+}, {}, HttpHandlerBuilder);

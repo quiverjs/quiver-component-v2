@@ -25,6 +25,14 @@ var $HandleableMiddleware = HandleableMiddleware;
     var mainMiddleware = this._handleableMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);
+  },
+  get type() {
+    return 'handleable middleware';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $HandleableMiddleware.prototype, "toJson", []);
+    json.middlewares = this.middlewareJson();
+    return json;
   }
 }, {}, MiddlewareComponent);
 mixinMiddlewareExtensible(HandleableMiddleware);

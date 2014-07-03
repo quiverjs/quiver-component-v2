@@ -26,6 +26,14 @@ var mixinMiddlewareExtensible = (function(Class) {
     this._middlewareComponents.push(middleware);
     return this;
   };
+  proto.middlewareJson = function() {
+    var middlewares = this.middlewareComponents;
+    if (middlewares.length == 0)
+      return undefined;
+    return middlewares.map((function(component) {
+      return component.toJson();
+    }));
+  };
   Object.defineProperty(proto, 'middlewareComponents', {get: function() {
       return this._middlewareComponents.slice();
     }});

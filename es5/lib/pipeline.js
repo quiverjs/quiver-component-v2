@@ -75,6 +75,9 @@ var $Pipeline = Pipeline;
     assertInstanceOf(component, HandlerComponent, 'component must be of type HandlerComponent');
     this._pipelineHandlers.push(component);
   },
+  get pipelineHandlers() {
+    return this._pipelineHandlers.slice();
+  },
   get handleableBuilder() {
     var builders = this._pipelineHandlers.map((function(component) {
       return component.handleableBuilder;
@@ -83,6 +86,16 @@ var $Pipeline = Pipeline;
     if (builders.length == 0)
       throw new Error('Pipeline must contain at least one handler component');
     return pipelineBuilder(builders, combinators);
+  },
+  get type() {
+    return 'pipeline';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $Pipeline.prototype, "toJson", []);
+    json.pipelines = this.pipelineHandlers.map((function(component) {
+      return component.toJson();
+    }));
+    return json;
   }
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(Pipeline);

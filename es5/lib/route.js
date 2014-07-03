@@ -33,6 +33,7 @@ var Route = function Route(handlerComponent) {
   var urlBuilder = $traceurRuntime.assertObject(options).urlBuilder;
   this._urlBuilder = urlBuilder;
 };
+var $Route = Route;
 ($traceurRuntime.createClass)(Route, {
   get handleableBuilder() {
     var handlerComponent = this.handlerComponent;
@@ -44,6 +45,14 @@ var Route = function Route(handlerComponent) {
   },
   get urlBuilder() {
     return this._urlBuilder;
+  },
+  get type() {
+    return 'route';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $Route.prototype, "toJson", []);
+    json.handler = this.handlerComponent.toJson();
+    return json;
   }
 }, {}, Component);
 var StaticRoute = function StaticRoute(handlerComponent, staticPath) {
@@ -66,6 +75,14 @@ var $StaticRoute = StaticRoute;
   },
   get staticPath() {
     return this._staticPath;
+  },
+  get type() {
+    return 'static route';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $StaticRoute.prototype, "toJson", []);
+    json.staticPath = this.staticPath;
+    return json;
   }
 }, {}, Route);
 var DynamicRoute = function DynamicRoute(handlerComponent, matcher) {
@@ -82,6 +99,9 @@ var $DynamicRoute = DynamicRoute;
   },
   get matcher() {
     return this._matcher;
+  },
+  get type() {
+    return 'dynamic route';
   }
 }, {}, Route);
 var RegexRoute = function RegexRoute(handlerComponent, regex) {
@@ -94,9 +114,14 @@ var RegexRoute = function RegexRoute(handlerComponent, regex) {
   $traceurRuntime.superCall(this, $RegexRoute.prototype, "constructor", [handlerComponent, matcher, options]);
 };
 var $RegexRoute = RegexRoute;
-($traceurRuntime.createClass)(RegexRoute, {get regex() {
+($traceurRuntime.createClass)(RegexRoute, {
+  get regex() {
     return this._regex;
-  }}, {}, DynamicRoute);
+  },
+  get type() {
+    return 'regex route';
+  }
+}, {}, DynamicRoute);
 var ParamRoute = function ParamRoute(handlerComponent, paramPath) {
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   if (typeof(paramPath) != 'string')
@@ -107,6 +132,16 @@ var ParamRoute = function ParamRoute(handlerComponent, paramPath) {
   $traceurRuntime.superCall(this, $ParamRoute.prototype, "constructor", [handlerComponent, matcher, options]);
 };
 var $ParamRoute = ParamRoute;
-($traceurRuntime.createClass)(ParamRoute, {get paramPath() {
+($traceurRuntime.createClass)(ParamRoute, {
+  get paramPath() {
     return this._paramPath;
-  }}, {}, DynamicRoute);
+  },
+  get type() {
+    return 'param route';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ParamRoute.prototype, "toJson", []);
+    json.paramPath = this.paramPath;
+    return json;
+  }
+}, {}, DynamicRoute);

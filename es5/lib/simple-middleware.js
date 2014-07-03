@@ -8,6 +8,7 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
+var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
 var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var ConfigMiddleware = function ConfigMiddleware(configHandler) {
@@ -20,7 +21,9 @@ var ConfigMiddleware = function ConfigMiddleware(configHandler) {
   $traceurRuntime.superCall(this, $ConfigMiddleware.prototype, "constructor", [middleware, options]);
 };
 var $ConfigMiddleware = ConfigMiddleware;
-($traceurRuntime.createClass)(ConfigMiddleware, {}, {}, HandleableMiddleware);
+($traceurRuntime.createClass)(ConfigMiddleware, {get type() {
+    return 'config middleware';
+  }}, {}, HandleableMiddleware);
 var ConfigOverrideMiddleware = function ConfigOverrideMiddleware(overrideConfig) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._overrideConfig = overrideConfig;
@@ -33,4 +36,16 @@ var ConfigOverrideMiddleware = function ConfigOverrideMiddleware(overrideConfig)
   $traceurRuntime.superCall(this, $ConfigOverrideMiddleware.prototype, "constructor", [configHandler, options]);
 };
 var $ConfigOverrideMiddleware = ConfigOverrideMiddleware;
-($traceurRuntime.createClass)(ConfigOverrideMiddleware, {}, {}, ConfigMiddleware);
+($traceurRuntime.createClass)(ConfigOverrideMiddleware, {
+  get overrideConfig() {
+    return copy(this._overrideConfig);
+  },
+  get type() {
+    return 'config override middleware';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ConfigOverrideMiddleware.prototype, "toJson", []);
+    json.overrideConfig = this.overrideConfig;
+    return json;
+  }
+}, {}, ConfigMiddleware);

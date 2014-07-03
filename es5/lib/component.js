@@ -13,22 +13,39 @@ Object.defineProperties(exports, {
 });
 var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
 var Component = function Component() {
-  var $__2;
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  var $__1 = $traceurRuntime.assertObject(options),
-      name = ($__2 = $__1.name) === void 0 ? '' : $__2;
+  var name = $traceurRuntime.assertObject(options).name;
   this._name = name;
 };
-($traceurRuntime.createClass)(Component, {get name() {
+($traceurRuntime.createClass)(Component, {
+  get name() {
     return this._name;
-  }}, {});
+  },
+  get type() {
+    return 'component';
+  },
+  toJson: function() {
+    var json = {type: this.type};
+    if (this.name)
+      json.name = name;
+    return json;
+  },
+  toString: function() {
+    return JSON.stringify(this.toJson(), undefined, 2);
+  }
+}, {});
 var MiddlewareComponent = function MiddlewareComponent() {
   $traceurRuntime.defaultSuperCall(this, $MiddlewareComponent.prototype, arguments);
 };
 var $MiddlewareComponent = MiddlewareComponent;
-($traceurRuntime.createClass)(MiddlewareComponent, {get handleableMiddleware() {
+($traceurRuntime.createClass)(MiddlewareComponent, {
+  get handleableMiddleware() {
     throw new Error('unimplemented in abstract class');
-  }}, {}, Component);
+  },
+  get type() {
+    return 'middleware';
+  }
+}, {}, Component);
 var HandlerComponent = function HandlerComponent() {
   $traceurRuntime.defaultSuperCall(this, $HandlerComponent.prototype, arguments);
 };
@@ -45,5 +62,8 @@ var $HandlerComponent = HandlerComponent;
   },
   loadHandler: function(config, options) {
     return loadHandleable(config, this, options);
+  },
+  get type() {
+    return 'handler';
   }
 }, {}, Component);
