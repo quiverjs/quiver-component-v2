@@ -19,7 +19,8 @@ var $__2 = $traceurRuntime.assertObject(require('./component.js')),
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var $__2 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineMiddlewareComponents = $__2.combineMiddlewareComponents,
-    combineBuilderMiddleware = $__2.combineBuilderMiddleware;
+    combineBuilderMiddleware = $__2.combineBuilderMiddleware,
+    combineBuilderWithMiddleware = $__2.combineBuilderWithMiddleware;
 var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
 var RouteList = function RouteList() {
   var routes = arguments[0] !== (void 0) ? arguments[0] : [];
@@ -104,7 +105,7 @@ var $Router = Router;
   get handleableBuilder() {
     var $__0 = this;
     var routeLists = this.routeLists;
-    return (function(config) {
+    var builder = (function(config) {
       var routeIndex = createRouteIndex();
       var promises = routeLists.map((function(routeList) {
         return routeList.buildRoutes(config, routeIndex);
@@ -117,6 +118,7 @@ var $Router = Router;
         return routerHandleable(routeIndex);
       }));
     });
+    return combineBuilderWithMiddleware(builder, this.extendMiddleware);
   },
   get type() {
     return 'router';
