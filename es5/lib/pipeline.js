@@ -38,7 +38,6 @@ var combineHandleables = (function(handleable1, handleable2, combinators) {
   return newHandleable;
 });
 var pipelineHandleables = (function(handleables, combinators) {
-  console.log('combinators:', combinators);
   if (handleables.length == 1)
     return handleables[0];
   var $__1 = $traceurRuntime.assertObject(handleables),
@@ -46,7 +45,7 @@ var pipelineHandleables = (function(handleables, combinators) {
       handleable2 = $__1[1],
       restHandleables = Array.prototype.slice.call($__1, 2);
   var newHandleable = combineHandleables(handleable1, handleable2, combinators);
-  return pipelineHandleables($traceurRuntime.spread([newHandleable], restHandleables));
+  return pipelineHandleables($traceurRuntime.spread([newHandleable], restHandleables), combinators);
 });
 var pipelineBuilder = (function(builders, combinators) {
   return (function(config) {
