@@ -27,7 +27,7 @@ var Component = function Component() {
   toJson: function() {
     var json = {type: this.type};
     if (this.name)
-      json.name = name;
+      json.name = this.name;
     return json;
   },
   toString: function() {
