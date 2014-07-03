@@ -37,14 +37,12 @@ var outTransformHandler = (function(handler, mode) {
 });
 var TransformFilter = function TransformFilter(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  if (!(handlerComponent instanceof HandlerComponent)) {
+  if (!(handlerComponent instanceof HandlerComponent))
     throw new TypeError('input handler component must be of type HandlerComponent');
-  }
   this._transformComponent = handlerComponent;
   var transformMode = $traceurRuntime.assertObject(options).transformMode;
-  if (!validModes[transformMode]) {
+  if (!validModes[transformMode])
     throw new TypeError('invalid transform mode provided in options');
-  }
   var loadOptions = $traceurRuntime.assertObject(options).loadOptions;
   var streamFilter = (function(config, handler) {
     return loadStreamHandler(config, handlerComponent).then((function(transformHandler) {

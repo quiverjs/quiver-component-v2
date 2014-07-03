@@ -58,9 +58,8 @@ var argsHandlerKeys = ['streamHandler', 'cacheIdHandler'];
 var ArgsFilter = function ArgsFilter(argsHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsHandler = argsHandler;
-  if (!options.applyToHandlers) {
+  if (!options.applyToHandlers)
     options.applyToHandlers = argsHandlerKeys;
-  }
   this._argsFilter = argsHandler;
   argsHandler = safeHandler(argsHandler, options);
   var streamFilter = argsToStreamFilter(argsHandler);
@@ -73,9 +72,8 @@ var $ArgsFilter = ArgsFilter;
 var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsBuilder = argsBuilder;
-  if (!options.applyToHandlers) {
+  if (!options.applyToHandlers)
     options.applyToHandlers = argsHandlerKeys;
-  }
   this._argsBuilder = argsBuilder;
   argsBuilder = safeBuilder(argsBuilder, options);
   var streamFilter = builderFilterConvert(argsBuilder, argsToStreamFilter);

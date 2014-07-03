@@ -21,9 +21,8 @@ var mixinMiddlewareExtensible = (function(Class) {
     }
   };
   proto.addMiddleware = function(middleware) {
-    if (!(middleware instanceof MiddlewareComponent)) {
+    if (!(middleware instanceof MiddlewareComponent))
       throw new TypeError('middleware must be of type MiddlewareComponent');
-    }
     this._middlewareComponents.push(middleware);
     return this;
   };

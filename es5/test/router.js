@@ -106,7 +106,7 @@ describe('router component test', (function() {
       var path = '/user/john/post/welcome-to-my-blog';
       var p1 = handler({path: path}, 'some comment').should.eventually.equal('Hello World!');
       var p2 = handler({path: '/user/john/spam'}, 'spam').should.be.rejected;
-      var p3 = handler({path: '/other place'}, 'nothing').should.eventually.equal('default routes');
+      var p3 = handler({path: '/other place'}, 'nothing').should.eventually.equal('default route');
       return Promise.all([p1, p2, p3]);
     }));
   }));
