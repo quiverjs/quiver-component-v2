@@ -1,11 +1,10 @@
 "use strict";
 require('traceur');
-var $__0 = $traceurRuntime.assertObject(require('../lib/router.js')),
+var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
     Router = $__0.Router,
-    RouteList = $__0.RouteList;
-var SimpleHandler = $traceurRuntime.assertObject(require('../lib/simple-handler.js')).SimpleHandler;
-var loadSimpleHandler = $traceurRuntime.assertObject(require('../lib/util/loader.js')).loadSimpleHandler;
-var $__0 = $traceurRuntime.assertObject(require('../lib/route.js')),
+    RouteList = $__0.RouteList,
+    SimpleHandler = $__0.SimpleHandler,
+    loadSimpleHandler = $__0.loadSimpleHandler,
     StaticRoute = $__0.StaticRoute,
     RegexRoute = $__0.RegexRoute,
     ParamRoute = $__0.ParamRoute;

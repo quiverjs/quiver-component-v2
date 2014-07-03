@@ -4,16 +4,15 @@ var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     streamableToText = $__0.streamableToText,
     textToStreamable = $__0.textToStreamable;
-var $__0 = $traceurRuntime.assertObject(require('../lib/simple-handler.js')),
+var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
     SimpleHandler = $__0.SimpleHandler,
-    SimpleHandlerBuilder = $__0.SimpleHandlerBuilder;
-var StreamFilter = $traceurRuntime.assertObject(require('../lib/filter.js')).StreamFilter;
-var TransformFilter = $traceurRuntime.assertObject(require('../lib/transform-filter.js')).TransformFilter;
-var $__0 = $traceurRuntime.assertObject(require('../lib/simple-filter.js')),
+    SimpleHandlerBuilder = $__0.SimpleHandlerBuilder,
+    StreamFilter = $__0.StreamFilter,
+    TransformFilter = $__0.TransformFilter,
     ArgsFilter = $__0.ArgsFilter,
     ArgsBuilderFilter = $__0.ArgsBuilderFilter,
-    ErrorFilter = $__0.ErrorFilter;
-var InputHandlerMiddleware = $traceurRuntime.assertObject(require('../lib/input-handler.js')).InputHandlerMiddleware;
+    ErrorFilter = $__0.ErrorFilter,
+    InputHandlerMiddleware = $__0.InputHandlerMiddleware;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -54,7 +53,7 @@ describe('filter test', (function() {
       return input.toUpperCase() + '!';
     });
     var transformComponent = new SimpleHandler(transformHandler, 'text', 'text');
-    var filterComponent = new TransformFilter(transformComponent, {transformMode: 'inout'});
+    var filterComponent = new TransformFilter(transformComponent, 'inout');
     handlerComponent.addMiddleware(filterComponent);
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({}, 'hello');

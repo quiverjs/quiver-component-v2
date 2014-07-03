@@ -35,12 +35,11 @@ var wrapMainHandler = (function(handler, mode) {
 var outTransformHandler = (function(handler, mode) {
   return mode != 'in' ? handler : echoHandler;
 });
-var TransformFilter = function TransformFilter(handlerComponent) {
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+var TransformFilter = function TransformFilter(handlerComponent, transformMode) {
+  var options = arguments[2] !== (void 0) ? arguments[2] : {};
   if (!(handlerComponent instanceof HandlerComponent))
     throw new TypeError('input handler component must be of type HandlerComponent');
   this._transformComponent = handlerComponent;
-  var transformMode = $traceurRuntime.assertObject(options).transformMode;
   if (!validModes[transformMode])
     throw new TypeError('invalid transform mode provided in options');
   var loadOptions = $traceurRuntime.assertObject(options).loadOptions;

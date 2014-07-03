@@ -1,8 +1,8 @@
 import 'traceur'
 
-import { Pipeline } from '../lib/pipeline.js'
-import { SimpleHandler } from '../lib/simple-handler.js'
-import { loadSimpleHandler } from '../lib/util/loader.js'
+import {
+  Pipeline, SimpleHandler, loadSimpleHandler
+} from '../lib/export.js'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
@@ -10,7 +10,7 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var should = chai.should()
 
-describe.only('pipeline handler test', () => {
+describe('pipeline handler test', () => {
   it('simple pipeline', () => {
     var handler1 = args =>
       'hello, ' + args.name

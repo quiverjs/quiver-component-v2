@@ -1,13 +1,14 @@
 "use strict";
 require('traceur');
-var Pipeline = $traceurRuntime.assertObject(require('../lib/pipeline.js')).Pipeline;
-var SimpleHandler = $traceurRuntime.assertObject(require('../lib/simple-handler.js')).SimpleHandler;
-var loadSimpleHandler = $traceurRuntime.assertObject(require('../lib/util/loader.js')).loadSimpleHandler;
+var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+    Pipeline = $__0.Pipeline,
+    SimpleHandler = $__0.SimpleHandler,
+    loadSimpleHandler = $__0.loadSimpleHandler;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var should = chai.should();
-describe.only('pipeline handler test', (function() {
+describe('pipeline handler test', (function() {
   it('simple pipeline', (function() {
     var handler1 = (function(args) {
       return 'hello, ' + args.name;

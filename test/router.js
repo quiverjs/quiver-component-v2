@@ -1,10 +1,10 @@
 import 'traceur'
-import { Router, RouteList } from '../lib/router.js'
-import { SimpleHandler } from '../lib/simple-handler.js'
-import { loadSimpleHandler } from '../lib/util/loader.js'
+
 import { 
+  Router, RouteList, 
+  SimpleHandler, loadSimpleHandler,
   StaticRoute, RegexRoute, ParamRoute 
-} from '../lib/route.js'
+} from '../lib/export.js'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')

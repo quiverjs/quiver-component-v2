@@ -1,7 +1,8 @@
 import 'traceur'
-import { StreamHandler } from '../lib/stream-handler.js'
-import { SimpleHandler } from '../lib/simple-handler.js'
-import { HttpHandlerBuilder } from '../lib/http-handler.js'
+
+import {
+  StreamHandler, SimpleHandler, HttpHandlerBuilder
+} from '../lib/export.js'
 
 import { resolve } from 'quiver-promise'
 import { streamableToText, textToStreamable } from 'quiver-stream-util'

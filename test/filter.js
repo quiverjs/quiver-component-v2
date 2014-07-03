@@ -3,18 +3,12 @@ import 'traceur'
 import { resolve } from 'quiver-promise'
 import { streamableToText, textToStreamable } from 'quiver-stream-util'
 
-import { 
-  SimpleHandler, SimpleHandlerBuilder 
-} from '../lib/simple-handler.js'
-
-import { StreamFilter } from '../lib/filter.js'
-import { TransformFilter } from '../lib/transform-filter.js'
-
-import { 
-  ArgsFilter, ArgsBuilderFilter, ErrorFilter 
-} from '../lib/simple-filter.js'
-
-import { InputHandlerMiddleware } from '../lib/input-handler.js'
+import {
+  SimpleHandler, SimpleHandlerBuilder ,
+  StreamFilter, TransformFilter,
+  ArgsFilter, ArgsBuilderFilter, ErrorFilter,
+  InputHandlerMiddleware
+} from '../lib/export.js'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
@@ -63,9 +57,7 @@ describe('filter test', () => {
 
     var transformComponent = new SimpleHandler(transformHandler, 'text', 'text')
 
-    var filterComponent = new TransformFilter(transformComponent, {
-      transformMode: 'inout'
-    })
+    var filterComponent = new TransformFilter(transformComponent, 'inout')
 
     handlerComponent.addMiddleware(filterComponent)
 

@@ -1,8 +1,9 @@
 "use strict";
 require('traceur');
-var StreamHandler = $traceurRuntime.assertObject(require('../lib/stream-handler.js')).StreamHandler;
-var SimpleHandler = $traceurRuntime.assertObject(require('../lib/simple-handler.js')).SimpleHandler;
-var HttpHandlerBuilder = $traceurRuntime.assertObject(require('../lib/http-handler.js')).HttpHandlerBuilder;
+var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+    StreamHandler = $__0.StreamHandler,
+    SimpleHandler = $__0.SimpleHandler,
+    HttpHandlerBuilder = $__0.HttpHandlerBuilder;
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     streamableToText = $__0.streamableToText,

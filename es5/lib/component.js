@@ -37,6 +37,9 @@ var $HandlerComponent = HandlerComponent;
   get handleableBuilder() {
     throw new Error('unimplemented in abstract class');
   },
+  addMiddleware: function(MiddlewareComponent) {
+    throw new Error('unimplemented in abstract class');
+  },
   loadHandleable: function(config, options) {
     return loadHandleable(config, this, options);
   },

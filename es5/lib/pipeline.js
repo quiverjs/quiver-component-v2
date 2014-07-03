@@ -11,6 +11,7 @@ var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
     assertInstanceOf = $__1.assertInstanceOf,
     assertArrayInstanceOf = $__1.assertArrayInstanceOf;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
+var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var combineStreamHandlers = (function(handler1, handler2) {
   return (function(args, streamable) {
     return handler1(copy(args), streamable).then((function(streamable) {
@@ -65,6 +66,7 @@ var Pipeline = function Pipeline() {
       pipelineCombinators = ($__2 = $__1.pipelineCombinators) === void 0 ? defaultCombinators : $__2;
   this._pipelineHandlers = handlerComponents;
   this._pipelineCombinators = pipelineCombinators;
+  this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $Pipeline.prototype, "constructor", [options]);
 };
 var $Pipeline = Pipeline;
@@ -83,3 +85,4 @@ var $Pipeline = Pipeline;
     return pipelineBuilder(builders, combinators);
   }
 }, {}, HandlerComponent);
+mixinMiddlewareExtensible(Pipeline);
