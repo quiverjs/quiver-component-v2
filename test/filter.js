@@ -42,12 +42,12 @@ describe('filter test', () => {
   })
 
   it('transform filter', () => {
-    var uppercaseHandler = new SimpleHandler(
+    var uppercase = new SimpleHandler(
       (args, input) =>
         input.toUpperCase() + '!', 
       'text', 'text')
 
-    var filter = new TransformFilter(uppercaseHandler, 'inout')
+    var filter = new TransformFilter(uppercase, 'inout')
 
     var main = new SimpleHandler(
       (args, input) => {
@@ -116,12 +116,12 @@ describe('filter test', () => {
   })
 
   it('input handler', () => {
-    var uppercaseHandler = new SimpleHandler(
+    var uppercase = new SimpleHandler(
       (args, input) =>  input.toUpperCase() + '!', 
       'text', 'text')
 
     var filter = new InputHandlerMiddleware(
-      uppercaseHandler, 'inHandler')
+      uppercase, 'inHandler')
 
     var main = new SimpleHandlerBuilder(
       config => {

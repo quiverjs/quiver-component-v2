@@ -26,13 +26,14 @@ describe('router component test', (function() {
     }));
   }));
   it('regex route', (function() {
-    var handlerComponent = new SimpleHandler((function(args, input) {
+    var greet = new SimpleHandler((function(args, input) {
       input.should.equal('hello');
+      args.name.should.equal('john');
       return 'goodbye, ' + args.name;
     }), 'text', 'text');
-    var router = new Router().addRegexRoute(handlerComponent, /^\/(\w+)$/, ['name']);
+    var router = new Router().addRegexRoute(greet, /^\/greet\/(\w+)$/, ['name']);
     return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
-      return handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye, foo');
+      return handler({path: '/greet/john'}, 'hello').should.eventually.equal('goodbye, john');
     }));
   }));
   it('param route', (function() {

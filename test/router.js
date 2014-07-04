@@ -36,19 +36,21 @@ describe('router component test', () => {
   })
 
   it('regex route', () => {
-    var handlerComponent = new SimpleHandler(
+    var greet = new SimpleHandler(
       (args, input) => {
         input.should.equal('hello')
+        args.name.should.equal('john')
+
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
     var router = new Router()
-      .addRegexRoute(handlerComponent, /^\/(\w+)$/, ['name'])
+      .addRegexRoute(greet, /^\/greet\/(\w+)$/, ['name'])
 
     return loadSimpleHandler({}, router, 'text', 'text')
       .then(handler => 
-        handler({ path: '/foo' }, 'hello')
-          .should.eventually.equal('goodbye, foo'))
+        handler({ path: '/greet/john' }, 'hello')
+          .should.eventually.equal('goodbye, john'))
   })
 
   it('param route', () => {

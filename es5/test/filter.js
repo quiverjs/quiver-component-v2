@@ -41,10 +41,10 @@ describe('filter test', (function() {
     })).should.eventually.equal('GOODBYE!');
   }));
   it('transform filter', (function() {
-    var uppercaseHandler = new SimpleHandler((function(args, input) {
+    var uppercase = new SimpleHandler((function(args, input) {
       return input.toUpperCase() + '!';
     }), 'text', 'text');
-    var filter = new TransformFilter(uppercaseHandler, 'inout');
+    var filter = new TransformFilter(uppercase, 'inout');
     var main = new SimpleHandler((function(args, input) {
       input.should.equal('HELLO!');
       return 'goodbye';
@@ -94,10 +94,10 @@ describe('filter test', (function() {
     })).should.eventually.equal('error caught from filter');
   }));
   it('input handler', (function() {
-    var uppercaseHandler = new SimpleHandler((function(args, input) {
+    var uppercase = new SimpleHandler((function(args, input) {
       return input.toUpperCase() + '!';
     }), 'text', 'text');
-    var filter = new InputHandlerMiddleware(uppercaseHandler, 'inHandler');
+    var filter = new InputHandlerMiddleware(uppercase, 'inHandler');
     var main = new SimpleHandlerBuilder((function(config) {
       var inHandler = config.inHandler;
       should.exist(inHandler);
