@@ -27,17 +27,16 @@ describe('handler test', (function() {
     }));
   }));
   it('simple handler', (function() {
-    var handler = (function(args, input) {
+    var component = new SimpleHandler((function(args, input) {
       input.should.equal('hello');
       return 'goodbye';
-    });
-    var component = new SimpleHandler(handler, 'text', 'text');
+    }), 'text', 'text');
     return component.loadHandler({}).then((function(handler) {
       return handler({}, 'hello').should.eventually.equal('goodbye');
     }));
   }));
   it('http builder', (function() {
-    var builder = (function(config) {
+    var component = new HttpHandlerBuilder((function(config) {
       var greet = config.greet || 'hi';
       return (function(requestHead, streamable) {
         return streamableToText(streamable).then((function(input) {
@@ -48,8 +47,7 @@ describe('handler test', (function() {
           };
         }));
       });
-    });
-    var component = new HttpHandlerBuilder(builder);
+    }));
     var config = {greet: 'goodbye'};
     return component.loadHandleable(config).then((function(handleable) {
       var handler = handleable.httpHandler;

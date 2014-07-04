@@ -10,7 +10,10 @@ Object.defineProperties(exports, {
 });
 var $__2 = $traceurRuntime.assertObject(require('./route.js')),
     Route = $__2.Route,
-    RouteList = $__2.RouteList;
+    StaticRoute = $__2.StaticRoute,
+    DynamicRoute = $__2.DynamicRoute,
+    RegexRoute = $__2.RegexRoute,
+    ParamRoute = $__2.ParamRoute;
 var routerHandleable = $traceurRuntime.assertObject(require('./util/router.js')).routerHandleable;
 var createRouteIndex = $traceurRuntime.assertObject(require('./util/route-index.js')).createRouteIndex;
 var $__2 = $traceurRuntime.assertObject(require('./component.js')),
@@ -39,6 +42,19 @@ var $RouteList = RouteList;
       throw new Error('route must be of type Route');
     }
     this._routes.push(route);
+    return this;
+  },
+  addStaticRoute: function(handler, path) {
+    return this.addRoute(new StaticRoute(handler, path));
+  },
+  addParamRoute: function(handler, path) {
+    return this.addRoute(new ParamRoute(handler, path));
+  },
+  addRegexRoute: function(handler, regex, fields) {
+    return this.addRoute(new RegexRoute(handler, regex, fields));
+  },
+  addDynamicRoute: function(handler, matcher) {
+    return this.addRoute(new DynamicRoute(handler, matcher));
   },
   buildRoutes: function(config, routeIndex) {
     var middleware = this.extendMiddleware;
@@ -85,11 +101,29 @@ var $Router = Router;
     if (!(route instanceof Route))
       throw new TypeError('route must be instance of Route');
     this._defaultRouteList.addRoute(route);
+    return this;
+  },
+  addStaticRoute: function(handler, path) {
+    this._defaultRouteList.addStaticRoute(handler, path);
+    return this;
+  },
+  addParamRoute: function(handler, path) {
+    this._defaultRouteList.addParamRoute(handler, path);
+    return this;
+  },
+  addRegexRoute: function(handler, regex, fields) {
+    this._defaultRouteList.addRegexRoute(handler, regex, fields);
+    return this;
+  },
+  addDynamicRoute: function(handler, matcher) {
+    this._defaultRouteList.addDynamicRoute(handler, matcher);
+    return this;
   },
   addRouteList: function(routeList) {
     if (!(routeList instanceof RouteList))
       throw new TypeError('route list must be instance of RouteList');
     this._routeLists.push(routeList);
+    return this;
   },
   get routeLists() {
     return $traceurRuntime.spread([this._defaultRouteList], this._routeLists);
@@ -101,6 +135,7 @@ var $Router = Router;
     if (this._defaultHandler)
       throw new Error('router component already has default route');
     this._defaultHandler = handlerComponent;
+    return this;
   },
   get handleableBuilder() {
     var $__0 = this;

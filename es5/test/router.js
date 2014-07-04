@@ -14,14 +14,11 @@ chai.use(chaiAsPromised);
 var should = chai.should();
 describe('router component test', (function() {
   it('static route', (function() {
-    var handler = (function(args, input) {
+    var handlerComponent = new SimpleHandler((function(args, input) {
       input.should.equal('hello');
       return 'goodbye';
-    });
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
-    var route = new StaticRoute(handlerComponent, '/foo');
-    var router = new Router();
-    router.addRoute(route);
+    }), 'text', 'text');
+    var router = new Router().addStaticRoute(handlerComponent, '/foo');
     return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
       var p1 = handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye');
       var p2 = handler({path: '/bar'}, 'nothing').should.be.rejected;
@@ -29,52 +26,42 @@ describe('router component test', (function() {
     }));
   }));
   it('regex route', (function() {
-    var handler = (function(args, input) {
+    var handlerComponent = new SimpleHandler((function(args, input) {
       input.should.equal('hello');
       return 'goodbye, ' + args.name;
-    });
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
-    var route = new RegexRoute(handlerComponent, /^\/(\w+)$/, ['name']);
-    var router = new Router();
-    router.addRoute(route);
+    }), 'text', 'text');
+    var router = new Router().addRegexRoute(handlerComponent, /^\/(\w+)$/, ['name']);
     return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
       return handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye, foo');
     }));
   }));
   it('param route', (function() {
-    var handler = (function(args, input) {
+    var handlerComponent = new SimpleHandler((function(args, input) {
       input.should.equal('hello');
       return 'goodbye, ' + args.name;
-    });
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
-    var route = new ParamRoute(handlerComponent, '/:name');
-    var router = new Router();
-    router.addRoute(route);
+    }), 'text', 'text');
+    var router = new Router().addParamRoute(handlerComponent, '/:name');
     return loadSimpleHandler({}, router, 'text', 'text').then((function(handler) {
       return handler({path: '/foo'}, 'hello').should.eventually.equal('goodbye, foo');
     }));
   }));
   it('route list', (function() {
-    var fooHandler = (function(args) {
+    var fooComponent = new SimpleHandler((function(args) {
       args.path.should.equal('/foo');
       return 'foo';
-    });
-    var fooComponent = new SimpleHandler(fooHandler, 'void', 'text');
-    var fooRoute = new StaticRoute(fooComponent, '/foo');
+    }), 'void', 'text');
     var barHandler = (function(args) {
       args.path.should.equal('/subpath');
       args.id.should.equal('baz');
       return 'bar';
     });
     var barComponent = new SimpleHandler(barHandler, 'void', 'text');
-    var barRoute = new ParamRoute(barComponent, '/bar/:id/:restpath');
     var defaultHandler = (function(args) {
       return 'default route';
     });
     var defaultComponent = new SimpleHandler(defaultHandler, 'void', 'text');
-    var routeList = new RouteList([fooRoute, barRoute]);
-    var router = new Router([routeList]);
-    router.setDefaultHandler(defaultComponent);
+    var routeList = new RouteList().addStaticRoute(fooComponent, '/foo').addParamRoute(barComponent, '/bar/:id/:restpath');
+    var router = new Router().addRouteList(routeList).setDefaultHandler(defaultComponent);
     return loadSimpleHandler({}, router, 'void', 'text').then((function(handler) {
       var p1 = handler({path: '/foo'}).should.eventually.equal('foo');
       var p2 = handler({path: '/bar/baz/subpath'}).should.eventually.equal('bar');
@@ -83,24 +70,17 @@ describe('router component test', (function() {
     }));
   }));
   it('nested router', (function() {
-    var postHandler = (function(args, input) {
+    var postComponent = new SimpleHandler((function(args, input) {
       args.userId.should.equal('john');
       args.postId.should.equal('welcome-to-my-blog');
       input.should.equal('some comment');
       return 'Hello World!';
-    });
-    var postComponent = new SimpleHandler(postHandler, 'text', 'text');
-    var postRoute = new ParamRoute(postComponent, '/post/:postId');
-    var userRouter = new Router();
-    userRouter.addRoute(postRoute);
-    var userRoute = new ParamRoute(userRouter, '/user/:userId/:restpath');
-    var defaultHandler = (function(args) {
+    }), 'text', 'text');
+    var userRouter = new Router().addParamRoute(postComponent, '/post/:postId');
+    var defaultComponent = new SimpleHandler((function(args) {
       return 'default route';
-    });
-    var defaultComponent = new SimpleHandler(defaultHandler, 'void', 'text');
-    var mainRouter = new Router();
-    mainRouter.addRoute(userRoute);
-    mainRouter.setDefaultHandler(defaultComponent);
+    }), 'void', 'text');
+    var mainRouter = new Router().addParamRoute(userRouter, '/user/:userId/:restpath').setDefaultHandler(defaultComponent);
     return loadSimpleHandler({}, mainRouter, 'text', 'text').then((function(handler) {
       var path = '/user/john/post/welcome-to-my-blog';
       var p1 = handler({path: path}, 'some comment').should.eventually.equal('Hello World!');

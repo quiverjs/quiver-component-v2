@@ -25,91 +25,80 @@ var uppercaseStream = (function(streamable) {
 });
 describe('filter test', (function() {
   it('simple handler', (function() {
-    var handler = (function(args, input) {
-      input.should.equal('HELLO!');
-      return 'goodbye';
-    });
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
-    var filter = (function(config, handler) {
+    var filterComponent = new StreamFilter((function(config, handler) {
       return (function(args, streamable) {
         return uppercaseStream(streamable).then((function(streamable) {
           return handler(args, streamable).then(uppercaseStream);
         }));
       });
-    });
-    var filterComponent = new StreamFilter(filter);
-    handlerComponent.addMiddleware(filterComponent);
+    }));
+    var handlerComponent = new SimpleHandler((function(args, input) {
+      input.should.equal('HELLO!');
+      return 'goodbye';
+    }), 'text', 'text').addMiddleware(filterComponent);
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({}, 'hello');
     })).should.eventually.equal('GOODBYE!');
   }));
   it('transform filter', (function() {
-    var handler = (function(args, input) {
+    var transformComponent = new SimpleHandler((function(args, input) {
+      return input.toUpperCase() + '!';
+    }), 'text', 'text');
+    var filterComponent = new TransformFilter(transformComponent, 'inout');
+    var handlerComponent = new SimpleHandler((function(args, input) {
       input.should.equal('HELLO!');
       return 'goodbye';
-    });
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text');
-    var transformHandler = (function(args, input) {
-      return input.toUpperCase() + '!';
-    });
-    var transformComponent = new SimpleHandler(transformHandler, 'text', 'text');
-    var filterComponent = new TransformFilter(transformComponent, 'inout');
-    handlerComponent.addMiddleware(filterComponent);
+    }), 'text', 'text').addMiddleware(filterComponent);
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({}, 'hello');
     })).should.eventually.equal('GOODBYE!');
   }));
   it('args filter', (function() {
-    var handler = (function(args) {
-      args.foo.should.equal('bar');
-      return 'foo';
-    });
-    var handlerComponent = new SimpleHandler(handler, 'void', 'text');
-    var argsFilter = (function(args) {
+    var filterComponent = new ArgsFilter((function(args) {
       args.foo = 'bar';
       return args;
-    });
-    var filterComponent = new ArgsFilter(argsFilter);
-    handlerComponent.addMiddleware(filterComponent);
+    }));
+    var handlerComponent = new SimpleHandler((function(args) {
+      args.foo.should.equal('bar');
+      return 'foo';
+    }), 'void', 'text').addMiddleware(filterComponent);
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({});
     })).should.eventually.equal('foo');
   }));
   it('args builder filter', (function() {
-    var handler = (function(args) {
-      args.foo.should.equal('bar');
-      return 'foo';
-    });
-    var handlerComponent = new SimpleHandler(handler, 'void', 'text');
-    var argsBuilder = (function(config) {
+    var filterComponent = new ArgsBuilderFilter((function(config) {
       var fooValue = config.fooValue;
       return (function(args) {
         args.foo = fooValue;
         return args;
       });
-    });
-    var filterComponent = new ArgsBuilderFilter(argsBuilder);
-    handlerComponent.addMiddleware(filterComponent);
+    }));
+    var handlerComponent = new SimpleHandler((function(args) {
+      args.foo.should.equal('bar');
+      return 'foo';
+    }), 'void', 'text').addMiddleware(filterComponent);
     return handlerComponent.loadHandler({fooValue: 'bar'}).then((function(handler) {
       return handler({});
     })).should.eventually.equal('foo');
   }));
   it('error filter', (function() {
-    var handler = (function(args) {
-      throw new Error('error in handler');
-    });
-    var handlerComponent = new SimpleHandler(handler, 'void', 'text');
-    var errorFilter = (function(err) {
+    var filterComponent = new ErrorFilter((function(err) {
       return textToStreamable('error caught from filter');
-    });
-    var filterComponent = new ErrorFilter(errorFilter);
-    handlerComponent.addMiddleware(filterComponent);
+    }));
+    var handlerComponent = new SimpleHandler((function(args) {
+      throw new Error('error in handler');
+    }), 'void', 'text').addMiddleware(filterComponent);
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({});
     })).should.eventually.equal('error caught from filter');
   }));
   it('input handler', (function() {
-    var builder = (function(config) {
+    var inputComponent = new SimpleHandler((function(args, input) {
+      return input.toUpperCase() + '!';
+    }), 'text', 'text');
+    var filterComponent = new InputHandlerMiddleware(inputComponent, 'inHandler');
+    var handlerComponent = new SimpleHandlerBuilder((function(config) {
       var inHandler = config.inHandler;
       should.exist(inHandler);
       return (function(args, input) {
@@ -120,14 +109,7 @@ describe('filter test', (function() {
           });
         }));
       });
-    });
-    var handlerComponent = new SimpleHandlerBuilder(builder, 'text', 'json');
-    var inputHandler = (function(args, input) {
-      return input.toUpperCase() + '!';
-    });
-    var inputComponent = new SimpleHandler(inputHandler, 'text', 'text');
-    var filterComponent = new InputHandlerMiddleware(inputComponent, 'inHandler');
-    handlerComponent.addMiddleware(filterComponent);
+    }), 'text', 'json').addMiddleware(filterComponent);
     return handlerComponent.loadHandler({}).then((function(handler) {
       return handler({}, 'hello').then((function(json) {
         json.status.should.equal('ok');

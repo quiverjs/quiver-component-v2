@@ -74,6 +74,7 @@ var $Pipeline = Pipeline;
   addPipe: function(component) {
     assertInstanceOf(component, HandlerComponent, 'component must be of type HandlerComponent');
     this._pipelineHandlers.push(component);
+    return this;
   },
   get pipelineHandlers() {
     return this._pipelineHandlers.slice();

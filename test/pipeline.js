@@ -12,22 +12,24 @@ var should = chai.should()
 
 describe('pipeline handler test', () => {
   it('simple pipeline', () => {
-    var handler1 = args =>
-      'hello, ' + args.name
+    var component1 = new SimpleHandler(
+      args => 'hello, ' + args.name, 
+      'void', 'text')
 
-    var handler2 = (args, input) =>
-      input.toUpperCase()
+    var component2 = new SimpleHandler(
+      (args, input) => input.toUpperCase(), 
+      'text', 'text')
 
-    var handler3 = (args, input) => ({
-      status: 'ok',
-      result: input
-    })
+    var component3 = new SimpleHandler(
+      (args, input) => ({
+        status: 'ok',
+        result: input
+      }), 'text', 'json')
 
-    var component1 = new SimpleHandler(handler1, 'void', 'text')
-    var component2 = new SimpleHandler(handler2, 'text', 'text')
-    var component3 = new SimpleHandler(handler3, 'text', 'json')
-
-    var pipeline = new Pipeline([component1, component2, component3])
+    var pipeline = new Pipeline()
+      .addPipe(component1)
+      .addPipe(component2)
+      .addPipe(component3)
     
     return loadSimpleHandler({}, pipeline, 'void', 'json')
     .then(handler => 

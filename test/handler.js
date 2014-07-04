@@ -15,11 +15,12 @@ var should = chai.should()
 
 describe('handler test', () => {
   it('stream handler', () => {
-    var component = new StreamHandler((args, streamable) =>
-      streamableToText(streamable).then(input => {
-        input.should.equal('hello')
-        return textToStreamable('goodbye')
-      }))
+    var component = new StreamHandler(
+      (args, streamable) =>
+        streamableToText(streamable).then(input => {
+          input.should.equal('hello')
+          return textToStreamable('goodbye')
+        }))
 
     return component.handleableBuilder({})
       .then(handleable => {
@@ -32,34 +33,32 @@ describe('handler test', () => {
   })
 
   it('simple handler', () => {
-    var handler = (args, input) => {
-      input.should.equal('hello')
-      return 'goodbye'
-    }
-
-    var component = new SimpleHandler(handler, 'text', 'text')
+    var component = new SimpleHandler(
+      (args, input) => {
+        input.should.equal('hello')
+        return 'goodbye'
+      }, 'text', 'text')
 
     return component.loadHandler({}).then(handler =>
       handler({}, 'hello').should.eventually.equal('goodbye'))
   })
 
   it('http builder', () => {
-    var builder = config => {
-      var greet = config.greet || 'hi'
+    var component = new HttpHandlerBuilder(
+      config => {
+        var greet = config.greet || 'hi'
 
-      return (requestHead, streamable) => 
-        streamableToText(streamable).then(input => {
-          input.should.equal('hello')
-          return {
-            responseHead: {
-              statusCode: 200
-            },
-            responseStreamable: textToStreamable(greet)
-          }
-        })
-    }
-
-    var component = new HttpHandlerBuilder(builder)
+        return (requestHead, streamable) => 
+          streamableToText(streamable).then(input => {
+            input.should.equal('hello')
+            return {
+              responseHead: {
+                statusCode: 200
+              },
+              responseStreamable: textToStreamable(greet)
+            }
+          })
+      })
 
     var config = {
       greet: 'goodbye'

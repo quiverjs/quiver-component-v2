@@ -24,86 +24,77 @@ var uppercaseStream = streamable =>
 
 describe('filter test', () => {
   it('simple handler', () => {
-    var handler = (args, input) => {
-      input.should.equal('HELLO!')
-      return 'goodbye'
-    }
+    var filterComponent = new StreamFilter(
+      (config, handler) =>
+        (args, streamable) =>
+          uppercaseStream(streamable).then(streamable =>
+            handler(args, streamable).then(uppercaseStream)))
 
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
-
-    var filter = (config, handler) =>
-      (args, streamable) =>
-        uppercaseStream(streamable).then(streamable =>
-          handler(args, streamable).then(uppercaseStream))
-
-    var filterComponent = new StreamFilter(filter)
-
-    handlerComponent.addMiddleware(filterComponent)
+    var handlerComponent = new SimpleHandler(
+      (args, input) => {
+        input.should.equal('HELLO!')
+        return 'goodbye'
+      }, 'text', 'text')
+    .addMiddleware(filterComponent)
 
     return handlerComponent.loadHandler({}).then(handler =>
       handler({}, 'hello')).should.eventually.equal('GOODBYE!')
   })
 
   it('transform filter', () => {
-    var handler = (args, input) => {
-      input.should.equal('HELLO!')
-      return 'goodbye'
-    }
-
-    var handlerComponent = new SimpleHandler(handler, 'text', 'text')
-
-    var transformHandler = (args, input) =>
-      input.toUpperCase() + '!'
-
-    var transformComponent = new SimpleHandler(transformHandler, 'text', 'text')
+    var transformComponent = new SimpleHandler(
+      (args, input) =>
+        input.toUpperCase() + '!', 
+      'text', 'text')
 
     var filterComponent = new TransformFilter(transformComponent, 'inout')
 
-    handlerComponent.addMiddleware(filterComponent)
+    var handlerComponent = new SimpleHandler(
+      (args, input) => {
+        input.should.equal('HELLO!')
+        return 'goodbye'
+      }, 'text', 'text')
+    .addMiddleware(filterComponent)
 
     return handlerComponent.loadHandler({}).then(handler =>
       handler({}, 'hello')).should.eventually.equal('GOODBYE!')
   })
 
   it('args filter', () => {
-    var handler = args => {
-      args.foo.should.equal('bar')
-      return 'foo'
-    }
+    var filterComponent = new ArgsFilter(
+      args => {
+        args.foo = 'bar'
+        return args
+      })
 
-    var handlerComponent = new SimpleHandler(handler, 'void', 'text')
-
-    var argsFilter = args => {
-      args.foo = 'bar'
-      return args
-    }
-
-    var filterComponent = new ArgsFilter(argsFilter)
-    handlerComponent.addMiddleware(filterComponent)
+    var handlerComponent = new SimpleHandler(
+      args => {
+        args.foo.should.equal('bar')
+        return 'foo'
+      }, 'void', 'text')
+    .addMiddleware(filterComponent)
 
     return handlerComponent.loadHandler({}).then(handler =>
       handler({})).should.eventually.equal('foo')
   })
 
   it('args builder filter', () => {
-    var handler = args => {
-      args.foo.should.equal('bar')
-      return 'foo'
-    }
+    var filterComponent = new ArgsBuilderFilter(
+      config => {
+        var fooValue = config.fooValue
 
-    var handlerComponent = new SimpleHandler(handler, 'void', 'text')
+        return args => {
+          args.foo = fooValue
+          return args
+        }
+      })
 
-    var argsBuilder = config => {
-      var fooValue = config.fooValue
-
-      return args => {
-        args.foo = fooValue
-        return args
-      }
-    }
-
-    var filterComponent = new ArgsBuilderFilter(argsBuilder)
-    handlerComponent.addMiddleware(filterComponent)
+    var handlerComponent = new SimpleHandler(
+      args => {
+        args.foo.should.equal('bar')
+        return 'foo'
+      }, 'void', 'text')
+    .addMiddleware(filterComponent)
 
     return handlerComponent.loadHandler({ fooValue: 'bar' })
       .then(handler => handler({}))
@@ -111,44 +102,39 @@ describe('filter test', () => {
   })
 
   it('error filter', () => {
-    var handler = args => {
-      throw new Error('error in handler')
-    }
+    var filterComponent = new ErrorFilter(
+      err => textToStreamable('error caught from filter'))
 
-    var handlerComponent = new SimpleHandler(handler, 'void', 'text')
-
-    var errorFilter = err =>
-      textToStreamable('error caught from filter')
-
-    var filterComponent = new ErrorFilter(errorFilter)
-    handlerComponent.addMiddleware(filterComponent)
+    var handlerComponent = new SimpleHandler(
+      args => {
+        throw new Error('error in handler')
+      }, 'void', 'text')
+    .addMiddleware(filterComponent)
 
     return handlerComponent.loadHandler({}).then(handler =>
       handler({})).should.eventually.equal('error caught from filter')
   })
 
   it('input handler', () => {
-    var builder = config => {
-      var inHandler = config.inHandler
-      should.exist(inHandler)
+    var inputComponent = new SimpleHandler(
+      (args, input) =>  input.toUpperCase() + '!', 
+      'text', 'text')
 
-      return (args, input) =>
-        inHandler(args, input).then(result => ({
-          status: 'ok',
-          result
-        }))
-    }
+    var filterComponent = new InputHandlerMiddleware(
+      inputComponent, 'inHandler')
 
-    var handlerComponent = new SimpleHandlerBuilder(builder, 'text', 'json')
+    var handlerComponent = new SimpleHandlerBuilder(
+      config => {
+        var inHandler = config.inHandler
+        should.exist(inHandler)
 
-    var inputHandler = (args, input) => 
-      input.toUpperCase() + '!'
-
-    var inputComponent = new SimpleHandler(inputHandler, 'text', 'text')
-
-    var filterComponent = new InputHandlerMiddleware(inputComponent, 'inHandler')
-
-    handlerComponent.addMiddleware(filterComponent)
+        return (args, input) =>
+          inHandler(args, input).then(result => ({
+            status: 'ok',
+            result
+          }))
+      }, 'text', 'json')
+    .addMiddleware(filterComponent)
 
     return handlerComponent.loadHandler({}).then(handler =>
       handler({}, 'hello').then(json => {
