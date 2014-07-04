@@ -14,29 +14,29 @@ chai.use(chaiAsPromised);
 var should = chai.should();
 describe('handler test', (function() {
   it('stream handler', (function() {
-    var component = new StreamHandler((function(args, streamable) {
+    var main = new StreamHandler((function(args, streamable) {
       return streamableToText(streamable).then((function(input) {
         input.should.equal('hello');
         return textToStreamable('goodbye');
       }));
     }));
-    return component.handleableBuilder({}).then((function(handleable) {
+    return main.handleableBuilder({}).then((function(handleable) {
       var handler = handleable.streamHandler;
       var input = textToStreamable('hello');
       return handler({}, input).then(streamableToText).should.eventually.equal('goodbye');
     }));
   }));
   it('simple handler', (function() {
-    var component = new SimpleHandler((function(args, input) {
+    var main = new SimpleHandler((function(args, input) {
       input.should.equal('hello');
       return 'goodbye';
     }), 'text', 'text');
-    return component.loadHandler({}).then((function(handler) {
+    return main.loadHandler({}).then((function(handler) {
       return handler({}, 'hello').should.eventually.equal('goodbye');
     }));
   }));
   it('http builder', (function() {
-    var component = new HttpHandlerBuilder((function(config) {
+    var main = new HttpHandlerBuilder((function(config) {
       var greet = config.greet || 'hi';
       return (function(requestHead, streamable) {
         return streamableToText(streamable).then((function(input) {
@@ -49,7 +49,7 @@ describe('handler test', (function() {
       });
     }));
     var config = {greet: 'goodbye'};
-    return component.loadHandleable(config).then((function(handleable) {
+    return main.loadHandleable(config).then((function(handleable) {
       var handler = handleable.httpHandler;
       should.exist(handler);
       var input = textToStreamable('hello');

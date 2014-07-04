@@ -52,47 +52,48 @@ describe('router component test', () => {
   })
 
   it('param route', () => {
-    var handlerComponent = new SimpleHandler(
+    var greet = new SimpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
     var router = new Router()
-      .addParamRoute(handlerComponent, '/:name')
+      .addParamRoute(greet, '/greet/:name')
 
     return loadSimpleHandler({}, router, 'text', 'text')
       .then(handler => 
-        handler({ path: '/foo' }, 'hello')
+        handler({ path: '/greet/foo' }, 'hello')
           .should.eventually.equal('goodbye, foo'))
   })
 
   it('route list', () => {
-    var fooComponent = new SimpleHandler(
+    var foo = new SimpleHandler(
       args => {
         args.path.should.equal('/foo')
+
         return 'foo'
       }, 'void', 'text')
 
-    var barHandler = args => {
-      args.path.should.equal('/subpath')
-      args.id.should.equal('baz')
+    var bar = new SimpleHandler(
+      args => {
+        args.path.should.equal('/subpath')
+        args.id.should.equal('baz')
 
-      return 'bar'
-    }
+        return 'bar'
+      }, 'void', 'text')
 
-    var barComponent = new SimpleHandler(barHandler, 'void', 'text')
-
-    var defaultHandler = args => 'default route'
-    var defaultComponent = new SimpleHandler(defaultHandler, 'void', 'text')
+    var defaultPage = new SimpleHandler(
+      args => 'default page', 
+      'void', 'text')
 
     var routeList = new RouteList()
-      .addStaticRoute(fooComponent, '/foo')
-      .addParamRoute(barComponent,  '/bar/:id/:restpath')
+      .addStaticRoute(foo, '/foo')
+      .addParamRoute(bar,  '/bar/:id/:restpath')
 
     var router = new Router()
       .addRouteList(routeList)
-      .setDefaultHandler(defaultComponent)
+      .setDefaultHandler(defaultPage)
 
     return loadSimpleHandler({}, router, 'void', 'text')
     .then(handler => {
@@ -103,14 +104,14 @@ describe('router component test', () => {
         .should.eventually.equal('bar')
 
       var p3 = handler({ path: '/baz' })
-        .should.eventually.equal('default route')
+        .should.eventually.equal('default page')
 
       return Promise.all([p1, p2, p3])
     })
   })
 
   it('nested router', () => {
-    var postComponent = new SimpleHandler(
+    var post = new SimpleHandler(
       (args, input) => {
         args.userId.should.equal('john')
         args.postId.should.equal('welcome-to-my-blog')
@@ -119,16 +120,16 @@ describe('router component test', () => {
         return 'Hello World!'
       }, 'text', 'text')
 
-    var userRouter = new Router()
-      .addParamRoute(postComponent, '/post/:postId')
-
-    var defaultComponent = new SimpleHandler(
-      args => 'default route', 
+    var defaultPage = new SimpleHandler(
+      args => 'default page', 
       'void', 'text')
+
+    var userRouter = new Router()
+      .addParamRoute(post, '/post/:postId')
 
     var mainRouter = new Router()
       .addParamRoute(userRouter, '/user/:userId/:restpath')
-      .setDefaultHandler(defaultComponent)
+      .setDefaultHandler(defaultPage)
 
     return loadSimpleHandler({}, mainRouter, 'text', 'text')
     .then(handler => {
@@ -141,7 +142,7 @@ describe('router component test', () => {
         .should.be.rejected
 
       var p3 = handler({ path: '/other place' }, 'nothing')
-        .should.eventually.equal('default route')
+        .should.eventually.equal('default page')
 
       return Promise.all([p1, p2, p3])
     })

@@ -15,14 +15,14 @@ var should = chai.should()
 
 describe('handler test', () => {
   it('stream handler', () => {
-    var component = new StreamHandler(
+    var main = new StreamHandler(
       (args, streamable) =>
         streamableToText(streamable).then(input => {
           input.should.equal('hello')
           return textToStreamable('goodbye')
         }))
 
-    return component.handleableBuilder({})
+    return main.handleableBuilder({})
       .then(handleable => {
         var handler = handleable.streamHandler
         var input = textToStreamable('hello')
@@ -33,18 +33,18 @@ describe('handler test', () => {
   })
 
   it('simple handler', () => {
-    var component = new SimpleHandler(
+    var main = new SimpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye'
       }, 'text', 'text')
 
-    return component.loadHandler({}).then(handler =>
+    return main.loadHandler({}).then(handler =>
       handler({}, 'hello').should.eventually.equal('goodbye'))
   })
 
   it('http builder', () => {
-    var component = new HttpHandlerBuilder(
+    var main = new HttpHandlerBuilder(
       config => {
         var greet = config.greet || 'hi'
 
@@ -64,7 +64,7 @@ describe('handler test', () => {
       greet: 'goodbye'
     }
 
-    return component.loadHandleable(config).then(handleable => {
+    return main.loadHandleable(config).then(handleable => {
       var handler = handleable.httpHandler
       should.exist(handler)
 

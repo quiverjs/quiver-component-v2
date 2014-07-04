@@ -10,19 +10,19 @@ chai.use(chaiAsPromised);
 var should = chai.should();
 describe('pipeline handler test', (function() {
   it('simple pipeline', (function() {
-    var component1 = new SimpleHandler((function(args) {
+    var handler1 = new SimpleHandler((function(args) {
       return 'hello, ' + args.name;
     }), 'void', 'text');
-    var component2 = new SimpleHandler((function(args, input) {
+    var handler2 = new SimpleHandler((function(args, input) {
       return input.toUpperCase();
     }), 'text', 'text');
-    var component3 = new SimpleHandler((function(args, input) {
+    var handler3 = new SimpleHandler((function(args, input) {
       return ({
         status: 'ok',
         result: input
       });
     }), 'text', 'json');
-    var pipeline = new Pipeline().addPipe(component1).addPipe(component2).addPipe(component3);
+    var pipeline = new Pipeline().addPipe(handler1).addPipe(handler2).addPipe(handler3);
     return loadSimpleHandler({}, pipeline, 'void', 'json').then((function(handler) {
       return handler({name: 'bob'}).then((function(result) {
         result.status.should.equal('ok');
