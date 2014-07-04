@@ -32,6 +32,9 @@ var Component = function Component() {
   },
   toString: function() {
     return JSON.stringify(this.toJson(), undefined, 2);
+  },
+  inspect: function() {
+    return this.toString();
   }
 }, {});
 var MiddlewareComponent = function MiddlewareComponent() {
@@ -40,6 +43,9 @@ var MiddlewareComponent = function MiddlewareComponent() {
 var $MiddlewareComponent = MiddlewareComponent;
 ($traceurRuntime.createClass)(MiddlewareComponent, {
   get handleableMiddleware() {
+    throw new Error('unimplemented in abstract class');
+  },
+  addMiddleware: function(MiddlewareComponent) {
     throw new Error('unimplemented in abstract class');
   },
   get type() {

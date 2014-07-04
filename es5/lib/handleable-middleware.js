@@ -5,10 +5,11 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
+var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var MiddlewareComponent = $traceurRuntime.assertObject(require('./component.js')).MiddlewareComponent;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var combineMiddlewares = $traceurRuntime.assertObject(require('./util/middleware.js')).combineMiddlewares;
+var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._rawHandleableMiddleware = handleableMiddleware;
@@ -18,10 +19,17 @@ var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
 };
 var $HandleableMiddleware = HandleableMiddleware;
 ($traceurRuntime.createClass)(HandleableMiddleware, {
+  replaceWith: function(replaceComponent) {
+    assertInstanceOf(replaceComponent, MiddlewareComponent, 'replacement must be another middleware component');
+    this._replaceComponent = replaceComponent;
+    return this;
+  },
   get rawHandleableMiddleware() {
     return this._rawHandleableMiddleware;
   },
   get handleableMiddleware() {
+    if (this._replaceComponent)
+      return this._replaceComponent.handleableMiddleware;
     var mainMiddleware = this._handleableMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);

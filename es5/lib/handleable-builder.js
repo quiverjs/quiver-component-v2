@@ -9,6 +9,7 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
+var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
@@ -22,10 +23,17 @@ var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
 };
 var $HandleableBuilder = HandleableBuilder;
 ($traceurRuntime.createClass)(HandleableBuilder, {
+  replaceWith: function(replaceComponent) {
+    assertInstanceOf(replaceComponent, HandlerComponent, 'replacement must be another handler component');
+    this._replaceComponent = replaceComponent;
+    return this;
+  },
   get rawHandleableBuilder() {
     return this._rawHandleableBuilder;
   },
   get handleableBuilder() {
+    if (this._replaceComponent)
+      return this._replaceComponent.handleableBuilder;
     var builder = this._handleableBuilder;
     var middleware = this.extendMiddleware;
     return combineBuilderWithMiddleware(builder, middleware);
