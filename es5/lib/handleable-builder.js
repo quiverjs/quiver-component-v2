@@ -49,7 +49,7 @@ var $HandleableBuilder = HandleableBuilder;
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(HandleableBuilder);
 var Handleable = function Handleable(handleable) {
-  var option = arguments[1] !== (void 0) ? arguments[1] : {};
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   var builder = (function(config) {
     return resolve(handleable);
   });

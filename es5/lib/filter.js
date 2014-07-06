@@ -23,7 +23,7 @@ var HandleableFilter = function HandleableFilter(handleableFilter) {
   handleableFilter = safeHandler(handleableFilter, options);
   var middleware = (function(config, builder) {
     return builder(config).then((function(handleable) {
-      return Promise.resolve(handleableFilter(config, handleable));
+      return resolve(handleableFilter(config, handleable));
     }));
   });
   $traceurRuntime.superCall(this, $HandleableFilter.prototype, "constructor", [middleware, options]);

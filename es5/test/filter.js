@@ -1,12 +1,16 @@
 "use strict";
 require('traceur');
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
+var streamToSimpleHandler = $traceurRuntime.assertObject(require('quiver-simple-handler')).streamToSimpleHandler;
 var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     streamableToText = $__0.streamableToText,
-    textToStreamable = $__0.textToStreamable;
+    textToStreamable = $__0.textToStreamable,
+    emptyStreamable = $__0.emptyStreamable,
+    jsonToStreamable = $__0.jsonToStreamable;
 var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
     SimpleHandler = $__0.SimpleHandler,
     SimpleHandlerBuilder = $__0.SimpleHandlerBuilder,
+    Handleable = $__0.Handleable,
     StreamFilter = $__0.StreamFilter,
     TransformFilter = $__0.TransformFilter,
     ArgsFilter = $__0.ArgsFilter,
@@ -81,6 +85,31 @@ describe('filter test', (function() {
     return main.loadHandler({fooValue: 'bar'}).then((function(handler) {
       return handler({});
     })).should.eventually.equal('foo');
+  }));
+  it('args helper filter', (function() {
+    var filter = new ArgsFilter((function(args) {
+      args.foo = 'bar';
+      return args;
+    }));
+    var main = new Handleable({
+      streamHandler: (function(args, streamable) {
+        args.foo.should.equal('bar');
+        return textToStreamable('main');
+      }),
+      meta: {cacheId: (function(args, streamable) {
+          args.foo.should.equal('bar');
+          return jsonToStreamable({cacheId: 123});
+        })}
+    }).addMiddleware(filter);
+    return main.loadHandleable({}).then((function(handleable) {
+      var mainHandler = streamToSimpleHandler(handleable.streamHandler, 'void', 'text');
+      var cacheIdHandler = streamToSimpleHandler(handleable.meta.cacheId, 'void', 'json');
+      var p1 = mainHandler({}).should.eventually.equal('main');
+      var p2 = cacheIdHandler({}).then((function(json) {
+        json.cacheId.should.equal(123);
+      }));
+      return Promise.all([p1, p2]);
+    }));
   }));
   it('error filter', (function() {
     var filter = new ErrorFilter((function(err) {

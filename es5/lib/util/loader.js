@@ -22,11 +22,16 @@ var $__2 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
     validateSimpleTypes = $__2.validateSimpleTypes;
 var getHandlerMap = $traceurRuntime.assertObject(require('./config.js')).getHandlerMap;
 var loadHandleable = (function(config, component) {
+  var $__3;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  var handlerMap = getHandlerMap(config);
-  var handleable = handlerMap.get(component);
-  if (handleable)
-    return resolve(handleable);
+  var $__2 = $traceurRuntime.assertObject(options),
+      loadPrivate = ($__3 = $__2.loadPrivate) === void 0 ? false : $__3;
+  if (!loadPrivate) {
+    var handlerMap = getHandlerMap(config);
+    var handleable = handlerMap.get(component);
+    if (handleable)
+      return resolve(handleable);
+  }
   var builder = component.handleableBuilder;
   return builder(config).then((function(handleable) {
     if (!handleable)

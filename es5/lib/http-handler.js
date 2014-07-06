@@ -14,20 +14,15 @@ var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
     safeBuilder = $__1.safeBuilder,
     safeHandler = $__1.safeHandler;
 var HandleableBuilder = $traceurRuntime.assertObject(require('./handleable-builder.js')).HandleableBuilder;
-var httpToHandleableBuilder = (function(httpBuilder) {
-  return (function(config) {
-    return resolve(httpBuilder(config)).then((function(httpHandler) {
-      return ({get httpHandler() {
-          return httpHandler;
-        }});
-    }));
-  });
-});
 var HttpHandlerBuilder = function HttpHandlerBuilder(httpHandlerBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._httpHandlerBuilder = httpHandlerBuilder;
   httpHandlerBuilder = safeBuilder(httpHandlerBuilder, options);
-  var handleableBuilder = httpToHandleableBuilder(httpHandlerBuilder);
+  var handleableBuilder = (function(config) {
+    return httpHandlerBuilder(config).then((function(httpHandler) {
+      return ({httpHandler: httpHandler});
+    }));
+  });
   $traceurRuntime.superCall(this, $HttpHandlerBuilder.prototype, "constructor", [handleableBuilder, options]);
 };
 var $HttpHandlerBuilder = HttpHandlerBuilder;

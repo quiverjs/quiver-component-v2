@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperties(exports, {
-  ArgsFilter: {get: function() {
-      return ArgsFilter;
-    }},
   ArgsBuilderFilter: {get: function() {
       return ArgsBuilderFilter;
+    }},
+  ArgsFilter: {get: function() {
+      return ArgsFilter;
     }},
   ErrorFilter: {get: function() {
       return ErrorFilter;
@@ -24,7 +24,8 @@ var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var $__2 = $traceurRuntime.assertObject(require('./filter.js')),
     StreamFilter = $__2.StreamFilter,
-    HttpFilter = $__2.HttpFilter;
+    HttpFilter = $__2.HttpFilter,
+    HandleableFilter = $__2.HandleableFilter;
 var $__2 = $traceurRuntime.assertObject(require('./util/wrap.js')),
     safeBuilder = $__2.safeBuilder,
     safeHandler = $__2.safeHandler;
@@ -54,16 +55,57 @@ var builderFilterConvert = (function(builder, filterConvert) {
     }));
   });
 });
-var argsHandlerKeys = ['streamHandler', 'cacheIdHandler'];
+var applyArgsFilter = (function(argsHandler, handler) {
+  return (function(args, inputStreamable) {
+    return argsHandler(args).then((function(args) {
+      return handler(args, inputStreamable);
+    }));
+  });
+});
+var argsBuilderToFilter = (function(argsBuilder) {
+  return (function(config, handleable) {
+    var $__2 = $traceurRuntime.assertObject(handleable),
+        streamHandler = $__2.streamHandler,
+        metaHandlers = $__2.meta;
+    if (!streamHandler && !metaHandlers)
+      return resolve(handleable);
+    return argsBuilder(config).then((function(argsHandler) {
+      if (streamHandler) {
+        handleable.streamHandler = applyArgsFilter(argsHandler, streamHandler);
+      }
+      if (metaHandlers) {
+        for (var key in metaHandlers) {
+          metaHandlers[key] = applyArgsFilter(argsHandler, metaHandlers[key]);
+        }
+      }
+      return handleable;
+    }));
+  });
+});
+var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._argsBuilder = argsBuilder;
+  argsBuilder = safeBuilder(argsBuilder, options);
+  var filter = argsBuilderToFilter(argsBuilder);
+  $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [filter, options]);
+};
+var $ArgsBuilderFilter = ArgsBuilderFilter;
+($traceurRuntime.createClass)(ArgsBuilderFilter, {
+  get argsBuilder() {
+    return this._argsBuilder;
+  },
+  get type() {
+    return 'args builder filter';
+  }
+}, {}, HandleableFilter);
 var ArgsFilter = function ArgsFilter(argsHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsHandler = argsHandler;
-  if (!options.applyToHandlers)
-    options.applyToHandlers = argsHandlerKeys;
-  this._argsFilter = argsHandler;
   argsHandler = safeHandler(argsHandler, options);
-  var streamFilter = argsToStreamFilter(argsHandler);
-  $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [streamFilter, options]);
+  var argsBuilder = (function(config) {
+    return resolve(argsHandler);
+  });
+  $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [argsBuilder, options]);
 };
 var $ArgsFilter = ArgsFilter;
 ($traceurRuntime.createClass)(ArgsFilter, {
@@ -73,21 +115,7 @@ var $ArgsFilter = ArgsFilter;
   get type() {
     return 'args filter';
   }
-}, {}, StreamFilter);
-var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._argsBuilder = argsBuilder;
-  if (!options.applyToHandlers)
-    options.applyToHandlers = argsHandlerKeys;
-  this._argsBuilder = argsBuilder;
-  argsBuilder = safeBuilder(argsBuilder, options);
-  var streamFilter = builderFilterConvert(argsBuilder, argsToStreamFilter);
-  $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [streamFilter, options]);
-};
-var $ArgsBuilderFilter = ArgsBuilderFilter;
-($traceurRuntime.createClass)(ArgsBuilderFilter, {get type() {
-    return 'args builder filter';
-  }}, {}, StreamFilter);
+}, {}, ArgsBuilderFilter);
 var createErrorFilterClass = (function(ParentClass) {
   return (function($__super) {
     var ErrorFilter = function ErrorFilter(errorHandler) {
