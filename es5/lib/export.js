@@ -75,6 +75,9 @@ Object.defineProperties(exports, {
   InputHandlerMiddleware: {get: function() {
       return InputHandlerMiddleware;
     }},
+  PrivateInputMiddleware: {get: function() {
+      return PrivateInputMiddleware;
+    }},
   ConfigMiddleware: {get: function() {
       return ConfigMiddleware;
     }},
@@ -153,7 +156,9 @@ var $__0 = $traceurRuntime.assertObject(require('./simple-filter.js')),
     ErrorHttpFilter = $__0.ErrorHttpFilter,
     ErrorBuilderHttpFilter = $__0.ErrorBuilderHttpFilter;
 var TransformFilter = $traceurRuntime.assertObject(require('./transform-filter.js')).TransformFilter;
-var InputHandlerMiddleware = $traceurRuntime.assertObject(require('./input-handler.js')).InputHandlerMiddleware;
+var $__0 = $traceurRuntime.assertObject(require('./input-handler.js')),
+    InputHandlerMiddleware = $__0.InputHandlerMiddleware,
+    PrivateInputMiddleware = $__0.PrivateInputMiddleware;
 var $__0 = $traceurRuntime.assertObject(require('./simple-middleware.js')),
     ConfigMiddleware = $__0.ConfigMiddleware,
     ConfigOverrideMiddleware = $__0.ConfigOverrideMiddleware;

@@ -26,8 +26,8 @@ var loadHandleable = (function(config, component) {
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   var $__2 = $traceurRuntime.assertObject(options),
       loadPrivate = ($__3 = $__2.loadPrivate) === void 0 ? false : $__3;
+  var handlerMap = getHandlerMap(config);
   if (!loadPrivate) {
-    var handlerMap = getHandlerMap(config);
     var handleable = handlerMap.get(component);
     if (handleable)
       return resolve(handleable);
@@ -36,7 +36,8 @@ var loadHandleable = (function(config, component) {
   return builder(config).then((function(handleable) {
     if (!handleable)
       return reject(new Error('handleable is not defined in builder result'));
-    handlerMap.set(component, handleable);
+    if (!loadPrivate)
+      handlerMap.set(component, handleable);
     return handleable;
   }));
 });

@@ -3,23 +3,33 @@ Object.defineProperties(exports, {
   InputHandlerMiddleware: {get: function() {
       return InputHandlerMiddleware;
     }},
+  PrivateInputMiddleware: {get: function() {
+      return PrivateInputMiddleware;
+    }},
   __esModule: {value: true}
 });
+var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
+    assertInstanceOf = $__1.assertInstanceOf,
+    assertString = $__1.assertString;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
+var ConfigMiddleware = $traceurRuntime.assertObject(require('./simple-middleware.js')).ConfigMiddleware;
+var loadHandler = (function(config, component, options) {
+  return component.loadHandler(config, options);
+});
 var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, toConfig) {
+  var $__2;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  if (!(handlerComponent instanceof HandlerComponent))
-    throw new TypeError('input handler component must be of type HandlerComponent');
-  if (typeof(toConfig) != 'string')
-    throw new TypeError('toConfig required to be string');
+  assertInstanceOf(handlerComponent, HandlerComponent, 'input handler must be of type HandlerComponent');
+  assertString(toConfig, 'toConfig required to be string');
+  var $__1 = $traceurRuntime.assertObject(options),
+      loader = ($__2 = $__1.loader) === void 0 ? loadHandler : $__2;
   this._inputHandlerComponent = handlerComponent;
-  var middleware = (function(config, builder) {
+  var middleware = (function(config) {
     if (config[toConfig])
-      return builder(config);
-    return handlerComponent.loadHandler(config, options).then((function(handler) {
+      return config;
+    return loader(config, handlerComponent, options).then((function(handler) {
       config[toConfig] = handler;
-      return builder(config);
+      return config;
     }));
   });
   $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "constructor", [middleware, options]);
@@ -37,4 +47,38 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
     json.inputHandler = this.inputHandlerComponent.toJson();
     return json;
   }
-}, {}, HandleableMiddleware);
+}, {}, ConfigMiddleware);
+var PrivateInputMiddleware = function PrivateInputMiddleware(handlerComponent, toConfig) {
+  var $__2;
+  var options = arguments[2] !== (void 0) ? arguments[2] : {};
+  assertInstanceOf(handlerComponent, HandlerComponent, 'input handler must be of type HandlerComponent');
+  assertString(toConfig, 'toConfig required to be string');
+  var $__1 = $traceurRuntime.assertObject(options),
+      loader = ($__2 = $__1.loader) === void 0 ? loadHandler : $__2;
+  this._inputHandlerComponent = handlerComponent;
+  var initKey = Symbol('middlewareInitialized');
+  var middleware = (function(config) {
+    if (config[initKey])
+      return config;
+    return loader(config, handlerComponent, {loadPrivate: true}).then((function(handler) {
+      config[toConfig] = handler;
+      config[initKey] = true;
+      return config;
+    }));
+  });
+  $traceurRuntime.superCall(this, $PrivateInputMiddleware.prototype, "constructor", [middleware, options]);
+};
+var $PrivateInputMiddleware = PrivateInputMiddleware;
+($traceurRuntime.createClass)(PrivateInputMiddleware, {
+  get inputHandlerComponent() {
+    return this._inputHandlerComponent;
+  },
+  get type() {
+    return 'private input handler middleware';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $PrivateInputMiddleware.prototype, "toJson", []);
+    json.inputHandler = this.inputHandlerComponent.toJson();
+    return json;
+  }
+}, {}, ConfigMiddleware);
