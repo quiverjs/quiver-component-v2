@@ -18,6 +18,12 @@ Object.defineProperties(exports, {
   HandleableMiddleware: {get: function() {
       return HandleableMiddleware;
     }},
+  ExtendedHandler: {get: function() {
+      return ExtendedHandler;
+    }},
+  ExtendedMiddleware: {get: function() {
+      return ExtendedMiddleware;
+    }},
   mixinMiddlewareExtensible: {get: function() {
       return mixinMiddlewareExtensible;
     }},
@@ -133,6 +139,9 @@ var $__0 = $traceurRuntime.assertObject(require('./handleable-builder.js')),
     HandleableBuilder = $__0.HandleableBuilder,
     Handleable = $__0.Handleable;
 var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
+var $__0 = $traceurRuntime.assertObject(require('./extend.js')),
+    ExtendedHandler = $__0.ExtendedHandler,
+    ExtendedMiddleware = $__0.ExtendedMiddleware;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var $__0 = $traceurRuntime.assertObject(require('./stream-handler.js')),
     StreamHandlerBuilder = $__0.StreamHandlerBuilder,

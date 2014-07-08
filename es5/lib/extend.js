@@ -1,28 +1,30 @@
 "use strict";
 Object.defineProperties(exports, {
-  ExtendHandler: {get: function() {
-      return ExtendHandler;
+  ExtendedHandler: {get: function() {
+      return ExtendedHandler;
     }},
-  ExtendMiddleware: {get: function() {
-      return ExtendMiddleware;
+  ExtendedMiddleware: {get: function() {
+      return ExtendedMiddleware;
     }},
   __esModule: {value: true}
 });
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
-var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
+var $__1 = $traceurRuntime.assertObject(require('./component.js')),
+    HandlerComponent = $__1.HandlerComponent,
+    MiddlewareComponent = $__1.MiddlewareComponent;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineBuilderWithMiddleware = $__1.combineBuilderWithMiddleware,
     combineMiddlewares = $__1.combineMiddlewares;
-var ExtendHandler = function ExtendHandler(handlerComponent) {
+var ExtendedHandler = function ExtendedHandler(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(handlerComponent, HandlerComponent, 'must extend from another handler component');
   this._initMiddlewareExtension(options);
   this._parentHandler = handlerComponent;
-  $traceurRuntime.superCall(this, $ExtendHandler.prototype, "constructor", [options]);
+  $traceurRuntime.superCall(this, $ExtendedHandler.prototype, "constructor", [options]);
 };
-var $ExtendHandler = ExtendHandler;
-($traceurRuntime.createClass)(ExtendHandler, {
+var $ExtendedHandler = ExtendedHandler;
+($traceurRuntime.createClass)(ExtendedHandler, {
   get handleableBuilder() {
     var builder = this._parentHandler.handleableBuilder;
     var middleware = this.extendMiddleware;
@@ -30,25 +32,41 @@ var $ExtendHandler = ExtendHandler;
   },
   get parentHandler() {
     return this._parentHandler;
+  },
+  get type() {
+    return 'extend handler';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ExtendedHandler.prototype, "toJson", []);
+    json.parentHandler = this.parentHandler.toJson();
+    return json;
   }
 }, {}, HandlerComponent);
-mixinMiddlewareExtensible(ExtendHandler);
-var ExtendMiddleware = function ExtendMiddleware(middlewareComponent) {
+mixinMiddlewareExtensible(ExtendedHandler);
+var ExtendedMiddleware = function ExtendedMiddleware(middlewareComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(middlewareComponent, MiddlewareComponent, 'must extend from another middleware component');
   this._initMiddlewareExtension(options);
   this._parentMiddleware = middlewareComponent;
-  $traceurRuntime.superCall(this, $ExtendMiddleware.prototype, "constructor", [options]);
+  $traceurRuntime.superCall(this, $ExtendedMiddleware.prototype, "constructor", [options]);
 };
-var $ExtendMiddleware = ExtendMiddleware;
-($traceurRuntime.createClass)(ExtendMiddleware, {
+var $ExtendedMiddleware = ExtendedMiddleware;
+($traceurRuntime.createClass)(ExtendedMiddleware, {
   get handleableMiddleware() {
-    var mainMiddleware = this._parentMiddleware.handleableMiddleware;
+    var mainMiddleware = this.parentMiddleware.handleableMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);
   },
-  get parentHandler() {
-    return this._parentHandler;
+  get parentMiddleware() {
+    return this._parentMiddleware;
+  },
+  get type() {
+    return 'extend middleware';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ExtendedMiddleware.prototype, "toJson", []);
+    json.parentMiddleware = this.parentMiddleware.toJson();
+    return json;
   }
 }, {}, MiddlewareComponent);
-mixinMiddlewareExtensible(ExtendMiddleware);
+mixinMiddlewareExtensible(ExtendedMiddleware);

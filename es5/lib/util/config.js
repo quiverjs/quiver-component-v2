@@ -6,25 +6,36 @@ Object.defineProperties(exports, {
   getHandlerMap: {get: function() {
       return getHandlerMap;
     }},
+  getInitTable: {get: function() {
+      return getInitTable;
+    }},
   getHandleable: {get: function() {
       return getHandleable;
     }},
   __esModule: {value: true}
 });
 var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
-var configNormalizedKey = 'quiverConfigNormalized';
-var handlerMapKey = 'quiverHandleables';
+var configNormalized = Symbol('ConfigNormalized');
+var handlerMap = Symbol('handlerMap');
+var initTable = Symbol('initTable');
 var normalizeConfig = (function(config) {
-  if (config[configNormalizedKey])
+  if (config[configNormalized])
     return;
-  if (!config[handlerMapKey]) {
-    config[handlerMapKey] = new Map();
+  if (!config[handlerMap]) {
+    config[handlerMap] = new Map();
   }
-  config[configNormalizedKey] = true;
+  if (!config[initTable]) {
+    config[initTable] = {};
+  }
+  config[configNormalized] = true;
 });
 var getHandlerMap = (function(config) {
   normalizeConfig(config);
-  return config[handlerMapKey];
+  return config[handlerMap];
+});
+var getInitTable = (function(config) {
+  normalizeConfig(config);
+  return config[initTable];
 });
 var getHandleable = (function(config, key) {
   var handlerMap = getHandlerMap(config);

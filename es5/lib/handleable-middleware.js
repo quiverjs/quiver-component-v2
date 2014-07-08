@@ -19,17 +19,10 @@ var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
 };
 var $HandleableMiddleware = HandleableMiddleware;
 ($traceurRuntime.createClass)(HandleableMiddleware, {
-  replaceWith: function(replaceComponent) {
-    assertInstanceOf(replaceComponent, MiddlewareComponent, 'replacement must be another middleware component');
-    this._replaceComponent = replaceComponent;
-    return this;
-  },
   get rawHandleableMiddleware() {
     return this._rawHandleableMiddleware;
   },
   get handleableMiddleware() {
-    if (this._replaceComponent)
-      return this._replaceComponent.handleableMiddleware;
     var mainMiddleware = this._handleableMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);

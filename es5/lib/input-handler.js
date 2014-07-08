@@ -13,6 +13,7 @@ var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
     assertString = $__1.assertString;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
 var ConfigMiddleware = $traceurRuntime.assertObject(require('./simple-middleware.js')).ConfigMiddleware;
+var PrivateMiddleware = $traceurRuntime.assertObject(require('./private-middleware.js')).PrivateMiddleware;
 var loadHandler = (function(config, component, options) {
   return component.loadHandler(config, options);
 });
@@ -49,36 +50,10 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
   }
 }, {}, ConfigMiddleware);
 var PrivateInputMiddleware = function PrivateInputMiddleware(handlerComponent, toConfig) {
-  var $__2;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  assertInstanceOf(handlerComponent, HandlerComponent, 'input handler must be of type HandlerComponent');
-  assertString(toConfig, 'toConfig required to be string');
-  var $__1 = $traceurRuntime.assertObject(options),
-      loader = ($__2 = $__1.loader) === void 0 ? loadHandler : $__2;
-  this._inputHandlerComponent = handlerComponent;
-  var initKey = Symbol('middlewareInitialized');
-  var middleware = (function(config) {
-    if (config[initKey])
-      return config;
-    return loader(config, handlerComponent, {loadPrivate: true}).then((function(handler) {
-      config[toConfig] = handler;
-      config[initKey] = true;
-      return config;
-    }));
-  });
-  $traceurRuntime.superCall(this, $PrivateInputMiddleware.prototype, "constructor", [middleware, options]);
+  options.loadPrivate = true;
+  var inputMiddleware = new InputHandlerMiddleware(handlerComponent, toConfig, options);
+  $traceurRuntime.superCall(this, $PrivateInputMiddleware.prototype, "constructor", [inputMiddleware]);
 };
 var $PrivateInputMiddleware = PrivateInputMiddleware;
-($traceurRuntime.createClass)(PrivateInputMiddleware, {
-  get inputHandlerComponent() {
-    return this._inputHandlerComponent;
-  },
-  get type() {
-    return 'private input handler middleware';
-  },
-  toJson: function() {
-    var json = $traceurRuntime.superCall(this, $PrivateInputMiddleware.prototype, "toJson", []);
-    json.inputHandler = this.inputHandlerComponent.toJson();
-    return json;
-  }
-}, {}, ConfigMiddleware);
+($traceurRuntime.createClass)(PrivateInputMiddleware, {}, {}, PrivateMiddleware);
