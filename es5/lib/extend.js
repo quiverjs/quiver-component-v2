@@ -9,10 +9,11 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
+var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
 var $__1 = $traceurRuntime.assertObject(require('./component.js')),
     HandlerComponent = $__1.HandlerComponent,
     MiddlewareComponent = $__1.MiddlewareComponent;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineBuilderWithMiddleware = $__1.combineBuilderWithMiddleware,
     combineMiddlewares = $__1.combineMiddlewares;
@@ -32,6 +33,9 @@ var $ExtendedHandler = ExtendedHandler;
   },
   get parentHandler() {
     return this._parentHandler;
+  },
+  get handlerLoader() {
+    return this.parentHandler.handlerLoader;
   },
   get type() {
     return 'extend handler';

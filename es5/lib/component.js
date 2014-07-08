@@ -67,7 +67,10 @@ var $HandlerComponent = HandlerComponent;
     return loadHandleable(config, this, options);
   },
   loadHandler: function(config, options) {
-    return loadHandleable(config, this, options);
+    return this.handlerLoader(config, this, options);
+  },
+  get handlerLoader() {
+    return loadHandleable;
   },
   get type() {
     return 'handler';

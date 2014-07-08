@@ -33,8 +33,8 @@ var $HttpHandlerBuilder = HttpHandlerBuilder;
   loadHttpHandler: function(config, options) {
     return loadHttpHandler(config, this, options);
   },
-  loadHandler: function(config, options) {
-    return loadHttpHandler(config, this, options);
+  get handlerLoader() {
+    return loadHttpHandler;
   },
   get type() {
     return 'http handler builder';

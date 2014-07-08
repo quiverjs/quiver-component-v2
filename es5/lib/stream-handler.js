@@ -30,11 +30,8 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
   get streamHandlerBuilder() {
     return this._streamHandlerBuilder;
   },
-  loadStreamHandler: function(config, options) {
-    return loadStreamHandler(config, this, options);
-  },
-  loadHandler: function(config, options) {
-    return loadStreamHandler(config, this, options);
+  get handlerLoader() {
+    return loadStreamHandler;
   },
   get type() {
     return 'stream handler builder';

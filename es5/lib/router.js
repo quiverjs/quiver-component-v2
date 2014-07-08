@@ -61,7 +61,7 @@ var $RouteList = RouteList;
     var promises = this.routes.map((function(route) {
       var component = route.handlerComponent;
       var builder = route.handleableBuilder;
-      return middleware(config, builder).then((function(handleable) {
+      return middleware(copy(config), builder).then((function(handleable) {
         return route.addRoute(routeIndex, handleable);
       }));
     }));

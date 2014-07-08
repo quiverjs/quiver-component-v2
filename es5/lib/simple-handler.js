@@ -9,16 +9,22 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var $__2 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
-    simpleToStreamHandler = $__2.simpleToStreamHandler,
-    streamToSimpleHandler = $__2.streamToSimpleHandler,
-    validateSimpleTypes = $__2.validateSimpleTypes;
-var $__2 = $traceurRuntime.assertObject(require('./util/wrap.js')),
-    safeBuilder = $__2.safeBuilder,
-    safeHandler = $__2.safeHandler;
-var $__2 = $traceurRuntime.assertObject(require('./stream-handler.js')),
-    StreamHandler = $__2.StreamHandler,
-    StreamHandlerBuilder = $__2.StreamHandlerBuilder;
+var $__1 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
+    simpleToStreamHandler = $__1.simpleToStreamHandler,
+    streamToSimpleHandler = $__1.streamToSimpleHandler,
+    validateSimpleTypes = $__1.validateSimpleTypes;
+var loadSimpleHandler = $traceurRuntime.assertObject(require('./util/loader.js')).loadSimpleHandler;
+var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
+    safeBuilder = $__1.safeBuilder,
+    safeHandler = $__1.safeHandler;
+var $__1 = $traceurRuntime.assertObject(require('./stream-handler.js')),
+    StreamHandler = $__1.StreamHandler,
+    StreamHandlerBuilder = $__1.StreamHandlerBuilder;
+var simpleHandlerLoader = (function(inType, outType) {
+  return (function(config, component, options) {
+    return loadSimpleHandler(config, component, inType, outType, options);
+  });
+});
 var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, inType, outType) {
   var options = arguments[3] !== (void 0) ? arguments[3] : {};
   var err = validateSimpleTypes([inType, outType]);
@@ -37,11 +43,8 @@ var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, i
 };
 var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 ($traceurRuntime.createClass)(SimpleHandlerBuilder, {
-  loadHandler: function(config, options) {
-    var $__0 = this;
-    return $traceurRuntime.superCall(this, $SimpleHandlerBuilder.prototype, "loadHandler", [config, options]).then((function(streamHandler) {
-      return streamToSimpleHandler(streamHandler, $__0._inType, $__0._outType);
-    }));
+  get handlerLoader() {
+    return simpleHandlerLoader(this.inType, this.outType);
   },
   get inType() {
     return this._inType;
