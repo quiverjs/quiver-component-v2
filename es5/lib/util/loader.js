@@ -28,7 +28,7 @@ var loadHandleable = (function(config, component) {
       loadPrivate = ($__3 = $__2.loadPrivate) === void 0 ? false : $__3;
   var handlerMap = getHandlerMap(config);
   if (!loadPrivate) {
-    var handleable = handlerMap.get(component);
+    var handleable = handlerMap[component.id];
     if (handleable)
       return resolve(handleable);
   }
@@ -37,7 +37,7 @@ var loadHandleable = (function(config, component) {
     if (!handleable)
       return reject(new Error('handleable is not defined in builder result'));
     if (!loadPrivate)
-      handlerMap.set(component, handleable);
+      handlerMap[component.id] = handleable;
     return handleable;
   }));
 });

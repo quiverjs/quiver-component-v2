@@ -24,6 +24,12 @@ Object.defineProperties(exports, {
   ExtendedMiddleware: {get: function() {
       return ExtendedMiddleware;
     }},
+  ExtensibleHandler: {get: function() {
+      return ExtensibleHandler;
+    }},
+  ExtensibleMiddleware: {get: function() {
+      return ExtensibleMiddleware;
+    }},
   mixinMiddlewareExtensible: {get: function() {
       return mixinMiddlewareExtensible;
     }},
@@ -139,9 +145,12 @@ var $__0 = $traceurRuntime.assertObject(require('./handleable-builder.js')),
     HandleableBuilder = $__0.HandleableBuilder,
     Handleable = $__0.Handleable;
 var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
-var $__0 = $traceurRuntime.assertObject(require('./extend.js')),
+var $__0 = $traceurRuntime.assertObject(require('./extended-component.js')),
     ExtendedHandler = $__0.ExtendedHandler,
     ExtendedMiddleware = $__0.ExtendedMiddleware;
+var $__0 = $traceurRuntime.assertObject(require('./extensible-component.js')),
+    ExtensibleHandler = $__0.ExtensibleHandler,
+    ExtensibleMiddleware = $__0.ExtensibleMiddleware;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
 var $__0 = $traceurRuntime.assertObject(require('./stream-handler.js')),
     StreamHandlerBuilder = $__0.StreamHandlerBuilder,

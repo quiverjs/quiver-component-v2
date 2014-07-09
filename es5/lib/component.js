@@ -16,10 +16,14 @@ var Component = function Component() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   var name = $traceurRuntime.assertObject(options).name;
   this._name = name;
+  this._id = Symbol();
 };
 ($traceurRuntime.createClass)(Component, {
   get name() {
     return this._name;
+  },
+  get id() {
+    return this._id;
   },
   get type() {
     return 'component';

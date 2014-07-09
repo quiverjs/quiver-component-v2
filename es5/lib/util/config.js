@@ -14,7 +14,9 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
+var $__0 = $traceurRuntime.assertObject(require('quiver-object')),
+    copy = $__0.copy,
+    noCopy = $__0.noCopy;
 var configNormalized = Symbol('ConfigNormalized');
 var handlerMap = Symbol('handlerMap');
 var initTable = Symbol('initTable');
@@ -22,7 +24,7 @@ var normalizeConfig = (function(config) {
   if (config[configNormalized])
     return;
   if (!config[handlerMap]) {
-    config[handlerMap] = new Map();
+    config[handlerMap] = noCopy({});
   }
   if (!config[initTable]) {
     config[initTable] = {};
@@ -37,7 +39,7 @@ var getInitTable = (function(config) {
   normalizeConfig(config);
   return config[initTable];
 });
-var getHandleable = (function(config, key) {
+var getHandleable = (function(config, component) {
   var handlerMap = getHandlerMap(config);
-  return handlerMap.get(key);
+  return handlerMap[component.id];
 });
