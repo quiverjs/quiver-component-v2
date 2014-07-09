@@ -15,6 +15,18 @@ Object.defineProperties(exports, {
   ParamRoute: {get: function() {
       return ParamRoute;
     }},
+  staticRoute: {get: function() {
+      return staticRoute;
+    }},
+  dynamicRoute: {get: function() {
+      return dynamicRoute;
+    }},
+  regexRoute: {get: function() {
+      return regexRoute;
+    }},
+  paramRoute: {get: function() {
+      return paramRoute;
+    }},
   __esModule: {value: true}
 });
 var urlManagedBuilder = $traceurRuntime.assertObject(require('./util/url.js')).urlManagedBuilder;
@@ -145,3 +157,15 @@ var $ParamRoute = ParamRoute;
     return json;
   }
 }, {}, DynamicRoute);
+var staticRoute = (function(handler, path, options) {
+  return new StaticRoute(handler, path, options);
+});
+var dynamicRoute = (function(handler, matcher, options) {
+  return new DynamicRoute(handler, matcher, options);
+});
+var regexRoute = (function(handler, regex, fields, options) {
+  return new RegexRoute(handler, regex, fields, options);
+});
+var paramRoute = (function(handler, path, options) {
+  return new ParamRoute(handler, path, options);
+});

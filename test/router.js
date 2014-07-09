@@ -1,9 +1,9 @@
 import 'traceur'
 
 import { 
-  Router, RouteList, 
-  SimpleHandler, loadSimpleHandler,
-  StaticRoute, RegexRoute, ParamRoute 
+  router as createRouter, 
+  routeList as createRouteList, 
+  simpleHandler, loadSimpleHandler,
 } from '../lib/export.js'
 
 var chai = require('chai')
@@ -14,13 +14,13 @@ var should = chai.should()
 
 describe('router component test', () => {
   it('static route', () => {
-    var handlerComponent = new SimpleHandler(
+    var handlerComponent = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye'
       }, 'text', 'text')
 
-    var router = new Router()
+    var router = createRouter()
       .addStaticRoute(handlerComponent, '/foo')
 
     return loadSimpleHandler({}, router, 'text', 'text')
@@ -36,7 +36,7 @@ describe('router component test', () => {
   })
 
   it('regex route', () => {
-    var greet = new SimpleHandler(
+    var greet = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         args.name.should.equal('john')
@@ -44,7 +44,7 @@ describe('router component test', () => {
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
-    var router = new Router()
+    var router = createRouter()
       .addRegexRoute(greet, /^\/greet\/(\w+)$/, ['name'])
 
     return loadSimpleHandler({}, router, 'text', 'text')
@@ -54,13 +54,13 @@ describe('router component test', () => {
   })
 
   it('param route', () => {
-    var greet = new SimpleHandler(
+    var greet = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
-    var router = new Router()
+    var router = createRouter()
       .addParamRoute(greet, '/greet/:name')
 
     return loadSimpleHandler({}, router, 'text', 'text')
@@ -70,14 +70,14 @@ describe('router component test', () => {
   })
 
   it('route list', () => {
-    var foo = new SimpleHandler(
+    var foo = simpleHandler(
       args => {
         args.path.should.equal('/foo')
 
         return 'foo'
       }, 'void', 'text')
 
-    var bar = new SimpleHandler(
+    var bar = simpleHandler(
       args => {
         args.path.should.equal('/subpath')
         args.id.should.equal('baz')
@@ -85,15 +85,15 @@ describe('router component test', () => {
         return 'bar'
       }, 'void', 'text')
 
-    var defaultPage = new SimpleHandler(
+    var defaultPage = simpleHandler(
       args => 'default page', 
       'void', 'text')
 
-    var routeList = new RouteList()
+    var routeList = createRouteList()
       .addStaticRoute(foo, '/foo')
       .addParamRoute(bar,  '/bar/:id/:restpath')
 
-    var router = new Router()
+    var router = createRouter()
       .addRouteList(routeList)
       .setDefaultHandler(defaultPage)
 
@@ -113,7 +113,7 @@ describe('router component test', () => {
   })
 
   it('nested router', () => {
-    var post = new SimpleHandler(
+    var post = simpleHandler(
       (args, input) => {
         args.userId.should.equal('john')
         args.postId.should.equal('welcome-to-my-blog')
@@ -122,14 +122,14 @@ describe('router component test', () => {
         return 'Hello World!'
       }, 'text', 'text')
 
-    var defaultPage = new SimpleHandler(
+    var defaultPage = simpleHandler(
       args => 'default page', 
       'void', 'text')
 
-    var userRouter = new Router()
+    var userRouter = createRouter()
       .addParamRoute(post, '/post/:postId')
 
-    var mainRouter = new Router()
+    var mainRouter = createRouter()
       .addParamRoute(userRouter, '/user/:userId/:restpath')
       .setDefaultHandler(defaultPage)
 

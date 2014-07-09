@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   PrivateMiddleware: {get: function() {
       return PrivateMiddleware;
     }},
+  privateMiddleware: {get: function() {
+      return privateMiddleware;
+    }},
   __esModule: {value: true}
 });
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
@@ -26,6 +29,8 @@ var $PrivateMiddleware = PrivateMiddleware;
     var initKey = this._initKey;
     return (function(config, builder) {
       var initTable = getInitTable(config);
+      if (initTable[initKey])
+        return builder(config);
       initTable[initKey] = true;
       return middleware(config, builder);
     });
@@ -40,3 +45,6 @@ var $PrivateMiddleware = PrivateMiddleware;
   }
 }, {}, MiddlewareComponent);
 mixinMiddlewareExtensible(PrivateMiddleware);
+var privateMiddleware = (function(middleware, options) {
+  return new PrivateMiddleware(middleware, options);
+});

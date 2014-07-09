@@ -8,15 +8,15 @@ var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     emptyStreamable = $__0.emptyStreamable,
     jsonToStreamable = $__0.jsonToStreamable;
 var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
-    SimpleHandler = $__0.SimpleHandler,
-    SimpleHandlerBuilder = $__0.SimpleHandlerBuilder,
-    Handleable = $__0.Handleable,
-    StreamFilter = $__0.StreamFilter,
-    TransformFilter = $__0.TransformFilter,
-    ArgsFilter = $__0.ArgsFilter,
-    ArgsBuilderFilter = $__0.ArgsBuilderFilter,
-    ErrorFilter = $__0.ErrorFilter,
-    InputHandlerMiddleware = $__0.InputHandlerMiddleware;
+    simpleHandler = $__0.simpleHandler,
+    simpleHandlerBuilder = $__0.simpleHandlerBuilder,
+    handleable = $__0.handleable,
+    streamFilter = $__0.streamFilter,
+    transformFilter = $__0.transformFilter,
+    argsFilter = $__0.argsFilter,
+    argsBuilderFilter = $__0.argsBuilderFilter,
+    errorFilter = $__0.errorFilter,
+    inputHandlerMiddleware = $__0.inputHandlerMiddleware;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -29,14 +29,14 @@ var uppercaseStream = (function(streamable) {
 });
 describe('filter test', (function() {
   it('simple handler', (function() {
-    var filter = new StreamFilter((function(config, handler) {
+    var filter = streamFilter((function(config, handler) {
       return (function(args, streamable) {
         return uppercaseStream(streamable).then((function(streamable) {
           return handler(args, streamable).then(uppercaseStream);
         }));
       });
     }));
-    var main = new SimpleHandler((function(args, input) {
+    var main = simpleHandler((function(args, input) {
       input.should.equal('HELLO!');
       return 'goodbye';
     }), 'text', 'text').addMiddleware(filter);
@@ -45,11 +45,11 @@ describe('filter test', (function() {
     })).should.eventually.equal('GOODBYE!');
   }));
   it('transform filter', (function() {
-    var uppercase = new SimpleHandler((function(args, input) {
+    var uppercase = simpleHandler((function(args, input) {
       return input.toUpperCase() + '!';
     }), 'text', 'text');
-    var filter = new TransformFilter(uppercase, 'inout');
-    var main = new SimpleHandler((function(args, input) {
+    var filter = transformFilter(uppercase, 'inout');
+    var main = simpleHandler((function(args, input) {
       input.should.equal('HELLO!');
       return 'goodbye';
     }), 'text', 'text').addMiddleware(filter);
@@ -58,11 +58,11 @@ describe('filter test', (function() {
     })).should.eventually.equal('GOODBYE!');
   }));
   it('args filter', (function() {
-    var filter = new ArgsFilter((function(args) {
+    var filter = argsFilter((function(args) {
       args.foo = 'bar';
       return args;
     }));
-    var main = new SimpleHandler((function(args) {
+    var main = simpleHandler((function(args) {
       args.foo.should.equal('bar');
       return 'foo';
     }), 'void', 'text').addMiddleware(filter);
@@ -71,14 +71,14 @@ describe('filter test', (function() {
     })).should.eventually.equal('foo');
   }));
   it('args builder filter', (function() {
-    var filter = new ArgsBuilderFilter((function(config) {
+    var filter = argsBuilderFilter((function(config) {
       var fooValue = config.fooValue;
       return (function(args) {
         args.foo = fooValue;
         return args;
       });
     }));
-    var main = new SimpleHandler((function(args) {
+    var main = simpleHandler((function(args) {
       args.foo.should.equal('bar');
       return 'foo';
     }), 'void', 'text').addMiddleware(filter);
@@ -87,11 +87,11 @@ describe('filter test', (function() {
     })).should.eventually.equal('foo');
   }));
   it('args helper filter', (function() {
-    var filter = new ArgsFilter((function(args) {
+    var filter = argsFilter((function(args) {
       args.foo = 'bar';
       return args;
     }));
-    var main = new Handleable({
+    var main = handleable({
       streamHandler: (function(args, streamable) {
         args.foo.should.equal('bar');
         return textToStreamable('main');
@@ -112,10 +112,10 @@ describe('filter test', (function() {
     }));
   }));
   it('error filter', (function() {
-    var filter = new ErrorFilter((function(err) {
+    var filter = errorFilter((function(err) {
       return textToStreamable('error caught from filter');
     }));
-    var main = new SimpleHandler((function(args) {
+    var main = simpleHandler((function(args) {
       throw new Error('error in handler');
     }), 'void', 'text').addMiddleware(filter);
     return main.loadHandler({}).then((function(handler) {
@@ -123,11 +123,11 @@ describe('filter test', (function() {
     })).should.eventually.equal('error caught from filter');
   }));
   it('input handler', (function() {
-    var uppercase = new SimpleHandler((function(args, input) {
+    var uppercase = simpleHandler((function(args, input) {
       return input.toUpperCase() + '!';
     }), 'text', 'text');
-    var filter = new InputHandlerMiddleware(uppercase, 'inHandler');
-    var main = new SimpleHandlerBuilder((function(config) {
+    var filter = inputHandlerMiddleware(uppercase, 'inHandler');
+    var main = simpleHandlerBuilder((function(config) {
       var inHandler = config.inHandler;
       should.exist(inHandler);
       return (function(args, input) {

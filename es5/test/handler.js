@@ -1,9 +1,9 @@
 "use strict";
 require('traceur');
 var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
-    StreamHandler = $__0.StreamHandler,
-    SimpleHandler = $__0.SimpleHandler,
-    HttpHandlerBuilder = $__0.HttpHandlerBuilder;
+    streamHandler = $__0.streamHandler,
+    simpleHandler = $__0.simpleHandler,
+    httpHandlerBuilder = $__0.httpHandlerBuilder;
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
     streamableToText = $__0.streamableToText,
@@ -14,7 +14,7 @@ chai.use(chaiAsPromised);
 var should = chai.should();
 describe('handler test', (function() {
   it('stream handler', (function() {
-    var main = new StreamHandler((function(args, streamable) {
+    var main = streamHandler((function(args, streamable) {
       return streamableToText(streamable).then((function(input) {
         input.should.equal('hello');
         return textToStreamable('goodbye');
@@ -27,7 +27,7 @@ describe('handler test', (function() {
     }));
   }));
   it('simple handler', (function() {
-    var main = new SimpleHandler((function(args, input) {
+    var main = simpleHandler((function(args, input) {
       input.should.equal('hello');
       return 'goodbye';
     }), 'text', 'text');
@@ -36,7 +36,7 @@ describe('handler test', (function() {
     }));
   }));
   it('http builder', (function() {
-    var main = new HttpHandlerBuilder((function(config) {
+    var main = httpHandlerBuilder((function(config) {
       var greet = config.greet || 'hi';
       return (function(requestHead, streamable) {
         return streamableToText(streamable).then((function(input) {

@@ -9,6 +9,15 @@ Object.defineProperties(exports, {
   HttpFilter: {get: function() {
       return HttpFilter;
     }},
+  handleableFilter: {get: function() {
+      return handleableFilter;
+    }},
+  streamFilter: {get: function() {
+      return streamFilter;
+    }},
+  httpFilter: {get: function() {
+      return httpFilter;
+    }},
   __esModule: {value: true}
 });
 var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
@@ -62,3 +71,12 @@ var handlerFilterClass = (function(filterType, filterKey, handlerKeys) {
 });
 var StreamFilter = handlerFilterClass('stream filter', '_streamFilter', ['streamHandler']);
 var HttpFilter = handlerFilterClass('http filter', '_httpFilter', ['httpHandler']);
+var handleableFilter = (function(filter, options) {
+  return new HandleableFilter(filter, options);
+});
+var streamFilter = (function(filter, options) {
+  return new StreamFilter(filter, options);
+});
+var httpFilter = (function(filter, options) {
+  return new HttpFilter(filter, options);
+});

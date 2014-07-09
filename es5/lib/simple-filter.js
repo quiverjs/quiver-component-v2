@@ -12,11 +12,17 @@ Object.defineProperties(exports, {
   ErrorBuilderFilter: {get: function() {
       return ErrorBuilderFilter;
     }},
-  ErrorHttpFilter: {get: function() {
-      return ErrorHttpFilter;
+  argsFilter: {get: function() {
+      return argsFilter;
     }},
-  ErrorBuilderHttpFilter: {get: function() {
-      return ErrorBuilderHttpFilter;
+  argsBuilderFilter: {get: function() {
+      return argsBuilderFilter;
+    }},
+  errorFilter: {get: function() {
+      return errorFilter;
+    }},
+  errorBuilderFilter: {get: function() {
+      return errorBuilderFilter;
     }},
   __esModule: {value: true}
 });
@@ -116,45 +122,47 @@ var $ArgsFilter = ArgsFilter;
     return 'args filter';
   }
 }, {}, ArgsBuilderFilter);
-var createErrorFilterClass = (function(ParentClass) {
-  return (function($__super) {
-    var ErrorFilter = function ErrorFilter(errorHandler) {
-      var options = arguments[1] !== (void 0) ? arguments[1] : {};
-      this._errorFilter = errorHandler;
-      errorHandler = safeHandler(errorHandler, options);
-      var streamFilter = errorToFilter(errorHandler);
-      $traceurRuntime.superCall(this, ErrorFilter.prototype, "constructor", [streamFilter, options]);
-    };
-    return ($traceurRuntime.createClass)(ErrorFilter, {
-      get errorFilter() {
-        return this._errorFilter;
-      },
-      get type() {
-        return 'error filter';
-      }
-    }, {}, $__super);
-  }(ParentClass));
+var ErrorFilter = function ErrorFilter(errorHandler) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._errorFilter = errorHandler;
+  errorHandler = safeHandler(errorHandler, options);
+  var streamFilter = errorToFilter(errorHandler);
+  $traceurRuntime.superCall(this, $ErrorFilter.prototype, "constructor", [streamFilter, options]);
+};
+var $ErrorFilter = ErrorFilter;
+($traceurRuntime.createClass)(ErrorFilter, {
+  get errorFilter() {
+    return this._errorFilter;
+  },
+  get type() {
+    return 'error filter';
+  }
+}, {}, StreamFilter);
+var ErrorBuilderFilter = function ErrorBuilderFilter(errorBuilder) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._errorBuilder = errorBuilder;
+  errorBuilder = safeBuilder(errorBuilder, options);
+  var streamFilter = builderFilterConvert(errorBuilder, errorToFilter);
+  $traceurRuntime.superCall(this, $ErrorBuilderFilter.prototype, "constructor", [streamFilter, options]);
+};
+var $ErrorBuilderFilter = ErrorBuilderFilter;
+($traceurRuntime.createClass)(ErrorBuilderFilter, {
+  get errorBuilder() {
+    return this._errorBuilder;
+  },
+  get type() {
+    return 'error builder filter';
+  }
+}, {}, StreamFilter);
+var argsFilter = (function(handler, options) {
+  return new ArgsFilter(handler, options);
 });
-var createErrorBuilderFilterClass = (function(ParentClass) {
-  return (function($__super) {
-    var ErrorBuilderFilter = function ErrorBuilderFilter(errorBuilder) {
-      var options = arguments[1] !== (void 0) ? arguments[1] : {};
-      this._errorBuilder = errorBuilder;
-      errorBuilder = safeBuilder(errorBuilder, options);
-      var streamFilter = builderFilterConvert(errorBuilder, errorToFilter);
-      $traceurRuntime.superCall(this, ErrorBuilderFilter.prototype, "constructor", [streamFilter, options]);
-    };
-    return ($traceurRuntime.createClass)(ErrorBuilderFilter, {
-      get errorBuilder() {
-        return this._errorBuilder;
-      },
-      get type() {
-        return 'error builder filter';
-      }
-    }, {}, $__super);
-  }(ParentClass));
+var argsBuilderFilter = (function(builder, options) {
+  return new ArgsBuilderFilter(builder, options);
 });
-var ErrorFilter = createErrorFilterClass(StreamFilter);
-var ErrorBuilderFilter = createErrorBuilderFilterClass(StreamFilter);
-var ErrorHttpFilter = createErrorFilterClass(HttpFilter);
-var ErrorBuilderHttpFilter = createErrorBuilderFilterClass(HttpFilter);
+var errorFilter = (function(handler, options) {
+  return new ErrorFilter(handler, options);
+});
+var errorBuilderFilter = (function(builder, options) {
+  return new ErrorBuilderFilter(builder, options);
+});

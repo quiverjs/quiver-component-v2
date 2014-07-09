@@ -6,10 +6,17 @@ Object.defineProperties(exports, {
   ExtendedMiddleware: {get: function() {
       return ExtendedMiddleware;
     }},
+  extendHandler: {get: function() {
+      return extendHandler;
+    }},
+  extendMiddleware: {get: function() {
+      return extendMiddleware;
+    }},
   __esModule: {value: true}
 });
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
 var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
+var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
 var $__1 = $traceurRuntime.assertObject(require('./extensible-component.js')),
     ExtensibleHandler = $__1.ExtensibleHandler,
     ExtensibleMiddleware = $__1.ExtensibleMiddleware;
@@ -65,3 +72,9 @@ var $ExtendedMiddleware = ExtendedMiddleware;
     return json;
   }
 }, {}, ExtensibleMiddleware);
+var extendHandler = (function(handler, options) {
+  return new ExtendedHandler(handler, options);
+});
+var extendMiddleware = (function(middleware, options) {
+  return new ExtendedMiddleware(middleware, options);
+});

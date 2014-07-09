@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   StreamHandler: {get: function() {
       return StreamHandler;
     }},
+  streamHandlerBuilder: {get: function() {
+      return streamHandlerBuilder;
+    }},
+  streamHandler: {get: function() {
+      return streamHandler;
+    }},
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
@@ -55,3 +61,9 @@ var $StreamHandler = StreamHandler;
     return 'stream handler';
   }
 }, {}, StreamHandlerBuilder);
+var streamHandlerBuilder = (function(builder, options) {
+  return new StreamHandlerBuilder(builder, options);
+});
+var streamHandler = (function(handler, options) {
+  return new StreamHandler(handler, options);
+});

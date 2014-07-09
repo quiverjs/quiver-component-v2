@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   HttpHandler: {get: function() {
       return HttpHandler;
     }},
+  httpHandlerBuilder: {get: function() {
+      return httpHandlerBuilder;
+    }},
+  httpHandler: {get: function() {
+      return httpHandler;
+    }},
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
@@ -58,3 +64,9 @@ var $HttpHandler = HttpHandler;
     return 'http handler';
   }
 }, {}, HttpHandlerBuilder);
+var httpHandlerBuilder = (function(builder, options) {
+  return new HttpHandlerBuilder(builder, options);
+});
+var httpHandler = (function(handler, options) {
+  return new HttpHandler(handler, options);
+});

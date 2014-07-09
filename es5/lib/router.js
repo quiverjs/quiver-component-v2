@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   Router: {get: function() {
       return Router;
     }},
+  routeList: {get: function() {
+      return routeList;
+    }},
+  router: {get: function() {
+      return router;
+    }},
   __esModule: {value: true}
 });
 var $__2 = $traceurRuntime.assertObject(require('./route.js')),
@@ -20,15 +26,15 @@ var $__2 = $traceurRuntime.assertObject(require('./component.js')),
     Component = $__2.Component,
     HandlerComponent = $__2.HandlerComponent;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleHandler;
 var $__2 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineMiddlewareComponents = $__2.combineMiddlewareComponents,
     combineBuilderMiddleware = $__2.combineBuilderMiddleware,
     combineBuilderWithMiddleware = $__2.combineBuilderWithMiddleware;
 var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
 var RouteList = function RouteList() {
-  var routes = arguments[0] !== (void 0) ? arguments[0] : [];
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._routes = routes;
+  var options = arguments[0] !== (void 0) ? arguments[0] : {};
+  this._routes = [];
   this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $RouteList.prototype, "constructor", [options]);
 };
@@ -88,11 +94,9 @@ var loadDefaultRoute = (function(config, component, routeIndex) {
   }));
 });
 var Router = function Router() {
-  var routeLists = arguments[0] !== (void 0) ? arguments[0] : [];
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._routeLists = routeLists;
+  var options = arguments[0] !== (void 0) ? arguments[0] : {};
+  this._routeLists = [];
   this._defaultRouteList = new RouteList();
-  this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $Router.prototype, "constructor", [options]);
 };
 var $Router = Router;
@@ -137,10 +141,10 @@ var $Router = Router;
     this._defaultHandler = handlerComponent;
     return this;
   },
-  get handleableBuilder() {
+  get mainHandleableBuilder() {
     var $__0 = this;
     var routeLists = this.routeLists;
-    var builder = (function(config) {
+    return (function(config) {
       var routeIndex = createRouteIndex();
       var promises = routeLists.map((function(routeList) {
         return routeList.buildRoutes(config, routeIndex);
@@ -153,7 +157,6 @@ var $Router = Router;
         return routerHandleable(routeIndex);
       }));
     });
-    return combineBuilderWithMiddleware(builder, this.extendMiddleware);
   },
   get type() {
     return 'router';
@@ -169,5 +172,10 @@ var $Router = Router;
     json.middlewares = this.middlewareJson();
     return json;
   }
-}, {}, HandlerComponent);
-mixinMiddlewareExtensible(Router);
+}, {}, ExtensibleHandler);
+var routeList = (function(options) {
+  return new RouteList(options);
+});
+var router = (function(options) {
+  return new Router(options);
+});

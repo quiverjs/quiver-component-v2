@@ -1,7 +1,7 @@
 import 'traceur'
 
 import {
-  StreamHandler, SimpleHandler, HttpHandlerBuilder
+  streamHandler, simpleHandler, httpHandlerBuilder
 } from '../lib/export.js'
 
 import { resolve } from 'quiver-promise'
@@ -15,7 +15,7 @@ var should = chai.should()
 
 describe('handler test', () => {
   it('stream handler', () => {
-    var main = new StreamHandler(
+    var main = streamHandler(
       (args, streamable) =>
         streamableToText(streamable).then(input => {
           input.should.equal('hello')
@@ -33,7 +33,7 @@ describe('handler test', () => {
   })
 
   it('simple handler', () => {
-    var main = new SimpleHandler(
+    var main = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye'
@@ -44,7 +44,7 @@ describe('handler test', () => {
   })
 
   it('http builder', () => {
-    var main = new HttpHandlerBuilder(
+    var main = httpHandlerBuilder(
       config => {
         var greet = config.greet || 'hi'
 

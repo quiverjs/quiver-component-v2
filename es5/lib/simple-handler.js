@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   SimpleHandler: {get: function() {
       return SimpleHandler;
     }},
+  simpleHandlerBuilder: {get: function() {
+      return simpleHandlerBuilder;
+    }},
+  simpleHandler: {get: function() {
+      return simpleHandler;
+    }},
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
@@ -75,3 +81,9 @@ var $SimpleHandler = SimpleHandler;
 ($traceurRuntime.createClass)(SimpleHandler, {get type() {
     return 'simple handler';
   }}, {}, SimpleHandlerBuilder);
+var simpleHandlerBuilder = (function(builder, inType, outType, options) {
+  return new SimpleHandlerBuilder(builder, inType, outType, options);
+});
+var simpleHandler = (function(handler, inType, outType, options) {
+  return new SimpleHandler(handler, inType, outType, options);
+});

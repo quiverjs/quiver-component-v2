@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   Pipeline: {get: function() {
       return Pipeline;
     }},
+  pipeline: {get: function() {
+      return pipeline;
+    }},
   __esModule: {value: true}
 });
 var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
@@ -11,7 +14,7 @@ var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
     assertInstanceOf = $__1.assertInstanceOf,
     assertArrayInstanceOf = $__1.assertArrayInstanceOf;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleHandler;
 var combineStreamHandlers = (function(handler1, handler2) {
   return (function(args, streamable) {
     return handler1(copy(args), streamable).then((function(streamable) {
@@ -59,14 +62,11 @@ var pipelineBuilder = (function(builders, combinators) {
 });
 var Pipeline = function Pipeline() {
   var $__2;
-  var handlerComponents = arguments[0] !== (void 0) ? arguments[0] : [];
-  var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  assertArrayInstanceOf(handlerComponents, HandlerComponent, 'component must be of type HandlerComponent');
+  var options = arguments[0] !== (void 0) ? arguments[0] : {};
   var $__1 = $traceurRuntime.assertObject(options),
       pipelineCombinators = ($__2 = $__1.pipelineCombinators) === void 0 ? defaultCombinators : $__2;
-  this._pipelineHandlers = handlerComponents;
+  this._pipelineHandlers = [];
   this._pipelineCombinators = pipelineCombinators;
-  this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $Pipeline.prototype, "constructor", [options]);
 };
 var $Pipeline = Pipeline;
@@ -79,7 +79,7 @@ var $Pipeline = Pipeline;
   get pipelineHandlers() {
     return this._pipelineHandlers.slice();
   },
-  get handleableBuilder() {
+  get mainHandleableBuilder() {
     var builders = this._pipelineHandlers.map((function(component) {
       return component.handleableBuilder;
     }));
@@ -98,5 +98,7 @@ var $Pipeline = Pipeline;
     }));
     return json;
   }
-}, {}, HandlerComponent);
-mixinMiddlewareExtensible(Pipeline);
+}, {}, ExtensibleHandler);
+var pipeline = (function(options) {
+  return new Pipeline(options);
+});

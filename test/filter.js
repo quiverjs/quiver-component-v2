@@ -8,10 +8,10 @@ import {
 } from 'quiver-stream-util'
 
 import {
-  SimpleHandler, SimpleHandlerBuilder, Handleable,
-  StreamFilter, TransformFilter,
-  ArgsFilter, ArgsBuilderFilter, ErrorFilter,
-  InputHandlerMiddleware
+  simpleHandler, simpleHandlerBuilder, handleable,
+  streamFilter, transformFilter,
+  argsFilter, argsBuilderFilter, errorFilter,
+  inputHandlerMiddleware
 } from '../lib/export.js'
 
 var chai = require('chai')
@@ -28,13 +28,13 @@ var uppercaseStream = streamable =>
 
 describe('filter test', () => {
   it('simple handler', () => {
-    var filter = new StreamFilter(
+    var filter = streamFilter(
       (config, handler) =>
         (args, streamable) =>
           uppercaseStream(streamable).then(streamable =>
             handler(args, streamable).then(uppercaseStream)))
 
-    var main = new SimpleHandler(
+    var main = simpleHandler(
       (args, input) => {
         input.should.equal('HELLO!')
         return 'goodbye'
@@ -46,14 +46,14 @@ describe('filter test', () => {
   })
 
   it('transform filter', () => {
-    var uppercase = new SimpleHandler(
+    var uppercase = simpleHandler(
       (args, input) =>
         input.toUpperCase() + '!', 
       'text', 'text')
 
-    var filter = new TransformFilter(uppercase, 'inout')
+    var filter = transformFilter(uppercase, 'inout')
 
-    var main = new SimpleHandler(
+    var main = simpleHandler(
       (args, input) => {
         input.should.equal('HELLO!')
         return 'goodbye'
@@ -65,13 +65,13 @@ describe('filter test', () => {
   })
 
   it('args filter', () => {
-    var filter = new ArgsFilter(
+    var filter = argsFilter(
       args => {
         args.foo = 'bar'
         return args
       })
 
-    var main = new SimpleHandler(
+    var main = simpleHandler(
       args => {
         args.foo.should.equal('bar')
         return 'foo'
@@ -84,7 +84,7 @@ describe('filter test', () => {
   })
 
   it('args builder filter', () => {
-    var filter = new ArgsBuilderFilter(
+    var filter = argsBuilderFilter(
       config => {
         var fooValue = config.fooValue
 
@@ -94,7 +94,7 @@ describe('filter test', () => {
         }
       })
 
-    var main = new SimpleHandler(
+    var main = simpleHandler(
       args => {
         args.foo.should.equal('bar')
         return 'foo'
@@ -107,13 +107,13 @@ describe('filter test', () => {
   })
 
   it('args helper filter', () => {
-    var filter = new ArgsFilter(
+    var filter = argsFilter(
       args => {
         args.foo = 'bar'
         return args
       })
 
-    var main = new Handleable({
+    var main = handleable({
       streamHandler: (args, streamable) => {
         args.foo.should.equal('bar')
         return textToStreamable('main')
@@ -144,10 +144,10 @@ describe('filter test', () => {
   })
 
   it('error filter', () => {
-    var filter = new ErrorFilter(
+    var filter = errorFilter(
       err => textToStreamable('error caught from filter'))
 
-    var main = new SimpleHandler(
+    var main = simpleHandler(
       args => {
         throw new Error('error in handler')
       }, 'void', 'text')
@@ -158,14 +158,14 @@ describe('filter test', () => {
   })
 
   it('input handler', () => {
-    var uppercase = new SimpleHandler(
+    var uppercase = simpleHandler(
       (args, input) =>  input.toUpperCase() + '!', 
       'text', 'text')
 
-    var filter = new InputHandlerMiddleware(
+    var filter = inputHandlerMiddleware(
       uppercase, 'inHandler')
 
-    var main = new SimpleHandlerBuilder(
+    var main = simpleHandlerBuilder(
       config => {
         var inHandler = config.inHandler
         should.exist(inHandler)

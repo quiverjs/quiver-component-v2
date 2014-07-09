@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   ConfigOverrideMiddleware: {get: function() {
       return ConfigOverrideMiddleware;
     }},
+  configMiddleware: {get: function() {
+      return configMiddleware;
+    }},
+  configOverrideMiddleware: {get: function() {
+      return configOverrideMiddleware;
+    }},
   __esModule: {value: true}
 });
 var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
@@ -49,3 +55,9 @@ var $ConfigOverrideMiddleware = ConfigOverrideMiddleware;
     return json;
   }
 }, {}, ConfigMiddleware);
+var configMiddleware = (function(handler, options) {
+  return new ConfigMiddleware(handler, options);
+});
+var configOverrideMiddleware = (function(config, options) {
+  return new ConfigOverrideMiddleware(config, options);
+});

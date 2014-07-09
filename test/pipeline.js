@@ -1,7 +1,7 @@
 import 'traceur'
 
 import {
-  Pipeline, SimpleHandler, loadSimpleHandler
+  pipeline, simpleHandler, loadSimpleHandler
 } from '../lib/export.js'
 
 var chai = require('chai')
@@ -12,26 +12,26 @@ var should = chai.should()
 
 describe('pipeline handler test', () => {
   it('simple pipeline', () => {
-    var handler1 = new SimpleHandler(
+    var handler1 = simpleHandler(
       args => 'hello, ' + args.name, 
       'void', 'text')
 
-    var handler2 = new SimpleHandler(
+    var handler2 = simpleHandler(
       (args, input) => input.toUpperCase(), 
       'text', 'text')
 
-    var handler3 = new SimpleHandler(
+    var handler3 = simpleHandler(
       (args, input) => ({
         status: 'ok',
         result: input
       }), 'text', 'json')
 
-    var pipeline = new Pipeline()
+    var main = pipeline()
       .addPipe(handler1)
       .addPipe(handler2)
       .addPipe(handler3)
     
-    return loadSimpleHandler({}, pipeline, 'void', 'json')
+    return loadSimpleHandler({}, main, 'void', 'json')
     .then(handler => 
       handler({ name: 'bob' })
       .then(result => {

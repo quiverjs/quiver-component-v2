@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   Handleable: {get: function() {
       return Handleable;
     }},
+  handleableBuilder: {get: function() {
+      return handleableBuilder;
+    }},
+  handleable: {get: function() {
+      return handleable;
+    }},
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
@@ -44,3 +50,9 @@ var $Handleable = Handleable;
 ($traceurRuntime.createClass)(Handleable, {get type() {
     return 'handleable';
   }}, {}, HandleableBuilder);
+var handleableBuilder = (function(builder, options) {
+  return new HandleableBuilder(builder, options);
+});
+var handleable = (function(handleable, options) {
+  return new Handleable(handleable, options);
+});

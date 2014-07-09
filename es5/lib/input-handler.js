@@ -6,6 +6,12 @@ Object.defineProperties(exports, {
   PrivateInputMiddleware: {get: function() {
       return PrivateInputMiddleware;
     }},
+  inputHandlerMiddleware: {get: function() {
+      return inputHandlerMiddleware;
+    }},
+  privateInputMiddleware: {get: function() {
+      return privateInputMiddleware;
+    }},
   __esModule: {value: true}
 });
 var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
@@ -57,3 +63,9 @@ var PrivateInputMiddleware = function PrivateInputMiddleware(handlerComponent, t
 };
 var $PrivateInputMiddleware = PrivateInputMiddleware;
 ($traceurRuntime.createClass)(PrivateInputMiddleware, {}, {}, PrivateMiddleware);
+var inputHandlerMiddleware = (function(handler, toConfig, options) {
+  return new InputHandlerMiddleware(handler, toConfig, options);
+});
+var privateInputMiddleware = (function(handler, toConfig, options) {
+  return new PrivateInputMiddleware(handler, toConfig, options);
+});

@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   HandleableMiddleware: {get: function() {
       return HandleableMiddleware;
     }},
+  handleableMiddleware: {get: function() {
+      return handleableMiddleware;
+    }},
   __esModule: {value: true}
 });
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
@@ -30,3 +33,6 @@ var $HandleableMiddleware = HandleableMiddleware;
     return json;
   }
 }, {}, ExtensibleMiddleware);
+var handleableMiddleware = (function(middleware, options) {
+  return new HandleableMiddleware(middleware, options);
+});

@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   TransformFilter: {get: function() {
       return TransformFilter;
     }},
+  transformFilter: {get: function() {
+      return transformFilter;
+    }},
   __esModule: {value: true}
 });
 var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
@@ -79,3 +82,6 @@ var $TransformFilter = TransformFilter;
     return json;
   }
 }, {}, StreamFilter);
+var transformFilter = (function(handler, mode, options) {
+  return new TransformFilter(handler, mode, options);
+});
