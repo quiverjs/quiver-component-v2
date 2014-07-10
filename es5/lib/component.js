@@ -29,7 +29,8 @@ var Component = function Component() {
   get type() {
     return 'component';
   },
-  makePrivate: function(bundle) {
+  makePrivate: function() {
+    var bundle = arguments[0] !== (void 0) ? arguments[0] : {};
     var original = this;
     var originalId = original.id;
     if (bundle[originalId])
