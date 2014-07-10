@@ -17,6 +17,7 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
+var getInitTable = $traceurRuntime.assertObject(require('./config.js')).getInitTable;
 var noopMiddleware = (function(config, builder) {
   return builder(config);
 });
@@ -45,4 +46,12 @@ var combineMiddlewareComponents = (function(components) {
   return combineMiddlewares(components.map((function(component) {
     return component.handleableMiddleware;
   })));
+});
+var repeatOnceMiddleware = (function(id, middleware) {
+  return (function(config, builder) {
+    var initTable = getInitTable(config);
+    if (initTable[id])
+      return builder(config);
+    return middleware(config, builder);
+  });
 });

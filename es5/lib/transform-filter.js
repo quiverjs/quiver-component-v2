@@ -72,6 +72,10 @@ var $TransformFilter = TransformFilter;
   get transformMode() {
     return this._transformMode;
   },
+  privatize: function(privateCopy, bundle) {
+    privateCopy._transformComponent = this._transformComponent.makePrivate(bundle);
+    $traceurRuntime.superCall(this, $TransformFilter.prototype, "privatize", [privateCopy, bundle]);
+  },
   get type() {
     return 'transform filter';
   },

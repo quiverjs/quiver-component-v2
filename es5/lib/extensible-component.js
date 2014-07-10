@@ -16,7 +16,7 @@ var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineBuilderWithMiddleware = $__1.combineBuilderWithMiddleware;
 var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
 var ExtensibleHandler = function ExtensibleHandler(options) {
-  this._initMiddlewareExtension(options);
+  this.initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "constructor", [options]);
 };
 var $ExtensibleHandler = ExtensibleHandler;
@@ -29,6 +29,10 @@ var $ExtensibleHandler = ExtensibleHandler;
   get mainHandleableBuilder() {
     throw new Error('unimplemented');
   },
+  privatize: function(privateCopy, bundle) {
+    this.privatizeMiddlewares(privateCopy, bundle);
+    $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "privatize", [privateCopy, bundle]);
+  },
   toJson: function() {
     var json = $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "toJson", []);
     json.middlewares = this.middlewareJson();
@@ -37,7 +41,7 @@ var $ExtensibleHandler = ExtensibleHandler;
 }, {}, HandlerComponent);
 mixinMiddlewareExtensible(ExtensibleHandler.prototype);
 var ExtensibleMiddleware = function ExtensibleMiddleware(options) {
-  this._initMiddlewareExtension(options);
+  this.initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "constructor", [options]);
 };
 var $ExtensibleMiddleware = ExtensibleMiddleware;
@@ -46,6 +50,10 @@ var $ExtensibleMiddleware = ExtensibleMiddleware;
     var mainMiddleware = this.mainHandleableMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);
+  },
+  privatize: function(privateCopy, bundle) {
+    this.privatizeMiddlewares(privateCopy, bundle);
+    $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "privatize", [privateCopy, bundle]);
   },
   toJson: function() {
     var json = $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "toJson", []);

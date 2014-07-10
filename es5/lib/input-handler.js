@@ -3,14 +3,8 @@ Object.defineProperties(exports, {
   InputHandlerMiddleware: {get: function() {
       return InputHandlerMiddleware;
     }},
-  PrivateInputMiddleware: {get: function() {
-      return PrivateInputMiddleware;
-    }},
   inputHandlerMiddleware: {get: function() {
       return inputHandlerMiddleware;
-    }},
-  privateInputMiddleware: {get: function() {
-      return privateInputMiddleware;
     }},
   __esModule: {value: true}
 });
@@ -46,6 +40,10 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
   get inputHandlerComponent() {
     return this._inputHandlerComponent;
   },
+  privatize: function(privateCopy, bundle) {
+    privateCopy._inputHandlerComponent = this._inputHandlerComponent.makePrivate(bundle);
+    $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "privatize", [privateCopy, bundle]);
+  },
   get type() {
     return 'input handler middleware';
   },
@@ -55,17 +53,6 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
     return json;
   }
 }, {}, ConfigMiddleware);
-var PrivateInputMiddleware = function PrivateInputMiddleware(handlerComponent, toConfig) {
-  var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  options.loadPrivate = true;
-  var inputMiddleware = new InputHandlerMiddleware(handlerComponent, toConfig, options);
-  $traceurRuntime.superCall(this, $PrivateInputMiddleware.prototype, "constructor", [inputMiddleware]);
-};
-var $PrivateInputMiddleware = PrivateInputMiddleware;
-($traceurRuntime.createClass)(PrivateInputMiddleware, {}, {}, PrivateMiddleware);
 var inputHandlerMiddleware = (function(handler, toConfig, options) {
   return new InputHandlerMiddleware(handler, toConfig, options);
-});
-var privateInputMiddleware = (function(handler, toConfig, options) {
-  return new PrivateInputMiddleware(handler, toConfig, options);
 });

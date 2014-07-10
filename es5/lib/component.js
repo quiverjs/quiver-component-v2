@@ -17,6 +17,7 @@ var Component = function Component() {
   var name = $traceurRuntime.assertObject(options).name;
   this._name = name;
   this._id = Symbol();
+  this._options = options;
 };
 ($traceurRuntime.createClass)(Component, {
   get name() {
@@ -28,6 +29,27 @@ var Component = function Component() {
   get type() {
     return 'component';
   },
+  makePrivate: function(bundle) {
+    var original = this;
+    var originalId = original.id;
+    if (bundle[originalId])
+      return bundle[originalId];
+    var privateId = Symbol();
+    var privateCopy = original.makeProto();
+    bundle[originalId] = privateCopy;
+    Object.defineProperty(privateCopy, 'id', {get: function() {
+        return privateId;
+      }});
+    privateCopy.makeProto = (function() {
+      return original.makeProto();
+    });
+    original.privatize(privateCopy, bundle);
+    return privateCopy;
+  },
+  makeProto: function() {
+    return Object.create(this);
+  },
+  privatize: function(privateCopy, bundle) {},
   toJson: function() {
     var json = {type: this.type};
     if (this.name)

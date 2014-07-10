@@ -16,7 +16,7 @@ var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-mi
 var PrivateMiddleware = function PrivateMiddleware(middlewareComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(middlewareComponent, MiddlewareComponent, 'Only MiddlewareComponent can be privatized');
-  this._initMiddlewareExtension(options);
+  this.initMiddlewareExtension(options);
   this._middlewareComponent = middlewareComponent;
   this._initKey = Symbol();
 };

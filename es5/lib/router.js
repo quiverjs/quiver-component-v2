@@ -35,7 +35,7 @@ var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
 var RouteList = function RouteList() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._routes = [];
-  this._initMiddlewareExtension(options);
+  this.initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $RouteList.prototype, "constructor", [options]);
 };
 var $RouteList = RouteList;
@@ -72,6 +72,13 @@ var $RouteList = RouteList;
       }));
     }));
     return Promise.all(promises);
+  },
+  privatize: function(privateCopy, bundle) {
+    privateCopy._routes = this._routes.map((function(route) {
+      return route.makePrivate(bundle);
+    }));
+    this.privatizeMiddlewares(privateCopy, bundle);
+    $traceurRuntime.superCall(this, $RouteList.prototype, "privatize", [privateCopy, bundle]);
   },
   get type() {
     return 'route list';
@@ -157,6 +164,14 @@ var $Router = Router;
         return routerHandleable(routeIndex);
       }));
     });
+  },
+  privatize: function(privateCopy, bundle) {
+    privateCopy._routeLists = this._routeLists.map((function(routeList) {
+      return routeList.makePrivate(bundle);
+    }));
+    privateCopy._defaultRouteList = this._defaultRouteList.makePrivate(bundle);
+    privateCopy._defaultHandler = this._defaultHandler.makePrivate(bundle);
+    $traceurRuntime.superCall(this, $Router.prototype, "privatize", [privateCopy, bundle]);
   },
   get type() {
     return 'router';

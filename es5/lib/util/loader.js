@@ -12,6 +12,9 @@ Object.defineProperties(exports, {
   loadSimpleHandler: {get: function() {
       return loadSimpleHandler;
     }},
+  simpleHandlerLoader: {get: function() {
+      return simpleHandlerLoader;
+    }},
   __esModule: {value: true}
 });
 var $__2 = $traceurRuntime.assertObject(require('quiver-promise')),
@@ -70,4 +73,9 @@ var loadSimpleHandler = (function(config, component, inType, outType, options) {
   return loadStreamHandler(config, component, options).then((function(handler) {
     return streamToSimpleHandler(handler, inType, outType);
   }));
+});
+var simpleHandlerLoader = (function(inType, outType) {
+  return (function(config, component, options) {
+    return loadSimpleHandler(config, component, inType, outType, options);
+  });
 });

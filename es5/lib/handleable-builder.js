@@ -18,10 +18,11 @@ var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleHandler;
+var privatizedConstructor = $traceurRuntime.assertObject(require('./privatize.js')).privatizedConstructor;
 var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._mainHandleableBuilder = handleableBuilder;
-  this._handleableBuilder = safeHandler(handleableBuilder, options);
+  this._rawHandleableBuilder = handleableBuilder;
+  this._mainHandleableBuilder = safeHandler(handleableBuilder, options);
   $traceurRuntime.superCall(this, $HandleableBuilder.prototype, "constructor", [options]);
 };
 var $HandleableBuilder = HandleableBuilder;
