@@ -14,7 +14,7 @@ var $__1 = $traceurRuntime.assertObject(require('./component.js')),
 var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineMiddlewares = $__1.combineMiddlewares,
     combineBuilderWithMiddleware = $__1.combineBuilderWithMiddleware;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
 var ExtensibleHandler = function ExtensibleHandler(options) {
   this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "constructor", [options]);
@@ -28,17 +28,29 @@ var $ExtensibleHandler = ExtensibleHandler;
   },
   get mainHandleableBuilder() {
     throw new Error('unimplemented');
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "toJson", []);
+    json.middlewares = this.middlewareJson();
+    return json;
   }
 }, {}, HandlerComponent);
-mixinMiddlewareExtensible(ExtensibleHandler);
+mixinMiddlewareExtensible(ExtensibleHandler.prototype);
 var ExtensibleMiddleware = function ExtensibleMiddleware(options) {
   this._initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "constructor", [options]);
 };
 var $ExtensibleMiddleware = ExtensibleMiddleware;
-($traceurRuntime.createClass)(ExtensibleMiddleware, {get handleableMiddleware() {
+($traceurRuntime.createClass)(ExtensibleMiddleware, {
+  get handleableMiddleware() {
     var mainMiddleware = this.mainHandleableMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);
-  }}, {}, MiddlewareComponent);
-mixinMiddlewareExtensible(ExtensibleMiddleware);
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "toJson", []);
+    json.middlewares = this.middlewareJson();
+    return json;
+  }
+}, {}, MiddlewareComponent);
+mixinMiddlewareExtensible(ExtensibleMiddleware.prototype);

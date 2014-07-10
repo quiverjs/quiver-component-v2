@@ -25,7 +25,7 @@ var createRouteIndex = $traceurRuntime.assertObject(require('./util/route-index.
 var $__2 = $traceurRuntime.assertObject(require('./component.js')),
     Component = $__2.Component,
     HandlerComponent = $__2.HandlerComponent;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
 var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleHandler;
 var $__2 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     combineMiddlewareComponents = $__2.combineMiddlewareComponents,
@@ -87,7 +87,7 @@ var $RouteList = RouteList;
     return json;
   }
 }, {}, Component);
-mixinMiddlewareExtensible(RouteList);
+mixinMiddlewareExtensible(RouteList.prototype);
 var loadDefaultRoute = (function(config, component, routeIndex) {
   return component.loadHandleable(copy(config)).then((function(handleable) {
     return routeIndex.setDefaultRoute(handleable);

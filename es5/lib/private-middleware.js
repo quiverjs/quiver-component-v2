@@ -12,7 +12,7 @@ var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).as
 var getInitTable = $traceurRuntime.assertObject(require('./util/config.js')).getInitTable;
 var MiddlewareComponent = $traceurRuntime.assertObject(require('./component.js')).MiddlewareComponent;
 var combineMiddlewares = $traceurRuntime.assertObject(require('./util/middleware.js')).combineMiddlewares;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./extend-middleware.js')).mixinMiddlewareExtensible;
+var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
 var PrivateMiddleware = function PrivateMiddleware(middlewareComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(middlewareComponent, MiddlewareComponent, 'Only MiddlewareComponent can be privatized');
@@ -44,7 +44,7 @@ var $PrivateMiddleware = PrivateMiddleware;
     return json;
   }
 }, {}, MiddlewareComponent);
-mixinMiddlewareExtensible(PrivateMiddleware);
+mixinMiddlewareExtensible(PrivateMiddleware.prototype);
 var privateMiddleware = (function(middleware, options) {
   return new PrivateMiddleware(middleware, options);
 });

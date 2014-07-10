@@ -31,11 +31,6 @@ var $HandleableBuilder = HandleableBuilder;
   },
   get type() {
     return 'handleable builder';
-  },
-  toJson: function() {
-    var json = $traceurRuntime.superCall(this, $HandleableBuilder.prototype, "toJson", []);
-    json.middlewares = this.middlewareJson();
-    return json;
   }
 }, {}, ExtensibleHandler);
 var Handleable = function Handleable(handleable) {
