@@ -1,7 +1,8 @@
 import 'traceur'
 
 import {
-  SimpleHandlerBuilder
+  simpleHandlerBuilder, simpleHandler,
+  transformFilter
 } from '../lib/export.js'
 
 var chai = require('chai')
@@ -10,9 +11,9 @@ var chaiAsPromised = require('chai-as-promised')
 chai.use(chaiAsPromised)
 var should = chai.should()
 
-describe.only('privatized component test', () => {
+describe('privatized component test', () => {
   it('single component test', () => {
-    var original = new SimpleHandlerBuilder(
+    var original = simpleHandlerBuilder(
     config => {
       var { greet='Hello' } = config
 
@@ -57,7 +58,7 @@ describe.only('privatized component test', () => {
   })
 
   it('private inheritance', () => {
-    var original = new SimpleHandlerBuilder(
+    var original = simpleHandlerBuilder(
     config => {
       var { greet='Hello' } = config
 
@@ -89,5 +90,58 @@ describe.only('privatized component test', () => {
     should.equal(copy21, copy22)
 
     should.equal(Object.getPrototypeOf(copy21), original)
+  })
+
+  it('nested privatize', () => {
+    var transformCase = simpleHandlerBuilder(
+    config => {
+      var { transform } = config
+      var doTransform = transform == 'uppercase' ?
+        string => string.toUpperCase() :
+        string => string.toLowerCase()
+
+      return (args, text) =>
+        doTransform(text)
+    }, 'text', 'text')
+
+    var filter = transformFilter(transformCase, 'out')
+
+    var filter1 = filter.makePrivate()
+    var filter2 = filter.makePrivate()
+
+    should.not.equal(filter1.id, filter2.id)
+    should.not.equal(filter1._transformComponent.id, 
+      filter2._transformComponent.id)
+
+    var greet = simpleHandler(
+      (args, name) =>
+        'Hello, ' + name, 
+      'text', 'text')
+
+    var greet1 = greet.makePrivate()
+      .addMiddleware(filter1)
+
+    var greet2  = greet.makePrivate()
+      .addMiddleware(filter1)
+
+    var greet3 = greet.makePrivate()
+      .addMiddleware(filter2)
+
+    var config = { transform: 'uppercase' }
+
+    return greet1.loadHandler(config).then(handler =>
+      handler({}, 'John').should.eventually.equal('HELLO, JOHN'))
+    .then(() => {
+      config.transform = 'lowercase'
+
+      return greet2.loadHandler(config).then(handler =>
+        handler({}, 'Bob').should.eventually.equal('HELLO, BOB'))
+    })
+    .then(() => {
+      config.transform = 'lowercase'
+
+      return greet3.loadHandler(config).then(handler =>
+        handler({}, 'Alice').should.eventually.equal('hello, alice'))
+    })
   })
 })

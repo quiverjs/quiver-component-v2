@@ -1,13 +1,16 @@
 "use strict";
 require('traceur');
-var SimpleHandlerBuilder = $traceurRuntime.assertObject(require('../lib/export.js')).SimpleHandlerBuilder;
+var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+    simpleHandlerBuilder = $__0.simpleHandlerBuilder,
+    simpleHandler = $__0.simpleHandler,
+    transformFilter = $__0.transformFilter;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 var should = chai.should();
-describe.only('privatized component test', (function() {
+describe('privatized component test', (function() {
   it('single component test', (function() {
-    var original = new SimpleHandlerBuilder((function(config) {
+    var original = simpleHandlerBuilder((function(config) {
       var $__1;
       var $__0 = $traceurRuntime.assertObject(config),
           greet = ($__1 = $__0.greet) === void 0 ? 'Hello' : $__1;
@@ -38,7 +41,7 @@ describe.only('privatized component test', (function() {
     }));
   }));
   it('private inheritance', (function() {
-    var original = new SimpleHandlerBuilder((function(config) {
+    var original = simpleHandlerBuilder((function(config) {
       var $__1;
       var $__0 = $traceurRuntime.assertObject(config),
           greet = ($__1 = $__0.greet) === void 0 ? 'Hello' : $__1;
@@ -63,5 +66,43 @@ describe.only('privatized component test', (function() {
     should.equal(copy21.id, copy22.id);
     should.equal(copy21, copy22);
     should.equal(Object.getPrototypeOf(copy21), original);
+  }));
+  it('nested privatize', (function() {
+    var transformCase = simpleHandlerBuilder((function(config) {
+      var transform = $traceurRuntime.assertObject(config).transform;
+      var doTransform = transform == 'uppercase' ? (function(string) {
+        return string.toUpperCase();
+      }) : (function(string) {
+        return string.toLowerCase();
+      });
+      return (function(args, text) {
+        return doTransform(text);
+      });
+    }), 'text', 'text');
+    var filter = transformFilter(transformCase, 'out');
+    var filter1 = filter.makePrivate();
+    var filter2 = filter.makePrivate();
+    should.not.equal(filter1.id, filter2.id);
+    should.not.equal(filter1._transformComponent.id, filter2._transformComponent.id);
+    var greet = simpleHandler((function(args, name) {
+      return 'Hello, ' + name;
+    }), 'text', 'text');
+    var greet1 = greet.makePrivate().addMiddleware(filter1);
+    var greet2 = greet.makePrivate().addMiddleware(filter1);
+    var greet3 = greet.makePrivate().addMiddleware(filter2);
+    var config = {transform: 'uppercase'};
+    return greet1.loadHandler(config).then((function(handler) {
+      return handler({}, 'John').should.eventually.equal('HELLO, JOHN');
+    })).then((function() {
+      config.transform = 'lowercase';
+      return greet2.loadHandler(config).then((function(handler) {
+        return handler({}, 'Bob').should.eventually.equal('HELLO, BOB');
+      }));
+    })).then((function() {
+      config.transform = 'lowercase';
+      return greet3.loadHandler(config).then((function(handler) {
+        return handler({}, 'Alice').should.eventually.equal('hello, alice');
+      }));
+    }));
   }));
 }));

@@ -90,14 +90,17 @@ var argsBuilderToFilter = (function(argsBuilder) {
 });
 var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._argsBuilder = argsBuilder;
-  argsBuilder = safeBuilder(argsBuilder, options);
-  var filter = argsBuilderToFilter(argsBuilder);
-  $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [filter, options]);
+  this._argsBuilder = safeBuilder(argsBuilder, options);
+  $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [null, options]);
 };
 var $ArgsBuilderFilter = ArgsBuilderFilter;
 ($traceurRuntime.createClass)(ArgsBuilderFilter, {
+  get handleableFilter() {
+    return argsBuilderToFilter(this.argsBuilder);
+  },
   get argsBuilder() {
+    if (!this._argsBuilder)
+      throw new Error('argsBuilder is not defined');
     return this._argsBuilder;
   },
   get type() {
@@ -106,17 +109,21 @@ var $ArgsBuilderFilter = ArgsBuilderFilter;
 }, {}, HandleableFilter);
 var ArgsFilter = function ArgsFilter(argsHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._argsHandler = argsHandler;
-  argsHandler = safeHandler(argsHandler, options);
-  var argsBuilder = (function(config) {
-    return resolve(argsHandler);
-  });
-  $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [argsBuilder, options]);
+  this._argsHandler = safeHandler(argsHandler, options);
+  $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [null, options]);
 };
 var $ArgsFilter = ArgsFilter;
 ($traceurRuntime.createClass)(ArgsFilter, {
-  get argsFilter() {
-    return this._argsFilter;
+  get argsBuilder() {
+    var argsHandler = this.argsHandler;
+    return (function(config) {
+      return resolve(argsHandler);
+    });
+  },
+  get argsHandler() {
+    if (!this._argsHandler)
+      throw new Error('argsHandler is not defined');
+    return this._argsHandler;
   },
   get type() {
     return 'args filter';
@@ -124,15 +131,18 @@ var $ArgsFilter = ArgsFilter;
 }, {}, ArgsBuilderFilter);
 var ErrorFilter = function ErrorFilter(errorHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._errorFilter = errorHandler;
-  errorHandler = safeHandler(errorHandler, options);
-  var streamFilter = errorToFilter(errorHandler);
-  $traceurRuntime.superCall(this, $ErrorFilter.prototype, "constructor", [streamFilter, options]);
+  this._errorHandler = safeHandler(errorHandler, options);
+  $traceurRuntime.superCall(this, $ErrorFilter.prototype, "constructor", [null, options]);
 };
 var $ErrorFilter = ErrorFilter;
 ($traceurRuntime.createClass)(ErrorFilter, {
-  get errorFilter() {
-    return this._errorFilter;
+  get streamFilter() {
+    return errorToFilter(this.errorHandler);
+  },
+  get errorHandler() {
+    if (!this._errorHandler)
+      throw new Error('errorHandler is not defined');
+    return this._errorHandler;
   },
   get type() {
     return 'error filter';
@@ -140,14 +150,17 @@ var $ErrorFilter = ErrorFilter;
 }, {}, StreamFilter);
 var ErrorBuilderFilter = function ErrorBuilderFilter(errorBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._errorBuilder = errorBuilder;
-  errorBuilder = safeBuilder(errorBuilder, options);
-  var streamFilter = builderFilterConvert(errorBuilder, errorToFilter);
-  $traceurRuntime.superCall(this, $ErrorBuilderFilter.prototype, "constructor", [streamFilter, options]);
+  this._errorBuilder = safeBuilder(errorBuilder, options);
+  $traceurRuntime.superCall(this, $ErrorBuilderFilter.prototype, "constructor", [null, options]);
 };
 var $ErrorBuilderFilter = ErrorBuilderFilter;
 ($traceurRuntime.createClass)(ErrorBuilderFilter, {
+  get streamFilter() {
+    return builderFilterConvert(this.errorBuilder, errorToFilter);
+  },
   get errorBuilder() {
+    if (!this._errorBuilder)
+      throw new Error('errorBuilder is not defined');
     return this._errorBuilder;
   },
   get type() {

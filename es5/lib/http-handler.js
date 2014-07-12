@@ -22,46 +22,51 @@ var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
 var HandleableBuilder = $traceurRuntime.assertObject(require('./handleable-builder.js')).HandleableBuilder;
 var HttpHandlerBuilder = function HttpHandlerBuilder(httpHandlerBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._httpHandlerBuilder = httpHandlerBuilder;
-  httpHandlerBuilder = safeBuilder(httpHandlerBuilder, options);
-  var handleableBuilder = (function(config) {
-    return httpHandlerBuilder(config).then((function(httpHandler) {
-      return ({httpHandler: httpHandler});
-    }));
-  });
-  $traceurRuntime.superCall(this, $HttpHandlerBuilder.prototype, "constructor", [handleableBuilder, options]);
+  this._httpHandlerBuilder = safeBuilder(httpHandlerBuilder, options);
+  $traceurRuntime.superCall(this, $HttpHandlerBuilder.prototype, "constructor", [null, options]);
 };
 var $HttpHandlerBuilder = HttpHandlerBuilder;
 ($traceurRuntime.createClass)(HttpHandlerBuilder, {
-  get httpHandlerBuilder() {
-    return this._httpHandlerBuilder;
+  get mainHandleableBuilder() {
+    var builder = this.httpHandlerBuilder;
+    return (function(config) {
+      return builder(config).then((function(httpHandler) {
+        return ({httpHandler: httpHandler});
+      }));
+    });
   },
-  loadHttpHandler: function(config, options) {
-    return loadHttpHandler(config, this, options);
+  get httpHandlerBuilder() {
+    if (!this._httpHandlerBuilder)
+      throw new Error('httpHandlerBuilder is not defined');
+    return this._httpHandlerBuilder;
   },
   get handlerLoader() {
     return loadHttpHandler;
   },
   get type() {
-    return 'http handler builder';
+    return 'Http Handler Builder';
   }
 }, {}, HandleableBuilder);
 var HttpHandler = function HttpHandler(httpHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._httpHandler = httpHandler;
-  httpHandler = safeHandler(httpHandler, options);
-  var httpHandlerBuilder = (function(config) {
-    return resolve(httpHandler);
-  });
-  $traceurRuntime.superCall(this, $HttpHandler.prototype, "constructor", [httpHandlerBuilder, options]);
+  this._httpHandler = safeHandler(httpHandler, options);
+  $traceurRuntime.superCall(this, $HttpHandler.prototype, "constructor", [null, options]);
 };
 var $HttpHandler = HttpHandler;
 ($traceurRuntime.createClass)(HttpHandler, {
+  get httpHandlerBuilder() {
+    var handler = this.httpHandler;
+    return (function(config) {
+      return resolve(handler);
+    });
+  },
   get httpHandler() {
+    if (!this._httpHandler)
+      throw new Error('httpHandler is not defined');
     return this._httpHandler;
   },
   get type() {
-    return 'http handler';
+    return 'Http Handler';
   }
 }, {}, HttpHandlerBuilder);
 var httpHandlerBuilder = (function(builder, options) {

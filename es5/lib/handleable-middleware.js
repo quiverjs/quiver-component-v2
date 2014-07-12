@@ -8,7 +8,6 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
 var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
 var ExtensibleMiddleware = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleMiddleware;
 var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
@@ -16,21 +15,26 @@ var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
     repeatOnceMiddleware = $__1.repeatOnceMiddleware;
 var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._rawHandleableMiddleware = handleableMiddleware;
-  var middleware = safeHandler(handleableMiddleware, options);
-  var repeat = $traceurRuntime.assertObject(options).repeat;
-  if (repeat == 'once')
-    middleware = repeatOnceMiddleware(this.id, middleware);
-  this._mainHandleableMiddleware = middleware;
+  this._mainMiddleware = safeHandler(handleableMiddleware, options);
+  this._repeat = options.repeat;
   $traceurRuntime.superCall(this, $HandleableMiddleware.prototype, "constructor", [options]);
 };
 var $HandleableMiddleware = HandleableMiddleware;
 ($traceurRuntime.createClass)(HandleableMiddleware, {
   get mainHandleableMiddleware() {
-    return this._mainHandleableMiddleware;
+    var middleware = this.mainMiddleware;
+    if (this._repeat == 'once')
+      middleware = repeatOnceMiddleware(this.id, middleware);
+    return middleware;
+  },
+  get mainMiddleware() {
+    var middleware = this._mainHandleableMiddleware;
+    if (!middleware)
+      throw new Error('mainHandleableMiddleware is not defined');
+    return middleware;
   },
   get type() {
-    return 'handleable middleware';
+    return 'Handleable Middleware';
   }
 }, {}, ExtensibleMiddleware);
 var handleableMiddleware = (function(middleware, options) {

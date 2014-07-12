@@ -21,7 +21,6 @@ var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-compo
 var privatizedConstructor = $traceurRuntime.assertObject(require('./privatize.js')).privatizedConstructor;
 var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._rawHandleableBuilder = handleableBuilder;
   this._mainHandleableBuilder = safeHandler(handleableBuilder, options);
   $traceurRuntime.superCall(this, $HandleableBuilder.prototype, "constructor", [options]);
 };
@@ -36,16 +35,27 @@ var $HandleableBuilder = HandleableBuilder;
 }, {}, ExtensibleHandler);
 var Handleable = function Handleable(handleable) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var builder = (function(config) {
-    return resolve(handleable);
-  });
+  this._handleable = handleable;
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $Handleable.prototype, "constructor", [builder, options]);
+  $traceurRuntime.superCall(this, $Handleable.prototype, "constructor", [null, options]);
 };
 var $Handleable = Handleable;
-($traceurRuntime.createClass)(Handleable, {get type() {
+($traceurRuntime.createClass)(Handleable, {
+  get mainHandleableBuilder() {
+    var handleable = this.handleable;
+    return (function(config) {
+      return resolve(handleable);
+    });
+  },
+  get handleable() {
+    if (!this._handleable)
+      throw new Error('handleable is not defined');
+    return this._handleable;
+  },
+  get type() {
     return 'handleable';
-  }}, {}, HandleableBuilder);
+  }
+}, {}, HandleableBuilder);
 var handleableBuilder = (function(builder, options) {
   return new HandleableBuilder(builder, options);
 });

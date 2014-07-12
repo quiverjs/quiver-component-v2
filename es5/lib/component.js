@@ -36,19 +36,15 @@ var Component = function Component() {
     if (bundle[originalId])
       return bundle[originalId];
     var privateId = Symbol();
-    var privateCopy = original.makeProto();
-    bundle[originalId] = privateCopy;
+    var originalProto = original.originalProto ? original.originalProto : original;
+    var privateCopy = Object.create(originalProto);
+    privateCopy.originalProto = originalProto;
     Object.defineProperty(privateCopy, 'id', {get: function() {
         return privateId;
       }});
-    privateCopy.makeProto = (function() {
-      return original.makeProto();
-    });
+    bundle[originalId] = privateCopy;
     original.privatize(privateCopy, bundle);
     return privateCopy;
-  },
-  makeProto: function() {
-    return Object.create(this);
   },
   privatize: function(privateCopy, bundle) {},
   toJson: function() {

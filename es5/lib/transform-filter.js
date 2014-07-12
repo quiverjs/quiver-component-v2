@@ -46,26 +46,29 @@ var TransformFilter = function TransformFilter(handlerComponent, transformMode) 
   if (!validModes[transformMode])
     throw new TypeError('invalid transform mode provided in options');
   this._transformMode = transformMode;
-  var loadOptions = $traceurRuntime.assertObject(options).loadOptions;
-  var streamFilter = (function(config, handler) {
-    return loadStreamHandler(config, handlerComponent).then((function(transformHandler) {
-      var transformIn = inTransformHandler(transformHandler, transformMode);
-      var mainHandler = wrapMainHandler(handler, transformMode);
-      var transformOut = outTransformHandler(transformHandler, transformMode);
-      return (function(args, streamable) {
-        return transformIn(args, streamable).then((function(transformedIn) {
-          return mainHandler(args, transformedIn).then((function(resultStreamable) {
-            return transformOut(args, resultStreamable);
-          }));
-        }));
-      });
-    }));
-  });
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $TransformFilter.prototype, "constructor", [streamFilter, options]);
+  $traceurRuntime.superCall(this, $TransformFilter.prototype, "constructor", [null, options]);
 };
 var $TransformFilter = TransformFilter;
 ($traceurRuntime.createClass)(TransformFilter, {
+  get streamFilter() {
+    var transformComponent = this.transformComponent;
+    var transformMode = this.transformMode;
+    return (function(config, handler) {
+      return loadStreamHandler(config, transformComponent).then((function(transformHandler) {
+        var transformIn = inTransformHandler(transformHandler, transformMode);
+        var mainHandler = wrapMainHandler(handler, transformMode);
+        var transformOut = outTransformHandler(transformHandler, transformMode);
+        return (function(args, streamable) {
+          return transformIn(args, streamable).then((function(transformedIn) {
+            return mainHandler(args, transformedIn).then((function(resultStreamable) {
+              return transformOut(args, resultStreamable);
+            }));
+          }));
+        });
+      }));
+    });
+  },
   get transformComponent() {
     return this._transformComponent;
   },

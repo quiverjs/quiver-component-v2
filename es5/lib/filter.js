@@ -1,5 +1,17 @@
 "use strict";
 Object.defineProperties(exports, {
+  filterToHandleableFilter: {get: function() {
+      return filterToHandleableFilter;
+    }},
+  streamToHandleableFilter: {get: function() {
+      return streamToHandleableFilter;
+    }},
+  httpToHandleableFilter: {get: function() {
+      return httpToHandleableFilter;
+    }},
+  filterToMiddleware: {get: function() {
+      return filterToMiddleware;
+    }},
   HandleableFilter: {get: function() {
       return HandleableFilter;
     }},
@@ -26,51 +38,87 @@ var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
     safeHandler = $__1.safeHandler,
     safeBuilder = $__1.safeBuilder;
 var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
+var filterToHandleableFilter = (function(filter, handlerKey) {
+  return (function(config, handleable) {
+    var handler = handleable[handlerKey];
+    if (!handler)
+      return resolve(handleable);
+    return filter(config, handler).then((function(filteredHandler) {
+      handleable[handlerKey] = filteredHandler;
+      return handleable;
+    }));
+  });
+});
+var streamToHandleableFilter = (function(filter) {
+  return filterToHandleableFilter(filter, 'streamHandler');
+});
+var httpToHandleableFilter = (function(filter) {
+  return filterToHandleableFilter(filter, 'httpHandler');
+});
+var filterToMiddleware = (function(filter) {
+  return (function(config, builder) {
+    return builder(config).then((function(handler) {
+      return filter(config, handler);
+    }));
+  });
+});
 var HandleableFilter = function HandleableFilter(handleableFilter) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._handleableFilter = handleableFilter;
-  handleableFilter = safeHandler(handleableFilter, options);
-  var middleware = (function(config, builder) {
-    return builder(config).then((function(handleable) {
-      return resolve(handleableFilter(config, handleable));
-    }));
-  });
-  $traceurRuntime.superCall(this, $HandleableFilter.prototype, "constructor", [middleware, options]);
+  this._handleableFilter = safeHandler(handleableFilter, options);
+  $traceurRuntime.superCall(this, $HandleableFilter.prototype, "constructor", [null, options]);
 };
 var $HandleableFilter = HandleableFilter;
-($traceurRuntime.createClass)(HandleableFilter, {}, {}, HandleableMiddleware);
-var handlerFilterClass = (function(filterType, filterKey, handlerKeys) {
-  return (function($__super) {
-    var HandlerFilter = function HandlerFilter(filter) {
-      var $__2;
-      var options = arguments[1] !== (void 0) ? arguments[1] : {};
-      var $__1 = $traceurRuntime.assertObject(options),
-          applyToHandlers = ($__2 = $__1.applyToHandlers) === void 0 ? handlerKeys : $__2;
-      this[filterKey] = filter;
-      filter = safeBuilder(filter, options);
-      var handleableFilter = (function(config, handleable) {
-        var newHandleable = copy(handleable);
-        var promises = applyToHandlers.map((function(handlerKey) {
-          var handler = handleable[handlerKey];
-          if (!handler)
-            return resolve();
-          return filter(copy(config), handler).then((function(filteredHandler) {
-            return newHandleable[handlerKey] = filteredHandler;
-          }));
-        }));
-        return Promise.all(promises).then((function() {
-          return newHandleable;
-        }));
-      });
-      $traceurRuntime.superCall(this, HandlerFilter.prototype, "constructor", [handleableFilter, options]);
-    };
-    return ($traceurRuntime.createClass)(HandlerFilter, {get type() {
-        return filterType;
-      }}, {}, $__super);
-  }(HandleableFilter));
-});
-var StreamFilter = handlerFilterClass('stream filter', '_streamFilter', ['streamHandler']);
-var HttpFilter = handlerFilterClass('http filter', '_httpFilter', ['httpHandler']);
+($traceurRuntime.createClass)(HandleableFilter, {
+  get mainMiddleware() {
+    return filterToMiddleware(this.handleableFilter);
+  },
+  get handleableFilter() {
+    if (!this._handleableFilter)
+      throw new Error('handleableFilter is not defined');
+    return this._handleableFilter;
+  }
+}, {}, HandleableMiddleware);
+var StreamFilter = function StreamFilter(filter) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._streamFilter = safeBuilder(filter, options);
+  $traceurRuntime.superCall(this, $StreamFilter.prototype, "constructor", [null, options]);
+};
+var $StreamFilter = StreamFilter;
+($traceurRuntime.createClass)(StreamFilter, {
+  get handleableFilter() {
+    return streamToHandleableFilter(this.streamFilter);
+  },
+  get streamFilter() {
+    var streamFilter = this._streamFilter;
+    if (!streamFilter)
+      throw new Error('streamFilter is not defined');
+    return streamFilter;
+  },
+  get type() {
+    return 'Stream Filter';
+  }
+}, {}, HandleableFilter);
+var HttpFilter = function HttpFilter(filter) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._httpFilter = safeBuilder(filter, options);
+  $traceurRuntime.superCall(this, $HttpFilter.prototype, "constructor", [null, options]);
+};
+var $HttpFilter = HttpFilter;
+($traceurRuntime.createClass)(HttpFilter, {
+  get handleableFilter() {
+    return httpToHandleableFilter(this.httpFilter);
+  },
+  get httpFilter() {
+    var httpFilter = this._httpFilter;
+    if (!httpFilter)
+      throw new Error('streamFilter is not defined');
+    return httpFilter;
+  },
+  get type() {
+    return 'Stream Filter';
+  }
+}, {}, HandleableFilter);
 var handleableFilter = (function(filter, options) {
   return new HandleableFilter(filter, options);
 });

@@ -19,18 +19,13 @@ var $__1 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
     simpleToStreamHandler = $__1.simpleToStreamHandler,
     streamToSimpleHandler = $__1.streamToSimpleHandler,
     validateSimpleTypes = $__1.validateSimpleTypes;
-var loadSimpleHandler = $traceurRuntime.assertObject(require('./util/loader.js')).loadSimpleHandler;
+var simpleHandlerLoader = $traceurRuntime.assertObject(require('./util/loader.js')).simpleHandlerLoader;
 var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
     safeBuilder = $__1.safeBuilder,
     safeHandler = $__1.safeHandler;
 var $__1 = $traceurRuntime.assertObject(require('./stream-handler.js')),
     StreamHandler = $__1.StreamHandler,
     StreamHandlerBuilder = $__1.StreamHandlerBuilder;
-var simpleHandlerLoader = (function(inType, outType) {
-  return (function(config, component, options) {
-    return loadSimpleHandler(config, component, inType, outType, options);
-  });
-});
 var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, inType, outType) {
   var options = arguments[3] !== (void 0) ? arguments[3] : {};
   var err = validateSimpleTypes([inType, outType]);
@@ -38,17 +33,27 @@ var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, i
     throw err;
   this._inType = inType;
   this._outType = outType;
-  this._simpleHandlerBuilder = simpleHandlerBuilder;
-  simpleHandlerBuilder = safeBuilder(simpleHandlerBuilder, options);
-  var streamHandlerBuilder = (function(config) {
-    return resolve(simpleHandlerBuilder(config)).then((function(simpleHandler) {
-      return simpleToStreamHandler(simpleHandler, inType, outType);
-    }));
-  });
-  $traceurRuntime.superCall(this, $SimpleHandlerBuilder.prototype, "constructor", [streamHandlerBuilder, options]);
+  this._simpleHandlerBuilder = safeBuilder(simpleHandlerBuilder, options);
+  $traceurRuntime.superCall(this, $SimpleHandlerBuilder.prototype, "constructor", [null, options]);
 };
 var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 ($traceurRuntime.createClass)(SimpleHandlerBuilder, {
+  get streamHandlerBuilder() {
+    var $__1 = this,
+        simpleHandlerBuilder = $__1.simpleHandlerBuilder,
+        inType = $__1.inType,
+        outType = $__1.outType;
+    return (function(config) {
+      return simpleHandlerBuilder(config).then((function(simpleHandler) {
+        return simpleToStreamHandler(simpleHandler, inType, outType);
+      }));
+    });
+  },
+  get simpleHandlerBuilder() {
+    if (!this._simpleHandlerBuilder)
+      throw new Error('simpleHandlerBuilder is not define');
+    return this._simpleHandlerBuilder;
+  },
   get handlerLoader() {
     return simpleHandlerLoader(this.inType, this.outType);
   },
@@ -70,17 +75,26 @@ var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 }, {}, StreamHandlerBuilder);
 var SimpleHandler = function SimpleHandler(simpleHandler, inType, outType) {
   var options = arguments[3] !== (void 0) ? arguments[3] : {};
-  this._simpleHandler = simpleHandler;
-  simpleHandler = safeHandler(simpleHandler, options);
-  var simpleHandlerBuilder = (function(config) {
-    return resolve(simpleHandler);
-  });
-  $traceurRuntime.superCall(this, $SimpleHandler.prototype, "constructor", [simpleHandlerBuilder, inType, outType, options]);
+  this._simpleHandler = safeHandler(simpleHandler, options);
+  $traceurRuntime.superCall(this, $SimpleHandler.prototype, "constructor", [null, inType, outType, options]);
 };
 var $SimpleHandler = SimpleHandler;
-($traceurRuntime.createClass)(SimpleHandler, {get type() {
+($traceurRuntime.createClass)(SimpleHandler, {
+  get simpleHandlerBuilder() {
+    var simpleHandler = this.simpleHandler;
+    return (function(config) {
+      return resolve(simpleHandler);
+    });
+  },
+  get simpleHandler() {
+    if (!this._simpleHandler)
+      throw new Error('simpleHandler is not defined');
+    return this._simpleHandler;
+  },
+  get type() {
     return 'simple handler';
-  }}, {}, SimpleHandlerBuilder);
+  }
+}, {}, SimpleHandlerBuilder);
 var simpleHandlerBuilder = (function(builder, inType, outType, options) {
   return new SimpleHandlerBuilder(builder, inType, outType, options);
 });

@@ -22,18 +22,22 @@ var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
 var HandleableBuilder = $traceurRuntime.assertObject(require('./handleable-builder.js')).HandleableBuilder;
 var StreamHandlerBuilder = function StreamHandlerBuilder(streamHandlerBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._streamHandlerBuilder = streamHandlerBuilder;
-  streamHandlerBuilder = safeBuilder(streamHandlerBuilder, options);
-  var handleableBuilder = (function(config) {
-    return streamHandlerBuilder(config).then((function(streamHandler) {
-      return ({streamHandler: streamHandler});
-    }));
-  });
-  $traceurRuntime.superCall(this, $StreamHandlerBuilder.prototype, "constructor", [handleableBuilder, options]);
+  this._streamHandlerBuilder = safeBuilder(streamHandlerBuilder, options);
+  $traceurRuntime.superCall(this, $StreamHandlerBuilder.prototype, "constructor", [null, options]);
 };
 var $StreamHandlerBuilder = StreamHandlerBuilder;
 ($traceurRuntime.createClass)(StreamHandlerBuilder, {
+  get mainHandleableBuilder() {
+    var builder = this.streamHandlerBuilder;
+    return (function(config) {
+      return builder(config).then((function(streamHandler) {
+        return ({streamHandler: streamHandler});
+      }));
+    });
+  },
   get streamHandlerBuilder() {
+    if (!this._streamHandlerBuilder)
+      throw new Error('streamHandlerBuilder is not defined');
     return this._streamHandlerBuilder;
   },
   get handlerLoader() {
@@ -45,16 +49,20 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
 }, {}, HandleableBuilder);
 var StreamHandler = function StreamHandler(streamHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._streamHandler = streamHandler;
-  streamHandler = safeHandler(streamHandler, options);
-  var streamHandlerBuilder = (function(config) {
-    return resolve(streamHandler);
-  });
-  $traceurRuntime.superCall(this, $StreamHandler.prototype, "constructor", [streamHandlerBuilder, options]);
+  this._streamHandler = safeHandler(streamHandler, options);
+  $traceurRuntime.superCall(this, $StreamHandler.prototype, "constructor", [null, options]);
 };
 var $StreamHandler = StreamHandler;
 ($traceurRuntime.createClass)(StreamHandler, {
+  get streamHandlerBuilder() {
+    var handler = this.streamHandler;
+    return (function(config) {
+      return resolve(handler);
+    });
+  },
   get streamHandler() {
+    if (!this._streamHandler)
+      throw new Error('streamHandler is not defined');
     return this._streamHandler;
   },
   get type() {
