@@ -144,4 +144,50 @@ describe('privatized component test', () => {
         handler({}, 'Alice').should.eventually.equal('hello, alice'))
     })
   })
+
+  it('privatized middlewares', () => {
+    var transformCase = simpleHandlerBuilder(
+    config => {
+      var { transform } = config
+      var doTransform = transform == 'uppercase' ?
+        string => string.toUpperCase() :
+        string => string.toLowerCase()
+
+      return (args, text) =>
+        doTransform(text)
+    }, 'text', 'text')
+
+    var filter = transformFilter(transformCase, 'out')
+
+    var greet = simpleHandler(
+      (args, name) =>
+        'Hello, ' + name, 
+      'text', 'text')
+    .addMiddleware(filter)
+
+    var bundle1 = { }
+    var bundle2 = { }
+
+    var greet1 = greet.makePrivate(bundle1)
+    var uppercase = transformCase.makePrivate(bundle1)
+
+    var greet2 = greet.makePrivate(bundle2)
+
+    var config = { transform: 'uppercase' }
+    
+    return uppercase.loadHandler(config).then(handler =>
+      handler({}, 'Test').should.eventually.equal('TEST'))
+    .then(() => {
+      config.transform = 'lowercase'
+
+      return greet1.loadHandler(config).then(handler =>
+        handler({}, 'Alice').should.eventually.equal('HELLO, ALICE'))
+    })
+    .then(() => {
+      config.transform = 'lowercase'
+
+      return greet2.loadHandler(config).then(handler =>
+        handler({}, 'Bob').should.eventually.equal('hello, bob'))
+    })
+  })
 })

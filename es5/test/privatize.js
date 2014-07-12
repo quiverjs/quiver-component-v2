@@ -105,4 +105,40 @@ describe('privatized component test', (function() {
       }));
     }));
   }));
+  it('privatized middlewares', (function() {
+    var transformCase = simpleHandlerBuilder((function(config) {
+      var transform = $traceurRuntime.assertObject(config).transform;
+      var doTransform = transform == 'uppercase' ? (function(string) {
+        return string.toUpperCase();
+      }) : (function(string) {
+        return string.toLowerCase();
+      });
+      return (function(args, text) {
+        return doTransform(text);
+      });
+    }), 'text', 'text');
+    var filter = transformFilter(transformCase, 'out');
+    var greet = simpleHandler((function(args, name) {
+      return 'Hello, ' + name;
+    }), 'text', 'text').addMiddleware(filter);
+    var bundle1 = {};
+    var bundle2 = {};
+    var greet1 = greet.makePrivate(bundle1);
+    var uppercase = transformCase.makePrivate(bundle1);
+    var greet2 = greet.makePrivate(bundle2);
+    var config = {transform: 'uppercase'};
+    return uppercase.loadHandler(config).then((function(handler) {
+      return handler({}, 'Test').should.eventually.equal('TEST');
+    })).then((function() {
+      config.transform = 'lowercase';
+      return greet1.loadHandler(config).then((function(handler) {
+        return handler({}, 'Alice').should.eventually.equal('HELLO, ALICE!');
+      }));
+    })).then((function() {
+      config.transform = 'lowercase';
+      return greet2.loadHandler(config).then((function(handler) {
+        return handler({}, 'Bob').should.eventually.equal('hello, bob');
+      }));
+    }));
+  }));
 }));
