@@ -15,6 +15,9 @@ Object.defineProperties(exports, {
   combineMiddlewareComponents: {get: function() {
       return combineMiddlewareComponents;
     }},
+  repeatOnceMiddleware: {get: function() {
+      return repeatOnceMiddleware;
+    }},
   __esModule: {value: true}
 });
 var getInitTable = $traceurRuntime.assertObject(require('./config.js')).getInitTable;

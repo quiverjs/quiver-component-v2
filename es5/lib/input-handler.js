@@ -24,19 +24,27 @@ var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, t
   assertString(toConfig, 'toConfig required to be string');
   var $__1 = $traceurRuntime.assertObject(options),
       loader = ($__2 = $__1.loader) === void 0 ? loadHandler : $__2;
+  this._handlerLoader = loader;
   this._inputHandlerComponent = handlerComponent;
-  var middleware = (function(config) {
-    if (config[toConfig])
-      return config;
-    return loader(config, handlerComponent, options).then((function(handler) {
-      config[toConfig] = handler;
-      return config;
-    }));
-  });
-  $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "constructor", [middleware, options]);
+  this._toInputConfig = toConfig;
+  options.safeWrapped = true;
+  $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "constructor", [null, options]);
 };
 var $InputHandlerMiddleware = InputHandlerMiddleware;
 ($traceurRuntime.createClass)(InputHandlerMiddleware, {
+  get configHandler() {
+    var handlerComponent = this.inputHandlerComponent;
+    var loader = this._handlerLoader;
+    var toConfig = this._toInputConfig;
+    return (function(config) {
+      if (config[toConfig])
+        return config;
+      return loader(config, handlerComponent).then((function(handler) {
+        config[toConfig] = handler;
+        return config;
+      }));
+    });
+  },
   get inputHandlerComponent() {
     return this._inputHandlerComponent;
   },

@@ -132,7 +132,7 @@ describe('privatized component test', (function() {
     })).then((function() {
       config.transform = 'lowercase';
       return greet1.loadHandler(config).then((function(handler) {
-        return handler({}, 'Alice').should.eventually.equal('HELLO, ALICE!');
+        return handler({}, 'Alice').should.eventually.equal('HELLO, ALICE');
       }));
     })).then((function() {
       config.transform = 'lowercase';

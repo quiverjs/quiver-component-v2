@@ -47,8 +47,17 @@ var Component = function Component() {
     return privateCopy;
   },
   privatize: function(privateCopy, bundle) {},
+  privatizedConstructor: function() {
+    var $__0 = this;
+    return (function(bundle) {
+      return $__0.makePrivate(bundle);
+    });
+  },
   toJson: function() {
-    var json = {type: this.type};
+    var json = {
+      id: this.id.toString(),
+      type: this.type
+    };
     if (this.name)
       json.name = this.name;
     return json;
