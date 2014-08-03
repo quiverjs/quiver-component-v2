@@ -37,8 +37,6 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
     var loader = this._handlerLoader;
     var toConfig = this._toInputConfig;
     return (function(config) {
-      if (config[toConfig])
-        return config;
       return loader(config, handlerComponent).then((function(handler) {
         config[toConfig] = handler;
         return config;

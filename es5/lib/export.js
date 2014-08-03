@@ -201,6 +201,12 @@ Object.defineProperties(exports, {
   router: {get: function() {
       return router;
     }},
+  combineMiddlewares: {get: function() {
+      return combineMiddlewares;
+    }},
+  combineBuilderWithMiddleware: {get: function() {
+      return combineBuilderWithMiddleware;
+    }},
   loadHandleable: {get: function() {
       return loadHandleable;
     }},
@@ -304,6 +310,9 @@ var $__0 = $traceurRuntime.assertObject(require('./router.js')),
     Router = $__0.Router,
     routeList = $__0.routeList,
     router = $__0.router;
+var $__0 = $traceurRuntime.assertObject(require('./util/middleware.js')),
+    combineMiddlewares = $__0.combineMiddlewares,
+    combineBuilderWithMiddleware = $__0.combineBuilderWithMiddleware;
 var $__0 = $traceurRuntime.assertObject(require('./util/loader.js')),
     loadHandleable = $__0.loadHandleable,
     loadStreamHandler = $__0.loadStreamHandler,
