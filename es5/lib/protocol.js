@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   Protocol: {get: function() {
       return Protocol;
     }},
+  protocol: {get: function() {
+      return protocol;
+    }},
   __esModule: {value: true}
 });
 var $__1 = $traceurRuntime.assertObject(require('./component.js')),
@@ -16,14 +19,21 @@ var $__1 = $traceurRuntime.assertObject(require('./util/loader.js')),
     simpleHandlerLoader = $__1.simpleHandlerLoader;
 var async = $traceurRuntime.assertObject(require('quiver-promise')).async;
 var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
-var loadProtocol = async($traceurRuntime.initGeneratorFunction(function $__2(config, loaderMap) {
+var assertHandlerComponent = (function(handler) {
+  return assertInstanceOf(handler, HandlerComponent, 'handler implementation must be ' + 'of type HandlerComponent');
+});
+var assertRepeatedField = (function(fields, fieldName) {
+  if (fields[fieldName])
+    throw new Error('Field of the same name is ' + 'already defined in protocol: ' + fieldName);
+});
+var loadProtocol = async($traceurRuntime.initGeneratorFunction(function $__2(config, implMap) {
   var bundleResult,
       $__3,
       $__4,
       $__5,
       $__6,
-      handlerName,
-      loader;
+      implName,
+      impl;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
@@ -33,7 +43,7 @@ var loadProtocol = async($traceurRuntime.initGeneratorFunction(function $__2(con
           break;
         case 20:
           $__3 = [];
-          $__4 = loaderMap;
+          $__4 = implMap;
           for ($__5 in $__4)
             $__3.push($__5);
           $ctx.state = 16;
@@ -50,21 +60,21 @@ var loadProtocol = async($traceurRuntime.initGeneratorFunction(function $__2(con
           $ctx.state = 14;
           break;
         case 8:
-          handlerName = $__3[$__6];
+          implName = $__3[$__6];
           $ctx.state = 9;
           break;
         case 9:
-          $ctx.state = (!(handlerName in $__4)) ? 4 : 6;
+          $ctx.state = (!(implName in $__4)) ? 4 : 6;
           break;
         case 6:
-          loader = loaderMap[handlername];
+          impl = implMap[implName];
           $ctx.state = 11;
           break;
         case 11:
           $ctx.state = 2;
-          return loader(config);
+          return impl.load(config);
         case 2:
-          bundleResult[handlerName] = $ctx.sent;
+          bundleResult[implName] = $ctx.sent;
           $ctx.state = 4;
           break;
         case 12:
@@ -76,35 +86,48 @@ var loadProtocol = async($traceurRuntime.initGeneratorFunction(function $__2(con
       }
   }, $__2, this);
 }));
-var protocolLoader = (function(loaderMap) {
-  return (function(config) {
-    return loadProtocol(config, loaderMap);
-  });
-});
-var metaProtocolLoader = (function(protocol) {
-  return (function(implMap) {
-    return protocol.concreteLoader(implMap);
-  });
-});
-var metaHandlerLoader = (function(handlerLoader) {
-  return (function(handlerComponent) {
-    assertInstanceOf(handlerComponent, HandlerComponent, 'handler implementation must be ' + 'of type HandlerComponent');
-    return (function(config) {
-      return handlerLoader(config, handlerComponent);
-    });
-  });
-});
+var HandlerProtocolImpl = function HandlerProtocolImpl(handlerComponent, handlerLoader) {
+  assertHandlerComponent(handlerComponent);
+  this._handlerLoader = handlerLoader;
+  this._handlerComponent = handlerComponent;
+};
+($traceurRuntime.createClass)(HandlerProtocolImpl, {
+  load: function(config) {
+    return this._handlerLoader(config, this._handlerComponent);
+  },
+  privatize: function(privateCopy, bundle) {
+    privateCopy._handlerComponent = this._handlerComponent.makePrivate(bundle);
+  }
+}, {}, Component);
+var ProtocolImpl = function ProtocolImpl(implMap) {
+  this._implMap = implMap;
+};
+($traceurRuntime.createClass)(ProtocolImpl, {
+  load: function(config) {
+    return loadProtocol(config, this._implMap);
+  },
+  privatize: function(privatecopy, bundle) {
+    var implMap = this._implMap;
+    var privateImplMap = {};
+    for (var implName in implMap) {
+      privateImplMap[implName] = implMap[implName].makePrivate(bundle);
+    }
+    privateCopy._implMap = privateImplMap;
+  }
+}, {}, Component);
 var Protocol = function Protocol() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  this._metaLoaderMap = {};
+  this._fields = {};
+  $traceurRuntime.superCall(this, $Protocol.prototype, "constructor", [options]);
 };
 var $Protocol = Protocol;
 ($traceurRuntime.createClass)(Protocol, {
   customHandler: function(handlerName, loader) {
-    var metaLoaderMap = this._metaLoaderMap;
-    if (metaLoaderMap[handlerName])
-      throw new Error('Field of the same name is ' + 'already defined in protocol: ' + handlerName);
-    metaLoaderMap[handlerName] = metaHandlerLoader(loader);
+    var fields = this._fields;
+    assertRepeatedField(fields, handlerName);
+    fields[handlerName] = (function(handlerComponent) {
+      return new HandlerProtocolImpl(handlerComponent, loader);
+    });
     return this;
   },
   handleable: function(handlerName) {
@@ -119,22 +142,28 @@ var $Protocol = Protocol;
   simpleHandler: function(handlerName, inType, outType) {
     return this.customHandler(handlerName, simpleHandlerLoader(inType, outType));
   },
-  protocol: function(protocolName, protocol) {
+  subprotocol: function(protocolName, protocol) {
     assertInstanceOf(protocol, $Protocol, 'protocol must be instance of Protocol');
-    var metaLoaderMap = this._metaLoaderMap;
-    if (metaLoaderMap[protocolName])
-      throw new Error('Field of the same name is ' + 'already defined in protocol: ' + protocolName);
-    metaLoaderMap[protocolName] = metaProtocolLoader(protocol);
+    var fields = this._fields;
+    assertRepeatedField(fields, protocolName);
+    fields[protocolName] = (function(implBundle) {
+      return protocol.implement(implBundle);
+    });
     return this;
   },
-  concreteLoader: function(implMap) {
-    var metaLoaderMap = this._metaLoaderMap;
-    var loaderMap = {};
-    for (var field in metaLoaderMap) {
-      var metaLoader = metaLoaderMap[field];
-      var impl = implMap[field];
-      loaderMap[field] = metaLoader(impl);
+  implement: function(implBundle) {
+    var fields = this._fields;
+    var implMap = {};
+    for (var fieldName in fields) {
+      var field = fields[fieldName];
+      var impl = implBundle[fieldName];
+      if (!impl)
+        throw new Error('missing field in implementation: ' + fieldName);
+      implMap[fieldName] = field(impl);
     }
-    return protocolLoader(loaderMap);
+    return new ProtocolImpl(implMap);
   }
 }, {}, Component);
+var protocol = (function() {
+  return new Protocol();
+});
