@@ -73,12 +73,12 @@ var $RouteList = RouteList;
     }));
     return Promise.all(promises);
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._routes = this._routes.map((function(route) {
-      return route.makePrivate(bundle);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._routes = this._routes.map((function(route) {
+      return route.makePrivate(privateTable);
     }));
-    this.privatizeMiddlewares(privateCopy, bundle);
-    $traceurRuntime.superCall(this, $RouteList.prototype, "privatize", [privateCopy, bundle]);
+    this.privatizeMiddlewares(privateInstance, privateTable);
+    $traceurRuntime.superCall(this, $RouteList.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'route list';
@@ -165,13 +165,13 @@ var $Router = Router;
       }));
     });
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._routeLists = this._routeLists.map((function(routeList) {
-      return routeList.makePrivate(bundle);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._routeLists = this._routeLists.map((function(routeList) {
+      return routeList.makePrivate(privateTable);
     }));
-    privateCopy._defaultRouteList = this._defaultRouteList.makePrivate(bundle);
-    privateCopy._defaultHandler = this._defaultHandler.makePrivate(bundle);
-    $traceurRuntime.superCall(this, $Router.prototype, "privatize", [privateCopy, bundle]);
+    privateInstance._defaultRouteList = this._defaultRouteList.makePrivate(privateTable);
+    privateInstance._defaultHandler = this._defaultHandler.makePrivate(privateTable);
+    $traceurRuntime.superCall(this, $Router.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'router';

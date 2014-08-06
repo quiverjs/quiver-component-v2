@@ -95,8 +95,8 @@ var HandlerProtocolImpl = function HandlerProtocolImpl(handlerComponent, handler
   load: function(config) {
     return this._handlerLoader(config, this._handlerComponent);
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._handlerComponent = this._handlerComponent.makePrivate(bundle);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._handlerComponent = this._handlerComponent.makePrivate(privateTable);
   }
 }, {}, Component);
 var ProtocolImpl = function ProtocolImpl(implMap) {
@@ -106,13 +106,13 @@ var ProtocolImpl = function ProtocolImpl(implMap) {
   load: function(config) {
     return loadProtocol(config, this._implMap);
   },
-  privatize: function(privatecopy, bundle) {
+  privatize: function(privateInstance, privateTable) {
     var implMap = this._implMap;
     var privateImplMap = {};
     for (var implName in implMap) {
-      privateImplMap[implName] = implMap[implName].makePrivate(bundle);
+      privateImplMap[implName] = implMap[implName].makePrivate(privateTable);
     }
-    privateCopy._implMap = privateImplMap;
+    privateInstance._implMap = privateImplMap;
   }
 }, {}, Component);
 var Protocol = function Protocol() {

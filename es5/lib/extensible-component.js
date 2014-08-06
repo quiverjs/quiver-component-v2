@@ -29,9 +29,9 @@ var $ExtensibleHandler = ExtensibleHandler;
   get mainHandleableBuilder() {
     throw new Error('unimplemented');
   },
-  privatize: function(privateCopy, bundle) {
-    this.privatizeMiddlewares(privateCopy, bundle);
-    $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "privatize", [privateCopy, bundle]);
+  privatize: function(privateInstance, privateTable) {
+    this.privatizeMiddlewares(privateInstance, privateTable);
+    $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "privatize", [privateInstance, privateTable]);
   },
   toJson: function() {
     var json = $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "toJson", []);
@@ -51,9 +51,9 @@ var $ExtensibleMiddleware = ExtensibleMiddleware;
     var extendMiddleware = this.extendMiddleware;
     return combineMiddlewares([mainMiddleware, extendMiddleware]);
   },
-  privatize: function(privateCopy, bundle) {
-    this.privatizeMiddlewares(privateCopy, bundle);
-    $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "privatize", [privateCopy, bundle]);
+  privatize: function(privateInstance, privateTable) {
+    this.privatizeMiddlewares(privateInstance, privateTable);
+    $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "privatize", [privateInstance, privateTable]);
   },
   toJson: function() {
     var json = $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "toJson", []);

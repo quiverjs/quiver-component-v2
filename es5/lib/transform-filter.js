@@ -75,9 +75,9 @@ var $TransformFilter = TransformFilter;
   get transformMode() {
     return this._transformMode;
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._transformComponent = this._transformComponent.makePrivate(bundle);
-    $traceurRuntime.superCall(this, $TransformFilter.prototype, "privatize", [privateCopy, bundle]);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._transformComponent = this._transformComponent.makePrivate(privateTable);
+    $traceurRuntime.superCall(this, $TransformFilter.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'transform filter';

@@ -88,11 +88,11 @@ var $Pipeline = Pipeline;
       throw new Error('Pipeline must contain at least one handler component');
     return pipelineBuilder(builders, combinators);
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._pipelineHandlers = this._pipelineHandlers.map((function(component) {
-      return component.makePrivate(bundle);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._pipelineHandlers = this._pipelineHandlers.map((function(component) {
+      return component.makePrivate(privateTable);
     }));
-    $traceurRuntime.superCall(this, $Pipeline.prototype, "privatize", [privateCopy, bundle]);
+    $traceurRuntime.superCall(this, $Pipeline.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'pipeline';

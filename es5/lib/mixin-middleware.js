@@ -33,9 +33,9 @@ var middlewareMixin = {
       return component.toJson();
     }));
   },
-  privatizeMiddlewares: function(privateCopy, bundle) {
-    privateCopy._middlewareComponents = this._middlewareComponents.map((function(component) {
-      return component.makePrivate(bundle);
+  privatizeMiddlewares: function(privateInstance, privateTable) {
+    privateInstance._middlewareComponents = this._middlewareComponents.map((function(component) {
+      return component.makePrivate(privateTable);
     }));
   }
 };

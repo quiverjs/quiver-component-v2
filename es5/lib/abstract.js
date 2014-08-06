@@ -3,6 +3,9 @@ Object.defineProperties(exports, {
   abstractComponent: {get: function() {
       return abstractComponent;
     }},
+  partialImplement: {get: function() {
+      return partialImplement;
+    }},
   __esModule: {value: true}
 });
 var Protocol = $traceurRuntime.assertObject(require('./protocol.js')).Protocol;
@@ -67,9 +70,9 @@ var $ProtocolMiddleware = ProtocolMiddleware;
       }, $__2, this);
     }));
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._protocolImpl = this._protocolImpl.makePrivate(bundle);
-    $traceurRuntime.superCall(this, $ProtocolMiddleware.prototype, "privatize", [privateCopy, bundle]);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._protocolImpl = this._protocolImpl.makePrivate(privateTable);
+    $traceurRuntime.superCall(this, $ProtocolMiddleware.prototype, "privatize", [privateInstance, privateTable]);
   }
 }, {}, ConfigMiddleware);
 var abstractComponent = (function(configKey, protocol, component) {
@@ -82,5 +85,12 @@ var abstractComponent = (function(configKey, protocol, component) {
     var protocolMiddleware = new ProtocolMiddleware(configKey, protocolImpl);
     var concreteComponent = component.makePrivate().addMiddleware(protocolMiddleware);
     return concreteComponent;
+  });
+});
+var partialImplement = (function(abstractComponent, partial) {
+  return (function(implBundle) {
+    var merged = {};
+    Object.assign(merged, implBundle, partial);
+    return abstractComponent(merged);
   });
 });

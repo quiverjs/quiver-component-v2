@@ -162,6 +162,18 @@ Object.defineProperties(exports, {
   configOverrideMiddleware: {get: function() {
       return configOverrideMiddleware;
     }},
+  Protocol: {get: function() {
+      return Protocol;
+    }},
+  protocol: {get: function() {
+      return protocol;
+    }},
+  abstractComponent: {get: function() {
+      return abstractComponent;
+    }},
+  partialImplement: {get: function() {
+      return partialImplement;
+    }},
   Route: {get: function() {
       return Route;
     }},
@@ -295,6 +307,12 @@ var $__0 = $traceurRuntime.assertObject(require('./simple-middleware.js')),
     ConfigOverrideMiddleware = $__0.ConfigOverrideMiddleware,
     configMiddleware = $__0.configMiddleware,
     configOverrideMiddleware = $__0.configOverrideMiddleware;
+var $__0 = $traceurRuntime.assertObject(require('./protocol.js')),
+    Protocol = $__0.Protocol,
+    protocol = $__0.protocol;
+var $__0 = $traceurRuntime.assertObject(require('./abstract.js')),
+    abstractComponent = $__0.abstractComponent,
+    partialImplement = $__0.partialImplement;
 var $__0 = $traceurRuntime.assertObject(require('./route.js')),
     Route = $__0.Route,
     StaticRoute = $__0.StaticRoute,

@@ -55,9 +55,9 @@ var $Route = Route;
   get handlerComponent() {
     return this._handlerComponent;
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._handlerComponent = this._handlerComponent.makePrivate(bundle);
-    $traceurRuntime.superCall(this, $Route.prototype, "privatize", [privateCopy, bundle]);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._handlerComponent = this._handlerComponent.makePrivate(privateTable);
+    $traceurRuntime.superCall(this, $Route.prototype, "privatize", [privateInstance, privateTable]);
   },
   get urlBuilder() {
     return this._urlBuilder;

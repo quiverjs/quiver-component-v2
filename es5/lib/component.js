@@ -30,27 +30,27 @@ var Component = function Component() {
     return 'component';
   },
   makePrivate: function() {
-    var bundle = arguments[0] !== (void 0) ? arguments[0] : {};
+    var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
     var original = this;
     var originalId = original.id;
-    if (bundle[originalId])
-      return bundle[originalId];
+    if (privateTable[originalId])
+      return privateTable[originalId];
     var privateId = Symbol();
     var originalProto = original.originalProto ? original.originalProto : original;
-    var privateCopy = Object.create(originalProto);
-    privateCopy.originalProto = originalProto;
-    Object.defineProperty(privateCopy, 'id', {get: function() {
+    var privateInstance = Object.create(originalProto);
+    privateInstance.originalProto = originalProto;
+    Object.defineProperty(privateInstance, 'id', {get: function() {
         return privateId;
       }});
-    bundle[originalId] = privateCopy;
-    original.privatize(privateCopy, bundle);
-    return privateCopy;
+    privateTable[originalId] = privateInstance;
+    original.privatize(privateInstance, privateTable);
+    return privateInstance;
   },
-  privatize: function(privateCopy, bundle) {},
+  privatize: function(privateInstance, privateTable) {},
   privatizedConstructor: function() {
     var $__0 = this;
-    return (function(bundle) {
-      return $__0.makePrivate(bundle);
+    return (function(privateTable) {
+      return $__0.makePrivate(privateTable);
     });
   },
   toJson: function() {

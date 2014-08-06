@@ -2,11 +2,10 @@ import 'traceur'
 
 import {
   simpleHandler, simpleHandlerBuilder, 
-  streamHandler, httpHandler
+  streamHandler, httpHandler,
+  protocol, abstractComponent
 } from '../lib/export.js'
 
-import { protocol } from '../lib/protocol.js'
-import { abstractComponent } from '../lib/abstract.js'
 import { async } from 'quiver-promise'
 import { streamableToText, emptyStreamable } from 'quiver-stream-util'
 

@@ -46,9 +46,9 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
   get inputHandlerComponent() {
     return this._inputHandlerComponent;
   },
-  privatize: function(privateCopy, bundle) {
-    privateCopy._inputHandlerComponent = this._inputHandlerComponent.makePrivate(bundle);
-    $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "privatize", [privateCopy, bundle]);
+  privatize: function(privateInstance, privateTable) {
+    privateInstance._inputHandlerComponent = this._inputHandlerComponent.makePrivate(privateTable);
+    $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'input handler middleware';
