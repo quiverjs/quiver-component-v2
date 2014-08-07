@@ -3,17 +3,27 @@ Object.defineProperties(exports, {
   loadHandlerFromBundle: {get: function() {
       return loadHandlerFromBundle;
     }},
-  ComponentBundle: {get: function() {
-      return ComponentBundle;
+  HandlerBundle: {get: function() {
+      return HandlerBundle;
     }},
-  componentBundle: {get: function() {
-      return componentBundle;
+  handlerBundle: {get: function() {
+      return handlerBundle;
     }},
   __esModule: {value: true}
 });
-var async = $traceurRuntime.assertObject(require('quiver-promise')).async;
+var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
+var error = $traceurRuntime.assertObject(require('quiver-error')).error;
+var $__1 = $traceurRuntime.assertObject(require('quiver-promise')),
+    async = $__1.async,
+    reject = $__1.reject,
+    safePromised = $__1.safePromised;
+var simpleToStreamHandler = $traceurRuntime.assertObject(require('quiver-simple-handler')).simpleToStreamHandler;
 var Component = $traceurRuntime.assertObject(require('./component.js')).Component;
+var StreamHandlerBuilder = $traceurRuntime.assertObject(require('./stream-handler.js')).StreamHandlerBuilder;
 var getBundleMap = $traceurRuntime.assertObject(require('./util/config.js')).getBundleMap;
+var $__1 = $traceurRuntime.assertObject(require('./util/loader.js')),
+    loadStreamHandler = $__1.loadStreamHandler,
+    simpleHandlerLoader = $__1.simpleHandlerLoader;
 var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function $__2(config, handlerName, component) {
   var componentId,
       bundleMap,
@@ -67,52 +77,105 @@ var bundleHandlerLoader = (function(handlerName, bundleComponent) {
     return loadHandlerFromBundle(config, handlerName, bundleComponent);
   });
 });
-var bundleField = (function(handlerName, bundleComponent) {
-  return handleableBuilder(bundleHandlerLoader(handlerName, bundleComponent));
-});
-var BundleField = function BundleField(handlerName, bundleComponent) {
+var BundleField = function BundleField(handlerName, bundleComponent, handlerConverter, handlerLoader) {
+  var options = arguments[4] !== (void 0) ? arguments[4] : {};
   this._handlerName = handlerName;
   this._bundleComponent = bundleComponent;
+  this._handlerConverter = handlerConverter;
+  this._handlerLoader = handlerLoader;
+  options.safeWrapped = true;
+  $traceurRuntime.superCall(this, $BundleField.prototype, "constructor", [null, options]);
 };
+var $BundleField = BundleField;
 ($traceurRuntime.createClass)(BundleField, {
   get streamHandlerBuilder() {
     return bundleHandlerLoader(this._handlerName, this._bundleComponent);
+  },
+  get handlerConverter() {
+    return this._handlerConverter;
+  },
+  get handlerLoader() {
+    return this._handlerLoader;
   },
   makePrivate: function() {
     var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
     var handlerName = this._handlerName;
     var bundleComponent = this._bundleComponent;
     return bundleComponent.makePrivate(privateTable).handlerComponents[handlerName];
+  },
+  _makePrivate: function() {
+    var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
+    return $traceurRuntime.superCall(this, $BundleField.prototype, "makePrivate", [privateTable]);
   }
 }, {}, StreamHandlerBuilder);
-var bundleFields = (function(handlerNames, componentBundle) {
+var bundleFields = (function(handlerNames, bundleComponent) {
   return handlerNames.map((function(handlerName) {
-    return new BundleField(handlerName, componentBundle);
+    return new BundleField(handlerName, bundleComponent);
   }));
 });
-var ComponentBundle = function ComponentBundle(bundleBuilder, handlerNames) {
-  var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  this._bundleBuilder = bundleBuilder;
-  this._handlerNames = handlerNames;
-  this._handlerComponents = bundleFields(handlerNames, this);
-  $traceurRuntime.superCall(this, $ComponentBundle.prototype, "constructor", [options]);
+var streamHandlerConverter = (function(handler) {
+  return safePromised(handler);
+});
+var simpleHandlerConverter = (function(inType, outType) {
+  return (function(handler) {
+    return simpleToStreamHandler(handler, inType, outType);
+  });
+});
+var HandlerBundle = function HandlerBundle(bundleBuilder) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._bundleBuilder = safePromised(bundleBuilder);
+  this._bundleFields = {};
+  $traceurRuntime.superCall(this, $HandlerBundle.prototype, "constructor", [options]);
 };
-var $ComponentBundle = ComponentBundle;
-($traceurRuntime.createClass)(ComponentBundle, {
+var $HandlerBundle = HandlerBundle;
+($traceurRuntime.createClass)(HandlerBundle, {
   get bundleBuilder() {
-    return this._bundleBuilder;
-  },
-  get handlerNames() {
-    return this._handlerNames;
+    var builder = this._bundleBuilder;
+    var bundleFields = this.handlerComponents;
+    return (function(config) {
+      return builder(config).then((function(bundle) {
+        var convertedBundle = {};
+        for (var key in bundleFields) {
+          var bundleField = bundleFields[key];
+          var handlerConverter = bundleField.handlerConverter;
+          var handler = bundle[key];
+          if (!handler)
+            return reject(error(500, 'required handler not found ' + 'in bundle result: ' + key));
+          convertedBundle[key] = handlerConverter(handler);
+        }
+        return convertedBundle;
+      }));
+    });
   },
   get handlerComponents() {
-    return this._handlerComponents;
+    return copy(this._bundleFields);
+  },
+  bundleField: function(handlerName, handlerConverter, handlerLoader) {
+    var bundleFields = this._bundleFields;
+    if (bundleFields[handlerName])
+      throw new Error('bundle field is already defined: ' + handlerName);
+    bundleFields[handlerName] = new BundleField(handlerName, this, handlerConverter, handlerLoader);
+    return this;
+  },
+  streamHandler: function(handlerName) {
+    return this.bundleField(handlerName, streamHandlerConverter, loadStreamHandler);
+  },
+  simpleHandler: function(handlerName, inType, outType) {
+    return this.bundleField(handlerName, simpleHandlerConverter(inType, outType), simpleHandlerLoader(inType, outType));
   },
   privatize: function(privateInstance, privateTable) {
-    privateInstance._handlerComponents = bundleFields(this._handlerNames, this);
-    $traceurRuntime.superCall(this, $ComponentBundle.prototype, "privatize", [privateInstance, privateTable]);
+    var bundleFields = this._bundleFields;
+    var privateFields = {};
+    for (var key in bundleFields) {
+      var bundleField = bundleFields[key];
+      var privateField = bundleField._makePrivate(privateTable);
+      privateField._bundleComponent = privateInstance;
+      privateFields[key] = privateField;
+    }
+    privateInstance._bundleFields = privateFields;
+    $traceurRuntime.superCall(this, $HandlerBundle.prototype, "privatize", [privateInstance, privateTable]);
   }
 }, {}, Component);
-var componentBundle = (function(bundleBuilder, handlerNames) {
-  return new ComponentBundle(bundleBuilder, handlerNames);
+var handlerBundle = (function(bundleBuilder, handlerNames) {
+  return new HandlerBundle(bundleBuilder, handlerNames);
 });

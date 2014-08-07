@@ -174,6 +174,12 @@ Object.defineProperties(exports, {
   partialImplement: {get: function() {
       return partialImplement;
     }},
+  HandlerBundle: {get: function() {
+      return HandlerBundle;
+    }},
+  handlerBundle: {get: function() {
+      return handlerBundle;
+    }},
   Route: {get: function() {
       return Route;
     }},
@@ -313,6 +319,9 @@ var $__0 = $traceurRuntime.assertObject(require('./protocol.js')),
 var $__0 = $traceurRuntime.assertObject(require('./abstract.js')),
     abstractComponent = $__0.abstractComponent,
     partialImplement = $__0.partialImplement;
+var $__0 = $traceurRuntime.assertObject(require('./bundle.js')),
+    HandlerBundle = $__0.HandlerBundle,
+    handlerBundle = $__0.handlerBundle;
 var $__0 = $traceurRuntime.assertObject(require('./route.js')),
     Route = $__0.Route,
     StaticRoute = $__0.StaticRoute,

@@ -79,4 +79,3 @@ var simpleHandlerLoader = (function(inType, outType) {
     return loadSimpleHandler(config, component, inType, outType, options);
   });
 });
-var loadHandleableFromBundle = (function(config, handlerName, component) {});
