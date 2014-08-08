@@ -174,6 +174,13 @@ var $HandlerBundle = HandlerBundle;
     }
     privateInstance._bundleFields = privateFields;
     $traceurRuntime.superCall(this, $HandlerBundle.prototype, "privatize", [privateInstance, privateTable]);
+  },
+  addMiddleware: function(middleware) {
+    var bundleFields = this._bundleFields;
+    for (var key in bundleFields) {
+      bundleFields[key].addMiddleware(middleware);
+    }
+    return this;
   }
 }, {}, Component);
 var handlerBundle = (function(bundleBuilder, handlerNames) {

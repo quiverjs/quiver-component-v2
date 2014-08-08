@@ -81,9 +81,10 @@ var abstractComponent = (function(configKey, protocol, component) {
     throw new Error('component must be either handler or middleware');
   }
   return (function(implBundle) {
+    var privateTable = arguments[1] !== (void 0) ? arguments[1] : {};
     var protocolImpl = protocol.implement(implBundle);
     var protocolMiddleware = new ProtocolMiddleware(configKey, protocolImpl);
-    var concreteComponent = component.makePrivate().addMiddleware(protocolMiddleware);
+    var concreteComponent = component.makePrivate(privateTable).addMiddleware(protocolMiddleware);
     return concreteComponent;
   });
 });
