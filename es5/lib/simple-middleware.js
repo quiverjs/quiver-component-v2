@@ -6,11 +6,17 @@ Object.defineProperties(exports, {
   ConfigOverrideMiddleware: {get: function() {
       return ConfigOverrideMiddleware;
     }},
+  ConfigAliasMiddleware: {get: function() {
+      return ConfigAliasMiddleware;
+    }},
   configMiddleware: {get: function() {
       return configMiddleware;
     }},
   configOverrideMiddleware: {get: function() {
       return configOverrideMiddleware;
+    }},
+  configAliasMiddleware: {get: function() {
+      return configAliasMiddleware;
     }},
   __esModule: {value: true}
 });
@@ -69,9 +75,42 @@ var $ConfigOverrideMiddleware = ConfigOverrideMiddleware;
     return json;
   }
 }, {}, ConfigMiddleware);
+var ConfigAliasMiddleware = function ConfigAliasMiddleware(aliasConfig) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  this._aliasConfig = aliasConfig;
+  options.safeWrapped = true;
+  $traceurRuntime.superCall(this, $ConfigAliasMiddleware.prototype, "constructor", [null, options]);
+};
+var $ConfigAliasMiddleware = ConfigAliasMiddleware;
+($traceurRuntime.createClass)(ConfigAliasMiddleware, {
+  get configHandler() {
+    var aliasConfig = this._aliasConfig;
+    return (function(config) {
+      for (var key in aliasConfig) {
+        var aliasKey = aliasConfig[key];
+        config[key] = config[aliasKey];
+      }
+      return resolve(config);
+    });
+  },
+  get aliasConfig() {
+    return copy(this._aliasConfig);
+  },
+  get type() {
+    return 'config alias middleware';
+  },
+  toJson: function() {
+    var json = $traceurRuntime.superCall(this, $ConfigAliasMiddleware.prototype, "toJson", []);
+    json.aliasConfig = this.aliasConfig;
+    return json;
+  }
+}, {}, ConfigMiddleware);
 var configMiddleware = (function(handler, options) {
   return new ConfigMiddleware(handler, options);
 });
 var configOverrideMiddleware = (function(config, options) {
   return new ConfigOverrideMiddleware(config, options);
+});
+var configAliasMiddleware = (function(config, options) {
+  return new ConfigAliasMiddleware(config, options);
 });

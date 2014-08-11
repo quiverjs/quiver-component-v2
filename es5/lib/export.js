@@ -153,14 +153,20 @@ Object.defineProperties(exports, {
   ConfigMiddleware: {get: function() {
       return ConfigMiddleware;
     }},
-  ConfigOverrideMiddleware: {get: function() {
-      return ConfigOverrideMiddleware;
-    }},
   configMiddleware: {get: function() {
       return configMiddleware;
     }},
+  ConfigOverrideMiddleware: {get: function() {
+      return ConfigOverrideMiddleware;
+    }},
   configOverrideMiddleware: {get: function() {
       return configOverrideMiddleware;
+    }},
+  ConfigAliasMiddleware: {get: function() {
+      return ConfigAliasMiddleware;
+    }},
+  configAliasMiddleware: {get: function() {
+      return configAliasMiddleware;
     }},
   Protocol: {get: function() {
       return Protocol;
@@ -310,9 +316,11 @@ var $__0 = $traceurRuntime.assertObject(require('./input-handler.js')),
     privateInputMiddleware = $__0.privateInputMiddleware;
 var $__0 = $traceurRuntime.assertObject(require('./simple-middleware.js')),
     ConfigMiddleware = $__0.ConfigMiddleware,
-    ConfigOverrideMiddleware = $__0.ConfigOverrideMiddleware,
     configMiddleware = $__0.configMiddleware,
-    configOverrideMiddleware = $__0.configOverrideMiddleware;
+    ConfigOverrideMiddleware = $__0.ConfigOverrideMiddleware,
+    configOverrideMiddleware = $__0.configOverrideMiddleware,
+    ConfigAliasMiddleware = $__0.ConfigAliasMiddleware,
+    configAliasMiddleware = $__0.configAliasMiddleware;
 var $__0 = $traceurRuntime.assertObject(require('./protocol.js')),
     Protocol = $__0.Protocol,
     protocol = $__0.protocol;

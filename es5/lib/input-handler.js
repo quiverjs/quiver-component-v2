@@ -13,7 +13,6 @@ var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
     assertString = $__1.assertString;
 var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
 var ConfigMiddleware = $traceurRuntime.assertObject(require('./simple-middleware.js')).ConfigMiddleware;
-var PrivateMiddleware = $traceurRuntime.assertObject(require('./private-middleware.js')).PrivateMiddleware;
 var loadHandler = (function(config, component, options) {
   return component.loadHandler(config, options);
 });
