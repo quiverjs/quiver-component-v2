@@ -52,7 +52,7 @@ describe('protocol test', (function() {
             break;
           case 22:
             $ctx.state = 2;
-            return impl.load({});
+            return impl.loadHandlers({});
           case 2:
             bundle = $ctx.sent;
             $ctx.state = 4;
@@ -109,7 +109,6 @@ describe('protocol test', (function() {
         impl,
         bundle,
         bazHandler,
-        subBundle,
         fooHandler,
         barHandler,
         $__11,
@@ -124,22 +123,20 @@ describe('protocol test', (function() {
       while (true)
         switch ($ctx.state) {
           case 0:
-            bazProtocol = protocol().simpleHandler('baz', 'void', 'text').subprotocol('sub', fooProtocol);
+            bazProtocol = protocol().simpleHandler('baz', 'void', 'text').subprotocol(fooProtocol);
             baz = simpleHandler((function(args) {
               return 'Baz';
             }), 'void', 'text');
             impl = bazProtocol.implement({
-              baz: baz,
-              sub: {
-                foo: foo,
-                bar: bar
-              }
+              foo: foo,
+              bar: bar,
+              baz: baz
             });
             $ctx.state = 26;
             break;
           case 26:
             $ctx.state = 2;
-            return impl.load({});
+            return impl.loadHandlers({});
           case 2:
             bundle = $ctx.sent;
             $ctx.state = 4;
@@ -147,11 +144,9 @@ describe('protocol test', (function() {
           case 4:
             bazHandler = bundle.baz;
             should.exist(bazHandler);
-            subBundle = bundle.sub;
-            should.exist(subBundle);
-            fooHandler = subBundle.foo;
+            fooHandler = bundle.foo;
             should.exist(fooHandler);
-            barHandler = subBundle.bar;
+            barHandler = bundle.bar;
             should.exist(barHandler);
             $ctx.state = 28;
             break;
@@ -201,7 +196,7 @@ describe('protocol test', (function() {
         }
     }, $__10, this);
   })));
-  it('sub protocol test', async($traceurRuntime.initGeneratorFunction(function $__19() {
+  it('astract component test', async($traceurRuntime.initGeneratorFunction(function $__19() {
     var abstractHandler,
         concrete,
         handler,
@@ -246,10 +241,10 @@ describe('protocol test', (function() {
                   }
               }, $__20, this);
             })), 'void', 'text'));
-            concrete = abstractHandler({
+            concrete = abstractHandler.implement({
               foo: foo,
               bar: bar
-            });
+            }).concretize();
             $ctx.state = 10;
             break;
           case 10:

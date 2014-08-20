@@ -25,7 +25,8 @@ describe('protocol test', () => {
     return 'hello, ' + text
   }, 'text', 'text')
 
-  var bar = simpleHandler(args => 'Bar', 'void', 'text')
+  var bar = simpleHandler(args => 'Bar', 
+    'void', 'text')
 
   it('basic test', async(function*() {
     expect(() => 
@@ -35,7 +36,7 @@ describe('protocol test', () => {
     var impl = fooProtocol.implement(
       { foo, bar })
 
-    var bundle = yield impl.load({})
+    var bundle = yield impl.loadHandlers({})
 
     var fooHandler = bundle.foo
     should.exist(fooHandler)
@@ -54,39 +55,34 @@ describe('protocol test', () => {
   it('sub protocol test', async(function*() {
     var bazProtocol = protocol()
       .simpleHandler('baz', 'void', 'text')
-      .subprotocol('sub', fooProtocol)
+      .subprotocol(fooProtocol)
 
     var baz = simpleHandler(args => 'Baz', 'void', 'text')
     var impl = bazProtocol.implement({
-      baz, sub: {
-        foo, bar
-      }
+      foo, bar, baz
     })
 
-    var bundle = yield impl.load({})
+    var bundle = yield impl.loadHandlers({})
     var bazHandler = bundle.baz
     should.exist(bazHandler)
 
-    var subBundle = bundle.sub
-    should.exist(subBundle)
-
-    var fooHandler = subBundle.foo
+    var fooHandler = bundle.foo
     should.exist(fooHandler)
 
-    var barHandler = subBundle.bar
+    var barHandler = bundle.bar
     should.exist(barHandler)
 
     yield fooHandler({}, 'world')
       .should.eventually.equal('hello, world')
 
-    yield streamableToText(yield barHandler(
-      {}, emptyStreamable()))
-        .should.eventually.equal('Bar')
+    yield streamableToText(
+      yield barHandler({}, emptyStreamable()))
+      .should.eventually.equal('Bar')
 
     yield bazHandler({}).should.eventually.equal('Baz')
   }))
 
-  it('sub protocol test', async(function*() {
+  it('astract component test', async(function*() {
     var abstractHandler = abstractComponent(
       'inBundle', fooProtocol,
       simpleHandlerBuilder(async(function*(config) {
@@ -102,7 +98,9 @@ describe('protocol test', () => {
         return args => fooResult
       }), 'void', 'text'))
 
-    var concrete = abstractHandler({ foo, bar })
+    var concrete = abstractHandler
+      .implement({ foo, bar })
+      .concretize()
 
     var handler = yield concrete.loadHandler({})
     var result = yield handler({})
