@@ -76,13 +76,15 @@ var AbstractComponent = function AbstractComponent(configKey, protocol, componen
 var $AbstractComponent = AbstractComponent;
 ($traceurRuntime.createClass)(AbstractComponent, {
   implement: function(handlerMap) {
-    var implBundle = this._implBundle;
+    var privateTable = arguments[1] !== (void 0) ? arguments[1] : {};
+    var privateCopy = this.makePrivate(privateTable);
+    var implBundle = privateCopy._implBundle;
     for (var key in handlerMap) {
       var component = handlerMap[key];
       assertHandlerComponent(component);
       implBundle[key] = component;
     }
-    return this;
+    return privateCopy;
   },
   privatize: function(privateInstance, privateTable) {
     var newImpl = {};
@@ -102,6 +104,9 @@ var $AbstractComponent = AbstractComponent;
     var protocolMiddleware = new ProtocolMiddleware(configKey, protocolImpl);
     var concreteComponent = component.makePrivate().addMiddleware(protocolMiddleware);
     return concreteComponent;
+  },
+  get rawComponent() {
+    return this._component;
   }
 }, {}, Component);
 var abstractComponent = (function(configKey, protocol, component) {
