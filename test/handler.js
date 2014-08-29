@@ -51,12 +51,10 @@ describe('handler test', () => {
         return (requestHead, streamable) => 
           streamableToText(streamable).then(input => {
             input.should.equal('hello')
-            return {
-              responseHead: {
-                statusCode: 200
-              },
-              responseStreamable: textToStreamable(greet)
-            }
+            return [
+              { statusCode: 200 },
+              textToStreamable(greet)
+            ]
           })
       })
 
@@ -70,7 +68,7 @@ describe('handler test', () => {
 
       var input = textToStreamable('hello')
       return handler({}, input).then(
-        ({ responseHead, responseStreamable }) => {
+        ([responseHead, responseStreamable]) => {
           responseHead.statusCode.should.equal(200)
 
           return streamableToText(responseStreamable)

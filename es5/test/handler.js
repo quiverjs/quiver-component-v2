@@ -41,10 +41,7 @@ describe('handler test', (function() {
       return (function(requestHead, streamable) {
         return streamableToText(streamable).then((function(input) {
           input.should.equal('hello');
-          return {
-            responseHead: {statusCode: 200},
-            responseStreamable: textToStreamable(greet)
-          };
+          return [{statusCode: 200}, textToStreamable(greet)];
         }));
       });
     }));
@@ -54,8 +51,8 @@ describe('handler test', (function() {
       should.exist(handler);
       var input = textToStreamable('hello');
       return handler({}, input).then((function($__0) {
-        var responseHead = $__0.responseHead,
-            responseStreamable = $__0.responseStreamable;
+        var responseHead = $__0[0],
+            responseStreamable = $__0[1];
         responseHead.statusCode.should.equal(200);
         return streamableToText(responseStreamable).should.eventually.equal('goodbye');
       }));

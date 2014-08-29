@@ -8,14 +8,6 @@ Object.defineProperties(exports, {
 var error = $traceurRuntime.assertObject(require('quiver-error')).error;
 var parseUrl = $traceurRuntime.assertObject(require('url')).parse;
 var reject = $traceurRuntime.assertObject(require('quiver-promise')).reject;
-var getPathFromRequestHead = function(requestHead) {
-  if (!requestHead.args)
-    requestHead.args = {};
-  if (requestHead.args.path)
-    return requestHead.args.path;
-  var path = parseUrl(requestHead.url, true).pathname;
-  requestHead.args.path = path;
-};
 var getHandlerFromPath = (function(routeIndex, path, args) {
   var staticHandler = routeIndex.staticRoutes[path];
   if (staticHandler)
@@ -36,8 +28,9 @@ var getHandlerFromPath = (function(routeIndex, path, args) {
 });
 var httpRouterHandler = (function(routeIndex) {
   return (function(requestHead, requestStreamable) {
-    var path = getPathFromRequestHead(requestHead);
-    var args = $traceurRuntime.assertObject(requestHead).args;
+    var $__2 = $traceurRuntime.assertObject(requestHead),
+        args = $__2.args,
+        path = $__2.path;
     var handler = getHandlerFromPath(routeIndex, path, args);
     if (!handler)
       return reject(error(404, 'not found'));
