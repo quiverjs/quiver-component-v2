@@ -26,15 +26,19 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
-var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var $__2 = $traceurRuntime.assertObject(require('./filter.js')),
+var $__quiver_45_object__,
+    $__quiver_45_promise__,
+    $__filter_46_js__,
+    $__util_47_wrap_46_js__;
+var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
+var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
+var $__2 = ($__filter_46_js__ = require("./filter.js"), $__filter_46_js__ && $__filter_46_js__.__esModule && $__filter_46_js__ || {default: $__filter_46_js__}),
     StreamFilter = $__2.StreamFilter,
     HttpFilter = $__2.HttpFilter,
     HandleableFilter = $__2.HandleableFilter;
-var $__2 = $traceurRuntime.assertObject(require('./util/wrap.js')),
-    safeBuilder = $__2.safeBuilder,
-    safeHandler = $__2.safeHandler;
+var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}),
+    safeBuilder = $__3.safeBuilder,
+    safeHandler = $__3.safeHandler;
 var argsToStreamFilter = (function(argsHandler) {
   return (function(config, handler) {
     return resolve((function(args, inputStreamable) {
@@ -48,9 +52,9 @@ var errorToFilter = (function(errorHandler) {
   return (function(config, handler) {
     return resolve((function() {
       for (var args = [],
-          $__1 = 0; $__1 < arguments.length; $__1++)
-        args[$__1] = arguments[$__1];
-      return handler.apply(null, $traceurRuntime.toObject(args)).catch(errorHandler);
+          $__5 = 0; $__5 < arguments.length; $__5++)
+        args[$__5] = arguments[$__5];
+      return handler.apply(null, $traceurRuntime.spread(args)).catch(errorHandler);
     }));
   });
 });
@@ -70,9 +74,9 @@ var applyArgsFilter = (function(argsHandler, handler) {
 });
 var argsBuilderToFilter = (function(argsBuilder) {
   return (function(config, handleable) {
-    var $__2 = $traceurRuntime.assertObject(handleable),
-        streamHandler = $__2.streamHandler,
-        metaHandlers = $__2.meta;
+    var $__6 = handleable,
+        streamHandler = $__6.streamHandler,
+        metaHandlers = $__6.meta;
     if (!streamHandler && !metaHandlers)
       return resolve(handleable);
     return argsBuilder(config).then((function(argsHandler) {

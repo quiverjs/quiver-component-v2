@@ -1,6 +1,8 @@
 "use strict";
-require('traceur');
-var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+var $__traceur_64_0_46_0_46_58__,
+    $___46__46__47_lib_47_export_46_js__;
+($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     pipeline = $__0.pipeline,
     simpleHandler = $__0.simpleHandler,
     loadSimpleHandler = $__0.loadSimpleHandler;

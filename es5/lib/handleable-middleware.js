@@ -8,11 +8,14 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
-var ExtensibleMiddleware = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleMiddleware;
-var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
-    combineMiddlewares = $__1.combineMiddlewares,
-    repeatOnceMiddleware = $__1.repeatOnceMiddleware;
+var $__util_47_wrap_46_js__,
+    $__extensible_45_component_46_js__,
+    $__util_47_middleware_46_js__;
+var safeHandler = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}).safeHandler;
+var ExtensibleMiddleware = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}).ExtensibleMiddleware;
+var $__2 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+    combineMiddlewares = $__2.combineMiddlewares,
+    repeatOnceMiddleware = $__2.repeatOnceMiddleware;
 var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._mainMiddleware = safeHandler(handleableMiddleware, options);

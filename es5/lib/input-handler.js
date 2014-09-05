@@ -8,21 +8,24 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
-    assertInstanceOf = $__1.assertInstanceOf,
-    assertString = $__1.assertString;
-var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var ConfigMiddleware = $traceurRuntime.assertObject(require('./simple-middleware.js')).ConfigMiddleware;
+var $__quiver_45_object__,
+    $__component_46_js__,
+    $__simple_45_middleware_46_js__;
+var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
+    assertInstanceOf = $__0.assertInstanceOf,
+    assertString = $__0.assertString;
+var HandlerComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).HandlerComponent;
+var ConfigMiddleware = ($__simple_45_middleware_46_js__ = require("./simple-middleware.js"), $__simple_45_middleware_46_js__ && $__simple_45_middleware_46_js__.__esModule && $__simple_45_middleware_46_js__ || {default: $__simple_45_middleware_46_js__}).ConfigMiddleware;
 var loadHandler = (function(config, component, options) {
   return component.loadHandler(config, options);
 });
 var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, toConfig) {
-  var $__2;
+  var $__5;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   assertInstanceOf(handlerComponent, HandlerComponent, 'input handler must be of type HandlerComponent');
   assertString(toConfig, 'toConfig required to be string');
-  var $__1 = $traceurRuntime.assertObject(options),
-      loader = ($__2 = $__1.loader) === void 0 ? loadHandler : $__2;
+  var $__4 = options,
+      loader = ($__5 = $__4.loader) === void 0 ? loadHandler : $__5;
   this._handlerLoader = loader;
   this._inputHandlerComponent = handlerComponent;
   this._toInputConfig = toConfig;

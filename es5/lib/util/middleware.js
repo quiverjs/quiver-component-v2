@@ -20,7 +20,8 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var getInitTable = $traceurRuntime.assertObject(require('./config.js')).getInitTable;
+var $__config_46_js__;
+var getInitTable = ($__config_46_js__ = require("./config.js"), $__config_46_js__ && $__config_46_js__.__esModule && $__config_46_js__ || {default: $__config_46_js__}).getInitTable;
 var noopMiddleware = (function(config, builder) {
   return builder(config);
 });

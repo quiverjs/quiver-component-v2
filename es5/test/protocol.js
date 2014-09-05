@@ -1,16 +1,20 @@
 "use strict";
-require('traceur');
-var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+var $__traceur_64_0_46_0_46_58__,
+    $___46__46__47_lib_47_export_46_js__,
+    $__quiver_45_promise__,
+    $__quiver_45_stream_45_util__;
+($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     simpleHandler = $__0.simpleHandler,
     simpleHandlerBuilder = $__0.simpleHandlerBuilder,
     streamHandler = $__0.streamHandler,
     httpHandler = $__0.httpHandler,
     protocol = $__0.protocol,
     abstractComponent = $__0.abstractComponent;
-var async = $traceurRuntime.assertObject(require('quiver-promise')).async;
-var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
-    streamableToText = $__0.streamableToText,
-    emptyStreamable = $__0.emptyStreamable;
+var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
+var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    streamableToText = $__2.streamableToText,
+    emptyStreamable = $__2.emptyStreamable;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -24,19 +28,19 @@ describe('protocol test', (function() {
   var bar = simpleHandler((function(args) {
     return 'Bar';
   }), 'void', 'text');
-  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__1() {
+  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__3() {
     var impl,
         bundle,
         fooHandler,
         barHandler,
-        $__2,
-        $__3,
         $__4,
         $__5,
         $__6,
         $__7,
         $__8,
-        $__9;
+        $__9,
+        $__10,
+        $__11;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -72,28 +76,28 @@ describe('protocol test', (function() {
             $ctx.state = 8;
             break;
           case 8:
-            $__2 = emptyStreamable();
-            $__3 = barHandler({}, $__2);
+            $__4 = emptyStreamable();
+            $__5 = barHandler({}, $__4);
             $ctx.state = 14;
             break;
           case 14:
             $ctx.state = 10;
-            return $__3;
+            return $__5;
           case 10:
-            $__4 = $ctx.sent;
+            $__6 = $ctx.sent;
             $ctx.state = 12;
             break;
           case 12:
-            $__5 = streamableToText($__4);
-            $__6 = $__5.should;
-            $__7 = $__6.eventually;
-            $__8 = $__7.equal;
-            $__9 = $__8.call($__7, 'Bar');
+            $__7 = streamableToText($__6);
+            $__8 = $__7.should;
+            $__9 = $__8.eventually;
+            $__10 = $__9.equal;
+            $__11 = $__10.call($__9, 'Bar');
             $ctx.state = 16;
             break;
           case 16:
             $ctx.state = 18;
-            return $__9;
+            return $__11;
           case 18:
             $ctx.maybeThrow();
             $ctx.state = -2;
@@ -101,9 +105,9 @@ describe('protocol test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__1, this);
+    }, $__3, this);
   })));
-  it('sub protocol test', async($traceurRuntime.initGeneratorFunction(function $__10() {
+  it('sub protocol test', async($traceurRuntime.initGeneratorFunction(function $__12() {
     var bazProtocol,
         baz,
         impl,
@@ -111,14 +115,14 @@ describe('protocol test', (function() {
         bazHandler,
         fooHandler,
         barHandler,
-        $__11,
-        $__12,
         $__13,
         $__14,
         $__15,
         $__16,
         $__17,
-        $__18;
+        $__18,
+        $__19,
+        $__20;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -158,28 +162,28 @@ describe('protocol test', (function() {
             $ctx.state = 8;
             break;
           case 8:
-            $__11 = emptyStreamable();
-            $__12 = barHandler({}, $__11);
+            $__13 = emptyStreamable();
+            $__14 = barHandler({}, $__13);
             $ctx.state = 14;
             break;
           case 14:
             $ctx.state = 10;
-            return $__12;
+            return $__14;
           case 10:
-            $__13 = $ctx.sent;
+            $__15 = $ctx.sent;
             $ctx.state = 12;
             break;
           case 12:
-            $__14 = streamableToText($__13);
-            $__15 = $__14.should;
-            $__16 = $__15.eventually;
-            $__17 = $__16.equal;
-            $__18 = $__17.call($__16, 'Bar');
+            $__16 = streamableToText($__15);
+            $__17 = $__16.should;
+            $__18 = $__17.eventually;
+            $__19 = $__18.equal;
+            $__20 = $__19.call($__18, 'Bar');
             $ctx.state = 16;
             break;
           case 16:
             $ctx.state = 18;
-            return $__18;
+            return $__20;
           case 18:
             $ctx.maybeThrow();
             $ctx.state = 20;
@@ -194,9 +198,9 @@ describe('protocol test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__10, this);
+    }, $__12, this);
   })));
-  it('astract component test', async($traceurRuntime.initGeneratorFunction(function $__19() {
+  it('astract component test', async($traceurRuntime.initGeneratorFunction(function $__21() {
     var abstractHandler,
         concrete,
         handler,
@@ -205,7 +209,7 @@ describe('protocol test', (function() {
       while (true)
         switch ($ctx.state) {
           case 0:
-            abstractHandler = abstractComponent('inBundle', fooProtocol, simpleHandlerBuilder(async($traceurRuntime.initGeneratorFunction(function $__20(config) {
+            abstractHandler = abstractComponent('inBundle', fooProtocol, simpleHandlerBuilder(async($traceurRuntime.initGeneratorFunction(function $__22(config) {
               var inBundle,
                   fooHandler,
                   fooResult;
@@ -239,7 +243,7 @@ describe('protocol test', (function() {
                     default:
                       return $ctx.end();
                   }
-              }, $__20, this);
+              }, $__22, this);
             })), 'void', 'text'));
             concrete = abstractHandler.implement({
               foo: foo,
@@ -268,6 +272,6 @@ describe('protocol test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__19, this);
+    }, $__21, this);
   })));
 }));

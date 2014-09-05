@@ -8,19 +8,20 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__1 = $traceurRuntime.assertObject(require('quiver-promise')),
-    safePromised = $__1.safePromised,
-    createPromise = $__1.createPromise;
+var $__quiver_45_promise__;
+var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
+    safePromised = $__0.safePromised,
+    createPromise = $__0.createPromise;
 var assertFunction = (function(fn) {
   if (typeof(fn) != 'function') {
     throw new Error('argument must be of type function');
   }
 });
 var safeHandler = (function(handler) {
-  var $__2;
+  var $__3;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__1 = $traceurRuntime.assertObject(options),
-      safeWrapped = ($__2 = $__1.safeWrapped) === void 0 ? false : $__2;
+  var $__2 = options,
+      safeWrapped = ($__3 = $__2.safeWrapped) === void 0 ? false : $__3;
   if (safeWrapped)
     return handler;
   assertFunction(handler);
@@ -30,8 +31,8 @@ var safeHandler = (function(handler) {
 var safeBuilder = (function(builder) {
   var $__2;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__1 = $traceurRuntime.assertObject(options),
-      safeWrapped = ($__2 = $__1.safeWrapped) === void 0 ? false : $__2;
+  var $__3 = options,
+      safeWrapped = ($__2 = $__3.safeWrapped) === void 0 ? false : $__2;
   if (safeWrapped)
     return builder;
   assertFunction(builder);
@@ -39,8 +40,8 @@ var safeBuilder = (function(builder) {
   var safeBuilder = safePromised(builder);
   return (function() {
     for (var args = [],
-        $__0 = 0; $__0 < arguments.length; $__0++)
-      args[$__0] = arguments[$__0];
-    return safeBuilder.apply(null, $traceurRuntime.toObject(args)).then(safeHandler);
+        $__1 = 0; $__1 < arguments.length; $__1++)
+      args[$__1] = arguments[$__1];
+    return safeBuilder.apply(null, $traceurRuntime.spread(args)).then(safeHandler);
   });
 });

@@ -1,22 +1,27 @@
 "use strict";
-require('traceur');
-var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var streamToSimpleHandler = $traceurRuntime.assertObject(require('quiver-simple-handler')).streamToSimpleHandler;
-var $__0 = $traceurRuntime.assertObject(require('quiver-stream-util')),
-    streamableToText = $__0.streamableToText,
-    textToStreamable = $__0.textToStreamable,
-    emptyStreamable = $__0.emptyStreamable,
-    jsonToStreamable = $__0.jsonToStreamable;
-var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
-    simpleHandler = $__0.simpleHandler,
-    simpleHandlerBuilder = $__0.simpleHandlerBuilder,
-    handleable = $__0.handleable,
-    streamFilter = $__0.streamFilter,
-    transformFilter = $__0.transformFilter,
-    argsFilter = $__0.argsFilter,
-    argsBuilderFilter = $__0.argsBuilderFilter,
-    errorFilter = $__0.errorFilter,
-    inputHandlerMiddleware = $__0.inputHandlerMiddleware;
+var $__traceur_64_0_46_0_46_58__,
+    $__quiver_45_promise__,
+    $__quiver_45_simple_45_handler__,
+    $__quiver_45_stream_45_util__,
+    $___46__46__47_lib_47_export_46_js__;
+($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
+var streamToSimpleHandler = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"), $__quiver_45_simple_45_handler__ && $__quiver_45_simple_45_handler__.__esModule && $__quiver_45_simple_45_handler__ || {default: $__quiver_45_simple_45_handler__}).streamToSimpleHandler;
+var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
+    streamableToText = $__2.streamableToText,
+    textToStreamable = $__2.textToStreamable,
+    emptyStreamable = $__2.emptyStreamable,
+    jsonToStreamable = $__2.jsonToStreamable;
+var $__3 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
+    simpleHandler = $__3.simpleHandler,
+    simpleHandlerBuilder = $__3.simpleHandlerBuilder,
+    handleable = $__3.handleable,
+    streamFilter = $__3.streamFilter,
+    transformFilter = $__3.transformFilter,
+    argsFilter = $__3.argsFilter,
+    argsBuilderFilter = $__3.argsBuilderFilter,
+    errorFilter = $__3.errorFilter,
+    inputHandlerMiddleware = $__3.inputHandlerMiddleware;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);

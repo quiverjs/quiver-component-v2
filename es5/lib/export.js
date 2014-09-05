@@ -251,109 +251,132 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__0 = $traceurRuntime.assertObject(require('./component.js')),
+var $__component_46_js__,
+    $__handleable_45_builder_46_js__,
+    $__handleable_45_middleware_46_js__,
+    $__extended_45_component_46_js__,
+    $__extensible_45_component_46_js__,
+    $__mixin_45_middleware_46_js__,
+    $__stream_45_handler_46_js__,
+    $__http_45_handler_46_js__,
+    $__simple_45_handler_46_js__,
+    $__pipeline_46_js__,
+    $__filter_46_js__,
+    $__simple_45_filter_46_js__,
+    $__transform_45_filter_46_js__,
+    $__input_45_handler_46_js__,
+    $__simple_45_middleware_46_js__,
+    $__protocol_46_js__,
+    $__abstract_46_js__,
+    $__bundle_46_js__,
+    $__route_46_js__,
+    $__router_46_js__,
+    $__util_47_middleware_46_js__,
+    $__util_47_loader_46_js__,
+    $__util_47_config_46_js__;
+var $__0 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
     Component = $__0.Component,
     MiddlewareComponent = $__0.MiddlewareComponent,
     HandlerComponent = $__0.HandlerComponent;
-var $__0 = $traceurRuntime.assertObject(require('./handleable-builder.js')),
-    HandleableBuilder = $__0.HandleableBuilder,
-    Handleable = $__0.Handleable,
-    handleableBuilder = $__0.handleableBuilder,
-    handleable = $__0.handleable;
-var $__0 = $traceurRuntime.assertObject(require('./handleable-middleware.js')),
-    HandleableMiddleware = $__0.HandleableMiddleware,
-    handleableMiddleware = $__0.handleableMiddleware;
-var $__0 = $traceurRuntime.assertObject(require('./extended-component.js')),
-    ExtendedHandler = $__0.ExtendedHandler,
-    ExtendedMiddleware = $__0.ExtendedMiddleware,
-    extendHandler = $__0.extendHandler,
-    extendMiddleware = $__0.extendMiddleware;
-var $__0 = $traceurRuntime.assertObject(require('./extensible-component.js')),
-    ExtensibleHandler = $__0.ExtensibleHandler,
-    ExtensibleMiddleware = $__0.ExtensibleMiddleware;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
-var $__0 = $traceurRuntime.assertObject(require('./stream-handler.js')),
-    StreamHandlerBuilder = $__0.StreamHandlerBuilder,
-    StreamHandler = $__0.StreamHandler,
-    streamHandlerBuilder = $__0.streamHandlerBuilder,
-    streamHandler = $__0.streamHandler;
-var $__0 = $traceurRuntime.assertObject(require('./http-handler.js')),
-    HttpHandlerBuilder = $__0.HttpHandlerBuilder,
-    HttpHandler = $__0.HttpHandler,
-    httpHandlerBuilder = $__0.httpHandlerBuilder,
-    httpHandler = $__0.httpHandler;
-var $__0 = $traceurRuntime.assertObject(require('./simple-handler.js')),
-    SimpleHandlerBuilder = $__0.SimpleHandlerBuilder,
-    SimpleHandler = $__0.SimpleHandler,
-    simpleHandlerBuilder = $__0.simpleHandlerBuilder,
-    simpleHandler = $__0.simpleHandler;
-var $__0 = $traceurRuntime.assertObject(require('./pipeline.js')),
-    Pipeline = $__0.Pipeline,
-    pipeline = $__0.pipeline;
-var $__0 = $traceurRuntime.assertObject(require('./filter.js')),
-    HandleableFilter = $__0.HandleableFilter,
-    StreamFilter = $__0.StreamFilter,
-    HttpFilter = $__0.HttpFilter,
-    handleableFilter = $__0.handleableFilter,
-    streamFilter = $__0.streamFilter,
-    httpFilter = $__0.httpFilter;
-var $__0 = $traceurRuntime.assertObject(require('./simple-filter.js')),
-    ArgsFilter = $__0.ArgsFilter,
-    ArgsBuilderFilter = $__0.ArgsBuilderFilter,
-    ErrorFilter = $__0.ErrorFilter,
-    ErrorBuilderFilter = $__0.ErrorBuilderFilter,
-    argsFilter = $__0.argsFilter,
-    argsBuilderFilter = $__0.argsBuilderFilter,
-    errorFilter = $__0.errorFilter,
-    errorBuilderFilter = $__0.errorBuilderFilter;
-var $__0 = $traceurRuntime.assertObject(require('./transform-filter.js')),
-    TransformFilter = $__0.TransformFilter,
-    transformFilter = $__0.transformFilter;
-var $__0 = $traceurRuntime.assertObject(require('./input-handler.js')),
-    InputHandlerMiddleware = $__0.InputHandlerMiddleware,
-    PrivateInputMiddleware = $__0.PrivateInputMiddleware,
-    inputHandlerMiddleware = $__0.inputHandlerMiddleware,
-    privateInputMiddleware = $__0.privateInputMiddleware;
-var $__0 = $traceurRuntime.assertObject(require('./simple-middleware.js')),
-    ConfigMiddleware = $__0.ConfigMiddleware,
-    configMiddleware = $__0.configMiddleware,
-    ConfigOverrideMiddleware = $__0.ConfigOverrideMiddleware,
-    configOverrideMiddleware = $__0.configOverrideMiddleware,
-    ConfigAliasMiddleware = $__0.ConfigAliasMiddleware,
-    configAliasMiddleware = $__0.configAliasMiddleware;
-var $__0 = $traceurRuntime.assertObject(require('./protocol.js')),
-    Protocol = $__0.Protocol,
-    protocol = $__0.protocol;
-var $__0 = $traceurRuntime.assertObject(require('./abstract.js')),
-    abstractComponent = $__0.abstractComponent,
-    partialImplement = $__0.partialImplement;
-var $__0 = $traceurRuntime.assertObject(require('./bundle.js')),
-    HandlerBundle = $__0.HandlerBundle,
-    handlerBundle = $__0.handlerBundle;
-var $__0 = $traceurRuntime.assertObject(require('./route.js')),
-    Route = $__0.Route,
-    StaticRoute = $__0.StaticRoute,
-    DynamicRoute = $__0.DynamicRoute,
-    RegexRoute = $__0.RegexRoute,
-    ParamRoute = $__0.ParamRoute,
-    staticRoute = $__0.staticRoute,
-    dynamicRoute = $__0.dynamicRoute,
-    regexRoute = $__0.regexRoute,
-    paramRoute = $__0.paramRoute;
-var $__0 = $traceurRuntime.assertObject(require('./router.js')),
-    RouteList = $__0.RouteList,
-    Router = $__0.Router,
-    routeList = $__0.routeList,
-    router = $__0.router;
-var $__0 = $traceurRuntime.assertObject(require('./util/middleware.js')),
-    combineMiddlewares = $__0.combineMiddlewares,
-    combineBuilderWithMiddleware = $__0.combineBuilderWithMiddleware;
-var $__0 = $traceurRuntime.assertObject(require('./util/loader.js')),
-    loadHandleable = $__0.loadHandleable,
-    loadStreamHandler = $__0.loadStreamHandler,
-    loadHttpHandler = $__0.loadHttpHandler,
-    loadSimpleHandler = $__0.loadSimpleHandler;
-var $__0 = $traceurRuntime.assertObject(require('./util/config.js')),
-    getHandleable = $__0.getHandleable,
-    getHandlerMap = $__0.getHandlerMap;
+var $__1 = ($__handleable_45_builder_46_js__ = require("./handleable-builder.js"), $__handleable_45_builder_46_js__ && $__handleable_45_builder_46_js__.__esModule && $__handleable_45_builder_46_js__ || {default: $__handleable_45_builder_46_js__}),
+    HandleableBuilder = $__1.HandleableBuilder,
+    Handleable = $__1.Handleable,
+    handleableBuilder = $__1.handleableBuilder,
+    handleable = $__1.handleable;
+var $__2 = ($__handleable_45_middleware_46_js__ = require("./handleable-middleware.js"), $__handleable_45_middleware_46_js__ && $__handleable_45_middleware_46_js__.__esModule && $__handleable_45_middleware_46_js__ || {default: $__handleable_45_middleware_46_js__}),
+    HandleableMiddleware = $__2.HandleableMiddleware,
+    handleableMiddleware = $__2.handleableMiddleware;
+var $__3 = ($__extended_45_component_46_js__ = require("./extended-component.js"), $__extended_45_component_46_js__ && $__extended_45_component_46_js__.__esModule && $__extended_45_component_46_js__ || {default: $__extended_45_component_46_js__}),
+    ExtendedHandler = $__3.ExtendedHandler,
+    ExtendedMiddleware = $__3.ExtendedMiddleware,
+    extendHandler = $__3.extendHandler,
+    extendMiddleware = $__3.extendMiddleware;
+var $__4 = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}),
+    ExtensibleHandler = $__4.ExtensibleHandler,
+    ExtensibleMiddleware = $__4.ExtensibleMiddleware;
+var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
+var $__6 = ($__stream_45_handler_46_js__ = require("./stream-handler.js"), $__stream_45_handler_46_js__ && $__stream_45_handler_46_js__.__esModule && $__stream_45_handler_46_js__ || {default: $__stream_45_handler_46_js__}),
+    StreamHandlerBuilder = $__6.StreamHandlerBuilder,
+    StreamHandler = $__6.StreamHandler,
+    streamHandlerBuilder = $__6.streamHandlerBuilder,
+    streamHandler = $__6.streamHandler;
+var $__7 = ($__http_45_handler_46_js__ = require("./http-handler.js"), $__http_45_handler_46_js__ && $__http_45_handler_46_js__.__esModule && $__http_45_handler_46_js__ || {default: $__http_45_handler_46_js__}),
+    HttpHandlerBuilder = $__7.HttpHandlerBuilder,
+    HttpHandler = $__7.HttpHandler,
+    httpHandlerBuilder = $__7.httpHandlerBuilder,
+    httpHandler = $__7.httpHandler;
+var $__8 = ($__simple_45_handler_46_js__ = require("./simple-handler.js"), $__simple_45_handler_46_js__ && $__simple_45_handler_46_js__.__esModule && $__simple_45_handler_46_js__ || {default: $__simple_45_handler_46_js__}),
+    SimpleHandlerBuilder = $__8.SimpleHandlerBuilder,
+    SimpleHandler = $__8.SimpleHandler,
+    simpleHandlerBuilder = $__8.simpleHandlerBuilder,
+    simpleHandler = $__8.simpleHandler;
+var $__9 = ($__pipeline_46_js__ = require("./pipeline.js"), $__pipeline_46_js__ && $__pipeline_46_js__.__esModule && $__pipeline_46_js__ || {default: $__pipeline_46_js__}),
+    Pipeline = $__9.Pipeline,
+    pipeline = $__9.pipeline;
+var $__10 = ($__filter_46_js__ = require("./filter.js"), $__filter_46_js__ && $__filter_46_js__.__esModule && $__filter_46_js__ || {default: $__filter_46_js__}),
+    HandleableFilter = $__10.HandleableFilter,
+    StreamFilter = $__10.StreamFilter,
+    HttpFilter = $__10.HttpFilter,
+    handleableFilter = $__10.handleableFilter,
+    streamFilter = $__10.streamFilter,
+    httpFilter = $__10.httpFilter;
+var $__11 = ($__simple_45_filter_46_js__ = require("./simple-filter.js"), $__simple_45_filter_46_js__ && $__simple_45_filter_46_js__.__esModule && $__simple_45_filter_46_js__ || {default: $__simple_45_filter_46_js__}),
+    ArgsFilter = $__11.ArgsFilter,
+    ArgsBuilderFilter = $__11.ArgsBuilderFilter,
+    ErrorFilter = $__11.ErrorFilter,
+    ErrorBuilderFilter = $__11.ErrorBuilderFilter,
+    argsFilter = $__11.argsFilter,
+    argsBuilderFilter = $__11.argsBuilderFilter,
+    errorFilter = $__11.errorFilter,
+    errorBuilderFilter = $__11.errorBuilderFilter;
+var $__12 = ($__transform_45_filter_46_js__ = require("./transform-filter.js"), $__transform_45_filter_46_js__ && $__transform_45_filter_46_js__.__esModule && $__transform_45_filter_46_js__ || {default: $__transform_45_filter_46_js__}),
+    TransformFilter = $__12.TransformFilter,
+    transformFilter = $__12.transformFilter;
+var $__13 = ($__input_45_handler_46_js__ = require("./input-handler.js"), $__input_45_handler_46_js__ && $__input_45_handler_46_js__.__esModule && $__input_45_handler_46_js__ || {default: $__input_45_handler_46_js__}),
+    InputHandlerMiddleware = $__13.InputHandlerMiddleware,
+    PrivateInputMiddleware = $__13.PrivateInputMiddleware,
+    inputHandlerMiddleware = $__13.inputHandlerMiddleware,
+    privateInputMiddleware = $__13.privateInputMiddleware;
+var $__14 = ($__simple_45_middleware_46_js__ = require("./simple-middleware.js"), $__simple_45_middleware_46_js__ && $__simple_45_middleware_46_js__.__esModule && $__simple_45_middleware_46_js__ || {default: $__simple_45_middleware_46_js__}),
+    ConfigMiddleware = $__14.ConfigMiddleware,
+    configMiddleware = $__14.configMiddleware,
+    ConfigOverrideMiddleware = $__14.ConfigOverrideMiddleware,
+    configOverrideMiddleware = $__14.configOverrideMiddleware,
+    ConfigAliasMiddleware = $__14.ConfigAliasMiddleware,
+    configAliasMiddleware = $__14.configAliasMiddleware;
+var $__15 = ($__protocol_46_js__ = require("./protocol.js"), $__protocol_46_js__ && $__protocol_46_js__.__esModule && $__protocol_46_js__ || {default: $__protocol_46_js__}),
+    Protocol = $__15.Protocol,
+    protocol = $__15.protocol;
+var $__16 = ($__abstract_46_js__ = require("./abstract.js"), $__abstract_46_js__ && $__abstract_46_js__.__esModule && $__abstract_46_js__ || {default: $__abstract_46_js__}),
+    abstractComponent = $__16.abstractComponent,
+    partialImplement = $__16.partialImplement;
+var $__17 = ($__bundle_46_js__ = require("./bundle.js"), $__bundle_46_js__ && $__bundle_46_js__.__esModule && $__bundle_46_js__ || {default: $__bundle_46_js__}),
+    HandlerBundle = $__17.HandlerBundle,
+    handlerBundle = $__17.handlerBundle;
+var $__18 = ($__route_46_js__ = require("./route.js"), $__route_46_js__ && $__route_46_js__.__esModule && $__route_46_js__ || {default: $__route_46_js__}),
+    Route = $__18.Route,
+    StaticRoute = $__18.StaticRoute,
+    DynamicRoute = $__18.DynamicRoute,
+    RegexRoute = $__18.RegexRoute,
+    ParamRoute = $__18.ParamRoute,
+    staticRoute = $__18.staticRoute,
+    dynamicRoute = $__18.dynamicRoute,
+    regexRoute = $__18.regexRoute,
+    paramRoute = $__18.paramRoute;
+var $__19 = ($__router_46_js__ = require("./router.js"), $__router_46_js__ && $__router_46_js__.__esModule && $__router_46_js__ || {default: $__router_46_js__}),
+    RouteList = $__19.RouteList,
+    Router = $__19.Router,
+    routeList = $__19.routeList,
+    router = $__19.router;
+var $__20 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+    combineMiddlewares = $__20.combineMiddlewares,
+    combineBuilderWithMiddleware = $__20.combineBuilderWithMiddleware;
+var $__21 = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}),
+    loadHandleable = $__21.loadHandleable,
+    loadStreamHandler = $__21.loadStreamHandler,
+    loadHttpHandler = $__21.loadHttpHandler,
+    loadSimpleHandler = $__21.loadSimpleHandler;
+var $__22 = ($__util_47_config_46_js__ = require("./util/config.js"), $__util_47_config_46_js__ && $__util_47_config_46_js__.__esModule && $__util_47_config_46_js__ || {default: $__util_47_config_46_js__}),
+    getHandleable = $__22.getHandleable,
+    getHandlerMap = $__22.getHandlerMap;
 ;

@@ -5,14 +5,15 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var streamToHttpHandler = $traceurRuntime.assertObject(require('quiver-http')).streamToHttpHandler;
+var $__quiver_45_http__;
+var streamToHttpHandler = ($__quiver_45_http__ = require("quiver-http"), $__quiver_45_http__ && $__quiver_45_http__.__esModule && $__quiver_45_http__ || {default: $__quiver_45_http__}).streamToHttpHandler;
 var getStreamHandler = (function(handleable) {
   return handleable.streamHandler;
 });
 var getHttpHandler = (function(handleable) {
-  var $__0 = $traceurRuntime.assertObject(handleable),
-      httpHandler = $__0.httpHandler,
-      streamHandler = $__0.streamHandler;
+  var $__1 = handleable,
+      httpHandler = $__1.httpHandler,
+      streamHandler = $__1.streamHandler;
   if (httpHandler)
     return httpHandler;
   if (streamHandler)

@@ -5,17 +5,19 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var MiddlewareComponent = $traceurRuntime.assertObject(require('./component.js')).MiddlewareComponent;
-var combineMiddlewareComponents = $traceurRuntime.assertObject(require('./util/middleware.js')).combineMiddlewareComponents;
+var $__component_46_js__,
+    $__util_47_middleware_46_js__;
+var MiddlewareComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).MiddlewareComponent;
+var combineMiddlewareComponents = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}).combineMiddlewareComponents;
 var middlewareMixin = {
   initMiddlewareExtension: function() {
     var options = arguments[0] !== (void 0) ? arguments[0] : {};
-    var $__0 = this;
+    var $__2 = this;
     this._middlewareComponents = [];
-    var middlewares = $traceurRuntime.assertObject(options).middlewares;
+    var middlewares = options.middlewares;
     if (middlewares) {
       middlewares.forEach((function(middleware) {
-        return $__0.addMiddleware(middleware);
+        return $__2.addMiddleware(middleware);
       }));
     }
   },

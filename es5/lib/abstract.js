@@ -5,19 +5,24 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var Protocol = $traceurRuntime.assertObject(require('./protocol.js')).Protocol;
-var ConfigMiddleware = $traceurRuntime.assertObject(require('./simple-middleware.js')).ConfigMiddleware;
-var $__1 = $traceurRuntime.assertObject(require('./component.js')),
-    Component = $__1.Component,
-    HandlerComponent = $__1.HandlerComponent,
-    MiddlewareComponent = $__1.MiddlewareComponent;
-var async = $traceurRuntime.assertObject(require('quiver-promise')).async;
-var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
+var $__protocol_46_js__,
+    $__simple_45_middleware_46_js__,
+    $__component_46_js__,
+    $__quiver_45_promise__,
+    $__quiver_45_object__;
+var Protocol = ($__protocol_46_js__ = require("./protocol.js"), $__protocol_46_js__ && $__protocol_46_js__.__esModule && $__protocol_46_js__ || {default: $__protocol_46_js__}).Protocol;
+var ConfigMiddleware = ($__simple_45_middleware_46_js__ = require("./simple-middleware.js"), $__simple_45_middleware_46_js__ && $__simple_45_middleware_46_js__.__esModule && $__simple_45_middleware_46_js__ || {default: $__simple_45_middleware_46_js__}).ConfigMiddleware;
+var $__2 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+    Component = $__2.Component,
+    HandlerComponent = $__2.HandlerComponent,
+    MiddlewareComponent = $__2.MiddlewareComponent;
+var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
+var assertInstanceOf = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).assertInstanceOf;
 var assertHandlerComponent = (function(handler) {
   return assertInstanceOf(handler, HandlerComponent, 'handler implementation must be ' + 'of type HandlerComponent');
 });
 var protocolMiddleware = (function(configKey, loader) {
-  return configMiddleware(async($traceurRuntime.initGeneratorFunction(function $__2(config) {
+  return configMiddleware(async($traceurRuntime.initGeneratorFunction(function $__6(config) {
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -35,7 +40,7 @@ var protocolMiddleware = (function(configKey, loader) {
           default:
             return $ctx.end();
         }
-    }, $__2, this);
+    }, $__6, this);
   })));
 });
 var ProtocolMiddleware = function ProtocolMiddleware(configKey, protocolImpl) {

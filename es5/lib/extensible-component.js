@@ -8,13 +8,16 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__1 = $traceurRuntime.assertObject(require('./component.js')),
-    HandlerComponent = $__1.HandlerComponent,
-    MiddlewareComponent = $__1.MiddlewareComponent;
-var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
+var $__component_46_js__,
+    $__util_47_middleware_46_js__,
+    $__mixin_45_middleware_46_js__;
+var $__0 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+    HandlerComponent = $__0.HandlerComponent,
+    MiddlewareComponent = $__0.MiddlewareComponent;
+var $__1 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
     combineMiddlewares = $__1.combineMiddlewares,
     combineBuilderWithMiddleware = $__1.combineBuilderWithMiddleware;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
+var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
 var ExtensibleHandler = function ExtensibleHandler(options) {
   this.initMiddlewareExtension(options);
   $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "constructor", [options]);

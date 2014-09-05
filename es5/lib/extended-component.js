@@ -14,15 +14,20 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var assertInstanceOf = $traceurRuntime.assertObject(require('quiver-object')).assertInstanceOf;
-var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
-var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var $__1 = $traceurRuntime.assertObject(require('./extensible-component.js')),
-    ExtensibleHandler = $__1.ExtensibleHandler,
-    ExtensibleMiddleware = $__1.ExtensibleMiddleware;
-var $__1 = $traceurRuntime.assertObject(require('./util/middleware.js')),
-    combineBuilderWithMiddleware = $__1.combineBuilderWithMiddleware,
-    combineMiddlewares = $__1.combineMiddlewares;
+var $__quiver_45_object__,
+    $__util_47_loader_46_js__,
+    $__component_46_js__,
+    $__extensible_45_component_46_js__,
+    $__util_47_middleware_46_js__;
+var assertInstanceOf = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).assertInstanceOf;
+var loadHandleable = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).loadHandleable;
+var HandlerComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).HandlerComponent;
+var $__3 = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}),
+    ExtensibleHandler = $__3.ExtensibleHandler,
+    ExtensibleMiddleware = $__3.ExtensibleMiddleware;
+var $__4 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+    combineBuilderWithMiddleware = $__4.combineBuilderWithMiddleware,
+    combineMiddlewares = $__4.combineMiddlewares;
 var ExtendedHandler = function ExtendedHandler(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(handlerComponent, HandlerComponent, 'must extend from another handler component');

@@ -29,20 +29,23 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var urlManagedBuilder = $traceurRuntime.assertObject(require('./util/url.js')).urlManagedBuilder;
-var $__1 = $traceurRuntime.assertObject(require('./component.js')),
+var $__util_47_url_46_js__,
+    $__component_46_js__,
+    $__util_47_route_46_js__;
+var urlManagedBuilder = ($__util_47_url_46_js__ = require("./util/url.js"), $__util_47_url_46_js__ && $__util_47_url_46_js__.__esModule && $__util_47_url_46_js__ || {default: $__util_47_url_46_js__}).urlManagedBuilder;
+var $__1 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
     Component = $__1.Component,
     HandlerComponent = $__1.HandlerComponent;
-var $__1 = $traceurRuntime.assertObject(require('./util/route.js')),
-    regexMatcher = $__1.regexMatcher,
-    paramMatcher = $__1.paramMatcher,
-    paramUrlBuilder = $__1.paramUrlBuilder;
+var $__2 = ($__util_47_route_46_js__ = require("./util/route.js"), $__util_47_route_46_js__ && $__util_47_route_46_js__.__esModule && $__util_47_route_46_js__ || {default: $__util_47_route_46_js__}),
+    regexMatcher = $__2.regexMatcher,
+    paramMatcher = $__2.paramMatcher,
+    paramUrlBuilder = $__2.paramUrlBuilder;
 var Route = function Route(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   if (!(handlerComponent instanceof HandlerComponent))
     throw new TypeError('input handler component must be of type HandlerComponent');
   this._handlerComponent = handlerComponent;
-  var urlBuilder = $traceurRuntime.assertObject(options).urlBuilder;
+  var urlBuilder = options.urlBuilder;
   this._urlBuilder = urlBuilder;
 };
 var $Route = Route;

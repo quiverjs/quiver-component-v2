@@ -8,13 +8,16 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
-    copy = $__1.copy,
-    defineGetter = $__1.defineGetter,
-    assertInstanceOf = $__1.assertInstanceOf,
-    assertArrayInstanceOf = $__1.assertArrayInstanceOf;
-var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleHandler;
+var $__quiver_45_object__,
+    $__component_46_js__,
+    $__extensible_45_component_46_js__;
+var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
+    copy = $__0.copy,
+    defineGetter = $__0.defineGetter,
+    assertInstanceOf = $__0.assertInstanceOf,
+    assertArrayInstanceOf = $__0.assertArrayInstanceOf;
+var HandlerComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).HandlerComponent;
+var ExtensibleHandler = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}).ExtensibleHandler;
 var combineStreamHandlers = (function(handler1, handler2) {
   return (function(args, streamable) {
     return handler1(copy(args), streamable).then((function(streamable) {
@@ -29,9 +32,10 @@ var streamCombinator = {
 var defaultCombinators = [streamCombinator];
 var combineHandleables = (function(handleable1, handleable2, combinators) {
   var newHandleable = {};
-  combinators.forEach((function($__1) {
-    var field = $__1.field,
-        combineHandlers = $__1.combineHandlers;
+  combinators.forEach((function($__4) {
+    var $__5 = $__4,
+        field = $__5.field,
+        combineHandlers = $__5.combineHandlers;
     var handler1 = handleable1[field];
     var handler2 = handleable2[field];
     if (!handler1 || !handler2)
@@ -44,10 +48,10 @@ var combineHandleables = (function(handleable1, handleable2, combinators) {
 var pipelineHandleables = (function(handleables, combinators) {
   if (handleables.length == 1)
     return handleables[0];
-  var $__1 = $traceurRuntime.assertObject(handleables),
-      handleable1 = $__1[0],
-      handleable2 = $__1[1],
-      restHandleables = Array.prototype.slice.call($__1, 2);
+  var $__4 = handleables,
+      handleable1 = $__4[0],
+      handleable2 = $__4[1],
+      restHandleables = Array.prototype.slice.call($__4, 2);
   var newHandleable = combineHandleables(handleable1, handleable2, combinators);
   return pipelineHandleables($traceurRuntime.spread([newHandleable], restHandleables), combinators);
 });
@@ -61,10 +65,10 @@ var pipelineBuilder = (function(builders, combinators) {
   });
 });
 var Pipeline = function Pipeline() {
-  var $__2;
+  var $__5;
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  var $__1 = $traceurRuntime.assertObject(options),
-      pipelineCombinators = ($__2 = $__1.pipelineCombinators) === void 0 ? defaultCombinators : $__2;
+  var $__4 = options,
+      pipelineCombinators = ($__5 = $__4.pipelineCombinators) === void 0 ? defaultCombinators : $__5;
   this._pipelineHandlers = [];
   this._pipelineCombinators = pipelineCombinators;
   $traceurRuntime.superCall(this, $Pipeline.prototype, "constructor", [options]);

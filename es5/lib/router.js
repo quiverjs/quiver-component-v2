@@ -14,24 +14,32 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__2 = $traceurRuntime.assertObject(require('./route.js')),
-    Route = $__2.Route,
-    StaticRoute = $__2.StaticRoute,
-    DynamicRoute = $__2.DynamicRoute,
-    RegexRoute = $__2.RegexRoute,
-    ParamRoute = $__2.ParamRoute;
-var routerHandleable = $traceurRuntime.assertObject(require('./util/router.js')).routerHandleable;
-var createRouteIndex = $traceurRuntime.assertObject(require('./util/route-index.js')).createRouteIndex;
-var $__2 = $traceurRuntime.assertObject(require('./component.js')),
-    Component = $__2.Component,
-    HandlerComponent = $__2.HandlerComponent;
-var mixinMiddlewareExtensible = $traceurRuntime.assertObject(require('./mixin-middleware.js')).mixinMiddlewareExtensible;
-var ExtensibleHandler = $traceurRuntime.assertObject(require('./extensible-component.js')).ExtensibleHandler;
-var $__2 = $traceurRuntime.assertObject(require('./util/middleware.js')),
-    combineMiddlewareComponents = $__2.combineMiddlewareComponents,
-    combineBuilderMiddleware = $__2.combineBuilderMiddleware,
-    combineBuilderWithMiddleware = $__2.combineBuilderWithMiddleware;
-var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
+var $__route_46_js__,
+    $__util_47_router_46_js__,
+    $__util_47_route_45_index_46_js__,
+    $__component_46_js__,
+    $__mixin_45_middleware_46_js__,
+    $__extensible_45_component_46_js__,
+    $__util_47_middleware_46_js__,
+    $__quiver_45_object__;
+var $__0 = ($__route_46_js__ = require("./route.js"), $__route_46_js__ && $__route_46_js__.__esModule && $__route_46_js__ || {default: $__route_46_js__}),
+    Route = $__0.Route,
+    StaticRoute = $__0.StaticRoute,
+    DynamicRoute = $__0.DynamicRoute,
+    RegexRoute = $__0.RegexRoute,
+    ParamRoute = $__0.ParamRoute;
+var routerHandleable = ($__util_47_router_46_js__ = require("./util/router.js"), $__util_47_router_46_js__ && $__util_47_router_46_js__.__esModule && $__util_47_router_46_js__ || {default: $__util_47_router_46_js__}).routerHandleable;
+var createRouteIndex = ($__util_47_route_45_index_46_js__ = require("./util/route-index.js"), $__util_47_route_45_index_46_js__ && $__util_47_route_45_index_46_js__.__esModule && $__util_47_route_45_index_46_js__ || {default: $__util_47_route_45_index_46_js__}).createRouteIndex;
+var $__3 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+    Component = $__3.Component,
+    HandlerComponent = $__3.HandlerComponent;
+var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
+var ExtensibleHandler = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}).ExtensibleHandler;
+var $__6 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+    combineMiddlewareComponents = $__6.combineMiddlewareComponents,
+    combineBuilderMiddleware = $__6.combineBuilderMiddleware,
+    combineBuilderWithMiddleware = $__6.combineBuilderWithMiddleware;
+var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var RouteList = function RouteList() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._routes = [];
@@ -149,14 +157,14 @@ var $Router = Router;
     return this;
   },
   get mainHandleableBuilder() {
-    var $__0 = this;
+    var $__8 = this;
     var routeLists = this.routeLists;
     return (function(config) {
       var routeIndex = createRouteIndex();
       var promises = routeLists.map((function(routeList) {
         return routeList.buildRoutes(config, routeIndex);
       }));
-      var defaultHandler = $__0.defaultHandler;
+      var defaultHandler = $__8.defaultHandler;
       if (defaultHandler) {
         promises.push(loadDefaultRoute(config, defaultHandler, routeIndex));
       }

@@ -1,6 +1,8 @@
 "use strict";
-require('traceur');
-var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+var $__traceur_64_0_46_0_46_58__,
+    $___46__46__47_lib_47_export_46_js__;
+($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     simpleHandlerBuilder = $__0.simpleHandlerBuilder,
     simpleHandler = $__0.simpleHandler,
     transformFilter = $__0.transformFilter;
@@ -11,9 +13,9 @@ var should = chai.should();
 describe('privatized component test', (function() {
   it('single component test', (function() {
     var original = simpleHandlerBuilder((function(config) {
-      var $__1;
-      var $__0 = $traceurRuntime.assertObject(config),
-          greet = ($__1 = $__0.greet) === void 0 ? 'Hello' : $__1;
+      var $__2;
+      var $__1 = config,
+          greet = ($__2 = $__1.greet) === void 0 ? 'Hello' : $__2;
       return (function(args, name) {
         return greet + ', ' + name;
       });
@@ -43,8 +45,8 @@ describe('privatized component test', (function() {
   it('private inheritance', (function() {
     var original = simpleHandlerBuilder((function(config) {
       var $__1;
-      var $__0 = $traceurRuntime.assertObject(config),
-          greet = ($__1 = $__0.greet) === void 0 ? 'Hello' : $__1;
+      var $__2 = config,
+          greet = ($__1 = $__2.greet) === void 0 ? 'Hello' : $__1;
       return (function(args, name) {
         return greet + ', ' + name;
       });
@@ -69,7 +71,7 @@ describe('privatized component test', (function() {
   }));
   it('nested privatize', (function() {
     var transformCase = simpleHandlerBuilder((function(config) {
-      var transform = $traceurRuntime.assertObject(config).transform;
+      var transform = config.transform;
       var doTransform = transform == 'uppercase' ? (function(string) {
         return string.toUpperCase();
       }) : (function(string) {
@@ -107,7 +109,7 @@ describe('privatized component test', (function() {
   }));
   it('privatized middlewares', (function() {
     var transformCase = simpleHandlerBuilder((function(config) {
-      var transform = $traceurRuntime.assertObject(config).transform;
+      var transform = config.transform;
       var doTransform = transform == 'uppercase' ? (function(string) {
         return string.toUpperCase();
       }) : (function(string) {

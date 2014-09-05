@@ -14,18 +14,23 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var $__1 = $traceurRuntime.assertObject(require('quiver-simple-handler')),
+var $__quiver_45_promise__,
+    $__quiver_45_simple_45_handler__,
+    $__util_47_loader_46_js__,
+    $__util_47_wrap_46_js__,
+    $__stream_45_handler_46_js__;
+var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
+var $__1 = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"), $__quiver_45_simple_45_handler__ && $__quiver_45_simple_45_handler__.__esModule && $__quiver_45_simple_45_handler__ || {default: $__quiver_45_simple_45_handler__}),
     simpleToStreamHandler = $__1.simpleToStreamHandler,
     streamToSimpleHandler = $__1.streamToSimpleHandler,
     validateSimpleTypes = $__1.validateSimpleTypes;
-var simpleHandlerLoader = $traceurRuntime.assertObject(require('./util/loader.js')).simpleHandlerLoader;
-var $__1 = $traceurRuntime.assertObject(require('./util/wrap.js')),
-    safeBuilder = $__1.safeBuilder,
-    safeHandler = $__1.safeHandler;
-var $__1 = $traceurRuntime.assertObject(require('./stream-handler.js')),
-    StreamHandler = $__1.StreamHandler,
-    StreamHandlerBuilder = $__1.StreamHandlerBuilder;
+var simpleHandlerLoader = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).simpleHandlerLoader;
+var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}),
+    safeBuilder = $__3.safeBuilder,
+    safeHandler = $__3.safeHandler;
+var $__4 = ($__stream_45_handler_46_js__ = require("./stream-handler.js"), $__stream_45_handler_46_js__ && $__stream_45_handler_46_js__.__esModule && $__stream_45_handler_46_js__ || {default: $__stream_45_handler_46_js__}),
+    StreamHandler = $__4.StreamHandler,
+    StreamHandlerBuilder = $__4.StreamHandlerBuilder;
 var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, inType, outType) {
   var options = arguments[3] !== (void 0) ? arguments[3] : {};
   var err = validateSimpleTypes([inType, outType]);
@@ -39,10 +44,10 @@ var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, i
 var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 ($traceurRuntime.createClass)(SimpleHandlerBuilder, {
   get streamHandlerBuilder() {
-    var $__1 = this,
-        simpleHandlerBuilder = $__1.simpleHandlerBuilder,
-        inType = $__1.inType,
-        outType = $__1.outType;
+    var $__6 = this,
+        simpleHandlerBuilder = $__6.simpleHandlerBuilder,
+        inType = $__6.inType,
+        outType = $__6.outType;
     return (function(config) {
       return simpleHandlerBuilder(config).then((function(simpleHandler) {
         return simpleToStreamHandler(simpleHandler, inType, outType);

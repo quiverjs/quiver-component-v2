@@ -20,7 +20,8 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__0 = $traceurRuntime.assertObject(require('quiver-object')),
+var $__quiver_45_object__;
+var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
     copy = $__0.copy,
     noCopy = $__0.noCopy;
 var configNormalized = Symbol('ConfigNormalized');

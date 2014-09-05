@@ -1,10 +1,13 @@
 "use strict";
-require('traceur');
-var $__0 = $traceurRuntime.assertObject(require('../lib/export.js')),
+var $__traceur_64_0_46_0_46_58__,
+    $___46__46__47_lib_47_export_46_js__,
+    $__quiver_45_promise__;
+($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     simpleHandlerBuilder = $__0.simpleHandlerBuilder,
     transformFilter = $__0.transformFilter,
     handlerBundle = $__0.handlerBundle;
-var async = $traceurRuntime.assertObject(require('quiver-promise')).async;
+var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
@@ -27,11 +30,11 @@ describe('bundle component test', (function() {
       decrement: decrement
     };
   })).simpleHandler('getCount', 'void', 'text').simpleHandler('increment', 'void', 'void').simpleHandler('decrement', 'void', 'void');
-  var $__0 = $traceurRuntime.assertObject(bundle.handlerComponents),
-      getCount = $__0.getCount,
-      increment = $__0.increment,
-      decrement = $__0.decrement;
-  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__1() {
+  var $__2 = bundle.handlerComponents,
+      getCount = $__2.getCount,
+      increment = $__2.increment,
+      decrement = $__2.decrement;
+  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__3() {
     var config,
         getCountHandler,
         incrementHandler,
@@ -130,9 +133,9 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__1, this);
+    }, $__3, this);
   })));
-  it('initialize test', async($traceurRuntime.initGeneratorFunction(function $__2() {
+  it('initialize test', async($traceurRuntime.initGeneratorFunction(function $__4() {
     var config,
         incrementHandler,
         getCountHandler;
@@ -171,11 +174,11 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__2, this);
+    }, $__4, this);
   })));
-  it('privatized bundle test', async($traceurRuntime.initGeneratorFunction(function $__3() {
+  it('privatized bundle test', async($traceurRuntime.initGeneratorFunction(function $__5() {
     var bundle2,
-        $__0,
+        $__2,
         getCount2,
         increment2,
         config,
@@ -188,7 +191,7 @@ describe('bundle component test', (function() {
         switch ($ctx.state) {
           case 0:
             bundle2 = bundle.makePrivate();
-            $__0 = $traceurRuntime.assertObject(bundle2.handlerComponents), getCount2 = $__0.getCount, increment2 = $__0.increment;
+            $__2 = bundle2.handlerComponents, getCount2 = $__2.getCount, increment2 = $__2.increment;
             config = {};
             $ctx.state = 62;
             break;
@@ -300,9 +303,9 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__3, this);
+    }, $__5, this);
   })));
-  it('privatized test', async($traceurRuntime.initGeneratorFunction(function $__4() {
+  it('privatized test', async($traceurRuntime.initGeneratorFunction(function $__6() {
     var privateTable,
         getCount2,
         increment2,
@@ -429,13 +432,13 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__4, this);
+    }, $__6, this);
   })));
-  it('privatized middleware test', async($traceurRuntime.initGeneratorFunction(function $__5() {
+  it('privatized middleware test', async($traceurRuntime.initGeneratorFunction(function $__7() {
     var prefixer,
         prefixFilter,
         bundle2,
-        $__0,
+        $__2,
         getCount2,
         increment2,
         bundle3,
@@ -458,10 +461,10 @@ describe('bundle component test', (function() {
             }), 'text', 'text');
             prefixFilter = transformFilter(prefixer, 'out');
             bundle2 = bundle.makePrivate();
-            $__0 = $traceurRuntime.assertObject(bundle2.handlerComponents), getCount2 = $__0.getCount, increment2 = $__0.increment;
+            $__2 = bundle2.handlerComponents, getCount2 = $__2.getCount, increment2 = $__2.increment;
             getCount2.addMiddleware(prefixFilter);
             bundle3 = bundle2.makePrivate();
-            $__0 = $traceurRuntime.assertObject(bundle3.handlerComponents), getCount3 = $__0.getCount, increment3 = $__0.increment;
+            $__2 = bundle3.handlerComponents, getCount3 = $__2.getCount, increment3 = $__2.increment;
             config = {prefix: 'foo'};
             $ctx.state = 62;
             break;
@@ -577,6 +580,6 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__5, this);
+    }, $__7, this);
   })));
 }));

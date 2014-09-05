@@ -11,10 +11,11 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var loadHandleable = $traceurRuntime.assertObject(require('./util/loader.js')).loadHandleable;
+var $__util_47_loader_46_js__;
+var loadHandleable = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).loadHandleable;
 var Component = function Component() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  var name = $traceurRuntime.assertObject(options).name;
+  var name = options.name;
   this._name = name;
   this._id = Symbol();
   this._options = options;
@@ -48,9 +49,9 @@ var Component = function Component() {
   },
   privatize: function(privateInstance, privateTable) {},
   privatizedConstructor: function() {
-    var $__0 = this;
+    var $__1 = this;
     return (function(privateTable) {
-      return $__0.makePrivate(privateTable);
+      return $__1.makePrivate(privateTable);
     });
   },
   toJson: function() {

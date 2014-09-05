@@ -8,11 +8,16 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
-var StreamFilter = $traceurRuntime.assertObject(require('./filter.js')).StreamFilter;
-var HandlerComponent = $traceurRuntime.assertObject(require('./component.js')).HandlerComponent;
-var loadStreamHandler = $traceurRuntime.assertObject(require('./util/loader.js')).loadStreamHandler;
+var $__quiver_45_promise__,
+    $__quiver_45_object__,
+    $__filter_46_js__,
+    $__component_46_js__,
+    $__util_47_loader_46_js__;
+var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
+var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
+var StreamFilter = ($__filter_46_js__ = require("./filter.js"), $__filter_46_js__ && $__filter_46_js__.__esModule && $__filter_46_js__ || {default: $__filter_46_js__}).StreamFilter;
+var HandlerComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).HandlerComponent;
+var loadStreamHandler = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).loadStreamHandler;
 var validModes = {
   'in': true,
   'out': true,
@@ -24,8 +29,8 @@ var echoHandler = (function(args, streamable) {
 var wrapHandler = (function(handler) {
   return (function(args) {
     for (var restArgs = [],
-        $__1 = 1; $__1 < arguments.length; $__1++)
-      restArgs[$__1 - 1] = arguments[$__1];
+        $__6 = 1; $__6 < arguments.length; $__6++)
+      restArgs[$__6 - 1] = arguments[$__6];
     return handler.apply(null, $traceurRuntime.spread([copy(args)], restArgs));
   });
 });

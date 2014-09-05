@@ -6,24 +6,25 @@
   },
   "name": "quiver-component",
   "desription": "Component system to allow creation of complex interconnected components",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "homepage": "https://github.com/quiverjs/component",
   "repository": {
     "url": "git@github.com:quiverjs/component.git"
   },
   "dependencies": {
-    "traceur": "~0.0.45",
-    "quiver-error": "~0.1.0",
-    "quiver-object": "~1.0.0",
-    "quiver-promise": "~0.0.2",
-    "quiver-stream-util": "~1.0.0",
-    "quiver-simple-handler": "~1.0.0"
+    "traceur": "~0.0.60",
+    "quiver-http": "~1.1.0",
+    "quiver-error": "~0.1.1",
+    "quiver-object": "~1.1.0",
+    "quiver-promise": "~0.1.0",
+    "quiver-stream-util": "~1.1.0",
+    "quiver-simple-handler": "~1.1.0"
   },
   "devDependencies": {
     "chai": "^1.9.1",
-    "gulp": "^3.8.1",
-    "mocha": "^1.20.1",
-    "gulp-traceur": "^0.7.0",
+    "gulp": "^3.8.7",
+    "mocha": "^1.21.4",
+    "gulp-traceur": "^0.13.0",
     "chai-as-promised": "^4.1.1"
   },
   "bugs": {

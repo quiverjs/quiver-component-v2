@@ -20,10 +20,14 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var copy = $traceurRuntime.assertObject(require('quiver-object')).copy;
-var resolve = $traceurRuntime.assertObject(require('quiver-promise')).resolve;
-var HandleableMiddleware = $traceurRuntime.assertObject(require('./handleable-middleware.js')).HandleableMiddleware;
-var safeHandler = $traceurRuntime.assertObject(require('./util/wrap.js')).safeHandler;
+var $__quiver_45_object__,
+    $__quiver_45_promise__,
+    $__handleable_45_middleware_46_js__,
+    $__util_47_wrap_46_js__;
+var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
+var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
+var HandleableMiddleware = ($__handleable_45_middleware_46_js__ = require("./handleable-middleware.js"), $__handleable_45_middleware_46_js__ && $__handleable_45_middleware_46_js__.__esModule && $__handleable_45_middleware_46_js__ || {default: $__handleable_45_middleware_46_js__}).HandleableMiddleware;
+var safeHandler = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}).safeHandler;
 var ConfigMiddleware = function ConfigMiddleware(configHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._configHandler = safeHandler(configHandler, options);

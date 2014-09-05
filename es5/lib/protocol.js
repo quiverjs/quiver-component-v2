@@ -11,19 +11,24 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__1 = $traceurRuntime.assertObject(require('./component.js')),
-    Component = $__1.Component,
-    HandlerComponent = $__1.HandlerComponent;
-var configMiddleware = $traceurRuntime.assertObject(require('./simple-middleware.js')).configMiddleware;
-var $__1 = $traceurRuntime.assertObject(require('./util/loader.js')),
-    loadHandleable = $__1.loadHandleable,
-    loadStreamHandler = $__1.loadStreamHandler,
-    loadHttpHandler = $__1.loadHttpHandler,
-    simpleHandlerLoader = $__1.simpleHandlerLoader;
-var async = $traceurRuntime.assertObject(require('quiver-promise')).async;
-var $__1 = $traceurRuntime.assertObject(require('quiver-object')),
-    copy = $__1.copy,
-    assertInstanceOf = $__1.assertInstanceOf;
+var $__component_46_js__,
+    $__simple_45_middleware_46_js__,
+    $__util_47_loader_46_js__,
+    $__quiver_45_promise__,
+    $__quiver_45_object__;
+var $__0 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+    Component = $__0.Component,
+    HandlerComponent = $__0.HandlerComponent;
+var configMiddleware = ($__simple_45_middleware_46_js__ = require("./simple-middleware.js"), $__simple_45_middleware_46_js__ && $__simple_45_middleware_46_js__.__esModule && $__simple_45_middleware_46_js__ || {default: $__simple_45_middleware_46_js__}).configMiddleware;
+var $__2 = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}),
+    loadHandleable = $__2.loadHandleable,
+    loadStreamHandler = $__2.loadStreamHandler,
+    loadHttpHandler = $__2.loadHttpHandler,
+    simpleHandlerLoader = $__2.simpleHandlerLoader;
+var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
+var $__4 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
+    copy = $__4.copy,
+    assertInstanceOf = $__4.assertInstanceOf;
 var assertHandlerComponent = (function(handler) {
   return assertInstanceOf(handler, HandlerComponent, 'handler implementation must be ' + 'of type HandlerComponent');
 });
@@ -31,14 +36,14 @@ var assertRepeatedField = (function(fields, fieldName) {
   if (fields[fieldName])
     throw new Error('Field of the same name is ' + 'already defined in protocol: ' + fieldName);
 });
-var loadProtocolHandlers = async($traceurRuntime.initGeneratorFunction(function $__2(config, implMap) {
+var loadProtocolHandlers = async($traceurRuntime.initGeneratorFunction(function $__7(config, implMap) {
   var handlerMap,
-      $__3,
-      $__4,
-      $__5,
-      $__6,
+      $__8,
+      $__9,
+      $__10,
+      $__11,
       key,
-      $__1,
+      $__6,
       component,
       loader;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
@@ -49,32 +54,32 @@ var loadProtocolHandlers = async($traceurRuntime.initGeneratorFunction(function 
           $ctx.state = 20;
           break;
         case 20:
-          $__3 = [];
-          $__4 = implMap;
-          for ($__5 in $__4)
-            $__3.push($__5);
+          $__8 = [];
+          $__9 = implMap;
+          for ($__10 in $__9)
+            $__8.push($__10);
           $ctx.state = 16;
           break;
         case 16:
-          $__6 = 0;
+          $__11 = 0;
           $ctx.state = 14;
           break;
         case 14:
-          $ctx.state = ($__6 < $__3.length) ? 8 : 12;
+          $ctx.state = ($__11 < $__8.length) ? 8 : 12;
           break;
         case 4:
-          $__6++;
+          $__11++;
           $ctx.state = 14;
           break;
         case 8:
-          key = $__3[$__6];
+          key = $__8[$__11];
           $ctx.state = 9;
           break;
         case 9:
-          $ctx.state = (!(key in $__4)) ? 4 : 6;
+          $ctx.state = (!(key in $__9)) ? 4 : 6;
           break;
         case 6:
-          $__1 = $traceurRuntime.assertObject(implMap[key]), component = $__1.component, loader = $__1.loader;
+          $__6 = implMap[key], component = $__6.component, loader = $__6.loader;
           $ctx.state = 11;
           break;
         case 11:
@@ -91,7 +96,7 @@ var loadProtocolHandlers = async($traceurRuntime.initGeneratorFunction(function 
         default:
           return $ctx.end();
       }
-  }, $__2, this);
+  }, $__7, this);
 }));
 var ProtocolImpl = function ProtocolImpl(implMap) {
   this._implMap = implMap;
@@ -105,9 +110,9 @@ var $ProtocolImpl = ProtocolImpl;
     var implMap = this._implMap;
     var newImplMap = {};
     for (var key in implMap) {
-      var $__1 = $traceurRuntime.assertObject(implMap[key]),
-          component = $__1.component,
-          loader = $__1.loader;
+      var $__6 = implMap[key],
+          component = $__6.component,
+          loader = $__6.loader;
       newImplMap[key] = {
         loader: loader,
         component: component.makePrivate(privateTable)
