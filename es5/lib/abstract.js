@@ -22,7 +22,7 @@ var assertHandlerComponent = (function(handler) {
   return assertInstanceOf(handler, HandlerComponent, 'handler implementation must be ' + 'of type HandlerComponent');
 });
 var protocolMiddleware = (function(configKey, loader) {
-  return configMiddleware(async($traceurRuntime.initGeneratorFunction(function $__6(config) {
+  return configMiddleware(async($traceurRuntime.initGeneratorFunction(function $__7(config) {
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -40,33 +40,27 @@ var protocolMiddleware = (function(configKey, loader) {
           default:
             return $ctx.end();
         }
-    }, $__6, this);
+    }, $__7, this);
   })));
 });
 var ProtocolMiddleware = function ProtocolMiddleware(configKey, protocolImpl) {
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   this._configKey = configKey;
-  this._protocolImpl = protocolImpl;
   options.safeWrapped = true;
   $traceurRuntime.superCall(this, $ProtocolMiddleware.prototype, "constructor", [null, options]);
+  this.subComponents.protocolImpl = protocolImpl;
 };
 var $ProtocolMiddleware = ProtocolMiddleware;
-($traceurRuntime.createClass)(ProtocolMiddleware, {
-  get configHandler() {
+($traceurRuntime.createClass)(ProtocolMiddleware, {get configHandler() {
     var configKey = this._configKey;
-    var protocolImpl = this._protocolImpl;
+    var protocolImpl = this.subComponents.protocolImpl;
     return (function(config) {
       return protocolImpl.loadHandlers(config).then((function(handlerMap) {
         config[configKey] = handlerMap;
         return config;
       }));
     });
-  },
-  privatize: function(privateInstance, privateTable) {
-    privateInstance._protocolImpl = this._protocolImpl.makePrivate(privateTable);
-    $traceurRuntime.superCall(this, $ProtocolMiddleware.prototype, "privatize", [privateInstance, privateTable]);
-  }
-}, {}, ConfigMiddleware);
+  }}, {}, ConfigMiddleware);
 var AbstractComponent = function AbstractComponent(configKey, protocol, component) {
   assertInstanceOf(protocol, Protocol, 'protocol must be instance of Protocol');
   if (!(component instanceof HandlerComponent || component instanceof MiddlewareComponent)) {

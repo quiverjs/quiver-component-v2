@@ -27,10 +27,10 @@ var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, t
   var $__4 = options,
       loader = ($__5 = $__4.loader) === void 0 ? loadHandler : $__5;
   this._handlerLoader = loader;
-  this._inputHandlerComponent = handlerComponent;
   this._toInputConfig = toConfig;
   options.safeWrapped = true;
   $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "constructor", [null, options]);
+  this.subComponents.inputHandler = handlerComponent;
 };
 var $InputHandlerMiddleware = InputHandlerMiddleware;
 ($traceurRuntime.createClass)(InputHandlerMiddleware, {
@@ -46,11 +46,7 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
     });
   },
   get inputHandlerComponent() {
-    return this._inputHandlerComponent;
-  },
-  privatize: function(privateInstance, privateTable) {
-    privateInstance._inputHandlerComponent = this._inputHandlerComponent.makePrivate(privateTable);
-    $traceurRuntime.superCall(this, $InputHandlerMiddleware.prototype, "privatize", [privateInstance, privateTable]);
+    return this.subComponents.inputHandler;
   },
   get type() {
     return 'input handler middleware';

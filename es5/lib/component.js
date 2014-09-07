@@ -13,12 +13,29 @@ Object.defineProperties(exports, {
 });
 var $__util_47_loader_46_js__;
 var loadHandleable = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).loadHandleable;
+var assertComponent = (function(component) {
+  if (!(component instanceof Component)) {
+    throw new Error('object must be of type Component');
+  }
+});
 var Component = function Component() {
+  var $__4;
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  var name = options.name;
+  var $__3 = options,
+      name = $__3.name,
+      subComponents = ($__4 = $__3.subComponents) === void 0 ? {} : $__4;
   this._name = name;
   this._id = Symbol();
   this._options = options;
+  for (var key in subComponents) {
+    var component = subComponents[key];
+    if (Array.isArray(component)) {
+      component.forEach(assertComponent);
+    } else {
+      assertComponent(component);
+    }
+  }
+  this._subComponents = subComponents;
 };
 ($traceurRuntime.createClass)(Component, {
   get name() {
@@ -29,6 +46,9 @@ var Component = function Component() {
   },
   get type() {
     return 'component';
+  },
+  get subComponents() {
+    return this._subComponents;
   },
   makePrivate: function() {
     var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
@@ -47,7 +67,21 @@ var Component = function Component() {
     original.privatize(privateInstance, privateTable);
     return privateInstance;
   },
-  privatize: function(privateInstance, privateTable) {},
+  privatize: function(privateInstance, privateTable) {
+    var subComponents = (this).subComponents;
+    var newSubComponents = {};
+    for (var key in subComponents) {
+      var component = subComponents[key];
+      if (Array.isArray(component)) {
+        newSubComponents[key] = component.map((function(component) {
+          return component.makePrivate(privateTable);
+        }));
+      } else {
+        newSubComponents[key] = component.makePrivate(privateTable);
+      }
+    }
+    privateInstance._subComponents = newSubComponents;
+  },
   privatizedConstructor: function() {
     var $__1 = this;
     return (function(privateTable) {

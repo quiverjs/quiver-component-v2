@@ -44,9 +44,10 @@ var Route = function Route(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   if (!(handlerComponent instanceof HandlerComponent))
     throw new TypeError('input handler component must be of type HandlerComponent');
-  this._handlerComponent = handlerComponent;
   var urlBuilder = options.urlBuilder;
   this._urlBuilder = urlBuilder;
+  $traceurRuntime.superCall(this, $Route.prototype, "constructor", [options]);
+  this.subComponents.routeHandler = handlerComponent;
 };
 var $Route = Route;
 ($traceurRuntime.createClass)(Route, {
@@ -56,11 +57,7 @@ var $Route = Route;
     return urlManagedBuilder(handlerComponent, urlBuilder);
   },
   get handlerComponent() {
-    return this._handlerComponent;
-  },
-  privatize: function(privateInstance, privateTable) {
-    privateInstance._handlerComponent = this._handlerComponent.makePrivate(privateTable);
-    $traceurRuntime.superCall(this, $Route.prototype, "privatize", [privateInstance, privateTable]);
+    return this.subComponents.routeHandler;
   },
   get urlBuilder() {
     return this._urlBuilder;

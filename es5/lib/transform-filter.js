@@ -47,12 +47,12 @@ var TransformFilter = function TransformFilter(handlerComponent, transformMode) 
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   if (!(handlerComponent instanceof HandlerComponent))
     throw new TypeError('input handler component must be of type HandlerComponent');
-  this._transformComponent = handlerComponent;
   if (!validModes[transformMode])
     throw new TypeError('invalid transform mode provided in options');
   this._transformMode = transformMode;
   options.safeWrapped = true;
   $traceurRuntime.superCall(this, $TransformFilter.prototype, "constructor", [null, options]);
+  this.subComponents.transformComponent = handlerComponent;
 };
 var $TransformFilter = TransformFilter;
 ($traceurRuntime.createClass)(TransformFilter, {
@@ -75,14 +75,10 @@ var $TransformFilter = TransformFilter;
     });
   },
   get transformComponent() {
-    return this._transformComponent;
+    return this.subComponents.transformComponent;
   },
   get transformMode() {
     return this._transformMode;
-  },
-  privatize: function(privateInstance, privateTable) {
-    privateInstance._transformComponent = this._transformComponent.makePrivate(privateTable);
-    $traceurRuntime.superCall(this, $TransformFilter.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'transform filter';

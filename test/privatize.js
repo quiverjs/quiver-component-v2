@@ -110,8 +110,8 @@ describe('privatized component test', () => {
     var filter2 = filter.makePrivate()
 
     should.not.equal(filter1.id, filter2.id)
-    should.not.equal(filter1._transformComponent.id, 
-      filter2._transformComponent.id)
+    should.not.equal(filter1.transformComponent.id, 
+      filter2.transformComponent.id)
 
     var greet = simpleHandler(
       (args, name) =>

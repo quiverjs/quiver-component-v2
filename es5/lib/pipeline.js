@@ -69,34 +69,28 @@ var Pipeline = function Pipeline() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   var $__4 = options,
       pipelineCombinators = ($__5 = $__4.pipelineCombinators) === void 0 ? defaultCombinators : $__5;
-  this._pipelineHandlers = [];
   this._pipelineCombinators = pipelineCombinators;
   $traceurRuntime.superCall(this, $Pipeline.prototype, "constructor", [options]);
+  this.subComponents.pipelineHandlers = [];
 };
 var $Pipeline = Pipeline;
 ($traceurRuntime.createClass)(Pipeline, {
   addPipe: function(component) {
     assertInstanceOf(component, HandlerComponent, 'component must be of type HandlerComponent');
-    this._pipelineHandlers.push(component);
+    this.subComponents.pipelineHandlers.push(component);
     return this;
   },
   get pipelineHandlers() {
-    return this._pipelineHandlers.slice();
+    return this.subComponents.pipelineHandlers;
   },
   get mainHandleableBuilder() {
-    var builders = this._pipelineHandlers.map((function(component) {
+    var builders = this.pipelineHandlers.map((function(component) {
       return component.handleableBuilder;
     }));
-    var combinators = this._pipelineCombinators;
     if (builders.length == 0)
       throw new Error('Pipeline must contain at least one handler component');
+    var combinators = this._pipelineCombinators;
     return pipelineBuilder(builders, combinators);
-  },
-  privatize: function(privateInstance, privateTable) {
-    privateInstance._pipelineHandlers = this._pipelineHandlers.map((function(component) {
-      return component.makePrivate(privateTable);
-    }));
-    $traceurRuntime.superCall(this, $Pipeline.prototype, "privatize", [privateInstance, privateTable]);
   },
   get type() {
     return 'pipeline';
