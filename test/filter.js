@@ -1,15 +1,18 @@
 import 'traceur'
 
-import { resolve } from 'quiver-promise'
+import { async, resolve } from 'quiver-promise'
 import { streamToSimpleHandler } from 'quiver-simple-handler'
 import { 
   streamableToText, textToStreamable, 
   emptyStreamable, jsonToStreamable
 } from 'quiver-stream-util'
 
+import { RequestHead } from 'quiver-http'
+
 import {
-  simpleHandler, simpleHandlerBuilder, handleable,
-  streamFilter, transformFilter,
+  simpleHandler, simpleHandlerBuilder, 
+  handleable as makeHandleable,
+  streamFilter, httpFilter, transformFilter,
   argsFilter, argsBuilderFilter, errorFilter,
   inputHandlerMiddleware
 } from '../lib/export.js'
@@ -27,7 +30,7 @@ var uppercaseStream = streamable =>
   })
 
 describe('filter test', () => {
-  it('simple handler', () => {
+  it('simple handler', async(function*() {
     var filter = streamFilter(
       (config, handler) =>
         (args, streamable) =>
@@ -41,11 +44,13 @@ describe('filter test', () => {
       }, 'text', 'text')
     .addMiddleware(filter)
 
-    return main.loadHandler({}).then(handler =>
-      handler({}, 'hello')).should.eventually.equal('GOODBYE!')
-  })
+    var handler = yield main.loadHandler({})
+    
+    yield handler({}, 'hello')
+      .should.eventually.equal('GOODBYE!')
+  }))
 
-  it('transform filter', () => {
+  it('transform filter', async(function*() {
     var uppercase = simpleHandler(
       (args, input) =>
         input.toUpperCase() + '!', 
@@ -60,9 +65,11 @@ describe('filter test', () => {
       }, 'text', 'text')
     .addMiddleware(filter)
 
-    return main.loadHandler({}).then(handler =>
-      handler({}, 'hello')).should.eventually.equal('GOODBYE!')
-  })
+    var handler = yield main.loadHandler({})
+    
+    yield handler({}, 'hello')
+      .should.eventually.equal('GOODBYE!')
+  }))
 
   it('args filter', () => {
     var filter = argsFilter(
@@ -106,14 +113,14 @@ describe('filter test', () => {
       .should.eventually.equal('foo')
   })
 
-  it('args helper filter', () => {
+  it('args helper filter', async(function*() {
     var filter = argsFilter(
       args => {
         args.foo = 'bar'
         return args
       })
 
-    var main = handleable({
+    var main = makeHandleable({
       streamHandler: (args, streamable) => {
         args.foo.should.equal('bar')
         return textToStreamable('main')
@@ -127,23 +134,21 @@ describe('filter test', () => {
     })
     .addMiddleware(filter)
 
-    return main.loadHandleable({}).then(handleable => {
-      var mainHandler = streamToSimpleHandler(
-        handleable.streamHandler, 'void', 'text')
+    var handleable = yield main.loadHandleable({})
+    var mainHandler = streamToSimpleHandler(
+      handleable.streamHandler, 'void', 'text')
 
-      var cacheIdHandler = streamToSimpleHandler(
-        handleable.meta.cacheId, 'void', 'json')
+    var cacheIdHandler = streamToSimpleHandler(
+      handleable.meta.cacheId, 'void', 'json')
 
-      var p1 = mainHandler({}).should.eventually.equal('main')
-      var p2 = cacheIdHandler({}).then(json => {
-        json.cacheId.should.equal(123)
-      })
+    yield mainHandler({})
+      .should.eventually.equal('main')
 
-      return Promise.all([p1, p2])
-    })
-  })
+    var json = yield cacheIdHandler({})
+    json.cacheId.should.equal(123)
+  }))
 
-  it('error filter', () => {
+  it('error filter', async(function*() {
     var filter = errorFilter(
       err => textToStreamable('error caught from filter'))
 
@@ -153,11 +158,13 @@ describe('filter test', () => {
       }, 'void', 'text')
     .addMiddleware(filter)
 
-    return main.loadHandler({}).then(handler =>
-      handler({})).should.eventually.equal('error caught from filter')
-  })
+    var handler = yield main.loadHandler({})
 
-  it('input handler', () => {
+    yield handler({}).should.eventually.equal(
+      'error caught from filter')
+  }))
+
+  it('input handler', async(function*() {
     var uppercase = simpleHandler(
       (args, input) =>  input.toUpperCase() + '!', 
       'text', 'text')
@@ -170,18 +177,50 @@ describe('filter test', () => {
         var inHandler = config.inHandler
         should.exist(inHandler)
 
-        return (args, input) =>
-          inHandler(args, input).then(result => ({
+        return async(function*(args, input) {
+          var result = yield inHandler(args, input)
+          
+          return {
             status: 'ok',
             result
-          }))
+          }
+        })
       }, 'text', 'json')
     .addMiddleware(filter)
 
-    return main.loadHandler({}).then(handler =>
-      handler({}, 'hello').then(json => {
-        json.status.should.equal('ok')
-        json.result.should.equal('HELLO!')
-      }))
-  })
+    var handler = yield main.loadHandler({})
+    var json = yield handler({}, 'hello')
+
+    json.status.should.equal('ok')
+    json.result.should.equal('HELLO!')
+  }))
+
+  it('stream handler on http filter', async(function*() {
+    var filter = httpFilter(
+      (config, handler) => handler)
+
+    var main = simpleHandler(
+      args => 'Hello World',
+      'void', 'text')
+    .addMiddleware(filter)
+
+    var handleable = yield main.loadHandleable({})
+
+    var {
+      streamHandler,
+      httpHandler
+    } = handleable
+
+    should.not.exist(streamHandler)
+    should.exist(httpHandler)
+
+    var [
+      responseHead, responseStreamable
+    ] = yield httpHandler(new RequestHead(), emptyStreamable())
+
+    responseHead.statusCode.should.equal(200)
+
+    yield streamableToText(responseStreamable)
+      .should.eventually.equal('Hello World')
+  }))
 })

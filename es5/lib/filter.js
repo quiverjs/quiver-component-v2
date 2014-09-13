@@ -34,13 +34,15 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__quiver_45_promise__,
+    $__quiver_45_http__,
     $__util_47_wrap_46_js__,
     $__handleable_45_middleware_46_js__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
-var $__2 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}),
-    safeHandler = $__2.safeHandler,
-    safeBuilder = $__2.safeBuilder;
+var streamToHttpHandler = ($__quiver_45_http__ = require("quiver-http"), $__quiver_45_http__ && $__quiver_45_http__.__esModule && $__quiver_45_http__ || {default: $__quiver_45_http__}).streamToHttpHandler;
+var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}),
+    safeHandler = $__3.safeHandler,
+    safeBuilder = $__3.safeBuilder;
 var HandleableMiddleware = ($__handleable_45_middleware_46_js__ = require("./handleable-middleware.js"), $__handleable_45_middleware_46_js__ && $__handleable_45_middleware_46_js__.__esModule && $__handleable_45_middleware_46_js__ || {default: $__handleable_45_middleware_46_js__}).HandleableMiddleware;
 var filterToHandleableFilter = (function(filter, handlerKey) {
   return (function(config, handleable) {
@@ -91,7 +93,16 @@ var StreamFilter = function StreamFilter(filter) {
 var $StreamFilter = StreamFilter;
 ($traceurRuntime.createClass)(StreamFilter, {
   get handleableFilter() {
-    return streamToHandleableFilter(this.streamFilter);
+    var streamFilter = this.streamFilter;
+    return (function(config, handleable) {
+      var handler = handleable.streamHandler;
+      if (!handler)
+        return resolve(handleable);
+      return streamFilter(config, handler).then((function(filteredHandler) {
+        handleable.streamHandler = filteredHandler;
+        return handleable;
+      }));
+    });
   },
   get streamFilter() {
     var streamFilter = this._streamFilter;
@@ -111,12 +122,26 @@ var HttpFilter = function HttpFilter(filter) {
 var $HttpFilter = HttpFilter;
 ($traceurRuntime.createClass)(HttpFilter, {
   get handleableFilter() {
-    return httpToHandleableFilter(this.httpFilter);
+    var httpFilter = this.httpFilter;
+    return (function(config, handleable) {
+      var httpHandler = handleable.httpHandler;
+      if (!httpHandler) {
+        var streamHandler = handleable.streamHandler;
+        if (!streamHandler)
+          return resolve(handleable);
+        httpHandler = streamToHttpHandler(streamHandler);
+        handleable = {httpHandler: httpHandler};
+      }
+      return httpFilter(config, httpHandler).then((function(filteredHandler) {
+        handleable.httpHandler = filteredHandler;
+        return handleable;
+      }));
+    });
   },
   get httpFilter() {
     var httpFilter = this._httpFilter;
     if (!httpFilter)
-      throw new Error('streamFilter is not defined');
+      throw new Error('httpFilter is not defined');
     return httpFilter;
   },
   get type() {
