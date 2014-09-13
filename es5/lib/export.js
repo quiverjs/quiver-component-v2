@@ -252,6 +252,9 @@ Object.defineProperties(exports, {
   getHandlerMap: {get: function() {
       return getHandlerMap;
     }},
+  normalizeConfig: {get: function() {
+      return normalizeConfig;
+    }},
   __esModule: {value: true}
 });
 var $__component_46_js__,
@@ -382,5 +385,6 @@ var $__21 = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47
     simpleHandlerLoader = $__21.simpleHandlerLoader;
 var $__22 = ($__util_47_config_46_js__ = require("./util/config.js"), $__util_47_config_46_js__ && $__util_47_config_46_js__.__esModule && $__util_47_config_46_js__ || {default: $__util_47_config_46_js__}),
     getHandleable = $__22.getHandleable,
-    getHandlerMap = $__22.getHandlerMap;
+    getHandlerMap = $__22.getHandlerMap,
+    normalizeConfig = $__22.normalizeConfig;
 ;

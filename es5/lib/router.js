@@ -14,32 +14,78 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__route_46_js__,
+var $__quiver_45_object__,
+    $__quiver_45_promise__,
     $__util_47_router_46_js__,
     $__util_47_route_45_index_46_js__,
+    $__extensible_45_component_46_js__,
     $__component_46_js__,
     $__mixin_45_middleware_46_js__,
-    $__extensible_45_component_46_js__,
+    $__route_46_js__,
     $__util_47_middleware_46_js__,
-    $__quiver_45_object__;
-var $__0 = ($__route_46_js__ = require("./route.js"), $__route_46_js__ && $__route_46_js__.__esModule && $__route_46_js__ || {default: $__route_46_js__}),
-    Route = $__0.Route,
-    StaticRoute = $__0.StaticRoute,
-    DynamicRoute = $__0.DynamicRoute,
-    RegexRoute = $__0.RegexRoute,
-    ParamRoute = $__0.ParamRoute;
+    $__util_47_config__;
+var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
+var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var routerHandleable = ($__util_47_router_46_js__ = require("./util/router.js"), $__util_47_router_46_js__ && $__util_47_router_46_js__.__esModule && $__util_47_router_46_js__ || {default: $__util_47_router_46_js__}).routerHandleable;
 var createRouteIndex = ($__util_47_route_45_index_46_js__ = require("./util/route-index.js"), $__util_47_route_45_index_46_js__ && $__util_47_route_45_index_46_js__.__esModule && $__util_47_route_45_index_46_js__ || {default: $__util_47_route_45_index_46_js__}).createRouteIndex;
-var $__3 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
-    Component = $__3.Component,
-    HandlerComponent = $__3.HandlerComponent;
-var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
 var ExtensibleHandler = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}).ExtensibleHandler;
-var $__6 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
-    combineMiddlewareComponents = $__6.combineMiddlewareComponents,
-    combineBuilderMiddleware = $__6.combineBuilderMiddleware,
-    combineBuilderWithMiddleware = $__6.combineBuilderWithMiddleware;
-var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
+var $__5 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+    Component = $__5.Component,
+    HandlerComponent = $__5.HandlerComponent;
+var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
+var $__7 = ($__route_46_js__ = require("./route.js"), $__route_46_js__ && $__route_46_js__.__esModule && $__route_46_js__ || {default: $__route_46_js__}),
+    Route = $__7.Route,
+    StaticRoute = $__7.StaticRoute,
+    DynamicRoute = $__7.DynamicRoute,
+    RegexRoute = $__7.RegexRoute,
+    ParamRoute = $__7.ParamRoute;
+var $__8 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+    combineMiddlewareComponents = $__8.combineMiddlewareComponents,
+    combineBuilderMiddleware = $__8.combineBuilderMiddleware,
+    combineBuilderWithMiddleware = $__8.combineBuilderWithMiddleware;
+var normalizeConfig = ($__util_47_config__ = require("./util/config"), $__util_47_config__ && $__util_47_config__.__esModule && $__util_47_config__ || {default: $__util_47_config__}).normalizeConfig;
+var buildRoutes = async($traceurRuntime.initGeneratorFunction(function $__11(config, routeIndex, routes, middleware) {
+  var i,
+      route,
+      component,
+      builder,
+      handleable;
+  return $traceurRuntime.createGeneratorInstance(function($ctx) {
+    while (true)
+      switch ($ctx.state) {
+        case 0:
+          i = 0;
+          $ctx.state = 11;
+          break;
+        case 11:
+          $ctx.state = (i < routes.length) ? 5 : -2;
+          break;
+        case 8:
+          i++;
+          $ctx.state = 11;
+          break;
+        case 5:
+          route = routes[i];
+          component = route.handlerComponent;
+          builder = route.handleableBuilder;
+          $ctx.state = 6;
+          break;
+        case 6:
+          $ctx.state = 2;
+          return middleware(copy(config), builder);
+        case 2:
+          handleable = $ctx.sent;
+          $ctx.state = 4;
+          break;
+        case 4:
+          route.addRoute(routeIndex, handleable);
+          $ctx.state = 8;
+          break;
+        default:
+          return $ctx.end();
+      }
+  }, $__11, this);
+}));
 var RouteList = function RouteList() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._routes = [];
@@ -72,14 +118,8 @@ var $RouteList = RouteList;
   },
   buildRoutes: function(config, routeIndex) {
     var middleware = this.extendMiddleware;
-    var promises = this.routes.map((function(route) {
-      var component = route.handlerComponent;
-      var builder = route.handleableBuilder;
-      return middleware(copy(config), builder).then((function(handleable) {
-        return route.addRoute(routeIndex, handleable);
-      }));
-    }));
-    return Promise.all(promises);
+    var routes = this.routes;
+    return buildRoutes(config, routeIndex, routes, middleware);
   },
   privatize: function(privateInstance, privateTable) {
     privateInstance._routes = this._routes.map((function(route) {
@@ -157,21 +197,56 @@ var $Router = Router;
     return this;
   },
   get mainHandleableBuilder() {
-    var $__8 = this;
     var routeLists = this.routeLists;
-    return (function(config) {
-      var routeIndex = createRouteIndex();
-      var promises = routeLists.map((function(routeList) {
-        return routeList.buildRoutes(config, routeIndex);
-      }));
-      var defaultHandler = $__8.defaultHandler;
-      if (defaultHandler) {
-        promises.push(loadDefaultRoute(config, defaultHandler, routeIndex));
-      }
-      return Promise.all(promises).then((function() {
-        return routerHandleable(routeIndex);
-      }));
-    });
+    var defaultHandler = this.defaultHandler;
+    return async($traceurRuntime.initGeneratorFunction(function $__12(config) {
+      var routeIndex,
+          i;
+      return $traceurRuntime.createGeneratorInstance(function($ctx) {
+        while (true)
+          switch ($ctx.state) {
+            case 0:
+              normalizeConfig(config);
+              routeIndex = createRouteIndex();
+              $ctx.state = 16;
+              break;
+            case 16:
+              i = 0;
+              $ctx.state = 7;
+              break;
+            case 7:
+              $ctx.state = (i < routeLists.length) ? 1 : 5;
+              break;
+            case 4:
+              i++;
+              $ctx.state = 7;
+              break;
+            case 1:
+              $ctx.state = 2;
+              return routeLists[i].buildRoutes(config, routeIndex);
+            case 2:
+              $ctx.maybeThrow();
+              $ctx.state = 4;
+              break;
+            case 5:
+              $ctx.state = (defaultHandler) ? 8 : 11;
+              break;
+            case 8:
+              $ctx.state = 9;
+              return loadDefaultRoute(config, defaultHandler, routeIndex);
+            case 9:
+              $ctx.maybeThrow();
+              $ctx.state = 11;
+              break;
+            case 11:
+              $ctx.returnValue = routerHandleable(routeIndex);
+              $ctx.state = -2;
+              break;
+            default:
+              return $ctx.end();
+          }
+      }, $__12, this);
+    }));
   },
   privatize: function(privateInstance, privateTable) {
     privateInstance._routeLists = this._routeLists.map((function(routeList) {
