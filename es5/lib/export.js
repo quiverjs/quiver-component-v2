@@ -243,6 +243,9 @@ Object.defineProperties(exports, {
   loadSimpleHandler: {get: function() {
       return loadSimpleHandler;
     }},
+  simpleHandlerLoader: {get: function() {
+      return simpleHandlerLoader;
+    }},
   getHandleable: {get: function() {
       return getHandleable;
     }},
@@ -375,7 +378,8 @@ var $__21 = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47
     loadHandleable = $__21.loadHandleable,
     loadStreamHandler = $__21.loadStreamHandler,
     loadHttpHandler = $__21.loadHttpHandler,
-    loadSimpleHandler = $__21.loadSimpleHandler;
+    loadSimpleHandler = $__21.loadSimpleHandler,
+    simpleHandlerLoader = $__21.simpleHandlerLoader;
 var $__22 = ($__util_47_config_46_js__ = require("./util/config.js"), $__util_47_config_46_js__ && $__util_47_config_46_js__.__esModule && $__util_47_config_46_js__ || {default: $__util_47_config_46_js__}),
     getHandleable = $__22.getHandleable,
     getHandlerMap = $__22.getHandlerMap;
