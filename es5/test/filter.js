@@ -1,11 +1,11 @@
 "use strict";
-var $__traceur_64_0_46_0_46_58__,
+var $__traceur_64_0_46_0_46_6__,
     $__quiver_45_promise__,
     $__quiver_45_simple_45_handler__,
     $__quiver_45_stream_45_util__,
     $__quiver_45_http__,
     $___46__46__47_lib_47_export_46_js__;
-($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
 var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
     async = $__0.async,
     resolve = $__0.resolve;
@@ -38,7 +38,7 @@ var uppercaseStream = (function(streamable) {
   }));
 });
 describe('filter test', (function() {
-  it('simple handler', async($traceurRuntime.initGeneratorFunction(function $__6() {
+  it('simple handler', async($traceurRuntime.initGeneratorFunction(function $__7() {
     var filter,
         main,
         handler;
@@ -76,9 +76,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__6, this);
+    }, $__7, this);
   })));
-  it('transform filter', async($traceurRuntime.initGeneratorFunction(function $__7() {
+  it('transform filter', async($traceurRuntime.initGeneratorFunction(function $__8() {
     var uppercase,
         filter,
         main,
@@ -114,7 +114,7 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__7, this);
+    }, $__8, this);
   })));
   it('args filter', (function() {
     var filter = argsFilter((function(args) {
@@ -145,7 +145,7 @@ describe('filter test', (function() {
       return handler({});
     })).should.eventually.equal('foo');
   }));
-  it('args helper filter', async($traceurRuntime.initGeneratorFunction(function $__8() {
+  it('args helper filter', async($traceurRuntime.initGeneratorFunction(function $__9() {
     var filter,
         main,
         handleable,
@@ -205,9 +205,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__8, this);
+    }, $__9, this);
   })));
-  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__9() {
+  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__10() {
     var filter,
         main,
         handler;
@@ -240,9 +240,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__9, this);
+    }, $__10, this);
   })));
-  it('input handler', async($traceurRuntime.initGeneratorFunction(function $__10() {
+  it('input handler', async($traceurRuntime.initGeneratorFunction(function $__11() {
     var uppercase,
         filter,
         main,
@@ -259,7 +259,7 @@ describe('filter test', (function() {
             main = simpleHandlerBuilder((function(config) {
               var inHandler = config.inHandler;
               should.exist(inHandler);
-              return async($traceurRuntime.initGeneratorFunction(function $__11(args, input) {
+              return async($traceurRuntime.initGeneratorFunction(function $__12(args, input) {
                 var result;
                 return $traceurRuntime.createGeneratorInstance(function($ctx) {
                   while (true)
@@ -281,7 +281,7 @@ describe('filter test', (function() {
                       default:
                         return $ctx.end();
                     }
-                }, $__11, this);
+                }, $__12, this);
               }));
             }), 'text', 'json').addMiddleware(filter);
             $ctx.state = 10;
@@ -308,23 +308,24 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__10, this);
+    }, $__11, this);
   })));
-  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__11() {
+  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__12() {
     var filter,
         main,
         handleable,
         $__5,
         streamHandler,
         httpHandler,
+        $__6,
         responseHead,
         responseStreamable,
-        $__12,
         $__13,
         $__14,
         $__15,
         $__16,
-        $__17;
+        $__17,
+        $__18;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -351,24 +352,24 @@ describe('filter test', (function() {
             $ctx.state = 20;
             break;
           case 20:
-            $__12 = new RequestHead();
-            $__13 = emptyStreamable();
-            $__14 = httpHandler($__12, $__13);
+            $__13 = new RequestHead();
+            $__14 = emptyStreamable();
+            $__15 = httpHandler($__13, $__14);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__14;
+            return $__15;
           case 6:
-            $__15 = $ctx.sent;
+            $__16 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__5 = $__15;
-            $__16 = $__5[0];
-            responseHead = $__16;
-            $__17 = $__5[1];
-            responseStreamable = $__17;
+            $__6 = $__16;
+            $__17 = $__6[0];
+            responseHead = $__17;
+            $__18 = $__6[1];
+            responseStreamable = $__18;
             $ctx.state = 12;
             break;
           case 12:
@@ -385,6 +386,6 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__11, this);
+    }, $__12, this);
   })));
 }));

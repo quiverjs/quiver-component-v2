@@ -29,10 +29,10 @@ var safeHandler = (function(handler) {
   return safePromised(handler);
 });
 var safeBuilder = (function(builder) {
-  var $__2;
+  var $__3;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  var $__3 = options,
-      safeWrapped = ($__2 = $__3.safeWrapped) === void 0 ? false : $__2;
+  var $__2 = options,
+      safeWrapped = ($__3 = $__2.safeWrapped) === void 0 ? false : $__3;
   if (safeWrapped)
     return builder;
   assertFunction(builder);

@@ -1,8 +1,8 @@
 "use strict";
-var $__traceur_64_0_46_0_46_58__,
+var $__traceur_64_0_46_0_46_6__,
     $___46__46__47_lib_47_export_46_js__,
     $__quiver_45_promise__;
-($__traceur_64_0_46_0_46_58__ = require("traceur"), $__traceur_64_0_46_0_46_58__ && $__traceur_64_0_46_0_46_58__.__esModule && $__traceur_64_0_46_0_46_58__ || {default: $__traceur_64_0_46_0_46_58__});
+($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
 var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     simpleHandlerBuilder = $__0.simpleHandlerBuilder,
     transformFilter = $__0.transformFilter,
@@ -34,7 +34,7 @@ describe('bundle component test', (function() {
       getCount = $__2.getCount,
       increment = $__2.increment,
       decrement = $__2.decrement;
-  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__3() {
+  it('basic test', async($traceurRuntime.initGeneratorFunction(function $__5() {
     var config,
         getCountHandler,
         incrementHandler,
@@ -133,9 +133,9 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__3, this);
+    }, $__5, this);
   })));
-  it('initialize test', async($traceurRuntime.initGeneratorFunction(function $__4() {
+  it('initialize test', async($traceurRuntime.initGeneratorFunction(function $__6() {
     var config,
         incrementHandler,
         getCountHandler;
@@ -174,11 +174,11 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__4, this);
+    }, $__6, this);
   })));
-  it('privatized bundle test', async($traceurRuntime.initGeneratorFunction(function $__5() {
+  it('privatized bundle test', async($traceurRuntime.initGeneratorFunction(function $__7() {
     var bundle2,
-        $__2,
+        $__3,
         getCount2,
         increment2,
         config,
@@ -191,7 +191,7 @@ describe('bundle component test', (function() {
         switch ($ctx.state) {
           case 0:
             bundle2 = bundle.makePrivate();
-            $__2 = bundle2.handlerComponents, getCount2 = $__2.getCount, increment2 = $__2.increment;
+            $__3 = bundle2.handlerComponents, getCount2 = $__3.getCount, increment2 = $__3.increment;
             config = {};
             $ctx.state = 62;
             break;
@@ -303,9 +303,9 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__5, this);
+    }, $__7, this);
   })));
-  it('privatized test', async($traceurRuntime.initGeneratorFunction(function $__6() {
+  it('privatized test', async($traceurRuntime.initGeneratorFunction(function $__8() {
     var privateTable,
         getCount2,
         increment2,
@@ -432,16 +432,17 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__6, this);
+    }, $__8, this);
   })));
-  it('privatized middleware test', async($traceurRuntime.initGeneratorFunction(function $__7() {
+  it('privatized middleware test', async($traceurRuntime.initGeneratorFunction(function $__9() {
     var prefixer,
         prefixFilter,
         bundle2,
-        $__2,
+        $__3,
         getCount2,
         increment2,
         bundle3,
+        $__4,
         getCount3,
         increment3,
         config,
@@ -461,10 +462,10 @@ describe('bundle component test', (function() {
             }), 'text', 'text');
             prefixFilter = transformFilter(prefixer, 'out');
             bundle2 = bundle.makePrivate();
-            $__2 = bundle2.handlerComponents, getCount2 = $__2.getCount, increment2 = $__2.increment;
+            $__3 = bundle2.handlerComponents, getCount2 = $__3.getCount, increment2 = $__3.increment;
             getCount2.addMiddleware(prefixFilter);
             bundle3 = bundle2.makePrivate();
-            $__2 = bundle3.handlerComponents, getCount3 = $__2.getCount, increment3 = $__2.increment;
+            $__4 = bundle3.handlerComponents, getCount3 = $__4.getCount, increment3 = $__4.increment;
             config = {prefix: 'foo'};
             $ctx.state = 62;
             break;
@@ -580,6 +581,6 @@ describe('bundle component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__7, this);
+    }, $__9, this);
   })));
 }));
