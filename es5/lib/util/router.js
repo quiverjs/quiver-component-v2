@@ -55,11 +55,7 @@ var routerHandleable = (function(indexes) {
   var streamHandler = streamRouterHandler(indexes.stream.routeIndex);
   var httpHandler = httpRouterHandler(indexes.http.routeIndex);
   return {
-    get streamHandler() {
-      return streamHandler;
-    },
-    get httpHandler() {
-      return httpHandler;
-    }
+    streamHandler: streamHandler,
+    httpHandler: httpHandler
   };
 });
