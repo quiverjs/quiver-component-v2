@@ -33,10 +33,10 @@ describe('handler test', (function() {
   it('simple handler', (function() {
     var main = simpleHandler((function(args, input) {
       input.should.equal('hello');
-      return 'goodbye';
-    }), 'text', 'text');
+      return '<b>goodbye</b>';
+    }), 'text', 'html');
     return main.loadHandler({}).then((function(handler) {
-      return handler({}, 'hello').should.eventually.equal('goodbye');
+      return handler({}, 'hello').should.eventually.equal('<b>goodbye</b>');
     }));
   }));
   it('http builder', (function() {

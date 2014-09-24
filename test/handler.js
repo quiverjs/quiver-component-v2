@@ -36,11 +36,11 @@ describe('handler test', () => {
     var main = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
-        return 'goodbye'
-      }, 'text', 'text')
+        return '<b>goodbye</b>'
+      }, 'text', 'html')
 
     return main.loadHandler({}).then(handler =>
-      handler({}, 'hello').should.eventually.equal('goodbye'))
+      handler({}, 'hello').should.eventually.equal('<b>goodbye</b>'))
   })
 
   it('http builder', () => {
