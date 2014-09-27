@@ -144,7 +144,7 @@ var $RouteList = RouteList;
 }, {}, Component);
 mixinMiddlewareExtensible(RouteList.prototype);
 var loadDefaultRoute = (function(config, component, routeIndex) {
-  return component.loadHandleable(copy(config)).then((function(handleable) {
+  return component.loadHandleable(config).then((function(handleable) {
     return routeIndex.setDefaultRoute(handleable);
   }));
 });

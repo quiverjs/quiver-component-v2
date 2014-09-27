@@ -84,7 +84,7 @@ var loadProtocolHandlers = async($traceurRuntime.initGeneratorFunction(function 
           break;
         case 11:
           $ctx.state = 2;
-          return loader(copy(config), component);
+          return loader(config, component);
         case 2:
           handlerMap[key] = $ctx.sent;
           $ctx.state = 4;

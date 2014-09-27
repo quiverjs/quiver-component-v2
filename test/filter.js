@@ -1,6 +1,6 @@
 import 'traceur'
 
-import { async, resolve } from 'quiver-promise'
+import { async, resolve, reject } from 'quiver-promise'
 import { streamToSimpleHandler } from 'quiver-simple-handler'
 import { 
   streamableToText, textToStreamable, 
@@ -90,9 +90,12 @@ describe('filter test', () => {
     .should.eventually.equal('foo')
   })
 
-  it('args builder filter', () => {
+  it('args builder filter', async(function*() {
     var filter = argsBuilderFilter(
       config => {
+        should.not.exist(config.handlerModified)
+        config.filterModified = true
+
         var fooValue = config.fooValue
 
         return args => {
@@ -101,17 +104,23 @@ describe('filter test', () => {
         }
       })
 
-    var main = simpleHandler(
-      args => {
-        args.foo.should.equal('bar')
-        return 'foo'
+    var main = simpleHandlerBuilder(
+      config => {
+        should.not.exist(config.filterModified)
+        config.handlerModified = true
+
+        return args => {
+          args.foo.should.equal('bar')
+          return 'foo'
+        }
       }, 'void', 'text')
     .addMiddleware(filter)
 
-    return main.loadHandler({ fooValue: 'bar' })
-      .then(handler => handler({}))
-      .should.eventually.equal('foo')
-  })
+    var config = { fooValue: 'bar' }
+    var handler = yield main.loadHandler(config)
+
+    yield handler({}).should.eventually.equal('foo')
+  }))
 
   it('args helper filter', async(function*() {
     var filter = argsFilter(

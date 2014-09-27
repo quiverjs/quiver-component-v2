@@ -60,7 +60,7 @@ var errorToFilter = (function(errorHandler) {
 });
 var builderFilterConvert = (function(builder, filterConvert) {
   return (function(config, handler) {
-    return builder(copy(config)).then((function(customHandler) {
+    return builder(config).then((function(customHandler) {
       return filterConvert(customHandler)(config, handler);
     }));
   });
@@ -95,6 +95,8 @@ var argsBuilderToFilter = (function(argsBuilder) {
 var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsBuilder = safeBuilder(argsBuilder, options);
+  if (options.copyConfig === undefined)
+    options.copyConfig = true;
   $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [null, options]);
 };
 var $ArgsBuilderFilter = ArgsBuilderFilter;
@@ -114,6 +116,7 @@ var $ArgsBuilderFilter = ArgsBuilderFilter;
 var ArgsFilter = function ArgsFilter(argsHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsHandler = safeHandler(argsHandler, options);
+  options.copyConfig = false;
   $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [null, options]);
 };
 var $ArgsFilter = ArgsFilter;

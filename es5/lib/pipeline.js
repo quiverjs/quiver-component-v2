@@ -58,7 +58,7 @@ var pipelineHandleables = (function(handleables, combinators) {
 var pipelineBuilder = (function(builders, combinators) {
   return (function(config) {
     return Promise.all(builders.map((function(builder) {
-      return builder(copy(config));
+      return builder(config);
     }))).then((function(handleables) {
       return pipelineHandleables(handleables, combinators);
     }));

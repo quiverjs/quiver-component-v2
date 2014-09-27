@@ -9,9 +9,7 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__quiver_45_promise__;
-var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
-    safePromised = $__0.safePromised,
-    createPromise = $__0.createPromise;
+var safePromised = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).safePromised;
 var assertFunction = (function(fn) {
   if (typeof(fn) != 'function') {
     throw new Error('argument must be of type function');
@@ -37,11 +35,11 @@ var safeBuilder = (function(builder) {
     return builder;
   assertFunction(builder);
   options.safeWrapped = true;
-  var safeBuilder = safePromised(builder);
+  var wrappedBuilder = safePromised(builder);
   return (function() {
     for (var args = [],
         $__1 = 0; $__1 < arguments.length; $__1++)
       args[$__1] = arguments[$__1];
-    return safeBuilder.apply(null, $traceurRuntime.spread(args)).then(safeHandler);
+    return wrappedBuilder.apply(null, $traceurRuntime.spread(args)).then(safeHandler);
   });
 });

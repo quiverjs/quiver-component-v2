@@ -1,11 +1,18 @@
 import 'traceur'
 
+import { async, resolve } from 'quiver-promise'
+
+import { 
+  RequestHead, ResponseHead 
+} from 'quiver-http'
+
+import { 
+  streamableToText, textToStreamable 
+} from 'quiver-stream-util'
+
 import {
   streamHandler, simpleHandler, httpHandlerBuilder
 } from '../lib/export.js'
-
-import { resolve } from 'quiver-promise'
-import { streamableToText, textToStreamable } from 'quiver-stream-util'
 
 var chai = require('chai')
 var chaiAsPromised = require('chai-as-promised')
@@ -43,37 +50,40 @@ describe('handler test', () => {
       handler({}, 'hello').should.eventually.equal('<b>goodbye</b>'))
   })
 
-  it('http builder', () => {
+  it('http builder', async(function*() {
     var main = httpHandlerBuilder(
       config => {
         var greet = config.greet || 'hi'
+        config.modified = true
 
-        return (requestHead, streamable) => 
-          streamableToText(streamable).then(input => {
-            input.should.equal('hello')
-            return [
-              { statusCode: 200 },
-              textToStreamable(greet)
-            ]
-          })
+        return async(function*(requestHead, streamable) {
+          var input = yield streamableToText(streamable)
+          input.should.equal('hello')
+
+          return [
+            new ResponseHead(),
+            textToStreamable(greet)
+          ]
+        })
       })
 
     var config = {
       greet: 'goodbye'
     }
 
-    return main.loadHandleable(config).then(handleable => {
-      var handler = handleable.httpHandler
-      should.exist(handler)
+    var handleable = yield main.loadHandleable(config)
+    should.not.exist(config.modified)
 
-      var input = textToStreamable('hello')
-      return handler({}, input).then(
-        ([responseHead, responseStreamable]) => {
-          responseHead.statusCode.should.equal(200)
+    var handler = handleable.httpHandler
+    should.exist(handler)
 
-          return streamableToText(responseStreamable)
-            .should.eventually.equal('goodbye')
-        })
-    })
-  })
+    var input = textToStreamable('hello')
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead(), input)
+
+    responseHead.statusCode.should.equal(200)
+
+    yield streamableToText(responseStreamable)
+      .should.eventually.equal('goodbye')
+  }))
 })

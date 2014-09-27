@@ -4,7 +4,8 @@ import {
   router as createRouter, 
   routeList as createRouteList, 
   httpHandler as createHttpHandler,
-  simpleHandler, loadSimpleHandler,
+  simpleHandler, simpleHandlerBuilder,
+  loadSimpleHandler,
 } from '../lib/export.js'
 
 import { async } from 'quiver-promise'
@@ -82,19 +83,29 @@ describe('router component test', () => {
   }))
 
   it('route list', async(function*() {
-    var foo = simpleHandler(
-      args => {
-        args.path.should.equal('/foo')
+    var foo = simpleHandlerBuilder(
+      config => {
+        should.not.exist(config.barModified)
+        config.fooModified = true
 
-        return 'foo'
+        return args => {
+          args.path.should.equal('/foo')
+
+          return 'foo'
+        }
       }, 'void', 'text')
 
-    var bar = simpleHandler(
-      args => {
-        args.path.should.equal('/subpath')
-        args.id.should.equal('baz')
+    var bar = simpleHandlerBuilder(
+      config => {
+        should.not.exist(config.fooModified)
+        config.barModified = true
 
-        return 'bar'
+        return args => {
+          args.path.should.equal('/subpath')
+          args.id.should.equal('baz')
+
+          return 'bar'
+        }
       }, 'void', 'text')
 
     var defaultPage = simpleHandler(

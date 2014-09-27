@@ -8,7 +8,8 @@ var $__traceur_64_0_46_0_46_6__,
 ($__traceur_64_0_46_0_46_6__ = require("traceur"), $__traceur_64_0_46_0_46_6__ && $__traceur_64_0_46_0_46_6__.__esModule && $__traceur_64_0_46_0_46_6__ || {default: $__traceur_64_0_46_0_46_6__});
 var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
     async = $__0.async,
-    resolve = $__0.resolve;
+    resolve = $__0.resolve,
+    reject = $__0.reject;
 var streamToSimpleHandler = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"), $__quiver_45_simple_45_handler__ && $__quiver_45_simple_45_handler__.__esModule && $__quiver_45_simple_45_handler__ || {default: $__quiver_45_simple_45_handler__}).streamToSimpleHandler;
 var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
     streamableToText = $__2.streamableToText,
@@ -129,23 +130,55 @@ describe('filter test', (function() {
       return handler({});
     })).should.eventually.equal('foo');
   }));
-  it('args builder filter', (function() {
-    var filter = argsBuilderFilter((function(config) {
-      var fooValue = config.fooValue;
-      return (function(args) {
-        args.foo = fooValue;
-        return args;
-      });
-    }));
-    var main = simpleHandler((function(args) {
-      args.foo.should.equal('bar');
-      return 'foo';
-    }), 'void', 'text').addMiddleware(filter);
-    return main.loadHandler({fooValue: 'bar'}).then((function(handler) {
-      return handler({});
-    })).should.eventually.equal('foo');
-  }));
-  it('args helper filter', async($traceurRuntime.initGeneratorFunction(function $__9() {
+  it('args builder filter', async($traceurRuntime.initGeneratorFunction(function $__9() {
+    var filter,
+        main,
+        config,
+        handler;
+    return $traceurRuntime.createGeneratorInstance(function($ctx) {
+      while (true)
+        switch ($ctx.state) {
+          case 0:
+            filter = argsBuilderFilter((function(config) {
+              should.not.exist(config.handlerModified);
+              config.filterModified = true;
+              var fooValue = config.fooValue;
+              return (function(args) {
+                args.foo = fooValue;
+                return args;
+              });
+            }));
+            main = simpleHandlerBuilder((function(config) {
+              should.not.exist(config.filterModified);
+              config.handlerModified = true;
+              return (function(args) {
+                args.foo.should.equal('bar');
+                return 'foo';
+              });
+            }), 'void', 'text').addMiddleware(filter);
+            config = {fooValue: 'bar'};
+            $ctx.state = 10;
+            break;
+          case 10:
+            $ctx.state = 2;
+            return main.loadHandler(config);
+          case 2:
+            handler = $ctx.sent;
+            $ctx.state = 4;
+            break;
+          case 4:
+            $ctx.state = 6;
+            return handler({}).should.eventually.equal('foo');
+          case 6:
+            $ctx.maybeThrow();
+            $ctx.state = -2;
+            break;
+          default:
+            return $ctx.end();
+        }
+    }, $__9, this);
+  })));
+  it('args helper filter', async($traceurRuntime.initGeneratorFunction(function $__10() {
     var filter,
         main,
         handleable,
@@ -205,9 +238,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__9, this);
+    }, $__10, this);
   })));
-  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__10() {
+  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__11() {
     var filter,
         main,
         handler;
@@ -240,9 +273,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__10, this);
+    }, $__11, this);
   })));
-  it('input handler', async($traceurRuntime.initGeneratorFunction(function $__11() {
+  it('input handler', async($traceurRuntime.initGeneratorFunction(function $__12() {
     var uppercase,
         filter,
         main,
@@ -259,7 +292,7 @@ describe('filter test', (function() {
             main = simpleHandlerBuilder((function(config) {
               var inHandler = config.inHandler;
               should.exist(inHandler);
-              return async($traceurRuntime.initGeneratorFunction(function $__12(args, input) {
+              return async($traceurRuntime.initGeneratorFunction(function $__13(args, input) {
                 var result;
                 return $traceurRuntime.createGeneratorInstance(function($ctx) {
                   while (true)
@@ -281,7 +314,7 @@ describe('filter test', (function() {
                       default:
                         return $ctx.end();
                     }
-                }, $__12, this);
+                }, $__13, this);
               }));
             }), 'text', 'json').addMiddleware(filter);
             $ctx.state = 10;
@@ -308,9 +341,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__11, this);
+    }, $__12, this);
   })));
-  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__12() {
+  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__13() {
     var filter,
         main,
         handleable,
@@ -320,12 +353,12 @@ describe('filter test', (function() {
         $__6,
         responseHead,
         responseStreamable,
-        $__13,
         $__14,
         $__15,
         $__16,
         $__17,
-        $__18;
+        $__18,
+        $__19;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -352,24 +385,24 @@ describe('filter test', (function() {
             $ctx.state = 20;
             break;
           case 20:
-            $__13 = new RequestHead();
-            $__14 = emptyStreamable();
-            $__15 = httpHandler($__13, $__14);
+            $__14 = new RequestHead();
+            $__15 = emptyStreamable();
+            $__16 = httpHandler($__14, $__15);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__15;
+            return $__16;
           case 6:
-            $__16 = $ctx.sent;
+            $__17 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__6 = $__16;
-            $__17 = $__6[0];
-            responseHead = $__17;
-            $__18 = $__6[1];
-            responseStreamable = $__18;
+            $__6 = $__17;
+            $__18 = $__6[0];
+            responseHead = $__18;
+            $__19 = $__6[1];
+            responseStreamable = $__19;
             $ctx.state = 12;
             break;
           case 12:
@@ -386,6 +419,6 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__12, this);
+    }, $__13, this);
   })));
 }));

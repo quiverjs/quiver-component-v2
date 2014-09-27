@@ -44,6 +44,9 @@ var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap
     safeHandler = $__3.safeHandler,
     safeBuilder = $__3.safeBuilder;
 var HandleableMiddleware = ($__handleable_45_middleware_46_js__ = require("./handleable-middleware.js"), $__handleable_45_middleware_46_js__ && $__handleable_45_middleware_46_js__.__esModule && $__handleable_45_middleware_46_js__ || {default: $__handleable_45_middleware_46_js__}).HandleableMiddleware;
+var noCopy = (function(config) {
+  return config;
+});
 var filterToHandleableFilter = (function(filter, handlerKey) {
   return (function(config, handleable) {
     var handler = handleable[handlerKey];
@@ -61,15 +64,19 @@ var streamToHandleableFilter = (function(filter) {
 var httpToHandleableFilter = (function(filter) {
   return filterToHandleableFilter(filter, 'httpHandler');
 });
-var filterToMiddleware = (function(filter) {
+var filterToMiddleware = (function(filter, copyConfig) {
   return (function(config, builder) {
-    return builder(config).then((function(handler) {
+    return builder(copyConfig(config)).then((function(handler) {
       return filter(config, handler);
     }));
   });
 });
 var HandleableFilter = function HandleableFilter(handleableFilter) {
+  var $__7;
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
+  var $__6 = options,
+      copyConfig = ($__7 = $__6.copyConfig) === void 0 ? true : $__7;
+  this._copyConfig = copyConfig;
   this._handleableFilter = handleableFilter;
   this._handleableFilter = safeHandler(handleableFilter, options);
   $traceurRuntime.superCall(this, $HandleableFilter.prototype, "constructor", [null, options]);
@@ -77,7 +84,8 @@ var HandleableFilter = function HandleableFilter(handleableFilter) {
 var $HandleableFilter = HandleableFilter;
 ($traceurRuntime.createClass)(HandleableFilter, {
   get mainMiddleware() {
-    return filterToMiddleware(this.handleableFilter);
+    var copyConfig = this._copyConfig ? copy : noCopy;
+    return filterToMiddleware(this.handleableFilter, copyConfig);
   },
   get handleableFilter() {
     if (!this._handleableFilter)

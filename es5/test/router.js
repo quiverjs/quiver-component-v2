@@ -10,6 +10,7 @@ var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), 
     createRouteList = $__0.routeList,
     createHttpHandler = $__0.httpHandler,
     simpleHandler = $__0.simpleHandler,
+    simpleHandlerBuilder = $__0.simpleHandlerBuilder,
     loadSimpleHandler = $__0.loadSimpleHandler;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
@@ -145,14 +146,22 @@ describe('router component test', (function() {
       while (true)
         switch ($ctx.state) {
           case 0:
-            foo = simpleHandler((function(args) {
-              args.path.should.equal('/foo');
-              return 'foo';
+            foo = simpleHandlerBuilder((function(config) {
+              should.not.exist(config.barModified);
+              config.fooModified = true;
+              return (function(args) {
+                args.path.should.equal('/foo');
+                return 'foo';
+              });
             }), 'void', 'text');
-            bar = simpleHandler((function(args) {
-              args.path.should.equal('/subpath');
-              args.id.should.equal('baz');
-              return 'bar';
+            bar = simpleHandlerBuilder((function(config) {
+              should.not.exist(config.fooModified);
+              config.barModified = true;
+              return (function(args) {
+                args.path.should.equal('/subpath');
+                args.id.should.equal('baz');
+                return 'bar';
+              });
             }), 'void', 'text');
             defaultPage = simpleHandler((function(args) {
               return 'default page';
