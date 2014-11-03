@@ -42,7 +42,7 @@ var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap
 var argsToStreamFilter = (function(argsHandler) {
   return (function(config, handler) {
     return resolve((function(args, inputStreamable) {
-      return argsHandler(args).then((function(newArgs) {
+      return argsHandler(args).then(newArgs = (function(args) {
         return handler(newArgs, inputStreamable);
       }));
     }));
@@ -54,7 +54,13 @@ var errorToFilter = (function(errorHandler) {
       for (var args = [],
           $__5 = 0; $__5 < arguments.length; $__5++)
         args[$__5] = arguments[$__5];
-      return handler.apply(null, $traceurRuntime.spread(args)).catch(errorHandler);
+      return handler.apply(null, $traceurRuntime.spread(args)).catch((function(err) {
+        return errorHandler(err).then((function(result) {
+          if (!result)
+            throw err;
+          return result;
+        }));
+      }));
     }));
   });
 });
@@ -67,8 +73,9 @@ var builderFilterConvert = (function(builder, filterConvert) {
 });
 var applyArgsFilter = (function(argsHandler, handler) {
   return (function(args, inputStreamable) {
-    return argsHandler(args).then((function(args) {
-      return handler(args, inputStreamable);
+    return argsHandler(args).then((function() {
+      var newArgs = arguments[0] !== (void 0) ? arguments[0] : args;
+      return handler(newArgs, inputStreamable);
     }));
   });
 });
