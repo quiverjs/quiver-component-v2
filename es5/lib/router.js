@@ -16,30 +16,30 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__quiver_45_promise__,
-    $__util_47_router_46_js__,
-    $__util_47_route_45_index_46_js__,
-    $__extensible_45_component_46_js__,
-    $__component_46_js__,
-    $__mixin_45_middleware_46_js__,
-    $__route_46_js__,
-    $__util_47_middleware_46_js__,
+    $__util_47_router__,
+    $__util_47_route_45_index__,
+    $__extensible_45_component__,
+    $__component__,
+    $__mixin_45_middleware__,
+    $__route__,
+    $__util_47_middleware__,
     $__util_47_config__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
-var routerHandleable = ($__util_47_router_46_js__ = require("./util/router.js"), $__util_47_router_46_js__ && $__util_47_router_46_js__.__esModule && $__util_47_router_46_js__ || {default: $__util_47_router_46_js__}).routerHandleable;
-var createRouteIndex = ($__util_47_route_45_index_46_js__ = require("./util/route-index.js"), $__util_47_route_45_index_46_js__ && $__util_47_route_45_index_46_js__.__esModule && $__util_47_route_45_index_46_js__ || {default: $__util_47_route_45_index_46_js__}).createRouteIndex;
-var ExtensibleHandler = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}).ExtensibleHandler;
-var $__5 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+var routerHandleable = ($__util_47_router__ = require("./util/router"), $__util_47_router__ && $__util_47_router__.__esModule && $__util_47_router__ || {default: $__util_47_router__}).routerHandleable;
+var createRouteIndex = ($__util_47_route_45_index__ = require("./util/route-index"), $__util_47_route_45_index__ && $__util_47_route_45_index__.__esModule && $__util_47_route_45_index__ || {default: $__util_47_route_45_index__}).createRouteIndex;
+var ExtensibleHandler = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleHandler;
+var $__5 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
     Component = $__5.Component,
     HandlerComponent = $__5.HandlerComponent;
-var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
-var $__7 = ($__route_46_js__ = require("./route.js"), $__route_46_js__ && $__route_46_js__.__esModule && $__route_46_js__ || {default: $__route_46_js__}),
+var mixinMiddlewareExtensible = ($__mixin_45_middleware__ = require("./mixin-middleware"), $__mixin_45_middleware__ && $__mixin_45_middleware__.__esModule && $__mixin_45_middleware__ || {default: $__mixin_45_middleware__}).mixinMiddlewareExtensible;
+var $__7 = ($__route__ = require("./route"), $__route__ && $__route__.__esModule && $__route__ || {default: $__route__}),
     Route = $__7.Route,
     StaticRoute = $__7.StaticRoute,
     DynamicRoute = $__7.DynamicRoute,
     RegexRoute = $__7.RegexRoute,
     ParamRoute = $__7.ParamRoute;
-var $__8 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+var $__8 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
     combineMiddlewareComponents = $__8.combineMiddlewareComponents,
     combineBuilderMiddleware = $__8.combineBuilderMiddleware,
     combineBuilderWithMiddleware = $__8.combineBuilderWithMiddleware;

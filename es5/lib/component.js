@@ -11,8 +11,8 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__util_47_loader_46_js__;
-var loadHandleable = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).loadHandleable;
+var $__util_47_loader__;
+var loadHandleable = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}).loadHandleable;
 var assertComponent = (function(component) {
   if (!(component instanceof Component)) {
     throw new Error('object must be of type Component');

@@ -5,10 +5,10 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__component_46_js__,
-    $__util_47_middleware_46_js__;
-var MiddlewareComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).MiddlewareComponent;
-var combineMiddlewareComponents = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}).combineMiddlewareComponents;
+var $__component__,
+    $__util_47_middleware__;
+var MiddlewareComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).MiddlewareComponent;
+var combineMiddlewareComponents = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}).combineMiddlewareComponents;
 var middlewareMixin = {
   initMiddlewareExtension: function() {
     var options = arguments[0] !== (void 0) ? arguments[0] : {};

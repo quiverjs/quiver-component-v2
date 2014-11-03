@@ -9,17 +9,17 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__quiver_45_object__,
-    $__component_46_js__,
-    $__util_47_middleware_46_js__,
-    $__mixin_45_middleware_46_js__;
+    $__component__,
+    $__util_47_middleware__,
+    $__mixin_45_middleware__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
-var $__1 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+var $__1 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
     HandlerComponent = $__1.HandlerComponent,
     MiddlewareComponent = $__1.MiddlewareComponent;
-var $__2 = ($__util_47_middleware_46_js__ = require("./util/middleware.js"), $__util_47_middleware_46_js__ && $__util_47_middleware_46_js__.__esModule && $__util_47_middleware_46_js__ || {default: $__util_47_middleware_46_js__}),
+var $__2 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
     combineMiddlewares = $__2.combineMiddlewares,
     combineBuilderWithMiddleware = $__2.combineBuilderWithMiddleware;
-var mixinMiddlewareExtensible = ($__mixin_45_middleware_46_js__ = require("./mixin-middleware.js"), $__mixin_45_middleware_46_js__ && $__mixin_45_middleware_46_js__.__esModule && $__mixin_45_middleware_46_js__ || {default: $__mixin_45_middleware_46_js__}).mixinMiddlewareExtensible;
+var mixinMiddlewareExtensible = ($__mixin_45_middleware__ = require("./mixin-middleware"), $__mixin_45_middleware__ && $__mixin_45_middleware__.__esModule && $__mixin_45_middleware__ || {default: $__mixin_45_middleware__}).mixinMiddlewareExtensible;
 var copyConfigBuilder = (function(builder) {
   return (function(config) {
     return builder(copy(config));

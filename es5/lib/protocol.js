@@ -11,16 +11,16 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__component_46_js__,
-    $__simple_45_middleware_46_js__,
-    $__util_47_loader_46_js__,
+var $__component__,
+    $__simple_45_middleware__,
+    $__util_47_loader__,
     $__quiver_45_promise__,
     $__quiver_45_object__;
-var $__0 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+var $__0 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
     Component = $__0.Component,
     HandlerComponent = $__0.HandlerComponent;
-var configMiddleware = ($__simple_45_middleware_46_js__ = require("./simple-middleware.js"), $__simple_45_middleware_46_js__ && $__simple_45_middleware_46_js__.__esModule && $__simple_45_middleware_46_js__ || {default: $__simple_45_middleware_46_js__}).configMiddleware;
-var $__2 = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}),
+var configMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).configMiddleware;
+var $__2 = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}),
     loadHandleable = $__2.loadHandleable,
     loadStreamHandler = $__2.loadStreamHandler,
     loadHttpHandler = $__2.loadHttpHandler,

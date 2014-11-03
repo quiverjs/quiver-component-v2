@@ -20,8 +20,8 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__config_46_js__;
-var getInitTable = ($__config_46_js__ = require("./config.js"), $__config_46_js__ && $__config_46_js__.__esModule && $__config_46_js__ || {default: $__config_46_js__}).getInitTable;
+var $__config__;
+var getInitTable = ($__config__ = require("./config"), $__config__ && $__config__.__esModule && $__config__ || {default: $__config__}).getInitTable;
 var noopMiddleware = (function(config, builder) {
   return builder(config);
 });

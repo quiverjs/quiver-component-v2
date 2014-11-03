@@ -19,14 +19,14 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_promise__,
     $__quiver_45_simple_45_handler__,
-    $__config_46_js__;
+    $__config__;
 var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
     resolve = $__0.resolve,
     reject = $__0.reject;
 var $__1 = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"), $__quiver_45_simple_45_handler__ && $__quiver_45_simple_45_handler__.__esModule && $__quiver_45_simple_45_handler__ || {default: $__quiver_45_simple_45_handler__}),
     streamToSimpleHandler = $__1.streamToSimpleHandler,
     validateSimpleTypes = $__1.validateSimpleTypes;
-var getHandlerMap = ($__config_46_js__ = require("./config.js"), $__config_46_js__ && $__config_46_js__.__esModule && $__config_46_js__ || {default: $__config_46_js__}).getHandlerMap;
+var getHandlerMap = ($__config__ = require("./config"), $__config__ && $__config__.__esModule && $__config__ || {default: $__config__}).getHandlerMap;
 var loadHandleable = (function(config, component) {
   var $__6;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};

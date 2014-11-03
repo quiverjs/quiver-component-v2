@@ -5,14 +5,14 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__protocol_46_js__,
-    $__simple_45_middleware_46_js__,
-    $__component_46_js__,
+var $__protocol__,
+    $__simple_45_middleware__,
+    $__component__,
     $__quiver_45_promise__,
     $__quiver_45_object__;
-var Protocol = ($__protocol_46_js__ = require("./protocol.js"), $__protocol_46_js__ && $__protocol_46_js__.__esModule && $__protocol_46_js__ || {default: $__protocol_46_js__}).Protocol;
-var ConfigMiddleware = ($__simple_45_middleware_46_js__ = require("./simple-middleware.js"), $__simple_45_middleware_46_js__ && $__simple_45_middleware_46_js__.__esModule && $__simple_45_middleware_46_js__ || {default: $__simple_45_middleware_46_js__}).ConfigMiddleware;
-var $__2 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+var Protocol = ($__protocol__ = require("./protocol"), $__protocol__ && $__protocol__.__esModule && $__protocol__ || {default: $__protocol__}).Protocol;
+var ConfigMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).ConfigMiddleware;
+var $__2 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
     Component = $__2.Component,
     HandlerComponent = $__2.HandlerComponent,
     MiddlewareComponent = $__2.MiddlewareComponent;

@@ -9,15 +9,15 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__quiver_45_object__,
-    $__component_46_js__,
-    $__extensible_45_component_46_js__;
+    $__component__,
+    $__extensible_45_component__;
 var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
     copy = $__0.copy,
     defineGetter = $__0.defineGetter,
     assertInstanceOf = $__0.assertInstanceOf,
     assertArrayInstanceOf = $__0.assertArrayInstanceOf;
-var HandlerComponent = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).HandlerComponent;
-var ExtensibleHandler = ($__extensible_45_component_46_js__ = require("./extensible-component.js"), $__extensible_45_component_46_js__ && $__extensible_45_component_46_js__.__esModule && $__extensible_45_component_46_js__ || {default: $__extensible_45_component_46_js__}).ExtensibleHandler;
+var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
+var ExtensibleHandler = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleHandler;
 var combineStreamHandlers = (function(handler1, handler2) {
   return (function(args, streamable) {
     return handler1(copy(args), streamable).then((function(streamable) {

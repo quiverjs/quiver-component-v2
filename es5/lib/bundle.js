@@ -15,10 +15,10 @@ var $__quiver_45_object__,
     $__quiver_45_error__,
     $__quiver_45_promise__,
     $__quiver_45_simple_45_handler__,
-    $__component_46_js__,
-    $__stream_45_handler_46_js__,
-    $__util_47_config_46_js__,
-    $__util_47_loader_46_js__;
+    $__component__,
+    $__stream_45_handler__,
+    $__util_47_config__,
+    $__util_47_loader__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
 var $__2 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
@@ -26,10 +26,10 @@ var $__2 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_pro
     reject = $__2.reject,
     safePromised = $__2.safePromised;
 var simpleToStreamHandler = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"), $__quiver_45_simple_45_handler__ && $__quiver_45_simple_45_handler__.__esModule && $__quiver_45_simple_45_handler__ || {default: $__quiver_45_simple_45_handler__}).simpleToStreamHandler;
-var Component = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}).Component;
-var StreamHandlerBuilder = ($__stream_45_handler_46_js__ = require("./stream-handler.js"), $__stream_45_handler_46_js__ && $__stream_45_handler_46_js__.__esModule && $__stream_45_handler_46_js__ || {default: $__stream_45_handler_46_js__}).StreamHandlerBuilder;
-var getBundleMap = ($__util_47_config_46_js__ = require("./util/config.js"), $__util_47_config_46_js__ && $__util_47_config_46_js__.__esModule && $__util_47_config_46_js__ || {default: $__util_47_config_46_js__}).getBundleMap;
-var $__7 = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}),
+var Component = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).Component;
+var StreamHandlerBuilder = ($__stream_45_handler__ = require("./stream-handler"), $__stream_45_handler__ && $__stream_45_handler__.__esModule && $__stream_45_handler__ || {default: $__stream_45_handler__}).StreamHandlerBuilder;
+var getBundleMap = ($__util_47_config__ = require("./util/config"), $__util_47_config__ && $__util_47_config__.__esModule && $__util_47_config__ || {default: $__util_47_config__}).getBundleMap;
+var $__7 = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}),
     loadStreamHandler = $__7.loadStreamHandler,
     simpleHandlerLoader = $__7.simpleHandlerLoader;
 var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function $__9(config, handlerName, component) {

@@ -16,19 +16,19 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_promise__,
     $__quiver_45_simple_45_handler__,
-    $__util_47_loader_46_js__,
-    $__util_47_wrap_46_js__,
-    $__stream_45_handler_46_js__;
+    $__util_47_loader__,
+    $__util_47_wrap__,
+    $__stream_45_handler__;
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
 var $__1 = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"), $__quiver_45_simple_45_handler__ && $__quiver_45_simple_45_handler__.__esModule && $__quiver_45_simple_45_handler__ || {default: $__quiver_45_simple_45_handler__}),
     simpleToStreamHandler = $__1.simpleToStreamHandler,
     streamToSimpleHandler = $__1.streamToSimpleHandler,
     validateSimpleTypes = $__1.validateSimpleTypes;
-var simpleHandlerLoader = ($__util_47_loader_46_js__ = require("./util/loader.js"), $__util_47_loader_46_js__ && $__util_47_loader_46_js__.__esModule && $__util_47_loader_46_js__ || {default: $__util_47_loader_46_js__}).simpleHandlerLoader;
-var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}),
+var simpleHandlerLoader = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}).simpleHandlerLoader;
+var $__3 = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}),
     safeBuilder = $__3.safeBuilder,
     safeHandler = $__3.safeHandler;
-var $__4 = ($__stream_45_handler_46_js__ = require("./stream-handler.js"), $__stream_45_handler_46_js__ && $__stream_45_handler_46_js__.__esModule && $__stream_45_handler_46_js__ || {default: $__stream_45_handler_46_js__}),
+var $__4 = ($__stream_45_handler__ = require("./stream-handler"), $__stream_45_handler__ && $__stream_45_handler__.__esModule && $__stream_45_handler__ || {default: $__stream_45_handler__}),
     StreamHandler = $__4.StreamHandler,
     StreamHandlerBuilder = $__4.StreamHandlerBuilder;
 var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, inType, outType) {

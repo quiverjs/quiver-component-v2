@@ -28,15 +28,15 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__quiver_45_promise__,
-    $__filter_46_js__,
-    $__util_47_wrap_46_js__;
+    $__filter__,
+    $__util_47_wrap__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
-var $__2 = ($__filter_46_js__ = require("./filter.js"), $__filter_46_js__ && $__filter_46_js__.__esModule && $__filter_46_js__ || {default: $__filter_46_js__}),
+var $__2 = ($__filter__ = require("./filter"), $__filter__ && $__filter__.__esModule && $__filter__ || {default: $__filter__}),
     StreamFilter = $__2.StreamFilter,
     HttpFilter = $__2.HttpFilter,
     HandleableFilter = $__2.HandleableFilter;
-var $__3 = ($__util_47_wrap_46_js__ = require("./util/wrap.js"), $__util_47_wrap_46_js__ && $__util_47_wrap_46_js__.__esModule && $__util_47_wrap_46_js__ || {default: $__util_47_wrap_46_js__}),
+var $__3 = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}),
     safeBuilder = $__3.safeBuilder,
     safeHandler = $__3.safeHandler;
 var argsToStreamFilter = (function(argsHandler) {

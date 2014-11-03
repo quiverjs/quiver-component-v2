@@ -29,14 +29,14 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__util_47_url_46_js__,
-    $__component_46_js__,
-    $__util_47_route_46_js__;
-var urlManagedBuilder = ($__util_47_url_46_js__ = require("./util/url.js"), $__util_47_url_46_js__ && $__util_47_url_46_js__.__esModule && $__util_47_url_46_js__ || {default: $__util_47_url_46_js__}).urlManagedBuilder;
-var $__1 = ($__component_46_js__ = require("./component.js"), $__component_46_js__ && $__component_46_js__.__esModule && $__component_46_js__ || {default: $__component_46_js__}),
+var $__util_47_url__,
+    $__component__,
+    $__util_47_route__;
+var urlManagedBuilder = ($__util_47_url__ = require("./util/url"), $__util_47_url__ && $__util_47_url__.__esModule && $__util_47_url__ || {default: $__util_47_url__}).urlManagedBuilder;
+var $__1 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
     Component = $__1.Component,
     HandlerComponent = $__1.HandlerComponent;
-var $__2 = ($__util_47_route_46_js__ = require("./util/route.js"), $__util_47_route_46_js__ && $__util_47_route_46_js__.__esModule && $__util_47_route_46_js__ || {default: $__util_47_route_46_js__}),
+var $__2 = ($__util_47_route__ = require("./util/route"), $__util_47_route__ && $__util_47_route__.__esModule && $__util_47_route__ || {default: $__util_47_route__}),
     regexMatcher = $__2.regexMatcher,
     paramMatcher = $__2.paramMatcher,
     paramUrlBuilder = $__2.paramUrlBuilder;
