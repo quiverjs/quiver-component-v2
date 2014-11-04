@@ -216,14 +216,23 @@ Object.defineProperties(exports, {
   RouteList: {get: function() {
       return RouteList;
     }},
-  Router: {get: function() {
-      return Router;
-    }},
   routeList: {get: function() {
       return routeList;
     }},
+  Router: {get: function() {
+      return Router;
+    }},
   router: {get: function() {
       return router;
+    }},
+  makeRouter: {get: function() {
+      return makeRouter;
+    }},
+  MethodRouter: {get: function() {
+      return MethodRouter;
+    }},
+  methodRouter: {get: function() {
+      return methodRouter;
     }},
   combineMiddlewares: {get: function() {
       return combineMiddlewares;
@@ -275,8 +284,10 @@ var $__component__,
     $__protocol__,
     $__abstract__,
     $__bundle__,
-    $__route__,
-    $__router__,
+    $__router_47_route_45_component__,
+    $__router_47_route_45_list_45_component__,
+    $__router_47_router_45_component__,
+    $__router_47_method_45_router__,
     $__util_47_middleware__,
     $__util_47_loader__,
     $__util_47_config__;
@@ -359,7 +370,7 @@ var $__16 = ($__abstract__ = require("./abstract"), $__abstract__ && $__abstract
 var $__17 = ($__bundle__ = require("./bundle"), $__bundle__ && $__bundle__.__esModule && $__bundle__ || {default: $__bundle__}),
     HandlerBundle = $__17.HandlerBundle,
     handlerBundle = $__17.handlerBundle;
-var $__18 = ($__route__ = require("./route"), $__route__ && $__route__.__esModule && $__route__ || {default: $__route__}),
+var $__18 = ($__router_47_route_45_component__ = require("./router/route-component"), $__router_47_route_45_component__ && $__router_47_route_45_component__.__esModule && $__router_47_route_45_component__ || {default: $__router_47_route_45_component__}),
     Route = $__18.Route,
     StaticRoute = $__18.StaticRoute,
     DynamicRoute = $__18.DynamicRoute,
@@ -369,22 +380,27 @@ var $__18 = ($__route__ = require("./route"), $__route__ && $__route__.__esModul
     dynamicRoute = $__18.dynamicRoute,
     regexRoute = $__18.regexRoute,
     paramRoute = $__18.paramRoute;
-var $__19 = ($__router__ = require("./router"), $__router__ && $__router__.__esModule && $__router__ || {default: $__router__}),
+var $__19 = ($__router_47_route_45_list_45_component__ = require("./router/route-list-component"), $__router_47_route_45_list_45_component__ && $__router_47_route_45_list_45_component__.__esModule && $__router_47_route_45_list_45_component__ || {default: $__router_47_route_45_list_45_component__}),
     RouteList = $__19.RouteList,
-    Router = $__19.Router,
-    routeList = $__19.routeList,
-    router = $__19.router;
-var $__20 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
-    combineMiddlewares = $__20.combineMiddlewares,
-    combineBuilderWithMiddleware = $__20.combineBuilderWithMiddleware;
-var $__21 = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}),
-    loadHandleable = $__21.loadHandleable,
-    loadStreamHandler = $__21.loadStreamHandler,
-    loadHttpHandler = $__21.loadHttpHandler,
-    loadSimpleHandler = $__21.loadSimpleHandler,
-    simpleHandlerLoader = $__21.simpleHandlerLoader;
-var $__22 = ($__util_47_config__ = require("./util/config"), $__util_47_config__ && $__util_47_config__.__esModule && $__util_47_config__ || {default: $__util_47_config__}),
-    getHandleable = $__22.getHandleable,
-    getHandlerMap = $__22.getHandlerMap,
-    normalizeConfig = $__22.normalizeConfig;
+    routeList = $__19.routeList;
+var $__20 = ($__router_47_router_45_component__ = require("./router/router-component"), $__router_47_router_45_component__ && $__router_47_router_45_component__.__esModule && $__router_47_router_45_component__ || {default: $__router_47_router_45_component__}),
+    Router = $__20.Router,
+    router = $__20.router,
+    makeRouter = $__20.makeRouter;
+var $__21 = ($__router_47_method_45_router__ = require("./router/method-router"), $__router_47_method_45_router__ && $__router_47_method_45_router__.__esModule && $__router_47_method_45_router__ || {default: $__router_47_method_45_router__}),
+    MethodRouter = $__21.MethodRouter,
+    methodRouter = $__21.methodRouter;
+var $__22 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
+    combineMiddlewares = $__22.combineMiddlewares,
+    combineBuilderWithMiddleware = $__22.combineBuilderWithMiddleware;
+var $__23 = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}),
+    loadHandleable = $__23.loadHandleable,
+    loadStreamHandler = $__23.loadStreamHandler,
+    loadHttpHandler = $__23.loadHttpHandler,
+    loadSimpleHandler = $__23.loadSimpleHandler,
+    simpleHandlerLoader = $__23.simpleHandlerLoader;
+var $__24 = ($__util_47_config__ = require("./util/config"), $__util_47_config__ && $__util_47_config__.__esModule && $__util_47_config__ || {default: $__util_47_config__}),
+    getHandleable = $__24.getHandleable,
+    getHandlerMap = $__24.getHandlerMap,
+    normalizeConfig = $__24.normalizeConfig;
 ;

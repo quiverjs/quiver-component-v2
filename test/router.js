@@ -1,11 +1,12 @@
 import 'traceur'
 
 import { 
-  router as createRouter, 
-  routeList as createRouteList, 
+  makeRouter, methodRouter,
+  routeList as makeRouteList,
   httpHandler as createHttpHandler,
   simpleHandler, simpleHandlerBuilder,
   loadSimpleHandler,
+  loadHttpHandler,
 } from '../lib/export.js'
 
 import { async } from 'quiver-promise'
@@ -33,8 +34,8 @@ describe('router component test', () => {
         return 'goodbye'
       }, 'text', 'text')
 
-    var router = createRouter()
-      .addStaticRoute(handlerComponent, '/foo')
+    var router = makeRouter()
+      .staticRoute('/foo', handlerComponent)
 
     var handler = yield loadSimpleHandler(
       {}, router, 'text', 'text')
@@ -55,8 +56,8 @@ describe('router component test', () => {
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
-    var router = createRouter()
-      .addRegexRoute(greet, /^\/greet\/(\w+)$/, ['name'])
+    var router = makeRouter()
+      .regexRoute(/^\/greet\/(\w+)$/, ['name'], greet)
 
     var handler = yield loadSimpleHandler(
       {}, router, 'text', 'text')
@@ -72,8 +73,8 @@ describe('router component test', () => {
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
-    var router = createRouter()
-      .addParamRoute(greet, '/greet/:name')
+    var router = makeRouter()
+      .paramRoute('/greet/:name', greet)
 
     var handler = yield loadSimpleHandler(
       {}, router, 'text', 'text')
@@ -112,13 +113,13 @@ describe('router component test', () => {
       args => 'default page', 
       'void', 'text')
 
-    var routeList = createRouteList()
-      .addStaticRoute(foo, '/foo')
-      .addParamRoute(bar,  '/bar/:id/:restpath')
+    var routeList = makeRouteList()
+      .staticRoute('/foo', foo)
+      .paramRoute('/bar/:id/:restpath', bar)
 
-    var router = createRouter()
-      .addRouteList(routeList)
-      .setDefaultHandler(defaultPage)
+    var router = makeRouter()
+      .routeList(routeList)
+      .defaultRoute(defaultPage)
 
     var handler = yield loadSimpleHandler(
       {}, router, 'void', 'text')
@@ -147,12 +148,12 @@ describe('router component test', () => {
       args => 'default page', 
       'void', 'text')
 
-    var userRouter = createRouter()
-      .addParamRoute(post, '/post/:postId')
+    var userRouter = makeRouter()
+      .paramRoute('/post/:postId', post)
 
-    var mainRouter = createRouter()
-      .addParamRoute(userRouter, '/user/:userId/:restpath')
-      .setDefaultHandler(defaultPage)
+    var mainRouter = makeRouter()
+      .paramRoute('/user/:userId/:restpath', userRouter)
+      .defaultRoute(defaultPage)
 
     var handler = yield loadSimpleHandler(
       {}, mainRouter, 'text', 'text')
@@ -201,10 +202,10 @@ describe('router component test', () => {
       return 'baz'
     }, 'text', 'text')
 
-    var router = createRouter()
-      .addParamRoute(foo, '/foo/:name')
-      .addStaticRoute(bar, '/bar')
-      .addStaticRoute(baz, '/baz')
+    var router = makeRouter()
+      .paramRoute('/foo/:name', foo)
+      .staticRoute('/bar', bar)
+      .staticRoute('/baz', baz)
 
     var {
       streamHandler,
@@ -272,5 +273,101 @@ describe('router component test', () => {
     yield streamHandler({ path: '/bar' }, 
       emptyStreamable())
       .should.be.rejected
+  }))
+
+  it('method router test 1', async(function*() {
+    var foo = simpleHandler(
+      args => 'foo',
+      'void', 'text')
+
+    var router = methodRouter({
+      get: foo
+    })
+
+    var handler = yield loadHttpHandler({}, router)
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'GET'
+      }), emptyStreamable())
+
+    responseHead.statusCode.should.equal(200)
+
+    yield streamableToText(responseStreamable)
+      .should.eventually.equal('foo')
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'POST'
+      }), emptyStreamable())
+
+    responseHead.statusCode.should.equal(405)
+  }))
+
+  it('method router test 2', async(function*() {
+    var foo = simpleHandler(
+      args => 'foo',
+      'void', 'text')
+
+    var bar = simpleHandler(
+      args => 'bar',
+      'void', 'text')
+
+    var router = makeRouter()
+      .staticRoute('/', {
+        get: foo,
+        post: bar
+      })
+
+    var handler = yield loadHttpHandler({}, router)
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'GET',
+        url: '/'
+      }), emptyStreamable()) 
+
+    responseHead.statusCode.should.equal(200)
+
+    yield streamableToText(responseStreamable)
+      .should.eventually.equal('foo')
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'POST',
+        url: '/'
+      }), emptyStreamable()) 
+
+    responseHead.statusCode.should.equal(200)
+    
+    yield streamableToText(responseStreamable)
+      .should.eventually.equal('bar')
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'HEAD',
+        url: '/'
+      }), emptyStreamable()) 
+
+    responseHead.statusCode.should.equal(200)
+
+    yield streamableToText(responseStreamable)
+      .should.eventually.equal('')
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'PUT'
+      }), emptyStreamable())
+
+    responseHead.statusCode.should.equal(405)
+
+    var [responseHead, responseStreamable] = 
+      yield handler(new RequestHead({
+        method: 'OPTIONS'
+      }), emptyStreamable())
+
+    responseHead.statusCode.should.equal(200)
+    responseHead.getHeader('allow').should.equal(
+      'GET, POST, HEAD, OPTIONS')
   }))
 })
