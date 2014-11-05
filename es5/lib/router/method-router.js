@@ -12,7 +12,7 @@ var $__quiver_45_error__,
     $__quiver_45_promise__,
     $__quiver_45_stream_45_util__,
     $__quiver_45_http__,
-    $___46__46__47_extensible_45_component__,
+    $___46__46__47_http_45_handler__,
     $___46__46__47_util_47_loader__;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
 var $__1 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
@@ -22,10 +22,8 @@ var emptyStreamable = ($__quiver_45_stream_45_util__ = require("quiver-stream-ut
 var $__3 = ($__quiver_45_http__ = require("quiver-http"), $__quiver_45_http__ && $__quiver_45_http__.__esModule && $__quiver_45_http__ || {default: $__quiver_45_http__}),
     ResponseHead = $__3.ResponseHead,
     streamToHttpHandler = $__3.streamToHttpHandler;
-var ExtensibleHandler = ($___46__46__47_extensible_45_component__ = require("../extensible-component"), $___46__46__47_extensible_45_component__ && $___46__46__47_extensible_45_component__.__esModule && $___46__46__47_extensible_45_component__ || {default: $___46__46__47_extensible_45_component__}).ExtensibleHandler;
-var $__5 = ($___46__46__47_util_47_loader__ = require("../util/loader"), $___46__46__47_util_47_loader__ && $___46__46__47_util_47_loader__.__esModule && $___46__46__47_util_47_loader__ || {default: $___46__46__47_util_47_loader__}),
-    loadHandleable = $__5.loadHandleable,
-    httpLoader = $__5.loadHttpHandler;
+var HttpHandlerBuilder = ($___46__46__47_http_45_handler__ = require("../http-handler"), $___46__46__47_http_45_handler__ && $___46__46__47_http_45_handler__.__esModule && $___46__46__47_http_45_handler__ || {default: $___46__46__47_http_45_handler__}).HttpHandlerBuilder;
+var loadHandleable = ($___46__46__47_util_47_loader__ = require("../util/loader"), $___46__46__47_util_47_loader__ && $___46__46__47_util_47_loader__.__esModule && $___46__46__47_util_47_loader__ || {default: $___46__46__47_util_47_loader__}).loadHandleable;
 var headRequestHandler = (function(handler) {
   return (function(requestHead, requestStreamable) {
     if (requestHead.method != 'HEAD') {
@@ -70,9 +68,6 @@ var methodMapToHttpHandler = (function(methodMap) {
       return methodNotAllowedResponse();
     return handler(requestHead, requestStreamable);
   });
-});
-var methodRouterHandleable = (function(methodMap) {
-  return ({httpHandler: methodMapToHttpHandler(methodMap)});
 });
 var loadHttpHandler = async($traceurRuntime.initGeneratorFunction(function $__9(config, component) {
   var handleable;
@@ -191,17 +186,18 @@ var normalizeMethodMap = (function(methodMap) {
   return newMap;
 });
 var MethodRouter = function MethodRouter(methodMap) {
+  var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._methodMap = normalizeMethodMap(methodMap);
+  options.safeWrapped = true;
+  $traceurRuntime.superCall(this, $MethodRouter.prototype, "constructor", [null, options]);
 };
+var $MethodRouter = MethodRouter;
 ($traceurRuntime.createClass)(MethodRouter, {
-  get handleableBuilder() {
+  get httpHandlerBuilder() {
     var methodMap = this._methodMap;
     return (function(config) {
-      return loadMethodHandlers(config, methodMap).then(methodRouterHandleable);
+      return loadMethodHandlers(config, methodMap).then(methodMapToHttpHandler);
     });
-  },
-  get handlerLoader() {
-    return httpLoader;
   },
   privatize: function(privateInstance, privateTable) {
     var methodMap = this._methodMap;
@@ -210,8 +206,9 @@ var MethodRouter = function MethodRouter(methodMap) {
       privateMap[key] = methodMap[key].makePrivate(privateTable);
     }
     privateInstance._methodMap = privateMap;
+    $traceurRuntime.superCall(this, $MethodRouter.prototype, "privatize", [privateInstance, privateTable]);
   }
-}, {}, ExtensibleHandler);
+}, {}, HttpHandlerBuilder);
 var methodRouter = (function(methodMap) {
   return new MethodRouter(methodMap);
 });

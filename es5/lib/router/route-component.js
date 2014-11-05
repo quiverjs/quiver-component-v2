@@ -150,35 +150,6 @@ var StaticRoute = function StaticRoute(handlerComponent, staticPath) {
 };
 var $StaticRoute = StaticRoute;
 ($traceurRuntime.createClass)(StaticRoute, {
-  routeSpecsBuilder: function(middleware) {
-    var staticPath = this.staticPath;
-    var routeBuilder = this.routeBuilder;
-    return async($traceurRuntime.initGeneratorFunction(function $__8(config) {
-      var handleable;
-      return $traceurRuntime.createGeneratorInstance(function($ctx) {
-        while (true)
-          switch ($ctx.state) {
-            case 0:
-              $ctx.state = 2;
-              return routeBuilder(config);
-            case 2:
-              handleable = $ctx.sent;
-              $ctx.state = 4;
-              break;
-            case 4:
-              $ctx.returnValue = {
-                routeType: 'static',
-                path: staticPath,
-                handleable: handleable
-              };
-              $ctx.state = -2;
-              break;
-            default:
-              return $ctx.end();
-          }
-      }, $__8, this);
-    }));
-  },
   get routeSpec() {
     return {
       routeType: 'static',
