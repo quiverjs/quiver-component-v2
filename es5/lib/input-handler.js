@@ -9,23 +9,27 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__quiver_45_object__,
+    $__simple_45_middleware__,
     $__component__,
-    $__simple_45_middleware__;
+    $__extensible_45_component__;
 var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
     assertInstanceOf = $__0.assertInstanceOf,
     assertString = $__0.assertString;
-var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
 var ConfigMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).ConfigMiddleware;
+var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
+var $__3 = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}),
+    ExtensibleHandler = $__3.ExtensibleHandler,
+    ExtensibleMiddleware = $__3.ExtensibleMiddleware;
 var loadHandler = (function(config, component, options) {
   return component.loadHandler(config, options);
 });
 var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, toConfig) {
-  var $__5;
+  var $__6;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   assertInstanceOf(handlerComponent, HandlerComponent, 'input handler must be of type HandlerComponent');
   assertString(toConfig, 'toConfig required to be string');
-  var $__4 = options,
-      loader = ($__5 = $__4.loader) === void 0 ? loadHandler : $__5;
+  var $__5 = options,
+      loader = ($__6 = $__5.loader) === void 0 ? loadHandler : $__6;
   this._handlerLoader = loader;
   this._toInputConfig = toConfig;
   options.safeWrapped = true;
@@ -57,6 +61,13 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
     return json;
   }
 }, {}, ConfigMiddleware);
+var mixinInputHandler = (function(prototype) {
+  prototype.inputHandler = function(handler, toConfig, options) {
+    return this.addMiddleware(new InputHandlerMiddleware(handler, toConfig, options));
+  };
+});
+mixinInputHandler(ExtensibleHandler.prototype);
+mixinInputHandler(ExtensibleMiddleware.prototype);
 var inputHandlerMiddleware = (function(handler, toConfig, options) {
   return new InputHandlerMiddleware(handler, toConfig, options);
 });

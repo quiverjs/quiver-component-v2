@@ -1,21 +1,23 @@
 "use strict";
 var $__traceur_64_0_46_0_46_7__,
-    $___46__46__47_lib_47_export_46_js__;
+    $___46__46__47_lib_47_export_46_js__,
+    $__chai__,
+    $__chai_45_as_45_promised__;
 ($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
 var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     simpleHandlerBuilder = $__0.simpleHandlerBuilder,
     simpleHandler = $__0.simpleHandler,
     transformFilter = $__0.transformFilter;
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
+var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"), $__chai_45_as_45_promised__ && $__chai_45_as_45_promised__.__esModule && $__chai_45_as_45_promised__ || {default: $__chai_45_as_45_promised__}).default;
 chai.use(chaiAsPromised);
 var should = chai.should();
 describe('privatized component test', (function() {
   it('single component test', (function() {
     var original = simpleHandlerBuilder((function(config) {
-      var $__2;
-      var $__1 = config,
-          greet = ($__2 = $__1.greet) === void 0 ? 'Hello' : $__2;
+      var $__4;
+      var $__3 = config,
+          greet = ($__4 = $__3.greet) === void 0 ? 'Hello' : $__4;
       return (function(args, name) {
         return greet + ', ' + name;
       });
@@ -44,9 +46,9 @@ describe('privatized component test', (function() {
   }));
   it('private inheritance', (function() {
     var original = simpleHandlerBuilder((function(config) {
-      var $__2;
-      var $__1 = config,
-          greet = ($__2 = $__1.greet) === void 0 ? 'Hello' : $__2;
+      var $__4;
+      var $__3 = config,
+          greet = ($__4 = $__3.greet) === void 0 ? 'Hello' : $__4;
       return (function(args, name) {
         return greet + ', ' + name;
       });

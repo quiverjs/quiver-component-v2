@@ -22,12 +22,16 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__quiver_45_promise__,
+    $__util_47_wrap__,
     $__handleable_45_middleware__,
-    $__util_47_wrap__;
+    $__extensible_45_component__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
-var HandleableMiddleware = ($__handleable_45_middleware__ = require("./handleable-middleware"), $__handleable_45_middleware__ && $__handleable_45_middleware__.__esModule && $__handleable_45_middleware__ || {default: $__handleable_45_middleware__}).HandleableMiddleware;
 var safeHandler = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}).safeHandler;
+var HandleableMiddleware = ($__handleable_45_middleware__ = require("./handleable-middleware"), $__handleable_45_middleware__ && $__handleable_45_middleware__.__esModule && $__handleable_45_middleware__ || {default: $__handleable_45_middleware__}).HandleableMiddleware;
+var $__4 = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}),
+    ExtensibleHandler = $__4.ExtensibleHandler,
+    ExtensibleMiddleware = $__4.ExtensibleMiddleware;
 var configHandlerToMiddleware = (function(configHandler) {
   return (function(config, builder) {
     return configHandler(config).then((function() {
@@ -117,12 +121,26 @@ var $ConfigAliasMiddleware = ConfigAliasMiddleware;
     return json;
   }
 }, {}, ConfigMiddleware);
-var configMiddleware = (function(handler, options) {
-  return new ConfigMiddleware(handler, options);
+var mixinConfigOverride = (function(prototype) {
+  prototype.configOverride = function(config) {
+    return this.addMiddleware(new ConfigOverrideMiddleware(config));
+  };
 });
-var configOverrideMiddleware = (function(config, options) {
-  return new ConfigOverrideMiddleware(config, options);
+var mixinConfigAlias = (function(prototype) {
+  prototype.configAlias = function(config) {
+    return this.addMiddleware(new ConfigAliasMiddleware(config));
+  };
 });
-var configAliasMiddleware = (function(config, options) {
-  return new ConfigAliasMiddleware(config, options);
+mixinConfigOverride(ExtensibleHandler.prototype);
+mixinConfigOverride(ExtensibleMiddleware.prototype);
+mixinConfigAlias(ExtensibleHandler.prototype);
+mixinConfigAlias(ExtensibleMiddleware.prototype);
+var configMiddleware = (function(handler) {
+  return new ConfigMiddleware(handler);
+});
+var configOverrideMiddleware = (function(config) {
+  return new ConfigOverrideMiddleware(config);
+});
+var configAliasMiddleware = (function(config) {
+  return new ConfigAliasMiddleware(config);
 });

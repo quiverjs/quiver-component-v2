@@ -14,11 +14,10 @@ import {
   handleable as makeHandleable,
   streamFilter, httpFilter, transformFilter,
   argsFilter, argsBuilderFilter, errorFilter,
-  inputHandlerMiddleware
 } from '../lib/export.js'
 
-var chai = require('chai')
-var chaiAsPromised = require('chai-as-promised')
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
 var should = chai.should()
@@ -42,7 +41,7 @@ describe('filter test', () => {
         input.should.equal('HELLO!')
         return 'goodbye'
       }, 'text', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
     var handler = yield main.loadHandler({})
     
@@ -63,7 +62,7 @@ describe('filter test', () => {
         input.should.equal('HELLO!')
         return 'goodbye'
       }, 'text', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
     var handler = yield main.loadHandler({})
     
@@ -83,7 +82,7 @@ describe('filter test', () => {
         args.foo.should.equal('bar')
         return 'foo'
       }, 'void', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
     return main.loadHandler({}).then(handler =>
       handler({}))
@@ -114,7 +113,7 @@ describe('filter test', () => {
           return 'foo'
         }
       }, 'void', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
     var config = { fooValue: 'bar' }
     var handler = yield main.loadHandler(config)
@@ -141,7 +140,7 @@ describe('filter test', () => {
         }
       }
     })
-    .addMiddleware(filter)
+    .middleware(filter)
 
     var handleable = yield main.loadHandleable({})
     var mainHandler = streamToSimpleHandler(
@@ -165,43 +164,12 @@ describe('filter test', () => {
       args => {
         throw new Error('error in handler')
       }, 'void', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
     var handler = yield main.loadHandler({})
 
     yield handler({}).should.eventually.equal(
       'error caught from filter')
-  }))
-
-  it('input handler', async(function*() {
-    var uppercase = simpleHandler(
-      (args, input) =>  input.toUpperCase() + '!', 
-      'text', 'text')
-
-    var filter = inputHandlerMiddleware(
-      uppercase, 'inHandler')
-
-    var main = simpleHandlerBuilder(
-      config => {
-        var inHandler = config.inHandler
-        should.exist(inHandler)
-
-        return async(function*(args, input) {
-          var result = yield inHandler(args, input)
-          
-          return {
-            status: 'ok',
-            result
-          }
-        })
-      }, 'text', 'json')
-    .addMiddleware(filter)
-
-    var handler = yield main.loadHandler({})
-    var json = yield handler({}, 'hello')
-
-    json.status.should.equal('ok')
-    json.result.should.equal('HELLO!')
   }))
 
   it('stream handler on http filter', async(function*() {
@@ -211,7 +179,7 @@ describe('filter test', () => {
     var main = simpleHandler(
       args => 'Hello World',
       'void', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
     var handleable = yield main.loadHandleable({})
 

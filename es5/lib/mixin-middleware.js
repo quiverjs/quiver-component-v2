@@ -27,6 +27,9 @@ var middlewareMixin = {
     this._middlewareComponents.push(middleware);
     return this;
   },
+  middleware: function(middleware) {
+    return this.addMiddleware(middleware);
+  },
   middlewareJson: function() {
     var middlewares = this.middlewareComponents;
     if (middlewares.length == 0)

@@ -16,7 +16,7 @@
     "quiver-http": "~1.2.0",
     "quiver-error": "~0.1.1",
     "quiver-object": "~1.2.1",
-    "quiver-promise": "~0.2.0",
+    "quiver-promise": "~0.2.1",
     "quiver-stream-util": "~1.2.0",
     "quiver-simple-handler": "~1.2.0"
   },

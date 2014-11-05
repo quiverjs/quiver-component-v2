@@ -3,7 +3,9 @@ var $__traceur_64_0_46_0_46_7__,
     $___46__46__47_lib_47_export_46_js__,
     $__quiver_45_promise__,
     $__quiver_45_stream_45_util__,
-    $__quiver_45_http__;
+    $__quiver_45_http__,
+    $__chai__,
+    $__chai_45_as_45_promised__;
 ($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
 var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     makeRouter = $__0.makeRouter,
@@ -22,12 +24,12 @@ var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__qu
 var $__3 = ($__quiver_45_http__ = require("quiver-http"), $__quiver_45_http__ && $__quiver_45_http__.__esModule && $__quiver_45_http__ || {default: $__quiver_45_http__}),
     RequestHead = $__3.RequestHead,
     ResponseHead = $__3.ResponseHead;
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
+var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"), $__chai_45_as_45_promised__ && $__chai_45_as_45_promised__.__esModule && $__chai_45_as_45_promised__ || {default: $__chai_45_as_45_promised__}).default;
 chai.use(chaiAsPromised);
 var should = chai.should();
 describe('router component test', (function() {
-  it('static route', async($traceurRuntime.initGeneratorFunction(function $__9() {
+  it('static route', async($traceurRuntime.initGeneratorFunction(function $__11() {
     var handlerComponent,
         router,
         handler;
@@ -66,9 +68,9 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__9, this);
+    }, $__11, this);
   })));
-  it('regex route', async($traceurRuntime.initGeneratorFunction(function $__10() {
+  it('regex route', async($traceurRuntime.initGeneratorFunction(function $__12() {
     var greet,
         router,
         handler;
@@ -101,9 +103,9 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__10, this);
+    }, $__12, this);
   })));
-  it('param route', async($traceurRuntime.initGeneratorFunction(function $__11() {
+  it('param route', async($traceurRuntime.initGeneratorFunction(function $__13() {
     var greet,
         router,
         handler;
@@ -135,9 +137,9 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__11, this);
+    }, $__13, this);
   })));
-  it('route list', async($traceurRuntime.initGeneratorFunction(function $__12() {
+  it('route list', async($traceurRuntime.initGeneratorFunction(function $__14() {
     var foo,
         bar,
         defaultPage,
@@ -203,9 +205,9 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__12, this);
+    }, $__14, this);
   })));
-  it('nested router', async($traceurRuntime.initGeneratorFunction(function $__13() {
+  it('nested router', async($traceurRuntime.initGeneratorFunction(function $__15() {
     var post,
         defaultPage,
         userRouter,
@@ -264,31 +266,29 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__13, this);
+    }, $__15, this);
   })));
-  it('http router test', async($traceurRuntime.initGeneratorFunction(function $__14() {
+  it('http router test', async($traceurRuntime.initGeneratorFunction(function $__16() {
     var foo,
         bar,
         baz,
         router,
-        $__4,
+        $__6,
         streamHandler,
         httpHandler,
         request1,
-        $__5,
+        $__7,
         response1,
         streamable1,
         request2,
-        $__6,
+        $__8,
         response2,
         streamable2,
         request3,
-        $__7,
+        $__9,
         response3,
         streamable3,
         request4,
-        $__17,
-        $__18,
         $__19,
         $__20,
         $__21,
@@ -306,12 +306,14 @@ describe('router component test', (function() {
         $__33,
         $__34,
         $__35,
-        $__36;
+        $__36,
+        $__37,
+        $__38;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
           case 0:
-            foo = createHttpHandler(async($traceurRuntime.initGeneratorFunction(function $__15(requestHead, streamable) {
+            foo = createHttpHandler(async($traceurRuntime.initGeneratorFunction(function $__17(requestHead, streamable) {
               return $traceurRuntime.createGeneratorInstance(function($ctx) {
                 while (true)
                   switch ($ctx.state) {
@@ -328,9 +330,9 @@ describe('router component test', (function() {
                     default:
                       return $ctx.end();
                   }
-              }, $__15, this);
+              }, $__17, this);
             })));
-            bar = createHttpHandler(async($traceurRuntime.initGeneratorFunction(function $__16(requestHead, streamable) {
+            bar = createHttpHandler(async($traceurRuntime.initGeneratorFunction(function $__18(requestHead, streamable) {
               return $traceurRuntime.createGeneratorInstance(function($ctx) {
                 while (true)
                   switch ($ctx.state) {
@@ -353,7 +355,7 @@ describe('router component test', (function() {
                     default:
                       return $ctx.end();
                   }
-              }, $__16, this);
+              }, $__18, this);
             })));
             baz = simpleHandler((function(args, text) {
               args.path.should.equal('/baz');
@@ -364,23 +366,23 @@ describe('router component test', (function() {
             $ctx.state = 62;
             break;
           case 62:
-            $__17 = router.loadHandleable;
-            $__18 = $__17.call(router, {});
+            $__19 = router.loadHandleable;
+            $__20 = $__19.call(router, {});
             $ctx.state = 6;
             break;
           case 6:
             $ctx.state = 2;
-            return $__18;
+            return $__20;
           case 2:
-            $__19 = $ctx.sent;
+            $__21 = $ctx.sent;
             $ctx.state = 4;
             break;
           case 4:
-            $__4 = $__19;
-            $__20 = $__4.streamHandler;
-            streamHandler = $__20;
-            $__21 = $__4.httpHandler;
-            httpHandler = $__21;
+            $__6 = $__21;
+            $__22 = $__6.streamHandler;
+            streamHandler = $__22;
+            $__23 = $__6.httpHandler;
+            httpHandler = $__23;
             $ctx.state = 8;
             break;
           case 8:
@@ -388,23 +390,23 @@ describe('router component test', (function() {
             $ctx.state = 64;
             break;
           case 64:
-            $__22 = emptyStreamable();
-            $__23 = httpHandler(request1, $__22);
+            $__24 = emptyStreamable();
+            $__25 = httpHandler(request1, $__24);
             $ctx.state = 14;
             break;
           case 14:
             $ctx.state = 10;
-            return $__23;
+            return $__25;
           case 10:
-            $__24 = $ctx.sent;
+            $__26 = $ctx.sent;
             $ctx.state = 12;
             break;
           case 12:
-            $__5 = $__24;
-            $__25 = $__5[0];
-            response1 = $__25;
-            $__26 = $__5[1];
-            streamable1 = $__26;
+            $__7 = $__26;
+            $__27 = $__7[0];
+            response1 = $__27;
+            $__28 = $__7[1];
+            streamable1 = $__28;
             $ctx.state = 16;
             break;
           case 16:
@@ -426,23 +428,23 @@ describe('router component test', (function() {
             $ctx.state = 68;
             break;
           case 68:
-            $__27 = textToStreamable('post content');
-            $__28 = httpHandler(request2, $__27);
+            $__29 = textToStreamable('post content');
+            $__30 = httpHandler(request2, $__29);
             $ctx.state = 26;
             break;
           case 26:
             $ctx.state = 22;
-            return $__28;
+            return $__30;
           case 22:
-            $__29 = $ctx.sent;
+            $__31 = $ctx.sent;
             $ctx.state = 24;
             break;
           case 24:
-            $__6 = $__29;
-            $__30 = $__6[0];
-            response2 = $__30;
-            $__31 = $__6[1];
-            streamable2 = $__31;
+            $__8 = $__31;
+            $__32 = $__8[0];
+            response2 = $__32;
+            $__33 = $__8[1];
+            streamable2 = $__33;
             $ctx.state = 28;
             break;
           case 28:
@@ -464,23 +466,23 @@ describe('router component test', (function() {
             $ctx.state = 72;
             break;
           case 72:
-            $__32 = textToStreamable('upload');
-            $__33 = httpHandler(request3, $__32);
+            $__34 = textToStreamable('upload');
+            $__35 = httpHandler(request3, $__34);
             $ctx.state = 38;
             break;
           case 38:
             $ctx.state = 34;
-            return $__33;
+            return $__35;
           case 34:
-            $__34 = $ctx.sent;
+            $__36 = $ctx.sent;
             $ctx.state = 36;
             break;
           case 36:
-            $__7 = $__34;
-            $__35 = $__7[0];
-            response3 = $__35;
-            $__36 = $__7[1];
-            streamable3 = $__36;
+            $__9 = $__36;
+            $__37 = $__9[0];
+            response3 = $__37;
+            $__38 = $__9[1];
+            streamable3 = $__38;
             $ctx.state = 40;
             break;
           case 40:
@@ -532,18 +534,16 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__14, this);
+    }, $__16, this);
   })));
-  it('method router test 1', async($traceurRuntime.initGeneratorFunction(function $__15() {
+  it('method router test 1', async($traceurRuntime.initGeneratorFunction(function $__17() {
     var foo,
         router,
         handler,
-        $__4,
+        $__6,
         responseHead,
         responseStreamable,
-        $__5,
-        $__37,
-        $__38,
+        $__7,
         $__39,
         $__40,
         $__41,
@@ -553,7 +553,9 @@ describe('router component test', (function() {
         $__45,
         $__46,
         $__47,
-        $__48;
+        $__48,
+        $__49,
+        $__50;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -572,24 +574,24 @@ describe('router component test', (function() {
             $ctx.state = 4;
             break;
           case 4:
-            $__37 = new RequestHead({method: 'GET'});
-            $__38 = emptyStreamable();
-            $__39 = handler($__37, $__38);
+            $__39 = new RequestHead({method: 'GET'});
+            $__40 = emptyStreamable();
+            $__41 = handler($__39, $__40);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__39;
+            return $__41;
           case 6:
-            $__40 = $ctx.sent;
+            $__42 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__4 = $__40;
-            $__41 = $__4[0];
-            responseHead = $__41;
-            $__42 = $__4[1];
-            responseStreamable = $__42;
+            $__6 = $__42;
+            $__43 = $__6[0];
+            responseHead = $__43;
+            $__44 = $__6[1];
+            responseStreamable = $__44;
             $ctx.state = 12;
             break;
           case 12:
@@ -604,24 +606,24 @@ describe('router component test', (function() {
             $ctx.state = 16;
             break;
           case 16:
-            $__43 = new RequestHead({method: 'POST'});
-            $__44 = emptyStreamable();
-            $__45 = handler($__43, $__44);
+            $__45 = new RequestHead({method: 'POST'});
+            $__46 = emptyStreamable();
+            $__47 = handler($__45, $__46);
             $ctx.state = 22;
             break;
           case 22:
             $ctx.state = 18;
-            return $__45;
+            return $__47;
           case 18:
-            $__46 = $ctx.sent;
+            $__48 = $ctx.sent;
             $ctx.state = 20;
             break;
           case 20:
-            $__5 = $__46;
-            $__47 = $__5[0];
-            responseHead = $__47;
-            $__48 = $__5[1];
-            responseStreamable = $__48;
+            $__7 = $__48;
+            $__49 = $__7[0];
+            responseHead = $__49;
+            $__50 = $__7[1];
+            responseStreamable = $__50;
             $ctx.state = 24;
             break;
           case 24:
@@ -631,22 +633,20 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__15, this);
+    }, $__17, this);
   })));
-  it('method router test 2', async($traceurRuntime.initGeneratorFunction(function $__16() {
+  it('method router test 2', async($traceurRuntime.initGeneratorFunction(function $__18() {
     var foo,
         bar,
         router,
         handler,
-        $__4,
+        $__6,
         responseHead,
         responseStreamable,
-        $__5,
-        $__6,
         $__7,
         $__8,
-        $__49,
-        $__50,
+        $__9,
+        $__10,
         $__51,
         $__52,
         $__53,
@@ -674,7 +674,9 @@ describe('router component test', (function() {
         $__75,
         $__76,
         $__77,
-        $__78;
+        $__78,
+        $__79,
+        $__80;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -699,27 +701,27 @@ describe('router component test', (function() {
             $ctx.state = 4;
             break;
           case 4:
-            $__49 = new RequestHead({
+            $__51 = new RequestHead({
               method: 'GET',
               url: '/'
             });
-            $__50 = emptyStreamable();
-            $__51 = handler($__49, $__50);
+            $__52 = emptyStreamable();
+            $__53 = handler($__51, $__52);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__51;
+            return $__53;
           case 6:
-            $__52 = $ctx.sent;
+            $__54 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__4 = $__52;
-            $__53 = $__4[0];
-            responseHead = $__53;
-            $__54 = $__4[1];
-            responseStreamable = $__54;
+            $__6 = $__54;
+            $__55 = $__6[0];
+            responseHead = $__55;
+            $__56 = $__6[1];
+            responseStreamable = $__56;
             $ctx.state = 12;
             break;
           case 12:
@@ -734,27 +736,27 @@ describe('router component test', (function() {
             $ctx.state = 16;
             break;
           case 16:
-            $__55 = new RequestHead({
+            $__57 = new RequestHead({
               method: 'POST',
               url: '/'
             });
-            $__56 = emptyStreamable();
-            $__57 = handler($__55, $__56);
+            $__58 = emptyStreamable();
+            $__59 = handler($__57, $__58);
             $ctx.state = 22;
             break;
           case 22:
             $ctx.state = 18;
-            return $__57;
+            return $__59;
           case 18:
-            $__58 = $ctx.sent;
+            $__60 = $ctx.sent;
             $ctx.state = 20;
             break;
           case 20:
-            $__5 = $__58;
-            $__59 = $__5[0];
-            responseHead = $__59;
-            $__60 = $__5[1];
-            responseStreamable = $__60;
+            $__7 = $__60;
+            $__61 = $__7[0];
+            responseHead = $__61;
+            $__62 = $__7[1];
+            responseStreamable = $__62;
             $ctx.state = 24;
             break;
           case 24:
@@ -769,27 +771,27 @@ describe('router component test', (function() {
             $ctx.state = 28;
             break;
           case 28:
-            $__61 = new RequestHead({
+            $__63 = new RequestHead({
               method: 'HEAD',
               url: '/'
             });
-            $__62 = emptyStreamable();
-            $__63 = handler($__61, $__62);
+            $__64 = emptyStreamable();
+            $__65 = handler($__63, $__64);
             $ctx.state = 34;
             break;
           case 34:
             $ctx.state = 30;
-            return $__63;
+            return $__65;
           case 30:
-            $__64 = $ctx.sent;
+            $__66 = $ctx.sent;
             $ctx.state = 32;
             break;
           case 32:
-            $__6 = $__64;
-            $__65 = $__6[0];
-            responseHead = $__65;
-            $__66 = $__6[1];
-            responseStreamable = $__66;
+            $__8 = $__66;
+            $__67 = $__8[0];
+            responseHead = $__67;
+            $__68 = $__8[1];
+            responseStreamable = $__68;
             $ctx.state = 36;
             break;
           case 36:
@@ -804,24 +806,24 @@ describe('router component test', (function() {
             $ctx.state = 40;
             break;
           case 40:
-            $__67 = new RequestHead({method: 'PUT'});
-            $__68 = emptyStreamable();
-            $__69 = handler($__67, $__68);
+            $__69 = new RequestHead({method: 'PUT'});
+            $__70 = emptyStreamable();
+            $__71 = handler($__69, $__70);
             $ctx.state = 46;
             break;
           case 46:
             $ctx.state = 42;
-            return $__69;
+            return $__71;
           case 42:
-            $__70 = $ctx.sent;
+            $__72 = $ctx.sent;
             $ctx.state = 44;
             break;
           case 44:
-            $__7 = $__70;
-            $__71 = $__7[0];
-            responseHead = $__71;
-            $__72 = $__7[1];
-            responseStreamable = $__72;
+            $__9 = $__72;
+            $__73 = $__9[0];
+            responseHead = $__73;
+            $__74 = $__9[1];
+            responseStreamable = $__74;
             $ctx.state = 48;
             break;
           case 48:
@@ -829,24 +831,24 @@ describe('router component test', (function() {
             $ctx.state = 66;
             break;
           case 66:
-            $__73 = new RequestHead({method: 'OPTIONS'});
-            $__74 = emptyStreamable();
-            $__75 = handler($__73, $__74);
+            $__75 = new RequestHead({method: 'OPTIONS'});
+            $__76 = emptyStreamable();
+            $__77 = handler($__75, $__76);
             $ctx.state = 54;
             break;
           case 54:
             $ctx.state = 50;
-            return $__75;
+            return $__77;
           case 50:
-            $__76 = $ctx.sent;
+            $__78 = $ctx.sent;
             $ctx.state = 52;
             break;
           case 52:
-            $__8 = $__76;
-            $__77 = $__8[0];
-            responseHead = $__77;
-            $__78 = $__8[1];
-            responseStreamable = $__78;
+            $__10 = $__78;
+            $__79 = $__10[0];
+            responseHead = $__79;
+            $__80 = $__10[1];
+            responseStreamable = $__80;
             $ctx.state = 56;
             break;
           case 56:
@@ -857,6 +859,6 @@ describe('router component test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__16, this);
+    }, $__18, this);
   })));
 }));

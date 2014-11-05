@@ -3,7 +3,9 @@ var $__traceur_64_0_46_0_46_7__,
     $__quiver_45_promise__,
     $__quiver_45_http__,
     $__quiver_45_stream_45_util__,
-    $___46__46__47_lib_47_export_46_js__;
+    $___46__46__47_lib_47_export_46_js__,
+    $__chai__,
+    $__chai_45_as_45_promised__;
 ($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
 var $__0 = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}),
     async = $__0.async,
@@ -18,8 +20,8 @@ var $__3 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), 
     streamHandler = $__3.streamHandler,
     simpleHandler = $__3.simpleHandler,
     httpHandlerBuilder = $__3.httpHandlerBuilder;
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
+var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"), $__chai_45_as_45_promised__ && $__chai_45_as_45_promised__.__esModule && $__chai_45_as_45_promised__ || {default: $__chai_45_as_45_promised__}).default;
 chai.use(chaiAsPromised);
 var should = chai.should();
 describe('handler test', (function() {
@@ -45,20 +47,20 @@ describe('handler test', (function() {
       return handler({}, 'hello').should.eventually.equal('<b>goodbye</b>');
     }));
   }));
-  it('http builder', async($traceurRuntime.initGeneratorFunction(function $__5() {
+  it('http builder', async($traceurRuntime.initGeneratorFunction(function $__7() {
     var main,
         config,
         handleable,
         handler,
         input,
-        $__4,
+        $__6,
         responseHead,
         responseStreamable,
-        $__7,
-        $__8,
         $__9,
         $__10,
-        $__11;
+        $__11,
+        $__12,
+        $__13;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -66,7 +68,7 @@ describe('handler test', (function() {
             main = httpHandlerBuilder((function(config) {
               var greet = config.greet || 'hi';
               config.modified = true;
-              return async($traceurRuntime.initGeneratorFunction(function $__6(requestHead, streamable) {
+              return async($traceurRuntime.initGeneratorFunction(function $__8(requestHead, streamable) {
                 var input;
                 return $traceurRuntime.createGeneratorInstance(function($ctx) {
                   while (true)
@@ -89,7 +91,7 @@ describe('handler test', (function() {
                       default:
                         return $ctx.end();
                     }
-                }, $__6, this);
+                }, $__8, this);
               }));
             }));
             config = {greet: 'goodbye'};
@@ -110,23 +112,23 @@ describe('handler test', (function() {
             $ctx.state = 20;
             break;
           case 20:
-            $__7 = new RequestHead();
-            $__8 = handler($__7, input);
+            $__9 = new RequestHead();
+            $__10 = handler($__9, input);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__8;
+            return $__10;
           case 6:
-            $__9 = $ctx.sent;
+            $__11 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__4 = $__9;
-            $__10 = $__4[0];
-            responseHead = $__10;
-            $__11 = $__4[1];
-            responseStreamable = $__11;
+            $__6 = $__11;
+            $__12 = $__6[0];
+            responseHead = $__12;
+            $__13 = $__6[1];
+            responseStreamable = $__13;
             $ctx.state = 12;
             break;
           case 12:
@@ -143,6 +145,6 @@ describe('handler test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__5, this);
+    }, $__7, this);
   })));
 }));
