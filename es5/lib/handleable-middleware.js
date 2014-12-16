@@ -20,7 +20,7 @@ var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._mainMiddleware = safeHandler(handleableMiddleware, options);
   this._repeat = options.repeat;
-  $traceurRuntime.superCall(this, $HandleableMiddleware.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($HandleableMiddleware).call(this, options);
 };
 var $HandleableMiddleware = HandleableMiddleware;
 ($traceurRuntime.createClass)(HandleableMiddleware, {

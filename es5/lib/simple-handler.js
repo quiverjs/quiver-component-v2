@@ -39,7 +39,7 @@ var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, i
   this._inType = inType;
   this._outType = outType;
   this._simpleHandlerBuilder = safeBuilder(simpleHandlerBuilder, options);
-  $traceurRuntime.superCall(this, $SimpleHandlerBuilder.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($SimpleHandlerBuilder).call(this, null, options);
 };
 var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 ($traceurRuntime.createClass)(SimpleHandlerBuilder, {
@@ -72,7 +72,7 @@ var $SimpleHandlerBuilder = SimpleHandlerBuilder;
     return 'simple handler builder';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $SimpleHandlerBuilder.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $SimpleHandlerBuilder.prototype, "toJson").call(this);
     json.inType = this.inType;
     json.outType = this.outType;
     return json;
@@ -81,7 +81,7 @@ var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 var SimpleHandler = function SimpleHandler(simpleHandler, inType, outType) {
   var options = arguments[3] !== (void 0) ? arguments[3] : {};
   this._simpleHandler = safeHandler(simpleHandler, options);
-  $traceurRuntime.superCall(this, $SimpleHandler.prototype, "constructor", [null, inType, outType, options]);
+  $traceurRuntime.superConstructor($SimpleHandler).call(this, null, inType, outType, options);
 };
 var $SimpleHandler = SimpleHandler;
 ($traceurRuntime.createClass)(SimpleHandler, {

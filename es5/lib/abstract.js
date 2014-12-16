@@ -47,7 +47,7 @@ var ProtocolMiddleware = function ProtocolMiddleware(configKey, protocolImpl) {
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
   this._configKey = configKey;
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $ProtocolMiddleware.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ProtocolMiddleware).call(this, null, options);
   this.subComponents.protocolImpl = protocolImpl;
 };
 var $ProtocolMiddleware = ProtocolMiddleware;
@@ -70,7 +70,7 @@ var AbstractComponent = function AbstractComponent(configKey, protocol, componen
   this._protocol = protocol;
   this._component = component;
   this._implBundle = {};
-  $traceurRuntime.superCall(this, $AbstractComponent.prototype, "constructor", []);
+  $traceurRuntime.superConstructor($AbstractComponent).call(this);
 };
 var $AbstractComponent = AbstractComponent;
 ($traceurRuntime.createClass)(AbstractComponent, {
@@ -92,7 +92,7 @@ var $AbstractComponent = AbstractComponent;
       newImpl[key] = implBundle[key].makePrivate(privateTable);
     }
     privateInstance._implBundle = newImpl;
-    $traceurRuntime.superCall(this, $AbstractComponent.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $AbstractComponent.prototype, "privatize").call(this, privateInstance, privateTable);
   },
   concretize: function() {
     var configKey = this._configKey;

@@ -25,7 +25,7 @@ var RouteList = function RouteList() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._routes = [];
   this.initMiddlewareExtension(options);
-  $traceurRuntime.superCall(this, $RouteList.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($RouteList).call(this, options);
 };
 var $RouteList = RouteList;
 ($traceurRuntime.createClass)(RouteList, {
@@ -65,13 +65,13 @@ var $RouteList = RouteList;
       return route.makePrivate(privateTable);
     }));
     this.privatizeMiddlewares(privateInstance, privateTable);
-    $traceurRuntime.superCall(this, $RouteList.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $RouteList.prototype, "privatize").call(this, privateInstance, privateTable);
   },
   get type() {
     return 'route list';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $RouteList.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $RouteList.prototype, "toJson").call(this);
     var routes = this.routes;
     if (routes.length > 0)
       json.routes = this.routes.map((function(route) {

@@ -104,7 +104,7 @@ var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
   this._argsBuilder = safeBuilder(argsBuilder, options);
   if (options.copyConfig === undefined)
     options.copyConfig = true;
-  $traceurRuntime.superCall(this, $ArgsBuilderFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ArgsBuilderFilter).call(this, null, options);
 };
 var $ArgsBuilderFilter = ArgsBuilderFilter;
 ($traceurRuntime.createClass)(ArgsBuilderFilter, {
@@ -124,7 +124,7 @@ var ArgsFilter = function ArgsFilter(argsHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsHandler = safeHandler(argsHandler, options);
   options.copyConfig = false;
-  $traceurRuntime.superCall(this, $ArgsFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ArgsFilter).call(this, null, options);
 };
 var $ArgsFilter = ArgsFilter;
 ($traceurRuntime.createClass)(ArgsFilter, {
@@ -146,7 +146,7 @@ var $ArgsFilter = ArgsFilter;
 var ErrorFilter = function ErrorFilter(errorHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._errorHandler = safeHandler(errorHandler, options);
-  $traceurRuntime.superCall(this, $ErrorFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ErrorFilter).call(this, null, options);
 };
 var $ErrorFilter = ErrorFilter;
 ($traceurRuntime.createClass)(ErrorFilter, {
@@ -165,7 +165,7 @@ var $ErrorFilter = ErrorFilter;
 var ErrorBuilderFilter = function ErrorBuilderFilter(errorBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._errorBuilder = safeBuilder(errorBuilder, options);
-  $traceurRuntime.superCall(this, $ErrorBuilderFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ErrorBuilderFilter).call(this, null, options);
 };
 var $ErrorBuilderFilter = ErrorBuilderFilter;
 ($traceurRuntime.createClass)(ErrorBuilderFilter, {

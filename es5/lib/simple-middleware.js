@@ -43,7 +43,7 @@ var configHandlerToMiddleware = (function(configHandler) {
 var ConfigMiddleware = function ConfigMiddleware(configHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._configHandler = safeHandler(configHandler, options);
-  $traceurRuntime.superCall(this, $ConfigMiddleware.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ConfigMiddleware).call(this, null, options);
 };
 var $ConfigMiddleware = ConfigMiddleware;
 ($traceurRuntime.createClass)(ConfigMiddleware, {
@@ -66,7 +66,7 @@ var ConfigOverrideMiddleware = function ConfigOverrideMiddleware(overrideConfig)
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._overrideConfig = overrideConfig;
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $ConfigOverrideMiddleware.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ConfigOverrideMiddleware).call(this, null, options);
 };
 var $ConfigOverrideMiddleware = ConfigOverrideMiddleware;
 ($traceurRuntime.createClass)(ConfigOverrideMiddleware, {
@@ -86,7 +86,7 @@ var $ConfigOverrideMiddleware = ConfigOverrideMiddleware;
     return 'config override middleware';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ConfigOverrideMiddleware.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ConfigOverrideMiddleware.prototype, "toJson").call(this);
     json.overrideConfig = this.overrideConfig;
     return json;
   }
@@ -95,7 +95,7 @@ var ConfigAliasMiddleware = function ConfigAliasMiddleware(aliasConfig) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._aliasConfig = aliasConfig;
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $ConfigAliasMiddleware.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($ConfigAliasMiddleware).call(this, null, options);
 };
 var $ConfigAliasMiddleware = ConfigAliasMiddleware;
 ($traceurRuntime.createClass)(ConfigAliasMiddleware, {
@@ -116,7 +116,7 @@ var $ConfigAliasMiddleware = ConfigAliasMiddleware;
     return 'config alias middleware';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ConfigAliasMiddleware.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ConfigAliasMiddleware.prototype, "toJson").call(this);
     json.aliasConfig = this.aliasConfig;
     return json;
   }

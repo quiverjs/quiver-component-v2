@@ -79,7 +79,7 @@ var HandleableFilter = function HandleableFilter(handleableFilter) {
   this._copyConfig = copyConfig;
   this._handleableFilter = handleableFilter;
   this._handleableFilter = safeHandler(handleableFilter, options);
-  $traceurRuntime.superCall(this, $HandleableFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($HandleableFilter).call(this, null, options);
 };
 var $HandleableFilter = HandleableFilter;
 ($traceurRuntime.createClass)(HandleableFilter, {
@@ -96,7 +96,7 @@ var $HandleableFilter = HandleableFilter;
 var StreamFilter = function StreamFilter(filter) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._streamFilter = safeBuilder(filter, options);
-  $traceurRuntime.superCall(this, $StreamFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($StreamFilter).call(this, null, options);
 };
 var $StreamFilter = StreamFilter;
 ($traceurRuntime.createClass)(StreamFilter, {
@@ -125,7 +125,7 @@ var $StreamFilter = StreamFilter;
 var HttpFilter = function HttpFilter(filter) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._httpFilter = safeBuilder(filter, options);
-  $traceurRuntime.superCall(this, $HttpFilter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($HttpFilter).call(this, null, options);
 };
 var $HttpFilter = HttpFilter;
 ($traceurRuntime.createClass)(HttpFilter, {

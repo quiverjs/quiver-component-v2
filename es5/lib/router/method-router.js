@@ -189,7 +189,7 @@ var MethodRouter = function MethodRouter(methodMap) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._methodMap = normalizeMethodMap(methodMap);
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $MethodRouter.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($MethodRouter).call(this, null, options);
 };
 var $MethodRouter = MethodRouter;
 ($traceurRuntime.createClass)(MethodRouter, {
@@ -206,7 +206,7 @@ var $MethodRouter = MethodRouter;
       privateMap[key] = methodMap[key].makePrivate(privateTable);
     }
     privateInstance._methodMap = privateMap;
-    $traceurRuntime.superCall(this, $MethodRouter.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $MethodRouter.prototype, "privatize").call(this, privateInstance, privateTable);
   }
 }, {}, HttpHandlerBuilder);
 var methodRouter = (function(methodMap) {

@@ -70,7 +70,7 @@ var Pipeline = function Pipeline() {
   var $__4 = options,
       pipelineCombinators = ($__5 = $__4.pipelineCombinators) === void 0 ? defaultCombinators : $__5;
   this._pipelineCombinators = pipelineCombinators;
-  $traceurRuntime.superCall(this, $Pipeline.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Pipeline).call(this, options);
   this.subComponents.pipelineHandlers = [];
 };
 var $Pipeline = Pipeline;
@@ -96,7 +96,7 @@ var $Pipeline = Pipeline;
     return 'pipeline';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $Pipeline.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $Pipeline.prototype, "toJson").call(this);
     json.pipelines = this.pipelineHandlers.map((function(component) {
       return component.toJson();
     }));

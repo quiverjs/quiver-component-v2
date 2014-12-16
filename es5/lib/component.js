@@ -105,7 +105,7 @@ var Component = function Component() {
   }
 }, {});
 var MiddlewareComponent = function MiddlewareComponent() {
-  $traceurRuntime.defaultSuperCall(this, $MiddlewareComponent.prototype, arguments);
+  $traceurRuntime.superConstructor($MiddlewareComponent).apply(this, arguments);
 };
 var $MiddlewareComponent = MiddlewareComponent;
 ($traceurRuntime.createClass)(MiddlewareComponent, {
@@ -120,7 +120,7 @@ var $MiddlewareComponent = MiddlewareComponent;
   }
 }, {}, Component);
 var HandlerComponent = function HandlerComponent() {
-  $traceurRuntime.defaultSuperCall(this, $HandlerComponent.prototype, arguments);
+  $traceurRuntime.superConstructor($HandlerComponent).apply(this, arguments);
 };
 var $HandlerComponent = HandlerComponent;
 ($traceurRuntime.createClass)(HandlerComponent, {

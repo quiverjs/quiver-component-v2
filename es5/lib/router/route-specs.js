@@ -23,7 +23,7 @@ var getHandlerFromPath = (function(routeIndex, path, args) {
   if (staticHandler)
     return staticHandler;
   var dynamicRoutes = routeIndex.dynamicRoutes;
-  for (var $__4 = dynamicRoutes[Symbol.iterator](),
+  for (var $__4 = dynamicRoutes[$traceurRuntime.toProperty(Symbol.iterator)](),
       $__5; !($__5 = $__4.next()).done; ) {
     var route = $__5.value;
     {

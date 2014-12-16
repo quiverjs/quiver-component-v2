@@ -92,7 +92,7 @@ var BundleField = function BundleField(handlerName, bundleComponent, handlerConv
   this._handlerConverter = handlerConverter;
   this._handlerLoader = handlerLoader;
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $BundleField.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($BundleField).call(this, null, options);
 };
 var $BundleField = BundleField;
 ($traceurRuntime.createClass)(BundleField, {
@@ -113,7 +113,7 @@ var $BundleField = BundleField;
   },
   _makePrivate: function() {
     var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
-    return $traceurRuntime.superCall(this, $BundleField.prototype, "makePrivate", [privateTable]);
+    return $traceurRuntime.superGet(this, $BundleField.prototype, "makePrivate").call(this, privateTable);
   }
 }, {}, StreamHandlerBuilder);
 var bundleFields = (function(handlerNames, bundleComponent) {
@@ -133,7 +133,7 @@ var HandlerBundle = function HandlerBundle(bundleBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._bundleBuilder = safePromised(bundleBuilder);
   this._bundleFields = {};
-  $traceurRuntime.superCall(this, $HandlerBundle.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($HandlerBundle).call(this, options);
 };
 var $HandlerBundle = HandlerBundle;
 ($traceurRuntime.createClass)(HandlerBundle, {
@@ -181,7 +181,7 @@ var $HandlerBundle = HandlerBundle;
       privateFields[key] = privateField;
     }
     privateInstance._bundleFields = privateFields;
-    $traceurRuntime.superCall(this, $HandlerBundle.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "privatize").call(this, privateInstance, privateTable);
   },
   addMiddleware: function(middleware) {
     var bundleFields = this._bundleFields;

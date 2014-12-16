@@ -31,7 +31,7 @@ var ExtensibleHandler = function ExtensibleHandler(options) {
       copyConfig = ($__6 = $__5.copyConfig) === void 0 ? true : $__6;
   this._copyConfig = copyConfig;
   this.initMiddlewareExtension(options);
-  $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($ExtensibleHandler).call(this, options);
 };
 var $ExtensibleHandler = ExtensibleHandler;
 ($traceurRuntime.createClass)(ExtensibleHandler, {
@@ -49,10 +49,10 @@ var $ExtensibleHandler = ExtensibleHandler;
   },
   privatize: function(privateInstance, privateTable) {
     this.privatizeMiddlewares(privateInstance, privateTable);
-    $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $ExtensibleHandler.prototype, "privatize").call(this, privateInstance, privateTable);
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ExtensibleHandler.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ExtensibleHandler.prototype, "toJson").call(this);
     json.middlewares = this.middlewareJson();
     return json;
   }
@@ -60,7 +60,7 @@ var $ExtensibleHandler = ExtensibleHandler;
 mixinMiddlewareExtensible(ExtensibleHandler.prototype);
 var ExtensibleMiddleware = function ExtensibleMiddleware(options) {
   this.initMiddlewareExtension(options);
-  $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($ExtensibleMiddleware).call(this, options);
 };
 var $ExtensibleMiddleware = ExtensibleMiddleware;
 ($traceurRuntime.createClass)(ExtensibleMiddleware, {
@@ -74,10 +74,10 @@ var $ExtensibleMiddleware = ExtensibleMiddleware;
   },
   privatize: function(privateInstance, privateTable) {
     this.privatizeMiddlewares(privateInstance, privateTable);
-    $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $ExtensibleMiddleware.prototype, "privatize").call(this, privateInstance, privateTable);
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ExtensibleMiddleware.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ExtensibleMiddleware.prototype, "toJson").call(this);
     json.middlewares = this.middlewareJson();
     return json;
   }

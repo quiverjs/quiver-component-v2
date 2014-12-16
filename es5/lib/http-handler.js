@@ -27,7 +27,7 @@ var HandleableBuilder = ($__handleable_45_builder__ = require("./handleable-buil
 var HttpHandlerBuilder = function HttpHandlerBuilder(httpHandlerBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._httpHandlerBuilder = safeBuilder(httpHandlerBuilder, options);
-  $traceurRuntime.superCall(this, $HttpHandlerBuilder.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($HttpHandlerBuilder).call(this, null, options);
 };
 var $HttpHandlerBuilder = HttpHandlerBuilder;
 ($traceurRuntime.createClass)(HttpHandlerBuilder, {
@@ -54,7 +54,7 @@ var $HttpHandlerBuilder = HttpHandlerBuilder;
 var HttpHandler = function HttpHandler(httpHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._httpHandler = safeHandler(httpHandler, options);
-  $traceurRuntime.superCall(this, $HttpHandler.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($HttpHandler).call(this, null, options);
 };
 var $HttpHandler = HttpHandler;
 ($traceurRuntime.createClass)(HttpHandler, {

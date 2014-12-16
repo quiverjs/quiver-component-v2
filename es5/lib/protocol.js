@@ -119,14 +119,14 @@ var $ProtocolImpl = ProtocolImpl;
       };
     }
     privateInstance._implMap = newImplMap;
-    $traceurRuntime.superCall(this, $ProtocolImpl.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $ProtocolImpl.prototype, "privatize").call(this, privateInstance, privateTable);
   }
 }, {}, Component);
 var Protocol = function Protocol() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._loaderMap = [];
   this._subprotocols = [];
-  $traceurRuntime.superCall(this, $Protocol.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Protocol).call(this, options);
 };
 var $Protocol = Protocol;
 ($traceurRuntime.createClass)(Protocol, {

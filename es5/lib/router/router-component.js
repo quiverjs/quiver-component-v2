@@ -31,7 +31,7 @@ var Router = function Router() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._routeLists = [];
   this._defaultRouteList = new RouteList();
-  $traceurRuntime.superCall(this, $Router.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Router).call(this, options);
 };
 var $Router = Router;
 ($traceurRuntime.createClass)(Router, {
@@ -95,13 +95,13 @@ var $Router = Router;
     }));
     privateInstance._defaultRouteList = this._defaultRouteList.makePrivate(privateTable);
     privateInstance._defaultHandler = this._defaultHandler.makePrivate(privateTable);
-    $traceurRuntime.superCall(this, $Router.prototype, "privatize", [privateInstance, privateTable]);
+    $traceurRuntime.superGet(this, $Router.prototype, "privatize").call(this, privateInstance, privateTable);
   },
   get type() {
     return 'router';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $Router.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $Router.prototype, "toJson").call(this);
     json.routeLists = this.routeLists.map((function(routeList) {
       return routeList.toJson();
     }));

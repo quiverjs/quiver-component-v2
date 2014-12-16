@@ -25,7 +25,7 @@ var ExtensibleHandler = ($__extensible_45_component__ = require("./extensible-co
 var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._mainHandleableBuilder = safeHandler(handleableBuilder, options);
-  $traceurRuntime.superCall(this, $HandleableBuilder.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($HandleableBuilder).call(this, options);
 };
 var $HandleableBuilder = HandleableBuilder;
 ($traceurRuntime.createClass)(HandleableBuilder, {
@@ -40,7 +40,7 @@ var Handleable = function Handleable(handleable) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._handleable = handleable;
   options.safeWrapped = true;
-  $traceurRuntime.superCall(this, $Handleable.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($Handleable).call(this, null, options);
 };
 var $Handleable = Handleable;
 ($traceurRuntime.createClass)(Handleable, {

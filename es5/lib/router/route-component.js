@@ -105,7 +105,7 @@ var Route = function Route(handlerComponent) {
   }
   var urlBuilder = options.urlBuilder;
   this._urlBuilder = urlBuilder;
-  $traceurRuntime.superCall(this, $Route.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($Route).call(this, options);
   this.subComponents.routeHandler = handlerComponent;
 };
 var $Route = Route;
@@ -132,7 +132,7 @@ var $Route = Route;
     return 'route';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $Route.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $Route.prototype, "toJson").call(this);
     json.handler = this.handlerComponent.toJson();
     return json;
   }
@@ -146,7 +146,7 @@ var StaticRoute = function StaticRoute(handlerComponent, staticPath) {
     return staticPath;
   });
   options.urlBuilder = options.urlBuilder || urlBuilder;
-  $traceurRuntime.superCall(this, $StaticRoute.prototype, "constructor", [handlerComponent, options]);
+  $traceurRuntime.superConstructor($StaticRoute).call(this, handlerComponent, options);
 };
 var $StaticRoute = StaticRoute;
 ($traceurRuntime.createClass)(StaticRoute, {
@@ -166,7 +166,7 @@ var $StaticRoute = StaticRoute;
     return 'static';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $StaticRoute.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $StaticRoute.prototype, "toJson").call(this);
     json.staticPath = this.staticPath;
     return json;
   }
@@ -176,7 +176,7 @@ var DynamicRoute = function DynamicRoute(handlerComponent, matcher) {
   if (typeof(matcher) != 'function')
     throw new TypeError('matcher must be of type function');
   this._matcher = matcher;
-  $traceurRuntime.superCall(this, $DynamicRoute.prototype, "constructor", [handlerComponent, options]);
+  $traceurRuntime.superConstructor($DynamicRoute).call(this, handlerComponent, options);
 };
 var $DynamicRoute = DynamicRoute;
 ($traceurRuntime.createClass)(DynamicRoute, {
@@ -203,7 +203,7 @@ var RegexRoute = function RegexRoute(handlerComponent, regex) {
     throw new TypeError('regex must be regular expression');
   this._regex = regex;
   var matcher = regexMatcher(regex, matchFields);
-  $traceurRuntime.superCall(this, $RegexRoute.prototype, "constructor", [handlerComponent, matcher, options]);
+  $traceurRuntime.superConstructor($RegexRoute).call(this, handlerComponent, matcher, options);
 };
 var $RegexRoute = RegexRoute;
 ($traceurRuntime.createClass)(RegexRoute, {
@@ -221,7 +221,7 @@ var ParamRoute = function ParamRoute(handlerComponent, paramPath) {
   this._paramPath = paramPath;
   var matcher = paramMatcher(paramPath);
   options.urlBuilder = options.urlBuilder || paramUrlBuilder(paramPath);
-  $traceurRuntime.superCall(this, $ParamRoute.prototype, "constructor", [handlerComponent, matcher, options]);
+  $traceurRuntime.superConstructor($ParamRoute).call(this, handlerComponent, matcher, options);
 };
 var $ParamRoute = ParamRoute;
 ($traceurRuntime.createClass)(ParamRoute, {
@@ -232,7 +232,7 @@ var $ParamRoute = ParamRoute;
     return 'param route';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ParamRoute.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ParamRoute.prototype, "toJson").call(this);
     json.paramPath = this.paramPath;
     return json;
   }

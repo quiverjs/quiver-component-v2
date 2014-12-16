@@ -32,7 +32,7 @@ var ExtendedHandler = function ExtendedHandler(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(handlerComponent, HandlerComponent, 'must extend from another handler component');
   this._parentHandler = handlerComponent;
-  $traceurRuntime.superCall(this, $ExtendedHandler.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($ExtendedHandler).call(this, options);
 };
 var $ExtendedHandler = ExtendedHandler;
 ($traceurRuntime.createClass)(ExtendedHandler, {
@@ -49,7 +49,7 @@ var $ExtendedHandler = ExtendedHandler;
     return 'extend handler';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ExtendedHandler.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ExtendedHandler.prototype, "toJson").call(this);
     json.parentHandler = this.parentHandler.toJson();
     return json;
   }
@@ -58,7 +58,7 @@ var ExtendedMiddleware = function ExtendedMiddleware(middlewareComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   assertInstanceOf(middlewareComponent, MiddlewareComponent, 'must extend from another middleware component');
   this._parentMiddleware = middlewareComponent;
-  $traceurRuntime.superCall(this, $ExtendedMiddleware.prototype, "constructor", [options]);
+  $traceurRuntime.superConstructor($ExtendedMiddleware).call(this, options);
 };
 var $ExtendedMiddleware = ExtendedMiddleware;
 ($traceurRuntime.createClass)(ExtendedMiddleware, {
@@ -72,7 +72,7 @@ var $ExtendedMiddleware = ExtendedMiddleware;
     return 'extend middleware';
   },
   toJson: function() {
-    var json = $traceurRuntime.superCall(this, $ExtendedMiddleware.prototype, "toJson", []);
+    var json = $traceurRuntime.superGet(this, $ExtendedMiddleware.prototype, "toJson").call(this);
     json.parentMiddleware = this.parentMiddleware.toJson();
     return json;
   }

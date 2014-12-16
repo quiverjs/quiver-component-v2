@@ -27,7 +27,7 @@ var HandleableBuilder = ($__handleable_45_builder__ = require("./handleable-buil
 var StreamHandlerBuilder = function StreamHandlerBuilder(streamHandlerBuilder) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._streamHandlerBuilder = safeBuilder(streamHandlerBuilder, options);
-  $traceurRuntime.superCall(this, $StreamHandlerBuilder.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($StreamHandlerBuilder).call(this, null, options);
 };
 var $StreamHandlerBuilder = StreamHandlerBuilder;
 ($traceurRuntime.createClass)(StreamHandlerBuilder, {
@@ -54,7 +54,7 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
 var StreamHandler = function StreamHandler(streamHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._streamHandler = safeHandler(streamHandler, options);
-  $traceurRuntime.superCall(this, $StreamHandler.prototype, "constructor", [null, options]);
+  $traceurRuntime.superConstructor($StreamHandler).call(this, null, options);
 };
 var $StreamHandler = StreamHandler;
 ($traceurRuntime.createClass)(StreamHandler, {
