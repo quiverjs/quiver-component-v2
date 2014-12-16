@@ -38,7 +38,7 @@ var loadHandleable = (function(config, component) {
     if (handleable)
       return resolve(handleable);
   }
-  var builder = component.handleableBuilder;
+  var builder = component.toHandleableBuilder();
   return builder(config).then((function(handleable) {
     if (!handleable)
       return reject(new Error('handleable is not defined in builder result'));

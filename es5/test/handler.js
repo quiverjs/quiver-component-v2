@@ -32,7 +32,7 @@ describe('handler test', (function() {
         return textToStreamable('goodbye');
       }));
     }));
-    return main.handleableBuilder({}).then((function(handleable) {
+    return main.toHandleableBuilder()({}).then((function(handleable) {
       var handler = handleable.streamHandler;
       var input = textToStreamable('hello');
       return handler({}, input).then(streamableToText).should.eventually.equal('goodbye');

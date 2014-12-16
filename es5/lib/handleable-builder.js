@@ -15,11 +15,9 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__quiver_45_promise__,
-    $__quiver_45_object__,
     $__util_47_wrap__,
     $__extensible_45_component__;
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
-var assertInstanceOf = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).assertInstanceOf;
 var safeHandler = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}).safeHandler;
 var ExtensibleHandler = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleHandler;
 var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
@@ -29,7 +27,7 @@ var HandleableBuilder = function HandleableBuilder(handleableBuilder) {
 };
 var $HandleableBuilder = HandleableBuilder;
 ($traceurRuntime.createClass)(HandleableBuilder, {
-  get mainHandleableBuilder() {
+  toMainHandleableBuilder: function() {
     return this._mainHandleableBuilder;
   },
   get type() {
@@ -44,13 +42,13 @@ var Handleable = function Handleable(handleable) {
 };
 var $Handleable = Handleable;
 ($traceurRuntime.createClass)(Handleable, {
-  get mainHandleableBuilder() {
-    var handleable = this.handleable;
+  toMainHandleableBuilder: function() {
+    var handleable = this.toHandleable();
     return (function(config) {
       return resolve(handleable);
     });
   },
-  get handleable() {
+  toHandleable: function() {
     if (!this._handleable)
       throw new Error('handleable is not defined');
     return this._handleable;

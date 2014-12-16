@@ -193,20 +193,20 @@ var MethodRouter = function MethodRouter(methodMap) {
 };
 var $MethodRouter = MethodRouter;
 ($traceurRuntime.createClass)(MethodRouter, {
-  get httpHandlerBuilder() {
+  toHttpHandlerBuilder: function() {
     var methodMap = this._methodMap;
     return (function(config) {
       return loadMethodHandlers(config, methodMap).then(methodMapToHttpHandler);
     });
   },
-  privatize: function(privateInstance, privateTable) {
+  doFork: function(forkedInstance, forkTable) {
     var methodMap = this._methodMap;
-    var privateMap = {};
+    var forkedMap = {};
     for (var key in methodMap) {
-      privateMap[key] = methodMap[key].makePrivate(privateTable);
+      forkedMap[key] = methodMap[key].fork(forkTable);
     }
-    privateInstance._methodMap = privateMap;
-    $traceurRuntime.superGet(this, $MethodRouter.prototype, "privatize").call(this, privateInstance, privateTable);
+    forkedInstance._methodMap = forkedMap;
+    $traceurRuntime.superGet(this, $MethodRouter.prototype, "doFork").call(this, forkedInstance, forkTable);
   }
 }, {}, HttpHandlerBuilder);
 var methodRouter = (function(methodMap) {

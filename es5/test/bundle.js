@@ -192,7 +192,7 @@ describe('bundle component test', (function() {
       while (true)
         switch ($ctx.state) {
           case 0:
-            bundle2 = bundle.makePrivate();
+            bundle2 = bundle.fork();
             $__5 = bundle2.handlerComponents, getCount2 = $__5.getCount, increment2 = $__5.increment;
             config = {};
             $ctx.state = 62;
@@ -308,7 +308,7 @@ describe('bundle component test', (function() {
     }, $__9, this);
   })));
   it('privatized test', async($traceurRuntime.initGeneratorFunction(function $__10() {
-    var privateTable,
+    var forkTable,
         getCount2,
         increment2,
         config,
@@ -320,9 +320,9 @@ describe('bundle component test', (function() {
       while (true)
         switch ($ctx.state) {
           case 0:
-            privateTable = {};
-            getCount2 = getCount.makePrivate(privateTable);
-            increment2 = increment.makePrivate(privateTable);
+            forkTable = {};
+            getCount2 = getCount.fork(forkTable);
+            increment2 = increment.fork(forkTable);
             config = {};
             $ctx.state = 62;
             break;
@@ -463,10 +463,10 @@ describe('bundle component test', (function() {
               });
             }), 'text', 'text');
             prefixFilter = transformFilter(prefixer, 'out');
-            bundle2 = bundle.makePrivate();
+            bundle2 = bundle.fork();
             $__5 = bundle2.handlerComponents, getCount2 = $__5.getCount, increment2 = $__5.increment;
             getCount2.addMiddleware(prefixFilter);
-            bundle3 = bundle2.makePrivate();
+            bundle3 = bundle2.fork();
             $__6 = bundle3.handlerComponents, getCount3 = $__6.getCount, increment3 = $__6.increment;
             config = {prefix: 'foo'};
             $ctx.state = 62;

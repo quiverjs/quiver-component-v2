@@ -31,15 +31,15 @@ var HttpHandlerBuilder = function HttpHandlerBuilder(httpHandlerBuilder) {
 };
 var $HttpHandlerBuilder = HttpHandlerBuilder;
 ($traceurRuntime.createClass)(HttpHandlerBuilder, {
-  get mainHandleableBuilder() {
-    var builder = this.httpHandlerBuilder;
+  toMainHandleableBuilder: function() {
+    var builder = this.toHttpHandlerBuilder();
     return (function(config) {
       return builder(config).then((function(httpHandler) {
         return ({httpHandler: httpHandler});
       }));
     });
   },
-  get httpHandlerBuilder() {
+  toHttpHandlerBuilder: function() {
     if (!this._httpHandlerBuilder)
       throw new Error('httpHandlerBuilder is not defined');
     return this._httpHandlerBuilder;
@@ -58,13 +58,13 @@ var HttpHandler = function HttpHandler(httpHandler) {
 };
 var $HttpHandler = HttpHandler;
 ($traceurRuntime.createClass)(HttpHandler, {
-  get httpHandlerBuilder() {
-    var handler = this.httpHandler;
+  toHttpHandlerBuilder: function() {
+    var handler = this.toHttpHandler();
     return (function(config) {
       return resolve(handler);
     });
   },
-  get httpHandler() {
+  toHttpHandler: function() {
     if (!this._httpHandler)
       throw new Error('httpHandler is not defined');
     return this._httpHandler;

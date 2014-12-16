@@ -48,7 +48,7 @@ var combineMiddlewares = (function(middlewares) {
 });
 var combineMiddlewareComponents = (function(components) {
   return combineMiddlewares(components.map((function(component) {
-    return component.handleableMiddleware;
+    return component.toHandleableMiddleware();
   })));
 });
 var repeatOnceMiddleware = (function(id, middleware) {

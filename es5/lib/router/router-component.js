@@ -36,8 +36,9 @@ var Router = function Router() {
 var $Router = Router;
 ($traceurRuntime.createClass)(Router, {
   addRoute: function(route) {
-    if (!(route instanceof Route))
+    if (!route.isRoute) {
       throw new TypeError('route must be instance of Route');
+    }
     this._defaultRouteList.addRoute(route);
     return this;
   },
@@ -58,8 +59,9 @@ var $Router = Router;
     return this;
   },
   routeList: function(routeList) {
-    if (!(routeList instanceof RouteList))
-      throw new TypeError('route list must be ' + 'instance of RouteList');
+    if (!routeList.isRouteList) {
+      throw new TypeError('route list must be instance of RouteList');
+    }
     this._routeLists.push(routeList);
     return this;
   },
@@ -75,27 +77,27 @@ var $Router = Router;
     this._defaultHandler = handlerComponent;
     return this;
   },
-  get mainHandleableBuilder() {
+  toMainHandleableBuilder: function() {
     var routeLists = this.routeLists;
     var routeBuildSpecs = [].concat.apply([], routeLists.map((function(routeList) {
-      return routeList.routeBuildSpecs;
+      return routeList.toRouteBuildSpecs();
     })));
     var defaultHandler = this.defaultHandler;
     if (defaultHandler) {
       routeBuildSpecs.push({
         routeType: 'default',
-        builder: defaultHandler.handleableBuilder
+        builder: defaultHandler.toHandleableBuilder()
       });
     }
     return routeBuildSpecsToRouterBuilder(routeBuildSpecs);
   },
-  privatize: function(privateInstance, privateTable) {
-    privateInstance._routeLists = this._routeLists.map((function(routeList) {
-      return routeList.makePrivate(privateTable);
+  doFork: function(forkedInstance, forkTable) {
+    forkedInstance._routeLists = this._routeLists.map((function(routeList) {
+      return routeList.doFork(forkTable);
     }));
-    privateInstance._defaultRouteList = this._defaultRouteList.makePrivate(privateTable);
-    privateInstance._defaultHandler = this._defaultHandler.makePrivate(privateTable);
-    $traceurRuntime.superGet(this, $Router.prototype, "privatize").call(this, privateInstance, privateTable);
+    forkedInstance._defaultRouteList = this._defaultRouteList.doFork(forkTable);
+    forkedInstance._defaultHandler = this._defaultHandler.doFork(forkTable);
+    $traceurRuntime.superGet(this, $Router.prototype, "doFork").call(this, forkedInstance, forkTable);
   },
   get type() {
     return 'router';

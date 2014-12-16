@@ -31,15 +31,15 @@ var StreamHandlerBuilder = function StreamHandlerBuilder(streamHandlerBuilder) {
 };
 var $StreamHandlerBuilder = StreamHandlerBuilder;
 ($traceurRuntime.createClass)(StreamHandlerBuilder, {
-  get mainHandleableBuilder() {
-    var builder = this.streamHandlerBuilder;
+  toMainHandleableBuilder: function() {
+    var builder = this.toStreamHandlerBuilder();
     return (function(config) {
       return builder(config).then((function(streamHandler) {
         return ({streamHandler: streamHandler});
       }));
     });
   },
-  get streamHandlerBuilder() {
+  toStreamHandlerBuilder: function() {
     if (!this._streamHandlerBuilder)
       throw new Error('streamHandlerBuilder is not defined');
     return this._streamHandlerBuilder;
@@ -58,13 +58,13 @@ var StreamHandler = function StreamHandler(streamHandler) {
 };
 var $StreamHandler = StreamHandler;
 ($traceurRuntime.createClass)(StreamHandler, {
-  get streamHandlerBuilder() {
-    var handler = this.streamHandler;
+  toStreamHandlerBuilder: function() {
+    var handler = this.toStreamHandler();
     return (function(config) {
       return resolve(handler);
     });
   },
-  get streamHandler() {
+  toStreamHandler: function() {
     if (!this._streamHandler)
       throw new Error('streamHandler is not defined');
     return this._streamHandler;

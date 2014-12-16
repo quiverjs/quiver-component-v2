@@ -21,8 +21,8 @@ describe('privatized component test', () => {
         greet + ', ' + name
     }, 'text', 'text')
 
-    var copy1 = original.makePrivate()
-    var copy2 = original.makePrivate()
+    var copy1 = original.fork()
+    var copy2 = original.fork()
 
     should.equal(Object.getPrototypeOf(copy1), original)
     should.equal(Object.getPrototypeOf(copy2), original)
@@ -67,14 +67,14 @@ describe('privatized component test', () => {
     }, 'text', 'text')
 
     var bundle1 = {}
-    var copy1 = original.makePrivate(bundle1)
-    var copy11 = original.makePrivate(bundle1)
+    var copy1 = original.fork(bundle1)
+    var copy11 = original.fork(bundle1)
     should.equal(copy1.id, copy11.id)
     should.equal(copy1, copy11)
 
     should.equal(Object.getPrototypeOf(copy1), original)
 
-    var copy2 = original.makePrivate()
+    var copy2 = original.fork()
 
     should.equal(Object.getPrototypeOf(copy2), original)
 
@@ -83,8 +83,8 @@ describe('privatized component test', () => {
     should.not.equal(copy1.id, copy2.id)
 
     var bundle2 = {}
-    var copy21 = copy2.makePrivate(bundle2)
-    var copy22 = copy2.makePrivate(bundle2)
+    var copy21 = copy2.fork(bundle2)
+    var copy22 = copy2.fork(bundle2)
 
     should.equal(copy21.id, copy22.id)
     should.equal(copy21, copy22)
@@ -106,8 +106,8 @@ describe('privatized component test', () => {
 
     var filter = transformFilter(transformCase, 'out')
 
-    var filter1 = filter.makePrivate()
-    var filter2 = filter.makePrivate()
+    var filter1 = filter.fork()
+    var filter2 = filter.fork()
 
     should.not.equal(filter1.id, filter2.id)
     should.not.equal(filter1.transformComponent.id, 
@@ -118,13 +118,13 @@ describe('privatized component test', () => {
         'Hello, ' + name, 
       'text', 'text')
 
-    var greet1 = greet.makePrivate()
+    var greet1 = greet.fork()
       .addMiddleware(filter1)
 
-    var greet2  = greet.makePrivate()
+    var greet2  = greet.fork()
       .addMiddleware(filter1)
 
-    var greet3 = greet.makePrivate()
+    var greet3 = greet.fork()
       .addMiddleware(filter2)
 
     var config = { transform: 'uppercase' }
@@ -168,10 +168,10 @@ describe('privatized component test', () => {
     var bundle1 = { }
     var bundle2 = { }
 
-    var greet1 = greet.makePrivate(bundle1)
-    var uppercase = transformCase.makePrivate(bundle1)
+    var greet1 = greet.fork(bundle1)
+    var uppercase = transformCase.fork(bundle1)
 
-    var greet2 = greet.makePrivate(bundle2)
+    var greet2 = greet.fork(bundle2)
 
     var config = { transform: 'uppercase' }
     

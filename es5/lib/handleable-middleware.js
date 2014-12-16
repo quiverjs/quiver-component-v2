@@ -18,20 +18,13 @@ var $__2 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_m
     repeatOnceMiddleware = $__2.repeatOnceMiddleware;
 var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._mainMiddleware = safeHandler(handleableMiddleware, options);
-  this._repeat = options.repeat;
+  this._handleableMiddleware = safeHandler(handleableMiddleware, options);
   $traceurRuntime.superConstructor($HandleableMiddleware).call(this, options);
 };
 var $HandleableMiddleware = HandleableMiddleware;
 ($traceurRuntime.createClass)(HandleableMiddleware, {
-  get mainHandleableMiddleware() {
-    var middleware = this.mainMiddleware;
-    if (this._repeat == 'once')
-      middleware = repeatOnceMiddleware(this.id, middleware);
-    return middleware;
-  },
-  get mainMiddleware() {
-    var middleware = this._mainHandleableMiddleware;
+  toMainHandleableMiddleware: function() {
+    var middleware = this._handleableMiddleware;
     if (!middleware)
       throw new Error('mainHandleableMiddleware is not defined');
     return middleware;

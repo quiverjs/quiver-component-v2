@@ -90,7 +90,7 @@ var urlMiddleware = (function(urlBuilder) {
   }));
 });
 var routeBuilder = (function(component, urlBuilder, middleware) {
-  var mainBuilder = component.handleableBuilder;
+  var mainBuilder = component.toHandleableBuilder();
   var middlewares = [];
   if (urlBuilder) {
     middlewares.push(urlMiddleware(urlBuilder));
@@ -100,7 +100,7 @@ var routeBuilder = (function(component, urlBuilder, middleware) {
 });
 var Route = function Route(handlerComponent) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  if (!(handlerComponent instanceof HandlerComponent)) {
+  if (!handlerComponent.isHandlerComponent) {
     handlerComponent = new MethodRouter(handlerComponent);
   }
   var urlBuilder = options.urlBuilder;
@@ -110,8 +110,8 @@ var Route = function Route(handlerComponent) {
 };
 var $Route = Route;
 ($traceurRuntime.createClass)(Route, {
-  get handleableBuilder() {
-    var mainBuilder = this.handlerComponent.handleableBuilder;
+  toHandleableBuilder: function() {
+    var mainBuilder = this.handlerComponent.toHandleableBuilder();
     var urlBuilder = this.urlBuilder;
     if (urlBuilder) {
       return combineBuilderWithMiddleware(mainBuilder, urlMiddleware(urlBuilder));
@@ -130,6 +130,9 @@ var $Route = Route;
   },
   get type() {
     return 'route';
+  },
+  get isRoute() {
+    return true;
   },
   toJson: function() {
     var json = $traceurRuntime.superGet(this, $Route.prototype, "toJson").call(this);

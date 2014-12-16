@@ -47,13 +47,13 @@ var ConfigMiddleware = function ConfigMiddleware(configHandler) {
 };
 var $ConfigMiddleware = ConfigMiddleware;
 ($traceurRuntime.createClass)(ConfigMiddleware, {
-  get mainMiddleware() {
-    var configHandler = this.configHandler;
+  toMainHandleableMiddleware: function() {
+    var configHandler = this.toConfigHandler();
     return (function(config, builder) {
       return configHandler(config).then(builder);
     });
   },
-  get configHandler() {
+  toConfigHandler: function() {
     if (!this._configHandler)
       throw new Error('configHandler is not defined');
     return this._configHandler;
@@ -70,7 +70,7 @@ var ConfigOverrideMiddleware = function ConfigOverrideMiddleware(overrideConfig)
 };
 var $ConfigOverrideMiddleware = ConfigOverrideMiddleware;
 ($traceurRuntime.createClass)(ConfigOverrideMiddleware, {
-  get configHandler() {
+  toConfigHandler: function() {
     var overrideConfig = this.overrideConfig;
     return (function(config) {
       for (var key in overrideConfig) {
@@ -99,7 +99,7 @@ var ConfigAliasMiddleware = function ConfigAliasMiddleware(aliasConfig) {
 };
 var $ConfigAliasMiddleware = ConfigAliasMiddleware;
 ($traceurRuntime.createClass)(ConfigAliasMiddleware, {
-  get configHandler() {
+  toConfigHandler: function() {
     var aliasConfig = this._aliasConfig;
     return (function(config) {
       for (var key in aliasConfig) {

@@ -9,14 +9,8 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__quiver_45_object__,
-    $__component__,
     $__extensible_45_component__;
-var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
-    copy = $__0.copy,
-    defineGetter = $__0.defineGetter,
-    assertInstanceOf = $__0.assertInstanceOf,
-    assertArrayInstanceOf = $__0.assertArrayInstanceOf;
-var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
+var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var ExtensibleHandler = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleHandler;
 var combineStreamHandlers = (function(handler1, handler2) {
   return (function(args, streamable) {
@@ -32,26 +26,26 @@ var streamCombinator = {
 var defaultCombinators = [streamCombinator];
 var combineHandleables = (function(handleable1, handleable2, combinators) {
   var newHandleable = {};
-  combinators.forEach((function($__4) {
-    var $__5 = $__4,
-        field = $__5.field,
-        combineHandlers = $__5.combineHandlers;
+  combinators.forEach((function($__3) {
+    var $__4 = $__3,
+        field = $__4.field,
+        combineHandlers = $__4.combineHandlers;
     var handler1 = handleable1[field];
     var handler2 = handleable2[field];
     if (!handler1 || !handler2)
       return;
     var newHandler = combineHandlers(handler1, handler2);
-    defineGetter(newHandleable, field, newHandler);
+    newHandleable[field] = newHandler;
   }));
   return newHandleable;
 });
 var pipelineHandleables = (function(handleables, combinators) {
   if (handleables.length == 1)
     return handleables[0];
-  var $__4 = handleables,
-      handleable1 = $__4[0],
-      handleable2 = $__4[1],
-      restHandleables = Array.prototype.slice.call($__4, 2);
+  var $__3 = handleables,
+      handleable1 = $__3[0],
+      handleable2 = $__3[1],
+      restHandleables = Array.prototype.slice.call($__3, 2);
   var newHandleable = combineHandleables(handleable1, handleable2, combinators);
   return pipelineHandleables($traceurRuntime.spread([newHandleable], restHandleables), combinators);
 });
@@ -65,10 +59,10 @@ var pipelineBuilder = (function(builders, combinators) {
   });
 });
 var Pipeline = function Pipeline() {
-  var $__5;
+  var $__4;
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  var $__4 = options,
-      pipelineCombinators = ($__5 = $__4.pipelineCombinators) === void 0 ? defaultCombinators : $__5;
+  var $__3 = options,
+      pipelineCombinators = ($__4 = $__3.pipelineCombinators) === void 0 ? defaultCombinators : $__4;
   this._pipelineCombinators = pipelineCombinators;
   $traceurRuntime.superConstructor($Pipeline).call(this, options);
   this.subComponents.pipelineHandlers = [];
@@ -76,16 +70,21 @@ var Pipeline = function Pipeline() {
 var $Pipeline = Pipeline;
 ($traceurRuntime.createClass)(Pipeline, {
   addPipe: function(component) {
-    assertInstanceOf(component, HandlerComponent, 'component must be of type HandlerComponent');
+    if (!component.isHandlerComponent) {
+      throw new TypeError('component must be of type HandlerComponent');
+    }
     this.subComponents.pipelineHandlers.push(component);
     return this;
+  },
+  pipe: function(component) {
+    return this.addPipe(component);
   },
   get pipelineHandlers() {
     return this.subComponents.pipelineHandlers;
   },
-  get mainHandleableBuilder() {
+  toMainHandleableBuilder: function() {
     var builders = this.pipelineHandlers.map((function(component) {
-      return component.handleableBuilder;
+      return component.toHandleableBuilder();
     }));
     if (builders.length == 0)
       throw new Error('Pipeline must contain at least one handler component');

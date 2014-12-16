@@ -83,11 +83,12 @@ var HandleableFilter = function HandleableFilter(handleableFilter) {
 };
 var $HandleableFilter = HandleableFilter;
 ($traceurRuntime.createClass)(HandleableFilter, {
-  get mainMiddleware() {
+  toMainHandleableMiddleware: function() {
     var copyConfig = this._copyConfig ? copy : noCopy;
-    return filterToMiddleware(this.handleableFilter, copyConfig);
+    var handleableFilter = this.toHandleableFilter();
+    return filterToMiddleware(handleableFilter, copyConfig);
   },
-  get handleableFilter() {
+  toHandleableFilter: function() {
     if (!this._handleableFilter)
       throw new Error('handleableFilter is not defined');
     return this._handleableFilter;
@@ -100,8 +101,8 @@ var StreamFilter = function StreamFilter(filter) {
 };
 var $StreamFilter = StreamFilter;
 ($traceurRuntime.createClass)(StreamFilter, {
-  get handleableFilter() {
-    var streamFilter = this.streamFilter;
+  toHandleableFilter: function() {
+    var streamFilter = this.toStreamFilter();
     return (function(config, handleable) {
       var handler = handleable.streamHandler;
       if (!handler)
@@ -112,7 +113,7 @@ var $StreamFilter = StreamFilter;
       }));
     });
   },
-  get streamFilter() {
+  toStreamFilter: function() {
     var streamFilter = this._streamFilter;
     if (!streamFilter)
       throw new Error('streamFilter is not defined');
@@ -129,8 +130,8 @@ var HttpFilter = function HttpFilter(filter) {
 };
 var $HttpFilter = HttpFilter;
 ($traceurRuntime.createClass)(HttpFilter, {
-  get handleableFilter() {
-    var httpFilter = this.httpFilter;
+  toHandleableFilter: function() {
+    var httpFilter = this.toHttpFilter();
     return (function(config, handleable) {
       var httpHandler = handleable.httpHandler;
       if (!httpHandler) {
@@ -146,14 +147,14 @@ var $HttpFilter = HttpFilter;
       }));
     });
   },
-  get httpFilter() {
+  toHttpFilter: function() {
     var httpFilter = this._httpFilter;
     if (!httpFilter)
       throw new Error('httpFilter is not defined');
     return httpFilter;
   },
   get type() {
-    return 'Stream Filter';
+    return 'Http Filter';
   }
 }, {}, HandleableFilter);
 var handleableFilter = (function(filter, options) {

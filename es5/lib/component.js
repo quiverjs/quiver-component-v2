@@ -3,18 +3,12 @@ Object.defineProperties(exports, {
   Component: {get: function() {
       return Component;
     }},
-  MiddlewareComponent: {get: function() {
-      return MiddlewareComponent;
-    }},
-  HandlerComponent: {get: function() {
-      return HandlerComponent;
-    }},
   __esModule: {value: true}
 });
 var $__util_47_loader__;
 var loadHandleable = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}).loadHandleable;
 var assertComponent = (function(component) {
-  if (!(component instanceof Component)) {
+  if (!component.isQuiverComponent) {
     throw new Error('object must be of type Component');
   }
 });
@@ -29,11 +23,7 @@ var Component = function Component() {
   this._options = options;
   for (var key in subComponents) {
     var component = subComponents[key];
-    if (Array.isArray(component)) {
-      component.forEach(assertComponent);
-    } else {
-      assertComponent(component);
-    }
+    assertComponent(component);
   }
   this._subComponents = subComponents;
 };
@@ -47,54 +37,59 @@ var Component = function Component() {
   get type() {
     return 'component';
   },
+  get isQuiverComponent() {
+    return true;
+  },
   get subComponents() {
     return this._subComponents;
   },
-  makePrivate: function() {
-    var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
+  fork: function() {
+    var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
     var original = this;
     var originalId = original.id;
-    if (privateTable[originalId])
-      return privateTable[originalId];
+    if (forkTable[originalId]) {
+      return forkTable[originalId];
+    }
     var privateId = Symbol();
     var originalProto = original.originalProto ? original.originalProto : original;
-    var privateInstance = Object.create(originalProto);
-    privateInstance.originalProto = originalProto;
-    Object.defineProperty(privateInstance, 'id', {get: function() {
+    var forkedInstance = Object.create(originalProto);
+    forkedInstance.originalProto = originalProto;
+    Object.defineProperty(forkedInstance, 'id', {get: function() {
         return privateId;
       }});
-    privateTable[originalId] = privateInstance;
-    original.privatize(privateInstance, privateTable);
-    return privateInstance;
+    forkTable[originalId] = forkedInstance;
+    original.doFork(forkedInstance, forkTable);
+    return forkedInstance;
   },
-  privatize: function(privateInstance, privateTable) {
+  doFork: function(forkedInstance, forkTable) {
     var subComponents = (this).subComponents;
     var newSubComponents = {};
     for (var key in subComponents) {
       var component = subComponents[key];
-      if (Array.isArray(component)) {
-        newSubComponents[key] = component.map((function(component) {
-          return component.makePrivate(privateTable);
-        }));
-      } else {
-        newSubComponents[key] = component.makePrivate(privateTable);
-      }
+      newSubComponents[key] = component.fork(forkTable);
     }
-    privateInstance._subComponents = newSubComponents;
+    forkedInstance._subComponents = newSubComponents;
   },
-  privatizedConstructor: function() {
+  toTemplate: function() {
     var $__1 = this;
-    return (function(privateTable) {
-      return $__1.makePrivate(privateTable);
+    return (function() {
+      return $__1.fork({});
     });
+  },
+  implement: function(componentMap) {
+    var subComponents = (this).subComponents;
+    for (var key in subComponents) {
+      subComponents[key].implement(componentMap);
+    }
   },
   toJson: function() {
     var json = {
       id: this.id.toString(),
       type: this.type
     };
-    if (this.name)
+    if (this.name) {
       json.name = this.name;
+    }
     return json;
   },
   toString: function() {
@@ -104,42 +99,3 @@ var Component = function Component() {
     return this.toString();
   }
 }, {});
-var MiddlewareComponent = function MiddlewareComponent() {
-  $traceurRuntime.superConstructor($MiddlewareComponent).apply(this, arguments);
-};
-var $MiddlewareComponent = MiddlewareComponent;
-($traceurRuntime.createClass)(MiddlewareComponent, {
-  get handleableMiddleware() {
-    throw new Error('unimplemented in abstract class');
-  },
-  addMiddleware: function(MiddlewareComponent) {
-    throw new Error('unimplemented in abstract class');
-  },
-  get type() {
-    return 'middleware';
-  }
-}, {}, Component);
-var HandlerComponent = function HandlerComponent() {
-  $traceurRuntime.superConstructor($HandlerComponent).apply(this, arguments);
-};
-var $HandlerComponent = HandlerComponent;
-($traceurRuntime.createClass)(HandlerComponent, {
-  get handleableBuilder() {
-    throw new Error('unimplemented in abstract class');
-  },
-  addMiddleware: function(MiddlewareComponent) {
-    throw new Error('unimplemented in abstract class');
-  },
-  loadHandleable: function(config, options) {
-    return loadHandleable(config, this, options);
-  },
-  loadHandler: function(config, options) {
-    return this.handlerLoader(config, this, options);
-  },
-  get handlerLoader() {
-    return loadHandleable;
-  },
-  get type() {
-    return 'handler';
-  }
-}, {}, Component);

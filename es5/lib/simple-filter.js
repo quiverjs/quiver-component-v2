@@ -108,10 +108,10 @@ var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
 };
 var $ArgsBuilderFilter = ArgsBuilderFilter;
 ($traceurRuntime.createClass)(ArgsBuilderFilter, {
-  get handleableFilter() {
-    return argsBuilderToFilter(this.argsBuilder);
+  toHandleableFilter: function() {
+    return argsBuilderToFilter(this.toArgsBuilder());
   },
-  get argsBuilder() {
+  toArgsBuilder: function() {
     if (!this._argsBuilder)
       throw new Error('argsBuilder is not defined');
     return this._argsBuilder;
@@ -128,13 +128,13 @@ var ArgsFilter = function ArgsFilter(argsHandler) {
 };
 var $ArgsFilter = ArgsFilter;
 ($traceurRuntime.createClass)(ArgsFilter, {
-  get argsBuilder() {
-    var argsHandler = this.argsHandler;
+  toArgsBuilder: function() {
+    var argsHandler = this.toArgsHandler();
     return (function(config) {
       return resolve(argsHandler);
     });
   },
-  get argsHandler() {
+  toArgsHandler: function() {
     if (!this._argsHandler)
       throw new Error('argsHandler is not defined');
     return this._argsHandler;
@@ -150,10 +150,10 @@ var ErrorFilter = function ErrorFilter(errorHandler) {
 };
 var $ErrorFilter = ErrorFilter;
 ($traceurRuntime.createClass)(ErrorFilter, {
-  get streamFilter() {
-    return errorToFilter(this.errorHandler);
+  toStreamFilter: function() {
+    return errorToFilter(this.toErrorHandler());
   },
-  get errorHandler() {
+  toErrorHandler: function() {
     if (!this._errorHandler)
       throw new Error('errorHandler is not defined');
     return this._errorHandler;
@@ -169,10 +169,10 @@ var ErrorBuilderFilter = function ErrorBuilderFilter(errorBuilder) {
 };
 var $ErrorBuilderFilter = ErrorBuilderFilter;
 ($traceurRuntime.createClass)(ErrorBuilderFilter, {
-  get streamFilter() {
-    return builderFilterConvert(this.errorBuilder, errorToFilter);
+  toStreamFilter: function() {
+    return builderFilterConvert(this.toErrorBuilder(), errorToFilter);
   },
-  get errorBuilder() {
+  toErrorBuilder: function() {
     if (!this._errorBuilder)
       throw new Error('errorBuilder is not defined');
     return this._errorBuilder;

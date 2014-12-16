@@ -51,7 +51,7 @@ var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function
           $ctx.state = (!bundle) ? 5 : 8;
           break;
         case 5:
-          bundleBuilder = component.bundleBuilder;
+          bundleBuilder = component.toBundleBuilder();
           $ctx.state = 6;
           break;
         case 6:
@@ -96,7 +96,7 @@ var BundleField = function BundleField(handlerName, bundleComponent, handlerConv
 };
 var $BundleField = BundleField;
 ($traceurRuntime.createClass)(BundleField, {
-  get streamHandlerBuilder() {
+  toStreamHandlerBuilder: function() {
     return bundleHandlerLoader(this._handlerName, this._bundleComponent);
   },
   get handlerConverter() {
@@ -105,15 +105,15 @@ var $BundleField = BundleField;
   get handlerLoader() {
     return this._handlerLoader;
   },
-  makePrivate: function() {
-    var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
+  fork: function() {
+    var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
     var handlerName = this._handlerName;
     var bundleComponent = this._bundleComponent;
-    return bundleComponent.makePrivate(privateTable).handlerComponents[handlerName];
+    return bundleComponent.fork(forkTable).handlerComponents[handlerName];
   },
-  _makePrivate: function() {
-    var privateTable = arguments[0] !== (void 0) ? arguments[0] : {};
-    return $traceurRuntime.superGet(this, $BundleField.prototype, "makePrivate").call(this, privateTable);
+  _fork: function() {
+    var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
+    return $traceurRuntime.superGet(this, $BundleField.prototype, "fork").call(this, forkTable);
   }
 }, {}, StreamHandlerBuilder);
 var bundleFields = (function(handlerNames, bundleComponent) {
@@ -137,7 +137,7 @@ var HandlerBundle = function HandlerBundle(bundleBuilder) {
 };
 var $HandlerBundle = HandlerBundle;
 ($traceurRuntime.createClass)(HandlerBundle, {
-  get bundleBuilder() {
+  toBundleBuilder: function() {
     var builder = this._bundleBuilder;
     var bundleFields = this.handlerComponents;
     return (function(config) {
@@ -171,24 +171,27 @@ var $HandlerBundle = HandlerBundle;
   simpleHandler: function(handlerName, inType, outType) {
     return this.bundleField(handlerName, simpleHandlerConverter(inType, outType), simpleHandlerLoader(inType, outType));
   },
-  privatize: function(privateInstance, privateTable) {
+  doFork: function(forkedInstance, forkTable) {
     var bundleFields = this._bundleFields;
-    var privateFields = {};
+    var forkedFields = {};
     for (var key in bundleFields) {
       var bundleField = bundleFields[key];
-      var privateField = bundleField._makePrivate(privateTable);
-      privateField._bundleComponent = privateInstance;
-      privateFields[key] = privateField;
+      var forkedField = bundleField._fork(forkTable);
+      forkedField._bundleComponent = forkedInstance;
+      forkedFields[key] = forkedField;
     }
-    privateInstance._bundleFields = privateFields;
-    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "privatize").call(this, privateInstance, privateTable);
+    forkedInstance._bundleFields = forkedFields;
+    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "doFork").call(this, forkedInstance, forkTable);
   },
-  addMiddleware: function(middleware) {
+  addMiddleware: function(middlewareComponent) {
     var bundleFields = this._bundleFields;
     for (var key in bundleFields) {
-      bundleFields[key].addMiddleware(middleware);
+      bundleFields[key].addMiddleware(middlewareComponent);
     }
     return this;
+  },
+  middleware: function(middlewareComponent) {
+    return this.addMiddleware(middlewareComponent);
   }
 }, {}, Component);
 var handlerBundle = (function(bundleBuilder, handlerNames) {

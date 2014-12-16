@@ -1,113 +1,73 @@
 "use strict";
 Object.defineProperties(exports, {
-  abstractComponent: {get: function() {
-      return abstractComponent;
+  AbstractHandler: {get: function() {
+      return AbstractHandler;
+    }},
+  AbstractMiddleware: {get: function() {
+      return AbstractMiddleware;
+    }},
+  abstractHandler: {get: function() {
+      return abstractHandler;
+    }},
+  abstractMiddleware: {get: function() {
+      return abstractMiddleware;
     }},
   __esModule: {value: true}
 });
-var $__protocol__,
-    $__simple_45_middleware__,
-    $__component__,
-    $__quiver_45_promise__,
-    $__quiver_45_object__;
-var Protocol = ($__protocol__ = require("./protocol"), $__protocol__ && $__protocol__.__esModule && $__protocol__ || {default: $__protocol__}).Protocol;
-var ConfigMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).ConfigMiddleware;
-var $__2 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
-    Component = $__2.Component,
-    HandlerComponent = $__2.HandlerComponent,
-    MiddlewareComponent = $__2.MiddlewareComponent;
-var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
-var assertInstanceOf = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).assertInstanceOf;
-var assertHandlerComponent = (function(handler) {
-  return assertInstanceOf(handler, HandlerComponent, 'handler implementation must be ' + 'of type HandlerComponent');
-});
-var protocolMiddleware = (function(configKey, loader) {
-  return configMiddleware(async($traceurRuntime.initGeneratorFunction(function $__7(config) {
-    return $traceurRuntime.createGeneratorInstance(function($ctx) {
-      while (true)
-        switch ($ctx.state) {
-          case 0:
-            $ctx.state = 2;
-            return loader(config);
-          case 2:
-            config[configKey] = $ctx.sent;
-            $ctx.state = 4;
-            break;
-          case 4:
-            $ctx.returnValue = config;
-            $ctx.state = -2;
-            break;
-          default:
-            return $ctx.end();
-        }
-    }, $__7, this);
-  })));
-});
-var ProtocolMiddleware = function ProtocolMiddleware(configKey, protocolImpl) {
-  var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  this._configKey = configKey;
-  options.safeWrapped = true;
-  $traceurRuntime.superConstructor($ProtocolMiddleware).call(this, null, options);
-  this.subComponents.protocolImpl = protocolImpl;
-};
-var $ProtocolMiddleware = ProtocolMiddleware;
-($traceurRuntime.createClass)(ProtocolMiddleware, {get configHandler() {
-    var configKey = this._configKey;
-    var protocolImpl = this.subComponents.protocolImpl;
-    return (function(config) {
-      return protocolImpl.loadHandlers(config).then((function(handlerMap) {
-        config[configKey] = handlerMap;
-        return config;
-      }));
-    });
-  }}, {}, ConfigMiddleware);
-var AbstractComponent = function AbstractComponent(configKey, protocol, component) {
-  assertInstanceOf(protocol, Protocol, 'protocol must be instance of Protocol');
-  if (!(component instanceof HandlerComponent || component instanceof MiddlewareComponent)) {
-    throw new Error('component must be either handler or middleware');
-  }
-  this._configKey = configKey;
-  this._protocol = protocol;
-  this._component = component;
-  this._implBundle = {};
-  $traceurRuntime.superConstructor($AbstractComponent).call(this);
-};
-var $AbstractComponent = AbstractComponent;
-($traceurRuntime.createClass)(AbstractComponent, {
-  implement: function(handlerMap) {
-    var privateTable = arguments[1] !== (void 0) ? arguments[1] : {};
-    var privateCopy = this.makePrivate(privateTable);
-    var implBundle = privateCopy._implBundle;
-    for (var key in handlerMap) {
-      var component = handlerMap[key];
-      assertHandlerComponent(component);
-      implBundle[key] = component;
+var $__extensible_45_component__;
+var $__0 = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}),
+    ExtensibleHandler = $__0.ExtensibleHandler,
+    ExtensibleMiddleware = $__0.ExtensibleMiddleware;
+var defineAbstractComponent = (function(Parent, mixin) {
+  var AbstractComponent = function AbstractComponent(componentKey) {
+    this._componentKey = componentKey;
+  };
+  var $AbstractComponent = AbstractComponent;
+  ($traceurRuntime.createClass)(AbstractComponent, {
+    implement: function(componentMap) {
+      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "implement").call(this, componentMap);
+      if (this._concreteComponent)
+        return;
+      var componentKey = this._componentKey;
+      var concreteComponent = componentMap[componentKey];
+      if (!concreteComponent)
+        return;
+      this.validateConcreteComponent(concreteComponent);
+      this._concreteComponent = concreteComponent;
+    },
+    doFork: function(forkedInstance, forkTable) {
+      if (this._concreteComponent) {
+        forkedInstance._concreteComponent = this._concreteComponent.fork(forkTable);
+      }
+      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "doFork").call(this, forkedInstance, forkTable);
     }
-    return privateCopy;
-  },
-  privatize: function(privateInstance, privateTable) {
-    var newImpl = {};
-    var implBundle = this._implBundle;
-    for (var key in implBundle) {
-      newImpl[key] = implBundle[key].makePrivate(privateTable);
+  }, {}, Parent);
+  Object.assign(AbstractComponent.prototype, mixin);
+  return AbstractComponent;
+});
+var AbstractHandler = defineAbstractComponent(ExtensibleHandler, {
+  toMainHandleableBuilder: function() {
+    var concreteComponent = this._concreteComponent;
+    if (!concreteComponent) {
+      throw new Error('Abstract handler component ' + 'not implemented: ' + this._componentKey);
     }
-    privateInstance._implBundle = newImpl;
-    $traceurRuntime.superGet(this, $AbstractComponent.prototype, "privatize").call(this, privateInstance, privateTable);
+    return concreteComponent.toHandleableBuilder();
   },
-  concretize: function() {
-    var configKey = this._configKey;
-    var protocol = this._protocol;
-    var component = this._component;
-    var implBundle = this._implBundle;
-    var protocolImpl = protocol.implement(implBundle);
-    var protocolMiddleware = new ProtocolMiddleware(configKey, protocolImpl);
-    var concreteComponent = component.makePrivate().addMiddleware(protocolMiddleware);
-    return concreteComponent;
-  },
-  get rawComponent() {
-    return this._component;
+  validateConcreteComponent: function(component) {
+    if (!concreteComponent.isHandlerComponent()) {
+      throw new Error('Concrete component in ' + 'implementation map is not handler component: ' + componentKey);
+    }
   }
-}, {}, Component);
-var abstractComponent = (function(configKey, protocol, component) {
-  return new AbstractComponent(configKey, protocol, component);
+});
+var AbstractMiddleware = defineAbstractComponent(ExtensibleMiddleware, {toMainHandleableMiddleware: function() {
+    var concreteComponent = this._concreteComponent;
+    if (!concreteComponent)
+      throw new Error('Abstract middleware component ' + 'not implemented: ' + this._componentKey);
+    return concreteComponent.toMainHandleableMiddleware();
+  }});
+var abstractHandler = (function(componentKey) {
+  return new AbstractHandler(componentKey);
+});
+var abstractMiddleware = (function(componentKey) {
+  return new AbstractMiddleware(componentKey);
 });

@@ -12,9 +12,7 @@ var $__quiver_45_object__,
     $__simple_45_middleware__,
     $__component__,
     $__extensible_45_component__;
-var $__0 = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}),
-    assertInstanceOf = $__0.assertInstanceOf,
-    assertString = $__0.assertString;
+var assertString = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).assertString;
 var ConfigMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).ConfigMiddleware;
 var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
 var $__3 = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}),
@@ -26,7 +24,9 @@ var loadHandler = (function(config, component, options) {
 var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, toConfig) {
   var $__6;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  assertInstanceOf(handlerComponent, HandlerComponent, 'input handler must be of type HandlerComponent');
+  if (!handlerComponent.isHandlerComponent) {
+    throw new TypeError('input handler must be of type HandlerComponent');
+  }
   assertString(toConfig, 'toConfig required to be string');
   var $__5 = options,
       loader = ($__6 = $__5.loader) === void 0 ? loadHandler : $__6;
@@ -38,7 +38,7 @@ var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, t
 };
 var $InputHandlerMiddleware = InputHandlerMiddleware;
 ($traceurRuntime.createClass)(InputHandlerMiddleware, {
-  get configHandler() {
+  toConfigHandler: function() {
     var handlerComponent = this.inputHandlerComponent;
     var loader = this._handlerLoader;
     var toConfig = this._toInputConfig;

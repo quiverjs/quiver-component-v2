@@ -22,8 +22,8 @@ describe('privatized component test', (function() {
         return greet + ', ' + name;
       });
     }), 'text', 'text');
-    var copy1 = original.makePrivate();
-    var copy2 = original.makePrivate();
+    var copy1 = original.fork();
+    var copy2 = original.fork();
     should.equal(Object.getPrototypeOf(copy1), original);
     should.equal(Object.getPrototypeOf(copy2), original);
     should.not.equal(original.id, copy1.id);
@@ -54,19 +54,19 @@ describe('privatized component test', (function() {
       });
     }), 'text', 'text');
     var bundle1 = {};
-    var copy1 = original.makePrivate(bundle1);
-    var copy11 = original.makePrivate(bundle1);
+    var copy1 = original.fork(bundle1);
+    var copy11 = original.fork(bundle1);
     should.equal(copy1.id, copy11.id);
     should.equal(copy1, copy11);
     should.equal(Object.getPrototypeOf(copy1), original);
-    var copy2 = original.makePrivate();
+    var copy2 = original.fork();
     should.equal(Object.getPrototypeOf(copy2), original);
     should.not.equal(original.id, copy1.id);
     should.not.equal(original.id, copy2.id);
     should.not.equal(copy1.id, copy2.id);
     var bundle2 = {};
-    var copy21 = copy2.makePrivate(bundle2);
-    var copy22 = copy2.makePrivate(bundle2);
+    var copy21 = copy2.fork(bundle2);
+    var copy22 = copy2.fork(bundle2);
     should.equal(copy21.id, copy22.id);
     should.equal(copy21, copy22);
     should.equal(Object.getPrototypeOf(copy21), original);
@@ -84,16 +84,16 @@ describe('privatized component test', (function() {
       });
     }), 'text', 'text');
     var filter = transformFilter(transformCase, 'out');
-    var filter1 = filter.makePrivate();
-    var filter2 = filter.makePrivate();
+    var filter1 = filter.fork();
+    var filter2 = filter.fork();
     should.not.equal(filter1.id, filter2.id);
     should.not.equal(filter1.transformComponent.id, filter2.transformComponent.id);
     var greet = simpleHandler((function(args, name) {
       return 'Hello, ' + name;
     }), 'text', 'text');
-    var greet1 = greet.makePrivate().addMiddleware(filter1);
-    var greet2 = greet.makePrivate().addMiddleware(filter1);
-    var greet3 = greet.makePrivate().addMiddleware(filter2);
+    var greet1 = greet.fork().addMiddleware(filter1);
+    var greet2 = greet.fork().addMiddleware(filter1);
+    var greet3 = greet.fork().addMiddleware(filter2);
     var config = {transform: 'uppercase'};
     return greet1.loadHandler(config).then((function(handler) {
       return handler({}, 'John').should.eventually.equal('HELLO, JOHN');
@@ -127,9 +127,9 @@ describe('privatized component test', (function() {
     }), 'text', 'text').addMiddleware(filter);
     var bundle1 = {};
     var bundle2 = {};
-    var greet1 = greet.makePrivate(bundle1);
-    var uppercase = transformCase.makePrivate(bundle1);
-    var greet2 = greet.makePrivate(bundle2);
+    var greet1 = greet.fork(bundle1);
+    var uppercase = transformCase.fork(bundle1);
+    var greet2 = greet.fork(bundle2);
     var config = {transform: 'uppercase'};
     return uppercase.loadHandler(config).then((function(handler) {
       return handler({}, 'Test').should.eventually.equal('TEST');

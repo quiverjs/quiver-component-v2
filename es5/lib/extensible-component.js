@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperties(exports, {
+  ExtensibleComponent: {get: function() {
+      return ExtensibleComponent;
+    }},
   ExtensibleHandler: {get: function() {
       return ExtensibleHandler;
     }},
@@ -11,75 +14,111 @@ Object.defineProperties(exports, {
 var $__quiver_45_object__,
     $__component__,
     $__util_47_middleware__,
-    $__mixin_45_middleware__;
+    $__util_47_loader__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
-var $__1 = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}),
-    HandlerComponent = $__1.HandlerComponent,
-    MiddlewareComponent = $__1.MiddlewareComponent;
+var Component = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).Component;
 var $__2 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
     combineMiddlewares = $__2.combineMiddlewares,
+    combineMiddlewareComponents = $__2.combineMiddlewareComponents,
     combineBuilderWithMiddleware = $__2.combineBuilderWithMiddleware;
-var mixinMiddlewareExtensible = ($__mixin_45_middleware__ = require("./mixin-middleware"), $__mixin_45_middleware__ && $__mixin_45_middleware__.__esModule && $__mixin_45_middleware__ || {default: $__mixin_45_middleware__}).mixinMiddlewareExtensible;
+var loadHandleable = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}).loadHandleable;
 var copyConfigBuilder = (function(builder) {
   return (function(config) {
     return builder(copy(config));
   });
 });
+var ExtensibleComponent = function ExtensibleComponent() {
+  var options = arguments[0] !== (void 0) ? arguments[0] : {};
+  this._middlewareComponents = [];
+  $traceurRuntime.superConstructor($ExtensibleComponent).call(this, options);
+};
+var $ExtensibleComponent = ExtensibleComponent;
+($traceurRuntime.createClass)(ExtensibleComponent, {
+  addMiddleware: function(middleware) {
+    if (!middleware.isMiddlewareComponent)
+      throw new TypeError('middleware must be ' + 'of type MiddlewareComponent');
+    this._middlewareComponents.push(middleware);
+    return this;
+  },
+  middleware: function(middleware) {
+    return this.addMiddleware(middleware);
+  },
+  doFork: function(forkedInstance, forkTable) {
+    this.forkMiddlewares(forkedInstance, forkTable);
+    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "doFork").call(this, forkedInstance, forkTable);
+  },
+  forkMiddlewares: function(forkedInstance, forkTable) {
+    forkedInstance._middlewareComponents = this._middlewareComponents.map((function(component) {
+      return component.fork(forkTable);
+    }));
+  },
+  implement: function(componentMap) {
+    this.implementMiddlewares(componentMap);
+    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "implement").call(this, componentMap);
+  },
+  implementMiddlewares: function(componentMap) {
+    this._middlewareComponents.forEach((function(component) {
+      return component.implement(componentMap);
+    }));
+  },
+  toExtendMiddleware: function() {
+    return combineMiddlewareComponents(this._middlewareComponents);
+  },
+  get middlewareComponents() {
+    return this._middlewareComponents.slice();
+  }
+}, {}, Component);
 var ExtensibleHandler = function ExtensibleHandler(options) {
   var $__6;
   var $__5 = options,
       copyConfig = ($__6 = $__5.copyConfig) === void 0 ? true : $__6;
   this._copyConfig = copyConfig;
-  this.initMiddlewareExtension(options);
   $traceurRuntime.superConstructor($ExtensibleHandler).call(this, options);
 };
 var $ExtensibleHandler = ExtensibleHandler;
 ($traceurRuntime.createClass)(ExtensibleHandler, {
-  get handleableBuilder() {
+  toHandleableBuilder: function() {
     var copyConfig = this._copyConfig;
-    var mainBuilder = this.mainHandleableBuilder;
-    var extendMiddleware = this.extendMiddleware;
+    var mainBuilder = this.toMainHandleableBuilder();
+    var extendMiddleware = this.toExtendMiddleware();
     var builder = combineBuilderWithMiddleware(mainBuilder, extendMiddleware);
     if (copyConfig)
       builder = copyConfigBuilder(builder);
     return builder;
   },
-  get mainHandleableBuilder() {
+  toMainHandleableBuilder: function() {
     throw new Error('unimplemented');
   },
-  privatize: function(privateInstance, privateTable) {
-    this.privatizeMiddlewares(privateInstance, privateTable);
-    $traceurRuntime.superGet(this, $ExtensibleHandler.prototype, "privatize").call(this, privateInstance, privateTable);
+  loadHandleable: function(config, options) {
+    return loadHandleable(config, this, options);
   },
-  toJson: function() {
-    var json = $traceurRuntime.superGet(this, $ExtensibleHandler.prototype, "toJson").call(this);
-    json.middlewares = this.middlewareJson();
-    return json;
+  loadHandler: function(config, options) {
+    return this.handlerLoader(config, this, options);
+  },
+  get handlerLoader() {
+    return loadHandleable;
+  },
+  get type() {
+    return 'handler';
+  },
+  get isHandlerComponent() {
+    return true;
   }
-}, {}, HandlerComponent);
-mixinMiddlewareExtensible(ExtensibleHandler.prototype);
-var ExtensibleMiddleware = function ExtensibleMiddleware(options) {
-  this.initMiddlewareExtension(options);
-  $traceurRuntime.superConstructor($ExtensibleMiddleware).call(this, options);
+}, {}, ExtensibleComponent);
+var ExtensibleMiddleware = function ExtensibleMiddleware() {
+  $traceurRuntime.superConstructor($ExtensibleMiddleware).apply(this, arguments);
 };
 var $ExtensibleMiddleware = ExtensibleMiddleware;
 ($traceurRuntime.createClass)(ExtensibleMiddleware, {
-  get handleableMiddleware() {
-    var mainMiddleware = this.mainHandleableMiddleware;
-    var extendMiddleware = this.extendMiddleware;
+  toHandleableMiddleware: function() {
+    var mainMiddleware = this.toMainHandleableMiddleware();
+    var extendMiddleware = this.toExtendMiddleware();
     return combineMiddlewares([mainMiddleware, extendMiddleware]);
   },
-  get mainHandleableMiddleware() {
+  toMainHandleableMiddleware: function() {
     throw new Error('unimplemented');
   },
-  privatize: function(privateInstance, privateTable) {
-    this.privatizeMiddlewares(privateInstance, privateTable);
-    $traceurRuntime.superGet(this, $ExtensibleMiddleware.prototype, "privatize").call(this, privateInstance, privateTable);
-  },
-  toJson: function() {
-    var json = $traceurRuntime.superGet(this, $ExtensibleMiddleware.prototype, "toJson").call(this);
-    json.middlewares = this.middlewareJson();
-    return json;
+  get isMiddlewareComponent() {
+    return true;
   }
-}, {}, MiddlewareComponent);
-mixinMiddlewareExtensible(ExtensibleMiddleware.prototype);
+}, {}, ExtensibleComponent);

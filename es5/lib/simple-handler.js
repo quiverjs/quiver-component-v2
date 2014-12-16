@@ -43,18 +43,18 @@ var SimpleHandlerBuilder = function SimpleHandlerBuilder(simpleHandlerBuilder, i
 };
 var $SimpleHandlerBuilder = SimpleHandlerBuilder;
 ($traceurRuntime.createClass)(SimpleHandlerBuilder, {
-  get streamHandlerBuilder() {
+  toStreamHandlerBuilder: function() {
     var $__6 = this,
-        simpleHandlerBuilder = $__6.simpleHandlerBuilder,
         inType = $__6.inType,
         outType = $__6.outType;
+    var simpleHandlerBuilder = this.toSimpleHandlerBuilder();
     return (function(config) {
       return simpleHandlerBuilder(config).then((function(simpleHandler) {
         return simpleToStreamHandler(simpleHandler, inType, outType);
       }));
     });
   },
-  get simpleHandlerBuilder() {
+  toSimpleHandlerBuilder: function() {
     if (!this._simpleHandlerBuilder)
       throw new Error('simpleHandlerBuilder is not define');
     return this._simpleHandlerBuilder;
@@ -85,13 +85,13 @@ var SimpleHandler = function SimpleHandler(simpleHandler, inType, outType) {
 };
 var $SimpleHandler = SimpleHandler;
 ($traceurRuntime.createClass)(SimpleHandler, {
-  get simpleHandlerBuilder() {
-    var simpleHandler = this.simpleHandler;
+  toSimpleHandlerBuilder: function() {
+    var simpleHandler = this.toSimpleHandler();
     return (function(config) {
       return resolve(simpleHandler);
     });
   },
-  get simpleHandler() {
+  toSimpleHandler: function() {
     if (!this._simpleHandler)
       throw new Error('simpleHandler is not defined');
     return this._simpleHandler;

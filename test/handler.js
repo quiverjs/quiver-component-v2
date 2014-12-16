@@ -29,7 +29,7 @@ describe('handler test', () => {
           return textToStreamable('goodbye')
         }))
 
-    return main.handleableBuilder({})
+    return main.toHandleableBuilder()({})
       .then(handleable => {
         var handler = handleable.streamHandler
         var input = textToStreamable('hello')

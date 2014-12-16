@@ -71,7 +71,7 @@ describe('bundle component test', () => {
   }))
 
   it('privatized bundle test', async(function*() {
-    var bundle2 = bundle.makePrivate()
+    var bundle2 = bundle.fork()
       
     var { 
       getCount: getCount2, 
@@ -103,10 +103,10 @@ describe('bundle component test', () => {
   }))
 
   it('privatized test', async(function*() {
-    var privateTable = { }
+    var forkTable = { }
     
-    var getCount2 = getCount.makePrivate(privateTable)
-    var increment2 = increment.makePrivate(privateTable)
+    var getCount2 = getCount.fork(forkTable)
+    var increment2 = increment.fork(forkTable)
 
     var config = { }
 
@@ -141,7 +141,7 @@ describe('bundle component test', () => {
 
     var prefixFilter = transformFilter(prefixer, 'out')
 
-    var bundle2 = bundle.makePrivate()
+    var bundle2 = bundle.fork()
       
     var { 
       getCount: getCount2, 
@@ -150,7 +150,7 @@ describe('bundle component test', () => {
 
     getCount2.addMiddleware(prefixFilter)
 
-    var bundle3 = bundle2.makePrivate()
+    var bundle3 = bundle2.fork()
       
     var { 
       getCount: getCount3, 
