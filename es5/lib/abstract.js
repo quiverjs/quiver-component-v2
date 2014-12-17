@@ -24,22 +24,28 @@ var defineAbstractComponent = (function(Parent, mixin) {
   };
   var $AbstractComponent = AbstractComponent;
   ($traceurRuntime.createClass)(AbstractComponent, {
-    implement: function(componentMap) {
-      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "implement").call(this, componentMap);
-      if (this._concreteComponent)
-        return;
-      var componentKey = this._componentKey;
-      var concreteComponent = componentMap[componentKey];
-      if (!concreteComponent)
-        return;
-      this.validateConcreteComponent(concreteComponent);
-      this._concreteComponent = concreteComponent;
-    },
-    doFork: function(forkedInstance, forkTable) {
+    each: function(iteratee) {
       if (this._concreteComponent) {
-        forkedInstance._concreteComponent = this._concreteComponent.fork(forkTable);
+        iteratee(this._concreteComponent);
       }
-      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "doFork").call(this, forkedInstance, forkTable);
+      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "each").call(this, iteratee);
+    },
+    doMap: function(target, mapper) {
+      if (this._concreteComponent) {
+        target._concreteComponent = mapper(this._concreteComponent);
+      }
+      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "doMap").call(this, target, mapper);
+    },
+    implement: function(componentMap) {
+      if (!this._concreteComponent) {
+        var componentKey = this._componentKey;
+        var concreteComponent = componentMap[componentKey];
+        if (concreteComponent) {
+          this.validateConcreteComponent(concreteComponent);
+          this._concreteComponent = concreteComponent;
+        }
+      }
+      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "implement").call(this, componentMap);
     }
   }, {}, Parent);
   Object.assign(AbstractComponent.prototype, mixin);
@@ -59,12 +65,19 @@ var AbstractHandler = defineAbstractComponent(ExtensibleHandler, {
     }
   }
 });
-var AbstractMiddleware = defineAbstractComponent(ExtensibleMiddleware, {toMainHandleableMiddleware: function() {
+var AbstractMiddleware = defineAbstractComponent(ExtensibleMiddleware, {
+  toMainHandleableMiddleware: function() {
     var concreteComponent = this._concreteComponent;
     if (!concreteComponent)
       throw new Error('Abstract middleware component ' + 'not implemented: ' + this._componentKey);
     return concreteComponent.toMainHandleableMiddleware();
-  }});
+  },
+  validateConcreteComponent: function(component) {
+    if (!concreteComponent.isMiddlewareComponent()) {
+      throw new Error('Concrete component in ' + 'implementation map is not middleware component: ' + componentKey);
+    }
+  }
+});
 var abstractHandler = (function(componentKey) {
   return new AbstractHandler(componentKey);
 });

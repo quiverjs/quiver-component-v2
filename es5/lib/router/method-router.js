@@ -199,14 +199,21 @@ var $MethodRouter = MethodRouter;
       return loadMethodHandlers(config, methodMap).then(methodMapToHttpHandler);
     });
   },
-  doFork: function(forkedInstance, forkTable) {
+  each: function(iteratee) {
     var methodMap = this._methodMap;
-    var forkedMap = {};
     for (var key in methodMap) {
-      forkedMap[key] = methodMap[key].fork(forkTable);
+      iteratee(methodMap[key]);
     }
-    forkedInstance._methodMap = forkedMap;
-    $traceurRuntime.superGet(this, $MethodRouter.prototype, "doFork").call(this, forkedInstance, forkTable);
+    $traceurRuntime.superGet(this, $MethodRouter.prototype, "each").call(this, iteratee);
+  },
+  doMap: function(target, mapper) {
+    var methodMap = this._methodMap;
+    var newMap = {};
+    for (var key in methodMap) {
+      newMap[key] = mapper(methodMap[key]);
+    }
+    target._methodMap = newMap;
+    $traceurRuntime.superGet(this, $MethodRouter.prototype, "doMap").call(this, target, mapper);
   }
 }, {}, HttpHandlerBuilder);
 var methodRouter = (function(methodMap) {

@@ -43,32 +43,35 @@ var Component = function Component() {
   get subComponents() {
     return this._subComponents;
   },
-  fork: function() {
-    var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
-    var original = this;
-    var originalId = original.id;
-    if (forkTable[originalId]) {
-      return forkTable[originalId];
-    }
+  copy: function() {
+    var originalProto = this.originalProto ? this.originalProto : this;
+    var newInstance = Object.create(originalProto);
+    newInstance.originalProto = originalProto;
     var privateId = Symbol();
-    var originalProto = original.originalProto ? original.originalProto : original;
-    var forkedInstance = Object.create(originalProto);
-    forkedInstance.originalProto = originalProto;
-    Object.defineProperty(forkedInstance, 'id', {get: function() {
+    Object.defineProperty(newInstance, 'id', {get: function() {
         return privateId;
       }});
-    forkTable[originalId] = forkedInstance;
-    original.doFork(forkedInstance, forkTable);
-    return forkedInstance;
+    return newInstance;
   },
-  doFork: function(forkedInstance, forkTable) {
+  map: function(mapper) {
+    var copy = this.copy();
+    this.doMap(copy, mapper);
+    return copy;
+  },
+  each: function(iteratee) {
+    var subComponents = (this).subComponents;
+    for (var key in subComponents) {
+      iteratee(subComponents[key]);
+    }
+  },
+  doMap: function(target, mapper) {
     var subComponents = (this).subComponents;
     var newSubComponents = {};
     for (var key in subComponents) {
       var component = subComponents[key];
-      newSubComponents[key] = component.fork(forkTable);
+      newSubComponents[key] = mapper(component);
     }
-    forkedInstance._subComponents = newSubComponents;
+    target._subComponents = newSubComponents;
   },
   toTemplate: function() {
     var $__1 = this;
@@ -76,11 +79,23 @@ var Component = function Component() {
       return $__1.fork({});
     });
   },
-  implement: function(componentMap) {
-    var subComponents = (this).subComponents;
-    for (var key in subComponents) {
-      subComponents[key].implement(componentMap);
+  fork: function() {
+    var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
+    var originalId = this.id;
+    if (forkTable[originalId]) {
+      return forkTable[originalId];
     }
+    var forkedInstance = this.copy();
+    forkTable[originalId] = forkedInstance;
+    this.doMap(forkedInstance, (function(component) {
+      return component.fork(forkTable);
+    }));
+    return forkedInstance;
+  },
+  implement: function(componentMap) {
+    this.each((function(component) {
+      return component.implement(componentMap);
+    }));
   },
   toJson: function() {
     var json = {

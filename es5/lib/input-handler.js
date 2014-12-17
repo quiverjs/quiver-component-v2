@@ -52,6 +52,10 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
   get inputHandlerComponent() {
     return this.subComponents.inputHandler;
   },
+  traverse: function(callback) {
+    callback(this.inputHandlerComponent);
+    $traceurRuntime.superGet(this, $InputHandlerMiddleware.prototype, "traverse").call(this, callback);
+  },
   get type() {
     return 'input handler middleware';
   },

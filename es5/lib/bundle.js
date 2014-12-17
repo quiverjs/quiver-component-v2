@@ -107,13 +107,24 @@ var $BundleField = BundleField;
   },
   fork: function() {
     var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
+    var componentId = this.id;
+    if (forkTable[componentId]) {
+      return forkTable[componentId];
+    }
     var handlerName = this._handlerName;
     var bundleComponent = this._bundleComponent;
-    return bundleComponent.fork(forkTable).handlerComponents[handlerName];
-  },
-  _fork: function() {
-    var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
-    return $traceurRuntime.superGet(this, $BundleField.prototype, "fork").call(this, forkTable);
+    var bundleId = bundleComponent.id;
+    var forkedBundle = forkTable[bundleId];
+    if (!forkedBundle) {
+      return bundleComponent.fork(forkTable).handlerComponents[handlerName];
+    }
+    var forkedField = this.copy();
+    forkedField._bundleComponent = forkedBundle;
+    forkTable[componentId] = forkedField;
+    this.doMap(forkedField, (function(component) {
+      return component.fork(forkTable);
+    }));
+    return forkedField;
   }
 }, {}, StreamHandlerBuilder);
 var bundleFields = (function(handlerNames, bundleComponent) {
@@ -156,7 +167,7 @@ var $HandlerBundle = HandlerBundle;
     });
   },
   get handlerComponents() {
-    return copy(this._bundleFields);
+    return this._bundleFields;
   },
   bundleField: function(handlerName, handlerConverter, handlerLoader) {
     var bundleFields = this._bundleFields;
@@ -171,17 +182,23 @@ var $HandlerBundle = HandlerBundle;
   simpleHandler: function(handlerName, inType, outType) {
     return this.bundleField(handlerName, simpleHandlerConverter(inType, outType), simpleHandlerLoader(inType, outType));
   },
-  doFork: function(forkedInstance, forkTable) {
+  each: function(iteratee) {
     var bundleFields = this._bundleFields;
-    var forkedFields = {};
+    for (var key in bundleFields) {
+      iteratee(bundleFields[key]);
+    }
+    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "each").call(this, iteratee);
+  },
+  doMap: function(target, mapper) {
+    var bundleFields = this._bundleFields;
+    var mappedFields = {};
     for (var key in bundleFields) {
       var bundleField = bundleFields[key];
-      var forkedField = bundleField._fork(forkTable);
-      forkedField._bundleComponent = forkedInstance;
-      forkedFields[key] = forkedField;
+      var mappedField = mapper(bundleField);
+      mappedFields[key] = mappedField;
     }
-    forkedInstance._bundleFields = forkedFields;
-    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "doFork").call(this, forkedInstance, forkTable);
+    target._bundleFields = mappedFields;
+    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "doMap").call(this, target, mapper);
   },
   addMiddleware: function(middlewareComponent) {
     var bundleFields = this._bundleFields;

@@ -91,13 +91,17 @@ var $Router = Router;
     }
     return routeBuildSpecsToRouterBuilder(routeBuildSpecs);
   },
-  doFork: function(forkedInstance, forkTable) {
-    forkedInstance._routeLists = this._routeLists.map((function(routeList) {
-      return routeList.doFork(forkTable);
-    }));
-    forkedInstance._defaultRouteList = this._defaultRouteList.doFork(forkTable);
-    forkedInstance._defaultHandler = this._defaultHandler.doFork(forkTable);
-    $traceurRuntime.superGet(this, $Router.prototype, "doFork").call(this, forkedInstance, forkTable);
+  each: function(iteratee) {
+    this._routeLists.forEach(iteratee);
+    iteratee(this._defaultRouteList);
+    iteratee(this._defaultHandler);
+    $traceurRuntime.superGet(this, $Router.prototype, "each").call(this, callback);
+  },
+  doMap: function(target, mapper) {
+    target._routeLists = this._routeLists.map(mapper);
+    target._defaultRouteList = mapper(this._defaultRouteList);
+    target._defaultHandler = mapper(this._defaultHandler);
+    $traceurRuntime.superGet(this, $Router.prototype, "doMap").call(this, target, mapper);
   },
   get type() {
     return 'router';

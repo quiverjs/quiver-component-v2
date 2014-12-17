@@ -43,23 +43,13 @@ var $ExtensibleComponent = ExtensibleComponent;
   middleware: function(middleware) {
     return this.addMiddleware(middleware);
   },
-  doFork: function(forkedInstance, forkTable) {
-    this.forkMiddlewares(forkedInstance, forkTable);
-    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "doFork").call(this, forkedInstance, forkTable);
+  each: function(iteratee) {
+    this._middlewareComponents.forEach(iteratee);
+    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "each").call(this, iteratee);
   },
-  forkMiddlewares: function(forkedInstance, forkTable) {
-    forkedInstance._middlewareComponents = this._middlewareComponents.map((function(component) {
-      return component.fork(forkTable);
-    }));
-  },
-  implement: function(componentMap) {
-    this.implementMiddlewares(componentMap);
-    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "implement").call(this, componentMap);
-  },
-  implementMiddlewares: function(componentMap) {
-    this._middlewareComponents.forEach((function(component) {
-      return component.implement(componentMap);
-    }));
+  doMap: function(target, mapper) {
+    target._middlewareComponents = this._middlewareComponents.map(mapper);
+    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "doMap").call(this, target, mapper);
   },
   toExtendMiddleware: function() {
     return combineMiddlewareComponents(this._middlewareComponents);

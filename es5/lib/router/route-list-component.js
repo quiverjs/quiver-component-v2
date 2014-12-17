@@ -59,11 +59,13 @@ var $RouteList = RouteList;
   dynamicRoute: function(matcher, handler) {
     return this.addRoute(new DynamicRoute(handler, matcher));
   },
-  doFork: function(forkedInstance, forkTable) {
-    forkedInstance._routes = this._routes.map((function(route) {
-      return route.fork(forkTable);
-    }));
-    $traceurRuntime.superGet(this, $RouteList.prototype, "doFork").call(this, forkedInstance, forkTable);
+  each: function(iteratee) {
+    this._routes.forEach(iteratee);
+    $traceurRuntime.superGet(this, $RouteList.prototype, "each").call(this, iteratee);
+  },
+  doMap: function(target, mapper) {
+    target._routes = this._routes.map(mapper);
+    $traceurRuntime.superGet(this, $RouteList.prototype, "doMap").call(this, target, mapper);
   },
   get type() {
     return 'route list';
