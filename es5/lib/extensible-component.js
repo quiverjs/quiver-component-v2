@@ -55,7 +55,7 @@ var $ExtensibleComponent = ExtensibleComponent;
     return combineMiddlewareComponents(this._middlewareComponents);
   },
   get middlewareComponents() {
-    return this._middlewareComponents.slice();
+    return this._middlewareComponents;
   }
 }, {}, Component);
 var ExtensibleHandler = function ExtensibleHandler(options) {
@@ -83,9 +83,19 @@ var $ExtensibleHandler = ExtensibleHandler;
     return loadHandleable(config, this, options);
   },
   loadHandler: function(config, options) {
-    return this.handlerLoader(config, this, options);
+    var loader = this.handlerLoader;
+    return loader(config, this, options);
+  },
+  setLoader: function(handlerLoader) {
+    this._handlerLoader = handlerLoader;
+    return this;
   },
   get handlerLoader() {
+    if (this._handlerLoader)
+      return this._handlerLoader;
+    return this.defaultLoader;
+  },
+  get defaultLoader() {
     return loadHandleable;
   },
   get type() {

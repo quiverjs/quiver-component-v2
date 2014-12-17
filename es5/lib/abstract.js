@@ -20,7 +20,9 @@ var $__0 = ($__extensible_45_component__ = require("./extensible-component"), $_
     ExtensibleMiddleware = $__0.ExtensibleMiddleware;
 var defineAbstractComponent = (function(Parent, mixin) {
   var AbstractComponent = function AbstractComponent(componentKey) {
+    var options = arguments[1] !== (void 0) ? arguments[1] : {};
     this._componentKey = componentKey;
+    $traceurRuntime.superConstructor($AbstractComponent).call(this, options);
   };
   var $AbstractComponent = AbstractComponent;
   ($traceurRuntime.createClass)(AbstractComponent, {
@@ -45,7 +47,7 @@ var defineAbstractComponent = (function(Parent, mixin) {
           this._concreteComponent = concreteComponent;
         }
       }
-      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "implement").call(this, componentMap);
+      return $traceurRuntime.superGet(this, $AbstractComponent.prototype, "implement").call(this, componentMap);
     }
   }, {}, Parent);
   Object.assign(AbstractComponent.prototype, mixin);
@@ -60,7 +62,7 @@ var AbstractHandler = defineAbstractComponent(ExtensibleHandler, {
     return concreteComponent.toHandleableBuilder();
   },
   validateConcreteComponent: function(component) {
-    if (!concreteComponent.isHandlerComponent()) {
+    if (!component.isHandlerComponent) {
       throw new Error('Concrete component in ' + 'implementation map is not handler component: ' + componentKey);
     }
   }
@@ -73,7 +75,7 @@ var AbstractMiddleware = defineAbstractComponent(ExtensibleMiddleware, {
     return concreteComponent.toMainHandleableMiddleware();
   },
   validateConcreteComponent: function(component) {
-    if (!concreteComponent.isMiddlewareComponent()) {
+    if (!component.isMiddlewareComponent) {
       throw new Error('Concrete component in ' + 'implementation map is not middleware component: ' + componentKey);
     }
   }

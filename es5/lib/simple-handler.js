@@ -59,7 +59,7 @@ var $SimpleHandlerBuilder = SimpleHandlerBuilder;
       throw new Error('simpleHandlerBuilder is not define');
     return this._simpleHandlerBuilder;
   },
-  get handlerLoader() {
+  get defaultLoader() {
     return simpleHandlerLoader(this.inType, this.outType);
   },
   get inType() {

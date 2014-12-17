@@ -52,10 +52,6 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
   get inputHandlerComponent() {
     return this.subComponents.inputHandler;
   },
-  traverse: function(callback) {
-    callback(this.inputHandlerComponent);
-    $traceurRuntime.superGet(this, $InputHandlerMiddleware.prototype, "traverse").call(this, callback);
-  },
   get type() {
     return 'input handler middleware';
   },
@@ -65,10 +61,21 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
     return json;
   }
 }, {}, ConfigMiddleware);
-var mixinInputHandler = (function(prototype) {
-  prototype.inputHandler = function(handler, toConfig, options) {
+var InputHandlerMixin = {
+  inputHandler: function(handler, toConfig) {
+    var options = arguments[2] !== (void 0) ? arguments[2] : {};
     return this.addMiddleware(new InputHandlerMiddleware(handler, toConfig, options));
-  };
+  },
+  inputHandlers: function(handlerMap) {
+    for (var key in handlerMap) {
+      var handler = handlerMap[key];
+      this.inputHandler(handler, key);
+    }
+    return this;
+  }
+};
+var mixinInputHandler = (function(prototype) {
+  Object.assign(prototype, InputHandlerMixin);
 });
 mixinInputHandler(ExtensibleHandler.prototype);
 mixinInputHandler(ExtensibleMiddleware.prototype);

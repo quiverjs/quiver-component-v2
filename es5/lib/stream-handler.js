@@ -44,7 +44,7 @@ var $StreamHandlerBuilder = StreamHandlerBuilder;
       throw new Error('streamHandlerBuilder is not defined');
     return this._streamHandlerBuilder;
   },
-  get handlerLoader() {
+  get defaultLoader() {
     return loadStreamHandler;
   },
   get type() {

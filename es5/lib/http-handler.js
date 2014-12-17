@@ -44,7 +44,7 @@ var $HttpHandlerBuilder = HttpHandlerBuilder;
       throw new Error('httpHandlerBuilder is not defined');
     return this._httpHandlerBuilder;
   },
-  get handlerLoader() {
+  get defaultLoader() {
     return loadHttpHandler;
   },
   get type() {

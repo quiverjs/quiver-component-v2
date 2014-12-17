@@ -32,7 +32,7 @@ describe('bundle component test', (function() {
       decrement: decrement
     };
   })).simpleHandler('getCount', 'void', 'text').simpleHandler('increment', 'void', 'void').simpleHandler('decrement', 'void', 'void');
-  var $__4 = bundle.handlerComponents,
+  var $__4 = bundle.toHandlerComponents(),
       getCount = $__4.getCount,
       increment = $__4.increment,
       decrement = $__4.decrement;
@@ -193,7 +193,7 @@ describe('bundle component test', (function() {
         switch ($ctx.state) {
           case 0:
             bundle2 = bundle.fork();
-            $__5 = bundle2.handlerComponents, getCount2 = $__5.getCount, increment2 = $__5.increment;
+            $__5 = bundle2.toHandlerComponents(), getCount2 = $__5.getCount, increment2 = $__5.increment;
             config = {};
             $ctx.state = 62;
             break;
@@ -464,10 +464,10 @@ describe('bundle component test', (function() {
             }), 'text', 'text');
             prefixFilter = transformFilter(prefixer, 'out');
             bundle2 = bundle.fork();
-            $__5 = bundle2.handlerComponents, getCount2 = $__5.getCount, increment2 = $__5.increment;
+            $__5 = bundle2.toHandlerComponents(), getCount2 = $__5.getCount, increment2 = $__5.increment;
             getCount2.addMiddleware(prefixFilter);
             bundle3 = bundle2.fork();
-            $__6 = bundle3.handlerComponents, getCount3 = $__6.getCount, increment3 = $__6.increment;
+            $__6 = bundle3.toHandlerComponents(), getCount3 = $__6.getCount, increment3 = $__6.increment;
             config = {prefix: 'foo'};
             $ctx.state = 62;
             break;

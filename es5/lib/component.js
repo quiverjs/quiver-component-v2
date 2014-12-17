@@ -97,6 +97,7 @@ var Component = function Component() {
     this.each((function(component) {
       return component.implement(componentMap);
     }));
+    return this;
   },
   toJson: function() {
     var json = {

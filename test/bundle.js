@@ -33,7 +33,7 @@ describe('bundle component test', () => {
 
   var { 
     getCount, increment, decrement 
-  } = bundle.handlerComponents
+  } = bundle.toHandlerComponents()
 
   it('basic test', async(function*() {
     var config = { }
@@ -76,7 +76,7 @@ describe('bundle component test', () => {
     var { 
       getCount: getCount2, 
       increment: increment2
-    } = bundle2.handlerComponents
+    } = bundle2.toHandlerComponents()
 
     var config = { }
 
@@ -146,7 +146,7 @@ describe('bundle component test', () => {
     var { 
       getCount: getCount2, 
       increment: increment2
-    } = bundle2.handlerComponents
+    } = bundle2.toHandlerComponents()
 
     getCount2.addMiddleware(prefixFilter)
 
@@ -155,7 +155,7 @@ describe('bundle component test', () => {
     var { 
       getCount: getCount3, 
       increment: increment3
-    } = bundle3.handlerComponents
+    } = bundle3.toHandlerComponents()
 
     var config = { 
       prefix: 'foo' 
