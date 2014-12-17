@@ -73,10 +73,11 @@ var Component = function Component() {
     }
     target._subComponents = newSubComponents;
   },
-  toTemplate: function() {
+  factory: function() {
     var $__1 = this;
     return (function() {
-      return $__1.fork({});
+      var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
+      return $__1.fork(forkTable);
     });
   },
   fork: function() {
