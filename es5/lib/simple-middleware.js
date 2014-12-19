@@ -49,9 +49,7 @@ var $ConfigMiddleware = ConfigMiddleware;
 ($traceurRuntime.createClass)(ConfigMiddleware, {
   toMainHandleableMiddleware: function() {
     var configHandler = this.toConfigHandler();
-    return (function(config, builder) {
-      return configHandler(config).then(builder);
-    });
+    return configHandlerToMiddleware(configHandler);
   },
   toConfigHandler: function() {
     if (!this._configHandler)
