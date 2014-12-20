@@ -74,7 +74,6 @@ describe('filter test', () => {
     var filter = argsFilter(
       args => {
         args.foo = 'bar'
-        return args
       })
 
     var main = simpleHandler(
@@ -99,7 +98,6 @@ describe('filter test', () => {
 
         return args => {
           args.foo = fooValue
-          return args
         }
       })
 
@@ -119,41 +117,6 @@ describe('filter test', () => {
     var handler = yield main.loadHandler(config)
 
     yield handler({}).should.eventually.equal('foo')
-  }))
-
-  it('args helper filter', async(function*() {
-    var filter = argsFilter(
-      args => {
-        args.foo = 'bar'
-        return args
-      })
-
-    var main = makeHandleable({
-      streamHandler: (args, streamable) => {
-        args.foo.should.equal('bar')
-        return textToStreamable('main')
-      },
-      meta: {
-        cacheId: (args, streamable) => {
-          args.foo.should.equal('bar')
-          return jsonToStreamable({ cacheId: 123 })
-        }
-      }
-    })
-    .middleware(filter)
-
-    var handleable = yield main.loadHandleable({})
-    var mainHandler = streamToSimpleHandler(
-      handleable.streamHandler, 'void', 'text')
-
-    var cacheIdHandler = streamToSimpleHandler(
-      handleable.meta.cacheId, 'void', 'json')
-
-    yield mainHandler({})
-      .should.eventually.equal('main')
-
-    var json = yield cacheIdHandler({})
-    json.cacheId.should.equal(123)
   }))
 
   it('error filter', async(function*() {

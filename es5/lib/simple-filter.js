@@ -80,22 +80,9 @@ var applyArgsFilter = (function(argsHandler, handler) {
   });
 });
 var argsBuilderToFilter = (function(argsBuilder) {
-  return (function(config, handleable) {
-    var $__6 = handleable,
-        streamHandler = $__6.streamHandler,
-        metaHandlers = $__6.meta;
-    if (!streamHandler && !metaHandlers)
-      return resolve(handleable);
+  return (function(config, handler) {
     return argsBuilder(config).then((function(argsHandler) {
-      if (streamHandler) {
-        handleable.streamHandler = applyArgsFilter(argsHandler, streamHandler);
-      }
-      if (metaHandlers) {
-        for (var key in metaHandlers) {
-          metaHandlers[key] = applyArgsFilter(argsHandler, metaHandlers[key]);
-        }
-      }
-      return handleable;
+      return applyArgsFilter(argsHandler, handler);
     }));
   });
 });
@@ -108,7 +95,7 @@ var ArgsBuilderFilter = function ArgsBuilderFilter(argsBuilder) {
 };
 var $ArgsBuilderFilter = ArgsBuilderFilter;
 ($traceurRuntime.createClass)(ArgsBuilderFilter, {
-  toHandleableFilter: function() {
+  toStreamFilter: function() {
     return argsBuilderToFilter(this.toArgsBuilder());
   },
   toArgsBuilder: function() {
@@ -119,7 +106,7 @@ var $ArgsBuilderFilter = ArgsBuilderFilter;
   get type() {
     return 'args builder filter';
   }
-}, {}, HandleableFilter);
+}, {}, StreamFilter);
 var ArgsFilter = function ArgsFilter(argsHandler) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._argsHandler = safeHandler(argsHandler, options);

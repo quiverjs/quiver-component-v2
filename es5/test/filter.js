@@ -121,7 +121,6 @@ describe('filter test', (function() {
   it('args filter', (function() {
     var filter = argsFilter((function(args) {
       args.foo = 'bar';
-      return args;
     }));
     var main = simpleHandler((function(args) {
       args.foo.should.equal('bar');
@@ -146,7 +145,6 @@ describe('filter test', (function() {
               var fooValue = config.fooValue;
               return (function(args) {
                 args.foo = fooValue;
-                return args;
               });
             }));
             main = simpleHandlerBuilder((function(config) {
@@ -179,69 +177,7 @@ describe('filter test', (function() {
         }
     }, $__11, this);
   })));
-  it('args helper filter', async($traceurRuntime.initGeneratorFunction(function $__12() {
-    var filter,
-        main,
-        handleable,
-        mainHandler,
-        cacheIdHandler,
-        json;
-    return $traceurRuntime.createGeneratorInstance(function($ctx) {
-      while (true)
-        switch ($ctx.state) {
-          case 0:
-            filter = argsFilter((function(args) {
-              args.foo = 'bar';
-              return args;
-            }));
-            main = makeHandleable({
-              streamHandler: (function(args, streamable) {
-                args.foo.should.equal('bar');
-                return textToStreamable('main');
-              }),
-              meta: {cacheId: (function(args, streamable) {
-                  args.foo.should.equal('bar');
-                  return jsonToStreamable({cacheId: 123});
-                })}
-            }).middleware(filter);
-            $ctx.state = 14;
-            break;
-          case 14:
-            $ctx.state = 2;
-            return main.loadHandleable({});
-          case 2:
-            handleable = $ctx.sent;
-            $ctx.state = 4;
-            break;
-          case 4:
-            mainHandler = streamToSimpleHandler(handleable.streamHandler, 'void', 'text');
-            cacheIdHandler = streamToSimpleHandler(handleable.meta.cacheId, 'void', 'json');
-            $ctx.state = 16;
-            break;
-          case 16:
-            $ctx.state = 6;
-            return mainHandler({}).should.eventually.equal('main');
-          case 6:
-            $ctx.maybeThrow();
-            $ctx.state = 8;
-            break;
-          case 8:
-            $ctx.state = 10;
-            return cacheIdHandler({});
-          case 10:
-            json = $ctx.sent;
-            $ctx.state = 12;
-            break;
-          case 12:
-            json.cacheId.should.equal(123);
-            $ctx.state = -2;
-            break;
-          default:
-            return $ctx.end();
-        }
-    }, $__12, this);
-  })));
-  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__13() {
+  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__12() {
     var filter,
         main,
         handler;
@@ -274,9 +210,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__13, this);
+    }, $__12, this);
   })));
-  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__14() {
+  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__13() {
     var filter,
         main,
         handleable,
@@ -286,12 +222,12 @@ describe('filter test', (function() {
         $__8,
         responseHead,
         responseStreamable,
+        $__14,
         $__15,
         $__16,
         $__17,
         $__18,
-        $__19,
-        $__20;
+        $__19;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -318,24 +254,24 @@ describe('filter test', (function() {
             $ctx.state = 20;
             break;
           case 20:
-            $__15 = new RequestHead();
-            $__16 = emptyStreamable();
-            $__17 = httpHandler($__15, $__16);
+            $__14 = new RequestHead();
+            $__15 = emptyStreamable();
+            $__16 = httpHandler($__14, $__15);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__17;
+            return $__16;
           case 6:
-            $__18 = $ctx.sent;
+            $__17 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__8 = $__18;
-            $__19 = $__8[0];
-            responseHead = $__19;
-            $__20 = $__8[1];
-            responseStreamable = $__20;
+            $__8 = $__17;
+            $__18 = $__8[0];
+            responseHead = $__18;
+            $__19 = $__8[1];
+            responseStreamable = $__19;
             $ctx.state = 12;
             break;
           case 12:
@@ -352,6 +288,6 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__14, this);
+    }, $__13, this);
   })));
 }));
