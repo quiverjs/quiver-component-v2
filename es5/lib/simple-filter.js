@@ -28,17 +28,18 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__quiver_45_promise__,
+    $__stream_45_handler__,
     $__filter__,
     $__util_47_wrap__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
-var $__2 = ($__filter__ = require("./filter"), $__filter__ && $__filter__.__esModule && $__filter__ || {default: $__filter__}),
-    StreamFilter = $__2.StreamFilter,
-    HttpFilter = $__2.HttpFilter,
-    HandleableFilter = $__2.HandleableFilter;
-var $__3 = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}),
-    safeBuilder = $__3.safeBuilder,
-    safeHandler = $__3.safeHandler;
+var StreamHandlerBuilder = ($__stream_45_handler__ = require("./stream-handler"), $__stream_45_handler__ && $__stream_45_handler__.__esModule && $__stream_45_handler__ || {default: $__stream_45_handler__}).StreamHandlerBuilder;
+var $__3 = ($__filter__ = require("./filter"), $__filter__ && $__filter__.__esModule && $__filter__ || {default: $__filter__}),
+    StreamFilter = $__3.StreamFilter,
+    HttpFilter = $__3.HttpFilter;
+var $__4 = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}),
+    safeBuilder = $__4.safeBuilder,
+    safeHandler = $__4.safeHandler;
 var argsToStreamFilter = (function(argsHandler) {
   return (function(config, handler) {
     return resolve((function(args, inputStreamable) {
@@ -52,8 +53,8 @@ var errorToFilter = (function(errorHandler) {
   return (function(config, handler) {
     return resolve((function() {
       for (var args = [],
-          $__5 = 0; $__5 < arguments.length; $__5++)
-        args[$__5] = arguments[$__5];
+          $__6 = 0; $__6 < arguments.length; $__6++)
+        args[$__6] = arguments[$__6];
       return handler.apply(null, $traceurRuntime.spread(args)).catch((function(err) {
         return errorHandler(err).then((function(result) {
           if (!result)
@@ -168,6 +169,13 @@ var $ErrorBuilderFilter = ErrorBuilderFilter;
     return 'error builder filter';
   }
 }, {}, StreamFilter);
+var ArgsFilterMixin = {argsFilter: function(argsHandler) {
+    return this.middleware(new ArgsFilter(argsHandler));
+  }};
+var mixinArgsFilter = (function(prototype) {
+  return Object.assign(prototype, ArgsFilterMixin);
+});
+mixinArgsFilter(StreamHandlerBuilder.prototype);
 var argsFilter = (function(handler, options) {
   return new ArgsFilter(handler, options);
 });

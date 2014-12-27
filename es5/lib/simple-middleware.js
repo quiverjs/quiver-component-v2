@@ -29,9 +29,7 @@ var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_objec
 var resolve = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).resolve;
 var safeHandler = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}).safeHandler;
 var HandleableMiddleware = ($__handleable_45_middleware__ = require("./handleable-middleware"), $__handleable_45_middleware__ && $__handleable_45_middleware__.__esModule && $__handleable_45_middleware__ || {default: $__handleable_45_middleware__}).HandleableMiddleware;
-var $__4 = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}),
-    ExtensibleHandler = $__4.ExtensibleHandler,
-    ExtensibleMiddleware = $__4.ExtensibleMiddleware;
+var ExtensibleComponent = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleComponent;
 var configHandlerToMiddleware = (function(configHandler) {
   return (function(config, builder) {
     return configHandler(config).then((function() {
@@ -129,10 +127,8 @@ var mixinConfigAlias = (function(prototype) {
     return this.addMiddleware(new ConfigAliasMiddleware(config));
   };
 });
-mixinConfigOverride(ExtensibleHandler.prototype);
-mixinConfigOverride(ExtensibleMiddleware.prototype);
-mixinConfigAlias(ExtensibleHandler.prototype);
-mixinConfigAlias(ExtensibleMiddleware.prototype);
+mixinConfigOverride(ExtensibleComponent.prototype);
+mixinConfigAlias(ExtensibleComponent.prototype);
 var configMiddleware = (function(handler) {
   return new ConfigMiddleware(handler);
 });

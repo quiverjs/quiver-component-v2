@@ -15,9 +15,7 @@ var $__quiver_45_object__,
 var assertString = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).assertString;
 var ConfigMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).ConfigMiddleware;
 var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
-var $__3 = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}),
-    ExtensibleHandler = $__3.ExtensibleHandler,
-    ExtensibleMiddleware = $__3.ExtensibleMiddleware;
+var ExtensibleComponent = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleComponent;
 var loadHandler = (function(config, component, options) {
   return component.loadHandler(config, options);
 });
@@ -64,7 +62,7 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
 var InputHandlerMixin = {
   inputHandler: function(handler, toConfig) {
     var options = arguments[2] !== (void 0) ? arguments[2] : {};
-    return this.addMiddleware(new InputHandlerMiddleware(handler, toConfig, options));
+    return this.middleware(new InputHandlerMiddleware(handler, toConfig, options));
   },
   inputHandlers: function(handlerMap) {
     for (var key in handlerMap) {
@@ -75,10 +73,9 @@ var InputHandlerMixin = {
   }
 };
 var mixinInputHandler = (function(prototype) {
-  Object.assign(prototype, InputHandlerMixin);
+  return Object.assign(prototype, InputHandlerMixin);
 });
-mixinInputHandler(ExtensibleHandler.prototype);
-mixinInputHandler(ExtensibleMiddleware.prototype);
+mixinInputHandler(ExtensibleComponent.prototype);
 var inputHandlerMiddleware = (function(handler, toConfig, options) {
   return new InputHandlerMiddleware(handler, toConfig, options);
 });

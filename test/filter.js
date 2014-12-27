@@ -70,23 +70,20 @@ describe('filter test', () => {
       .should.eventually.equal('GOODBYE!')
   }))
 
-  it('args filter', () => {
-    var filter = argsFilter(
-      args => {
-        args.foo = 'bar'
-      })
-
+  it('args filter', async(function*() {
     var main = simpleHandler(
       args => {
         args.foo.should.equal('bar')
         return 'foo'
       }, 'void', 'text')
-    .middleware(filter)
+    .argsFilter(args => {
+      args.foo = 'bar'
+    })
 
-    return main.loadHandler({}).then(handler =>
-      handler({}))
-    .should.eventually.equal('foo')
-  })
+    var handler = yield main.loadHandler({})
+
+    yield handler({}).should.eventually.equal('foo')
+  }))
 
   it('args builder filter', async(function*() {
     var filter = argsBuilderFilter(

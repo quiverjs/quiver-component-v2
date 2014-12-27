@@ -120,7 +120,7 @@ var $BundleField = BundleField;
     if (!forkedBundle) {
       return bundleComponent.fork(forkTable).toHandlerComponents()[handlerName];
     }
-    var forkedField = this.copy();
+    var forkedField = this.clone();
     forkedField._bundleComponent = forkedBundle;
     forkTable[componentId] = forkedField;
     this.doMap(forkedField, (function(component) {

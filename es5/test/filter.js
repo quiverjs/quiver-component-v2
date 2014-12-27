@@ -118,19 +118,41 @@ describe('filter test', (function() {
         }
     }, $__10, this);
   })));
-  it('args filter', (function() {
-    var filter = argsFilter((function(args) {
-      args.foo = 'bar';
-    }));
-    var main = simpleHandler((function(args) {
-      args.foo.should.equal('bar');
-      return 'foo';
-    }), 'void', 'text').middleware(filter);
-    return main.loadHandler({}).then((function(handler) {
-      return handler({});
-    })).should.eventually.equal('foo');
-  }));
-  it('args builder filter', async($traceurRuntime.initGeneratorFunction(function $__11() {
+  it('args filter', async($traceurRuntime.initGeneratorFunction(function $__11() {
+    var main,
+        handler;
+    return $traceurRuntime.createGeneratorInstance(function($ctx) {
+      while (true)
+        switch ($ctx.state) {
+          case 0:
+            main = simpleHandler((function(args) {
+              args.foo.should.equal('bar');
+              return 'foo';
+            }), 'void', 'text').argsFilter((function(args) {
+              args.foo = 'bar';
+            }));
+            $ctx.state = 10;
+            break;
+          case 10:
+            $ctx.state = 2;
+            return main.loadHandler({});
+          case 2:
+            handler = $ctx.sent;
+            $ctx.state = 4;
+            break;
+          case 4:
+            $ctx.state = 6;
+            return handler({}).should.eventually.equal('foo');
+          case 6:
+            $ctx.maybeThrow();
+            $ctx.state = -2;
+            break;
+          default:
+            return $ctx.end();
+        }
+    }, $__11, this);
+  })));
+  it('args builder filter', async($traceurRuntime.initGeneratorFunction(function $__12() {
     var filter,
         main,
         config,
@@ -175,9 +197,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__11, this);
+    }, $__12, this);
   })));
-  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__12() {
+  it('error filter', async($traceurRuntime.initGeneratorFunction(function $__13() {
     var filter,
         main,
         handler;
@@ -210,9 +232,9 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__12, this);
+    }, $__13, this);
   })));
-  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__13() {
+  it('stream handler on http filter', async($traceurRuntime.initGeneratorFunction(function $__14() {
     var filter,
         main,
         handleable,
@@ -222,12 +244,12 @@ describe('filter test', (function() {
         $__8,
         responseHead,
         responseStreamable,
-        $__14,
         $__15,
         $__16,
         $__17,
         $__18,
-        $__19;
+        $__19,
+        $__20;
     return $traceurRuntime.createGeneratorInstance(function($ctx) {
       while (true)
         switch ($ctx.state) {
@@ -254,24 +276,24 @@ describe('filter test', (function() {
             $ctx.state = 20;
             break;
           case 20:
-            $__14 = new RequestHead();
-            $__15 = emptyStreamable();
-            $__16 = httpHandler($__14, $__15);
+            $__15 = new RequestHead();
+            $__16 = emptyStreamable();
+            $__17 = httpHandler($__15, $__16);
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 6;
-            return $__16;
+            return $__17;
           case 6:
-            $__17 = $ctx.sent;
+            $__18 = $ctx.sent;
             $ctx.state = 8;
             break;
           case 8:
-            $__8 = $__17;
-            $__18 = $__8[0];
-            responseHead = $__18;
-            $__19 = $__8[1];
-            responseStreamable = $__19;
+            $__8 = $__18;
+            $__19 = $__8[0];
+            responseHead = $__19;
+            $__20 = $__8[1];
+            responseStreamable = $__20;
             $ctx.state = 12;
             break;
           case 12:
@@ -288,6 +310,6 @@ describe('filter test', (function() {
           default:
             return $ctx.end();
         }
-    }, $__13, this);
+    }, $__14, this);
   })));
 }));

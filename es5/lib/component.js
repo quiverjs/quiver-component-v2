@@ -43,7 +43,7 @@ var Component = function Component() {
   get subComponents() {
     return this._subComponents;
   },
-  copy: function() {
+  clone: function() {
     var originalProto = this.originalProto ? this.originalProto : this;
     var newInstance = Object.create(originalProto);
     newInstance.originalProto = originalProto;
@@ -54,7 +54,7 @@ var Component = function Component() {
     return newInstance;
   },
   map: function(mapper) {
-    var copy = this.copy();
+    var copy = this.clone();
     this.doMap(copy, mapper);
     return copy;
   },
@@ -86,7 +86,7 @@ var Component = function Component() {
     if (forkTable[originalId]) {
       return forkTable[originalId];
     }
-    var forkedInstance = this.copy();
+    var forkedInstance = this.clone();
     forkTable[originalId] = forkedInstance;
     this.doMap(forkedInstance, (function(component) {
       return component.fork(forkTable);
