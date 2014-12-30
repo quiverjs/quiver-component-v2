@@ -7,7 +7,7 @@ var $__traceur_64_0_46_0_46_7__,
 var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     pipeline = $__0.pipeline,
     simpleHandler = $__0.simpleHandler,
-    loadSimpleHandler = $__0.loadSimpleHandler;
+    simpleHandlerLoader = $__0.simpleHandlerLoader;
 var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
 var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"), $__chai_45_as_45_promised__ && $__chai_45_as_45_promised__.__esModule && $__chai_45_as_45_promised__ || {default: $__chai_45_as_45_promised__}).default;
 chai.use(chaiAsPromised);
@@ -26,8 +26,8 @@ describe('pipeline handler test', (function() {
         result: input
       });
     }), 'text', 'json');
-    var main = pipeline().addPipe(handler1).addPipe(handler2).addPipe(handler3);
-    return loadSimpleHandler({}, main, 'void', 'json').then((function(handler) {
+    var main = pipeline().addPipe(handler1).addPipe(handler2).addPipe(handler3).setLoader(simpleHandlerLoader('void', 'json'));
+    return main.loadHandler({}).then((function(handler) {
       return handler({name: 'bob'}).then((function(result) {
         result.status.should.equal('ok');
         result.result.should.equal('HELLO, BOB');

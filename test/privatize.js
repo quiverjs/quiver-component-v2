@@ -1,5 +1,7 @@
 import 'traceur'
 
+import { async } from 'quiver-promise'
+
 import {
   simpleHandlerBuilder, simpleHandler,
   transformFilter
@@ -92,7 +94,7 @@ describe('privatized component test', () => {
     should.equal(Object.getPrototypeOf(copy21), original)
   })
 
-  it('nested privatize', () => {
+  it('nested privatize', async(function*() {
     var transformCase = simpleHandlerBuilder(
     config => {
       var { transform } = config
@@ -129,21 +131,25 @@ describe('privatized component test', () => {
 
     var config = { transform: 'uppercase' }
 
-    return greet1.loadHandler(config).then(handler =>
-      handler({}, 'John').should.eventually.equal('HELLO, JOHN'))
-    .then(() => {
-      config.transform = 'lowercase'
+    var handler = yield greet1.loadHandler(config)
+    
+    yield handler({}, 'John')
+      .should.eventually.equal('HELLO, JOHN')
 
-      return greet2.loadHandler(config).then(handler =>
-        handler({}, 'Bob').should.eventually.equal('HELLO, BOB'))
-    })
-    .then(() => {
-      config.transform = 'lowercase'
+    config.transform = 'lowercase'
 
-      return greet3.loadHandler(config).then(handler =>
-        handler({}, 'Alice').should.eventually.equal('hello, alice'))
-    })
-  })
+    var handler = yield greet2.loadHandler(config)
+
+    yield handler({}, 'Bob')
+      .should.eventually.equal('HELLO, BOB')
+
+    config.transform = 'lowercase'
+
+    var handler = yield greet3.loadHandler(config)
+
+    yield handler({}, 'Alice')
+      .should.eventually.equal('hello, alice')
+  }))
 
   it('privatized middlewares', () => {
     var transformCase = simpleHandlerBuilder(

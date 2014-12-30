@@ -231,6 +231,9 @@ Object.defineProperties(exports, {
   simpleHandlerLoader: {get: function() {
       return $__util_47_loader__.simpleHandlerLoader;
     }},
+  globalConfig: {get: function() {
+      return $__util_47_config__.globalConfig;
+    }},
   getHandleable: {get: function() {
       return $__util_47_config__.getHandleable;
     }},

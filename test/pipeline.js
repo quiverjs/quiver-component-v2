@@ -1,7 +1,7 @@
 import 'traceur'
 
 import {
-  pipeline, simpleHandler, loadSimpleHandler
+  pipeline, simpleHandler, simpleHandlerLoader
 } from '../lib/export.js'
 
 import chai from 'chai'
@@ -30,8 +30,9 @@ describe('pipeline handler test', () => {
       .addPipe(handler1)
       .addPipe(handler2)
       .addPipe(handler3)
+      .setLoader(simpleHandlerLoader('void', 'json'))
     
-    return loadSimpleHandler({}, main, 'void', 'json')
+    return main.loadHandler({})
     .then(handler => 
       handler({ name: 'bob' })
       .then(result => {

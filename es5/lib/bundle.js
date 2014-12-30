@@ -34,29 +34,22 @@ var getBundleMap = ($__util_47_config__ = require("./util/config"), $__util_47_c
 var $__8 = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}),
     loadStreamHandler = $__8.loadStreamHandler,
     simpleHandlerLoader = $__8.simpleHandlerLoader;
-var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function $__10(config, handlerName, component) {
-  var componentId,
-      bundleMap,
+var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function $__10(config, handlerName, componentId, bundleBuilder) {
+  var bundleMap,
       bundle,
-      bundleBuilder,
       handler;
   return $traceurRuntime.createGeneratorInstance(function($ctx) {
     while (true)
       switch ($ctx.state) {
         case 0:
-          componentId = component.id;
           bundleMap = getBundleMap(config);
           bundle = bundleMap[componentId];
-          $ctx.state = 13;
+          $ctx.state = 11;
           break;
-        case 13:
-          $ctx.state = (!bundle) ? 5 : 8;
+        case 11:
+          $ctx.state = (!bundle) ? 1 : 6;
           break;
-        case 5:
-          bundleBuilder = component.toBundleBuilder();
-          $ctx.state = 6;
-          break;
-        case 6:
+        case 1:
           $ctx.state = 2;
           return bundleBuilder(config);
         case 2:
@@ -65,15 +58,15 @@ var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function
           break;
         case 4:
           bundleMap[componentId] = bundle;
-          $ctx.state = 8;
+          $ctx.state = 6;
           break;
-        case 8:
+        case 6:
           handler = bundle[handlerName];
           if (!handler)
             throw new Error('handler not found in bundle: ' + handlerName);
-          $ctx.state = 15;
+          $ctx.state = 13;
           break;
-        case 15:
+        case 13:
           $ctx.returnValue = handler;
           $ctx.state = -2;
           break;
@@ -83,8 +76,10 @@ var loadHandlerFromBundle = async($traceurRuntime.initGeneratorFunction(function
   }, $__10, this);
 }));
 var bundleHandlerLoader = (function(handlerName, bundleComponent) {
+  var componentId = bundleComponent.id;
+  var bundleBuilder = bundleComponent.toBundleBuilder();
   return (function(config) {
-    return loadHandlerFromBundle(config, handlerName, bundleComponent);
+    return loadHandlerFromBundle(config, handlerName, componentId, bundleBuilder);
   });
 });
 var BundleField = function BundleField(handlerName, bundleComponent, handlerConverter, handlerLoader) {

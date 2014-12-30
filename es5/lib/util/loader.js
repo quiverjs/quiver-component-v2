@@ -27,23 +27,15 @@ var $__1 = ($__quiver_45_simple_45_handler__ = require("quiver-simple-handler"),
     streamToSimpleHandler = $__1.streamToSimpleHandler,
     validateSimpleTypes = $__1.validateSimpleTypes;
 var getHandlerMap = ($__config__ = require("./config"), $__config__ && $__config__.__esModule && $__config__ || {default: $__config__}).getHandlerMap;
-var loadHandleable = (function(config, component) {
-  var $__6;
-  var options = arguments[2] !== (void 0) ? arguments[2] : {};
-  var $__5 = options,
-      loadPrivate = ($__6 = $__5.loadPrivate) === void 0 ? false : $__6;
+var loadHandleable = (function(config, componentId, builder) {
   var handlerMap = getHandlerMap(config);
-  if (!loadPrivate) {
-    var handleable = handlerMap[component.id];
-    if (handleable)
-      return resolve(handleable);
-  }
-  var builder = component.toHandleableBuilder();
+  var handleable = handlerMap[componentId];
+  if (handleable)
+    return resolve(handleable);
   return builder(config).then((function(handleable) {
     if (!handleable)
       return reject(new Error('handleable is not defined in builder result'));
-    if (!loadPrivate)
-      handlerMap[component.id] = handleable;
+    handlerMap[componentId] = handleable;
     return handleable;
   }));
 });
@@ -69,16 +61,16 @@ var loadHttpHandler = (function() {
     return handler;
   }));
 });
-var loadSimpleHandler = (function(config, component, inType, outType, options) {
+var loadSimpleHandler = (function(config, componentId, builder, inType, outType) {
   var err = validateSimpleTypes([inType, outType]);
   if (err)
     return reject(err);
-  return loadStreamHandler(config, component, options).then((function(handler) {
+  return loadStreamHandler(config, componentId, builder).then((function(handler) {
     return streamToSimpleHandler(handler, inType, outType);
   }));
 });
 var simpleHandlerLoader = (function(inType, outType) {
-  return (function(config, component, options) {
-    return loadSimpleHandler(config, component, inType, outType, options);
+  return (function(config, componentId, builder) {
+    return loadSimpleHandler(config, componentId, builder, inType, outType);
   });
 });

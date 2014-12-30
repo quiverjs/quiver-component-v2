@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperties(exports, {
+  globalConfig: {get: function() {
+      return globalConfig;
+    }},
   normalizeConfig: {get: function() {
       return normalizeConfig;
     }},
@@ -28,31 +31,39 @@ var configNormalized = Symbol('ConfigNormalized');
 var handlerMap = Symbol('handlerMap');
 var bundleMap = Symbol('bundleMap');
 var initTable = Symbol('initTable');
+var globalConfig = (function(config) {
+  if (!config.global) {
+    config.global = noCopy({});
+  }
+  return config.global;
+});
 var normalizeConfig = (function(config) {
-  if (config[configNormalized])
+  var global = globalConfig(config);
+  if (global[configNormalized])
     return;
-  if (!config[handlerMap]) {
-    config[handlerMap] = noCopy({});
+  if (!global[handlerMap]) {
+    global[handlerMap] = noCopy({});
   }
-  if (!config[bundleMap]) {
-    config[bundleMap] = noCopy({});
+  if (!global[bundleMap]) {
+    global[bundleMap] = noCopy({});
   }
-  if (!config[initTable]) {
-    config[initTable] = {};
+  if (!global[initTable]) {
+    global[initTable] = {};
   }
-  config[configNormalized] = true;
+  global[configNormalized] = true;
+  return config;
 });
 var getHandlerMap = (function(config) {
   normalizeConfig(config);
-  return config[handlerMap];
+  return config.global[handlerMap];
 });
 var getBundleMap = (function(config) {
   normalizeConfig(config);
-  return config[bundleMap];
+  return config.global[bundleMap];
 });
 var getInitTable = (function(config) {
   normalizeConfig(config);
-  return config[initTable];
+  return config.global[initTable];
 });
 var getHandleable = (function(config, component) {
   var handlerMap = getHandlerMap(config);

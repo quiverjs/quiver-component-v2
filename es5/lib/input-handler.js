@@ -16,9 +16,6 @@ var assertString = ($__quiver_45_object__ = require("quiver-object"), $__quiver_
 var ConfigMiddleware = ($__simple_45_middleware__ = require("./simple-middleware"), $__simple_45_middleware__ && $__simple_45_middleware__.__esModule && $__simple_45_middleware__ || {default: $__simple_45_middleware__}).ConfigMiddleware;
 var HandlerComponent = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).HandlerComponent;
 var ExtensibleComponent = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleComponent;
-var loadHandler = (function(config, component, options) {
-  return component.loadHandler(config, options);
-});
 var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, toConfig) {
   var $__6;
   var options = arguments[2] !== (void 0) ? arguments[2] : {};
@@ -27,7 +24,7 @@ var InputHandlerMiddleware = function InputHandlerMiddleware(handlerComponent, t
   }
   assertString(toConfig, 'toConfig required to be string');
   var $__5 = options,
-      loader = ($__6 = $__5.loader) === void 0 ? loadHandler : $__6;
+      loader = ($__6 = $__5.loader) === void 0 ? handlerComponent.handlerLoader : $__6;
   this._handlerLoader = loader;
   this._toInputConfig = toConfig;
   options.safeWrapped = true;
@@ -38,12 +35,13 @@ var $InputHandlerMiddleware = InputHandlerMiddleware;
 ($traceurRuntime.createClass)(InputHandlerMiddleware, {
   toConfigHandler: function() {
     var handlerComponent = this.inputHandlerComponent;
+    var componentId = handlerComponent.id;
+    var builder = handlerComponent.toHandleableBuilder();
     var loader = this._handlerLoader;
     var toConfig = this._toInputConfig;
     return (function(config) {
-      return loader(config, handlerComponent).then((function(handler) {
+      return loader(config, componentId, builder).then((function(handler) {
         config[toConfig] = handler;
-        return config;
       }));
     });
   },

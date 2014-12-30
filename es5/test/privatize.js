@@ -1,13 +1,15 @@
 "use strict";
 var $__traceur_64_0_46_0_46_7__,
+    $__quiver_45_promise__,
     $___46__46__47_lib_47_export_46_js__,
     $__chai__,
     $__chai_45_as_45_promised__;
 ($__traceur_64_0_46_0_46_7__ = require("traceur"), $__traceur_64_0_46_0_46_7__ && $__traceur_64_0_46_0_46_7__.__esModule && $__traceur_64_0_46_0_46_7__ || {default: $__traceur_64_0_46_0_46_7__});
-var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
-    simpleHandlerBuilder = $__0.simpleHandlerBuilder,
-    simpleHandler = $__0.simpleHandler,
-    transformFilter = $__0.transformFilter;
+var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
+var $__1 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
+    simpleHandlerBuilder = $__1.simpleHandlerBuilder,
+    simpleHandler = $__1.simpleHandler,
+    transformFilter = $__1.transformFilter;
 var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
 var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"), $__chai_45_as_45_promised__ && $__chai_45_as_45_promised__.__esModule && $__chai_45_as_45_promised__ || {default: $__chai_45_as_45_promised__}).default;
 chai.use(chaiAsPromised);
@@ -15,9 +17,9 @@ var should = chai.should();
 describe('privatized component test', (function() {
   it('single component test', (function() {
     var original = simpleHandlerBuilder((function(config) {
-      var $__4;
-      var $__3 = config,
-          greet = ($__4 = $__3.greet) === void 0 ? 'Hello' : $__4;
+      var $__5;
+      var $__4 = config,
+          greet = ($__5 = $__4.greet) === void 0 ? 'Hello' : $__5;
       return (function(args, name) {
         return greet + ', ' + name;
       });
@@ -46,9 +48,9 @@ describe('privatized component test', (function() {
   }));
   it('private inheritance', (function() {
     var original = simpleHandlerBuilder((function(config) {
-      var $__4;
-      var $__3 = config,
-          greet = ($__4 = $__3.greet) === void 0 ? 'Hello' : $__4;
+      var $__5;
+      var $__4 = config,
+          greet = ($__5 = $__4.greet) === void 0 ? 'Hello' : $__5;
       return (function(args, name) {
         return greet + ', ' + name;
       });
@@ -71,44 +73,101 @@ describe('privatized component test', (function() {
     should.equal(copy21, copy22);
     should.equal(Object.getPrototypeOf(copy21), original);
   }));
-  it('nested privatize', (function() {
-    var transformCase = simpleHandlerBuilder((function(config) {
-      var transform = config.transform;
-      var doTransform = transform == 'uppercase' ? (function(string) {
-        return string.toUpperCase();
-      }) : (function(string) {
-        return string.toLowerCase();
-      });
-      return (function(args, text) {
-        return doTransform(text);
-      });
-    }), 'text', 'text');
-    var filter = transformFilter(transformCase, 'out');
-    var filter1 = filter.fork();
-    var filter2 = filter.fork();
-    should.not.equal(filter1.id, filter2.id);
-    should.not.equal(filter1.transformComponent.id, filter2.transformComponent.id);
-    var greet = simpleHandler((function(args, name) {
-      return 'Hello, ' + name;
-    }), 'text', 'text');
-    var greet1 = greet.fork().addMiddleware(filter1);
-    var greet2 = greet.fork().addMiddleware(filter1);
-    var greet3 = greet.fork().addMiddleware(filter2);
-    var config = {transform: 'uppercase'};
-    return greet1.loadHandler(config).then((function(handler) {
-      return handler({}, 'John').should.eventually.equal('HELLO, JOHN');
-    })).then((function() {
-      config.transform = 'lowercase';
-      return greet2.loadHandler(config).then((function(handler) {
-        return handler({}, 'Bob').should.eventually.equal('HELLO, BOB');
-      }));
-    })).then((function() {
-      config.transform = 'lowercase';
-      return greet3.loadHandler(config).then((function(handler) {
-        return handler({}, 'Alice').should.eventually.equal('hello, alice');
-      }));
-    }));
-  }));
+  it('nested privatize', async($traceurRuntime.initGeneratorFunction(function $__6() {
+    var transformCase,
+        filter,
+        filter1,
+        filter2,
+        greet,
+        greet1,
+        greet2,
+        greet3,
+        config,
+        handler;
+    return $traceurRuntime.createGeneratorInstance(function($ctx) {
+      while (true)
+        switch ($ctx.state) {
+          case 0:
+            transformCase = simpleHandlerBuilder((function(config) {
+              var transform = config.transform;
+              var doTransform = transform == 'uppercase' ? (function(string) {
+                return string.toUpperCase();
+              }) : (function(string) {
+                return string.toLowerCase();
+              });
+              return (function(args, text) {
+                return doTransform(text);
+              });
+            }), 'text', 'text');
+            filter = transformFilter(transformCase, 'out');
+            filter1 = filter.fork();
+            filter2 = filter.fork();
+            should.not.equal(filter1.id, filter2.id);
+            should.not.equal(filter1.transformComponent.id, filter2.transformComponent.id);
+            greet = simpleHandler((function(args, name) {
+              return 'Hello, ' + name;
+            }), 'text', 'text');
+            greet1 = greet.fork().addMiddleware(filter1);
+            greet2 = greet.fork().addMiddleware(filter1);
+            greet3 = greet.fork().addMiddleware(filter2);
+            config = {transform: 'uppercase'};
+            $ctx.state = 26;
+            break;
+          case 26:
+            $ctx.state = 2;
+            return greet1.loadHandler(config);
+          case 2:
+            handler = $ctx.sent;
+            $ctx.state = 4;
+            break;
+          case 4:
+            $ctx.state = 6;
+            return handler({}, 'John').should.eventually.equal('HELLO, JOHN');
+          case 6:
+            $ctx.maybeThrow();
+            $ctx.state = 8;
+            break;
+          case 8:
+            config.transform = 'lowercase';
+            $ctx.state = 28;
+            break;
+          case 28:
+            $ctx.state = 10;
+            return greet2.loadHandler(config);
+          case 10:
+            handler = $ctx.sent;
+            $ctx.state = 12;
+            break;
+          case 12:
+            $ctx.state = 14;
+            return handler({}, 'Bob').should.eventually.equal('HELLO, BOB');
+          case 14:
+            $ctx.maybeThrow();
+            $ctx.state = 16;
+            break;
+          case 16:
+            config.transform = 'lowercase';
+            $ctx.state = 30;
+            break;
+          case 30:
+            $ctx.state = 18;
+            return greet3.loadHandler(config);
+          case 18:
+            handler = $ctx.sent;
+            $ctx.state = 20;
+            break;
+          case 20:
+            $ctx.state = 22;
+            return handler({}, 'Alice').should.eventually.equal('hello, alice');
+          case 22:
+            $ctx.maybeThrow();
+            $ctx.state = -2;
+            break;
+          default:
+            return $ctx.end();
+        }
+    }, $__6, this);
+  })));
   it('privatized middlewares', (function() {
     var transformCase = simpleHandlerBuilder((function(config) {
       var transform = config.transform;

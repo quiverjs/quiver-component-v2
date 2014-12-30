@@ -80,11 +80,11 @@ var $ExtensibleHandler = ExtensibleHandler;
     throw new Error('unimplemented');
   },
   loadHandleable: function(config, options) {
-    return loadHandleable(config, this, options);
+    return loadHandleable(config, this.id, this.toHandleableBuilder(), options);
   },
   loadHandler: function(config, options) {
     var loader = this.handlerLoader;
-    return loader(config, this, options);
+    return loader(config, this.id, this.toHandleableBuilder(), options);
   },
   setLoader: function(handlerLoader) {
     this._handlerLoader = handlerLoader;

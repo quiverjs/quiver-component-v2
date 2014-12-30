@@ -5,7 +5,7 @@ import {
   routeList as makeRouteList,
   httpHandler as createHttpHandler,
   simpleHandler, simpleHandlerBuilder,
-  loadSimpleHandler,
+  simpleHandlerLoader,
   loadHttpHandler,
 } from '../lib/export.js'
 
@@ -36,9 +36,9 @@ describe('router component test', () => {
 
     var router = makeRouter()
       .staticRoute('/foo', handlerComponent)
+      .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield loadSimpleHandler(
-      {}, router, 'text', 'text')
+    var handler = yield router.loadHandler({})
 
     yield handler({ path: '/foo' }, 'hello')
       .should.eventually.equal('goodbye')
@@ -58,9 +58,9 @@ describe('router component test', () => {
 
     var router = makeRouter()
       .regexRoute(/^\/greet\/(\w+)$/, ['name'], greet)
+      .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield loadSimpleHandler(
-      {}, router, 'text', 'text')
+    var handler = yield router.loadHandler({})
 
     yield handler({ path: '/greet/john' }, 'hello')
       .should.eventually.equal('goodbye, john')
@@ -75,9 +75,9 @@ describe('router component test', () => {
 
     var router = makeRouter()
       .paramRoute('/greet/:name', greet)
+      .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield loadSimpleHandler(
-      {}, router, 'text', 'text')
+    var handler = yield router.loadHandler({})
 
     yield handler({ path: '/greet/foo' }, 'hello')
       .should.eventually.equal('goodbye, foo')
@@ -120,9 +120,9 @@ describe('router component test', () => {
     var router = makeRouter()
       .routeList(routeList)
       .defaultRoute(defaultPage)
+      .setLoader(simpleHandlerLoader('void', 'text'))
 
-    var handler = yield loadSimpleHandler(
-      {}, router, 'void', 'text')
+    var handler = yield router.loadHandler({})
 
     yield handler({ path: '/foo' })
       .should.eventually.equal('foo')
@@ -154,9 +154,9 @@ describe('router component test', () => {
     var mainRouter = makeRouter()
       .paramRoute('/user/:userId/:restpath', userRouter)
       .defaultRoute(defaultPage)
+      .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield loadSimpleHandler(
-      {}, mainRouter, 'text', 'text')
+    var handler = yield mainRouter.loadHandler({})
 
     var path = '/user/john/post/welcome-to-my-blog'
 
@@ -283,8 +283,9 @@ describe('router component test', () => {
     var router = methodRouter({
       get: foo
     })
+    .setLoader(loadHttpHandler)
 
-    var handler = yield loadHttpHandler({}, router)
+    var handler = yield router.loadHandler({})
 
     var [responseHead, responseStreamable] = 
       yield handler(new RequestHead({
@@ -318,8 +319,9 @@ describe('router component test', () => {
         get: foo,
         post: bar
       })
+    .setLoader(loadHttpHandler)
 
-    var handler = yield loadHttpHandler({}, router)
+    var handler = yield router.loadHandler({})
 
     var [responseHead, responseStreamable] = 
       yield handler(new RequestHead({

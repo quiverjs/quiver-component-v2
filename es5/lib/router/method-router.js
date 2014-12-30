@@ -76,7 +76,7 @@ var loadHttpHandler = async($traceurRuntime.initGeneratorFunction(function $__9(
       switch ($ctx.state) {
         case 0:
           $ctx.state = 2;
-          return loadHandleable(config, component);
+          return loadHandleable(config, component.id, component.builder);
         case 2:
           handleable = $ctx.sent;
           $ctx.state = 4;
@@ -195,8 +195,16 @@ var $MethodRouter = MethodRouter;
 ($traceurRuntime.createClass)(MethodRouter, {
   toHttpHandlerBuilder: function() {
     var methodMap = this._methodMap;
+    var snapshot = {};
+    for (var key in methodMap) {
+      var component = methodMap[key];
+      snapshot[key] = {
+        id: component.id,
+        builder: component.toHandleableBuilder()
+      };
+    }
     return (function(config) {
-      return loadMethodHandlers(config, methodMap).then(methodMapToHttpHandler);
+      return loadMethodHandlers(config, snapshot).then(methodMapToHttpHandler);
     });
   },
   each: function(iteratee) {

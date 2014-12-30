@@ -6,7 +6,7 @@
   },
   "name": "quiver-component",
   "desription": "Component system to allow creation of complex interconnected components",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "homepage": "https://github.com/quiverjs/quiver-component",
   "repository": {
     "url": "git@github.com:quiverjs/quiver-component.git"

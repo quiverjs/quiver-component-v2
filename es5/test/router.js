@@ -14,7 +14,7 @@ var $__0 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), 
     createHttpHandler = $__0.httpHandler,
     simpleHandler = $__0.simpleHandler,
     simpleHandlerBuilder = $__0.simpleHandlerBuilder,
-    loadSimpleHandler = $__0.loadSimpleHandler,
+    simpleHandlerLoader = $__0.simpleHandlerLoader,
     loadHttpHandler = $__0.loadHttpHandler;
 var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_promise__ && $__quiver_45_promise__.__esModule && $__quiver_45_promise__ || {default: $__quiver_45_promise__}).async;
 var $__2 = ($__quiver_45_stream_45_util__ = require("quiver-stream-util"), $__quiver_45_stream_45_util__ && $__quiver_45_stream_45_util__.__esModule && $__quiver_45_stream_45_util__ || {default: $__quiver_45_stream_45_util__}),
@@ -41,12 +41,12 @@ describe('router component test', (function() {
               input.should.equal('hello');
               return 'goodbye';
             }), 'text', 'text');
-            router = makeRouter().staticRoute('/foo', handlerComponent);
+            router = makeRouter().staticRoute('/foo', handlerComponent).setLoader(simpleHandlerLoader('text', 'text'));
             $ctx.state = 14;
             break;
           case 14:
             $ctx.state = 2;
-            return loadSimpleHandler({}, router, 'text', 'text');
+            return router.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;
@@ -83,12 +83,12 @@ describe('router component test', (function() {
               args.name.should.equal('john');
               return 'goodbye, ' + args.name;
             }), 'text', 'text');
-            router = makeRouter().regexRoute(/^\/greet\/(\w+)$/, ['name'], greet);
+            router = makeRouter().regexRoute(/^\/greet\/(\w+)$/, ['name'], greet).setLoader(simpleHandlerLoader('text', 'text'));
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 2;
-            return loadSimpleHandler({}, router, 'text', 'text');
+            return router.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;
@@ -117,12 +117,12 @@ describe('router component test', (function() {
               input.should.equal('hello');
               return 'goodbye, ' + args.name;
             }), 'text', 'text');
-            router = makeRouter().paramRoute('/greet/:name', greet);
+            router = makeRouter().paramRoute('/greet/:name', greet).setLoader(simpleHandlerLoader('text', 'text'));
             $ctx.state = 10;
             break;
           case 10:
             $ctx.state = 2;
-            return loadSimpleHandler({}, router, 'text', 'text');
+            return router.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;
@@ -171,12 +171,12 @@ describe('router component test', (function() {
               return 'default page';
             }), 'void', 'text');
             routeList = makeRouteList().staticRoute('/foo', foo).paramRoute('/bar/:id/:restpath', bar);
-            router = makeRouter().routeList(routeList).defaultRoute(defaultPage);
+            router = makeRouter().routeList(routeList).defaultRoute(defaultPage).setLoader(simpleHandlerLoader('void', 'text'));
             $ctx.state = 18;
             break;
           case 18:
             $ctx.state = 2;
-            return loadSimpleHandler({}, router, 'void', 'text');
+            return router.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;
@@ -228,12 +228,12 @@ describe('router component test', (function() {
               return 'default page';
             }), 'void', 'text');
             userRouter = makeRouter().paramRoute('/post/:postId', post);
-            mainRouter = makeRouter().paramRoute('/user/:userId/:restpath', userRouter).defaultRoute(defaultPage);
+            mainRouter = makeRouter().paramRoute('/user/:userId/:restpath', userRouter).defaultRoute(defaultPage).setLoader(simpleHandlerLoader('text', 'text'));
             $ctx.state = 18;
             break;
           case 18:
             $ctx.state = 2;
-            return loadSimpleHandler({}, mainRouter, 'text', 'text');
+            return mainRouter.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;
@@ -563,12 +563,12 @@ describe('router component test', (function() {
             foo = simpleHandler((function(args) {
               return 'foo';
             }), 'void', 'text');
-            router = methodRouter({get: foo});
+            router = methodRouter({get: foo}).setLoader(loadHttpHandler);
             $ctx.state = 26;
             break;
           case 26:
             $ctx.state = 2;
-            return loadHttpHandler({}, router);
+            return router.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;
@@ -690,12 +690,12 @@ describe('router component test', (function() {
             router = makeRouter().staticRoute('/', {
               get: foo,
               post: bar
-            });
+            }).setLoader(loadHttpHandler);
             $ctx.state = 58;
             break;
           case 58:
             $ctx.state = 2;
-            return loadHttpHandler({}, router);
+            return router.loadHandler({});
           case 2:
             handler = $ctx.sent;
             $ctx.state = 4;

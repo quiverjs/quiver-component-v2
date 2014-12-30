@@ -58,9 +58,11 @@ var $TransformFilter = TransformFilter;
 ($traceurRuntime.createClass)(TransformFilter, {
   toStreamFilter: function() {
     var transformComponent = this.transformComponent;
+    var componentId = transformComponent.id;
+    var builder = transformComponent.toHandleableBuilder();
     var transformMode = this.transformMode;
     return (function(config, handler) {
-      return loadStreamHandler(config, transformComponent).then((function(transformHandler) {
+      return loadStreamHandler(config, componentId, builder).then((function(transformHandler) {
         var transformIn = inTransformHandler(transformHandler, transformMode);
         var mainHandler = wrapMainHandler(handler, transformMode);
         var transformOut = outTransformHandler(transformHandler, transformMode);
