@@ -71,7 +71,7 @@ describe('privatized component test', (function() {
     var copy22 = copy2.fork(bundle2);
     should.equal(copy21.id, copy22.id);
     should.equal(copy21, copy22);
-    should.equal(Object.getPrototypeOf(copy21), original);
+    should.equal(Object.getPrototypeOf(copy21), copy2);
   }));
   it('nested privatize', async($traceurRuntime.initGeneratorFunction(function $__6() {
     var transformCase,

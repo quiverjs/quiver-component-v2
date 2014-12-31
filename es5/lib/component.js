@@ -44,9 +44,7 @@ var Component = function Component() {
     return this._subComponents;
   },
   clone: function() {
-    var originalProto = this.originalProto ? this.originalProto : this;
-    var newInstance = Object.create(originalProto);
-    newInstance.originalProto = originalProto;
+    var newInstance = Object.create(this);
     var privateId = Symbol();
     Object.defineProperty(newInstance, 'id', {get: function() {
         return privateId;

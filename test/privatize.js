@@ -91,7 +91,7 @@ describe('privatized component test', () => {
     should.equal(copy21.id, copy22.id)
     should.equal(copy21, copy22)
 
-    should.equal(Object.getPrototypeOf(copy21), original)
+    should.equal(Object.getPrototypeOf(copy21), copy2)
   })
 
   it('nested privatize', async(function*() {
