@@ -26,28 +26,19 @@ var defineAbstractComponent = (function(Parent, mixin) {
   };
   var $AbstractComponent = AbstractComponent;
   ($traceurRuntime.createClass)(AbstractComponent, {
-    each: function(iteratee) {
-      if (this._concreteComponent) {
-        iteratee(this._concreteComponent);
-      }
-      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "each").call(this, iteratee);
-    },
-    doMap: function(target, mapper, mapTable) {
-      if (this._concreteComponent) {
-        target._concreteComponent = mapper(this._concreteComponent, mapTable);
-      }
-      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "doMap").call(this, target, mapper, mapTable);
-    },
     implement: function(componentMap) {
-      if (!this._concreteComponent) {
+      if (!this.concreteComponent) {
         var componentKey = this._componentKey;
         var concreteComponent = componentMap[componentKey];
         if (concreteComponent) {
           this.validateConcreteComponent(concreteComponent);
-          this._concreteComponent = concreteComponent;
+          this.subComponents.concreteComponent = concreteComponent;
         }
       }
       return $traceurRuntime.superGet(this, $AbstractComponent.prototype, "implement").call(this, componentMap);
+    },
+    get concreteComponent() {
+      return this.subComponents.concreteComponent;
     }
   }, {}, Parent);
   Object.assign(AbstractComponent.prototype, mixin);
@@ -55,7 +46,7 @@ var defineAbstractComponent = (function(Parent, mixin) {
 });
 var AbstractHandler = defineAbstractComponent(ExtensibleHandler, {
   toMainHandleableBuilder: function() {
-    var concreteComponent = this._concreteComponent;
+    var concreteComponent = (this).concreteComponent;
     if (!concreteComponent) {
       throw new Error('Abstract handler component ' + 'not implemented: ' + this._componentKey);
     }
@@ -69,7 +60,7 @@ var AbstractHandler = defineAbstractComponent(ExtensibleHandler, {
 });
 var AbstractMiddleware = defineAbstractComponent(ExtensibleMiddleware, {
   toMainHandleableMiddleware: function() {
-    var concreteComponent = this._concreteComponent;
+    var concreteComponent = (this).concreteComponent;
     if (!concreteComponent)
       throw new Error('Abstract middleware component ' + 'not implemented: ' + this._componentKey);
     return concreteComponent.toMainHandleableMiddleware();

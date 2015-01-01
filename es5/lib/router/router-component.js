@@ -16,6 +16,7 @@ var $__quiver_45_object__,
     $___46__46__47_util_47_config__,
     $___46__46__47_extensible_45_component__,
     $___46__46__47_component__,
+    $___46__46__47_list__,
     $__route_45_list_45_component__,
     $__route_45_specs__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
@@ -25,13 +26,14 @@ var ExtensibleHandler = ($___46__46__47_extensible_45_component__ = require("../
 var $__4 = ($___46__46__47_component__ = require("../component"), $___46__46__47_component__ && $___46__46__47_component__.__esModule && $___46__46__47_component__ || {default: $___46__46__47_component__}),
     Component = $__4.Component,
     HandlerComponent = $__4.HandlerComponent;
+var componentList = ($___46__46__47_list__ = require("../list"), $___46__46__47_list__ && $___46__46__47_list__.__esModule && $___46__46__47_list__ || {default: $___46__46__47_list__}).componentList;
 var RouteList = ($__route_45_list_45_component__ = require("./route-list-component"), $__route_45_list_45_component__ && $__route_45_list_45_component__.__esModule && $__route_45_list_45_component__ || {default: $__route_45_list_45_component__}).RouteList;
 var routeBuildSpecsToRouterBuilder = ($__route_45_specs__ = require("./route-specs"), $__route_45_specs__ && $__route_45_specs__.__esModule && $__route_45_specs__ || {default: $__route_45_specs__}).routeBuildSpecsToRouterBuilder;
 var Router = function Router() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  this._routeLists = [];
-  this._defaultRouteList = new RouteList();
   $traceurRuntime.superConstructor($Router).call(this, options);
+  this.subComponents.defaultRouteList = new RouteList();
+  this.subComponents.routeListList = componentList();
 };
 var $Router = Router;
 ($traceurRuntime.createClass)(Router, {
@@ -39,42 +41,48 @@ var $Router = Router;
     if (!route.isRoute) {
       throw new TypeError('route must be instance of Route');
     }
-    this._defaultRouteList.addRoute(route);
+    this.defaultRouteList.addRoute(route);
     return this;
   },
   staticRoute: function(path, handler) {
-    this._defaultRouteList.staticRoute(path, handler);
+    this.defaultRouteList.staticRoute(path, handler);
     return this;
   },
   paramRoute: function(path, handler) {
-    this._defaultRouteList.paramRoute(path, handler);
+    this.defaultRouteList.paramRoute(path, handler);
     return this;
   },
   regexRoute: function(regex, fields, handler) {
-    this._defaultRouteList.regexRoute(regex, fields, handler);
+    this.defaultRouteList.regexRoute(regex, fields, handler);
     return this;
   },
   dynamicRoute: function(matcher, handler) {
-    this._defaultRouteList.dynamicRoute(matcher, handler);
+    this.defaultRouteList.dynamicRoute(matcher, handler);
     return this;
   },
   routeList: function(routeList) {
     if (!routeList.isRouteList) {
       throw new TypeError('route list must be instance of RouteList');
     }
-    this._routeLists.push(routeList);
+    this.routeListList.push(routeList);
     return this;
   },
   get routeLists() {
-    return $traceurRuntime.spread([this._defaultRouteList], this._routeLists);
+    return $traceurRuntime.spread([this.defaultRouteList], this.routeListList.array);
+  },
+  get defaultRouteList() {
+    return this.subComponents.defaultRouteList;
+  },
+  get routeListList() {
+    return this.subComponents.routeListList;
   },
   get defaultHandler() {
-    return this._defaultHandler;
+    return this.subComponents.defaultHandler;
   },
   defaultRoute: function(handlerComponent) {
-    if (this._defaultHandler)
+    if (this.defaultHandler)
       throw new Error('router component already has default route');
-    this._defaultHandler = handlerComponent;
+    this.subComponents.defaultHandler = handlerComponent;
     return this;
   },
   toMainHandleableBuilder: function() {
@@ -90,20 +98,6 @@ var $Router = Router;
       });
     }
     return routeBuildSpecsToRouterBuilder(routeBuildSpecs);
-  },
-  each: function(iteratee) {
-    this._routeLists.forEach(iteratee);
-    iteratee(this._defaultRouteList);
-    iteratee(this._defaultHandler);
-    $traceurRuntime.superGet(this, $Router.prototype, "each").call(this, callback);
-  },
-  doMap: function(target, mapper, mapTable) {
-    target._routeLists = this._routeLists.map((function(component) {
-      return mapper(component, mapTable);
-    }));
-    target._defaultRouteList = mapper(this._defaultRouteList, mapTable);
-    target._defaultHandler = mapper(this._defaultHandler, mapTable);
-    $traceurRuntime.superGet(this, $Router.prototype, "doMap").call(this, target, mapper, mapTable);
   },
   get type() {
     return 'router';

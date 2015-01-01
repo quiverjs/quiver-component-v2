@@ -13,14 +13,16 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__component__,
+    $__list__,
     $__util_47_middleware__,
     $__util_47_loader__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var Component = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).Component;
-var $__2 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
-    combineMiddlewares = $__2.combineMiddlewares,
-    combineMiddlewareComponents = $__2.combineMiddlewareComponents,
-    combineBuilderWithMiddleware = $__2.combineBuilderWithMiddleware;
+var componentList = ($__list__ = require("./list"), $__list__ && $__list__.__esModule && $__list__ || {default: $__list__}).componentList;
+var $__3 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
+    combineMiddlewares = $__3.combineMiddlewares,
+    combineMiddlewareComponents = $__3.combineMiddlewareComponents,
+    combineBuilderWithMiddleware = $__3.combineBuilderWithMiddleware;
 var loadHandleable = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}).loadHandleable;
 var copyConfigBuilder = (function(builder) {
   return (function(config) {
@@ -31,39 +33,33 @@ var ExtensibleComponent = function ExtensibleComponent() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._middlewareComponents = [];
   $traceurRuntime.superConstructor($ExtensibleComponent).call(this, options);
+  this.subComponents.middlewareList = componentList();
 };
 var $ExtensibleComponent = ExtensibleComponent;
 ($traceurRuntime.createClass)(ExtensibleComponent, {
   addMiddleware: function(middleware) {
     if (!middleware.isMiddlewareComponent)
       throw new TypeError('middleware must be ' + 'of type MiddlewareComponent');
-    this._middlewareComponents.push(middleware);
+    this.middlewareList.push(middleware);
     return this;
   },
   middleware: function(middleware) {
     return this.addMiddleware(middleware);
   },
-  each: function(iteratee) {
-    this._middlewareComponents.forEach(iteratee);
-    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "each").call(this, iteratee);
-  },
-  doMap: function(target, mapper, mapTable) {
-    target._middlewareComponents = this._middlewareComponents.map((function(component) {
-      return mapper(component, mapTable);
-    }));
-    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "doMap").call(this, target, mapper, mapTable);
-  },
   toExtendMiddleware: function() {
-    return combineMiddlewareComponents(this._middlewareComponents);
+    return combineMiddlewareComponents(this.middlewareComponents);
+  },
+  get middlewareList() {
+    return this.subComponents.middlewareList;
   },
   get middlewareComponents() {
-    return this._middlewareComponents;
+    return this.middlewareList.array;
   }
 }, {}, Component);
 var ExtensibleHandler = function ExtensibleHandler(options) {
-  var $__6;
-  var $__5 = options,
-      copyConfig = ($__6 = $__5.copyConfig) === void 0 ? true : $__6;
+  var $__7;
+  var $__6 = options,
+      copyConfig = ($__7 = $__6.copyConfig) === void 0 ? true : $__7;
   this._copyConfig = copyConfig;
   $traceurRuntime.superConstructor($ExtensibleHandler).call(this, options);
 };

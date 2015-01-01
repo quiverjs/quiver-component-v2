@@ -9,27 +9,29 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $___46__46__47_component__,
+    $___46__46__47_list__,
     $__route_45_component__,
     $___46__46__47_extensible_45_component__,
     $___46__46__47_util_47_middleware__;
 var Component = ($___46__46__47_component__ = require("../component"), $___46__46__47_component__ && $___46__46__47_component__.__esModule && $___46__46__47_component__ || {default: $___46__46__47_component__}).Component;
-var $__1 = ($__route_45_component__ = require("./route-component"), $__route_45_component__ && $__route_45_component__.__esModule && $__route_45_component__ || {default: $__route_45_component__}),
-    Route = $__1.Route,
-    StaticRoute = $__1.StaticRoute,
-    DynamicRoute = $__1.DynamicRoute,
-    RegexRoute = $__1.RegexRoute,
-    ParamRoute = $__1.ParamRoute;
+var componentList = ($___46__46__47_list__ = require("../list"), $___46__46__47_list__ && $___46__46__47_list__.__esModule && $___46__46__47_list__ || {default: $___46__46__47_list__}).componentList;
+var $__2 = ($__route_45_component__ = require("./route-component"), $__route_45_component__ && $__route_45_component__.__esModule && $__route_45_component__ || {default: $__route_45_component__}),
+    Route = $__2.Route,
+    StaticRoute = $__2.StaticRoute,
+    DynamicRoute = $__2.DynamicRoute,
+    RegexRoute = $__2.RegexRoute,
+    ParamRoute = $__2.ParamRoute;
 var ExtensibleComponent = ($___46__46__47_extensible_45_component__ = require("../extensible-component"), $___46__46__47_extensible_45_component__ && $___46__46__47_extensible_45_component__.__esModule && $___46__46__47_extensible_45_component__ || {default: $___46__46__47_extensible_45_component__}).ExtensibleComponent;
 var combineBuilderWithMiddleware = ($___46__46__47_util_47_middleware__ = require("../util/middleware"), $___46__46__47_util_47_middleware__ && $___46__46__47_util_47_middleware__.__esModule && $___46__46__47_util_47_middleware__ || {default: $___46__46__47_util_47_middleware__}).combineBuilderWithMiddleware;
 var RouteList = function RouteList() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  this._routes = [];
   $traceurRuntime.superConstructor($RouteList).call(this, options);
+  this.subComponents.routeList = componentList();
 };
 var $RouteList = RouteList;
 ($traceurRuntime.createClass)(RouteList, {
   get routes() {
-    return this._routes;
+    return this.subComponents.routeList.array;
   },
   toRouteBuildSpecs: function() {
     var middleware = this.toExtendMiddleware();
@@ -44,7 +46,7 @@ var $RouteList = RouteList;
     if (!route.isRoute) {
       throw new Error('route must be of type Route');
     }
-    this._routes.push(route);
+    this.routes.push(route);
     return this;
   },
   staticRoute: function(path, handler) {
@@ -58,16 +60,6 @@ var $RouteList = RouteList;
   },
   dynamicRoute: function(matcher, handler) {
     return this.addRoute(new DynamicRoute(handler, matcher));
-  },
-  each: function(iteratee) {
-    this._routes.forEach(iteratee);
-    $traceurRuntime.superGet(this, $RouteList.prototype, "each").call(this, iteratee);
-  },
-  doMap: function(target, mapper, mapTable) {
-    target._routes = this._routes.map((function(component) {
-      return mapper(component, mapTable);
-    }));
-    $traceurRuntime.superGet(this, $RouteList.prototype, "doMap").call(this, target, mapper, mapTable);
   },
   get type() {
     return 'route list';
