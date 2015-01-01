@@ -118,9 +118,9 @@ var $BundleField = BundleField;
     var forkedField = this.clone();
     forkedField._bundleComponent = forkedBundle;
     forkTable[componentId] = forkedField;
-    this.doMap(forkedField, (function(component) {
-      return component.fork(forkTable);
-    }));
+    this.doMap(forkedField, (function(component, mapTable) {
+      return component.fork(mapTable);
+    }), forkTable);
     return forkedField;
   }
 }, {}, StreamHandlerBuilder);
@@ -189,16 +189,16 @@ var $HandlerBundle = HandlerBundle;
     }
     $traceurRuntime.superGet(this, $HandlerBundle.prototype, "each").call(this, iteratee);
   },
-  doMap: function(target, mapper) {
+  doMap: function(target, mapper, mapTable) {
     var bundleFields = this._bundleFields;
     var mappedFields = {};
     for (var key in bundleFields) {
       var bundleField = bundleFields[key];
-      var mappedField = mapper(bundleField);
+      var mappedField = mapper(bundleField, mapTable);
       mappedFields[key] = mappedField;
     }
     target._bundleFields = mappedFields;
-    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "doMap").call(this, target, mapper);
+    $traceurRuntime.superGet(this, $HandlerBundle.prototype, "doMap").call(this, target, mapper, mapTable);
   },
   addMiddleware: function(middlewareComponent) {
     var bundleFields = this._bundleFields;

@@ -63,9 +63,11 @@ var $RouteList = RouteList;
     this._routes.forEach(iteratee);
     $traceurRuntime.superGet(this, $RouteList.prototype, "each").call(this, iteratee);
   },
-  doMap: function(target, mapper) {
-    target._routes = this._routes.map(mapper);
-    $traceurRuntime.superGet(this, $RouteList.prototype, "doMap").call(this, target, mapper);
+  doMap: function(target, mapper, mapTable) {
+    target._routes = this._routes.map((function(component) {
+      return mapper(component, mapTable);
+    }));
+    $traceurRuntime.superGet(this, $RouteList.prototype, "doMap").call(this, target, mapper, mapTable);
   },
   get type() {
     return 'route list';

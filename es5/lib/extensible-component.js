@@ -47,9 +47,11 @@ var $ExtensibleComponent = ExtensibleComponent;
     this._middlewareComponents.forEach(iteratee);
     $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "each").call(this, iteratee);
   },
-  doMap: function(target, mapper) {
-    target._middlewareComponents = this._middlewareComponents.map(mapper);
-    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "doMap").call(this, target, mapper);
+  doMap: function(target, mapper, mapTable) {
+    target._middlewareComponents = this._middlewareComponents.map((function(component) {
+      return mapper(component, mapTable);
+    }));
+    $traceurRuntime.superGet(this, $ExtensibleComponent.prototype, "doMap").call(this, target, mapper, mapTable);
   },
   toExtendMiddleware: function() {
     return combineMiddlewareComponents(this._middlewareComponents);

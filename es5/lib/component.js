@@ -52,8 +52,14 @@ var Component = function Component() {
     return newInstance;
   },
   map: function(mapper) {
+    var mapTable = arguments[1] !== (void 0) ? arguments[1] : {};
+    var currentId = this.id;
+    if (mapTable[currentId]) {
+      return mapTable[currentId];
+    }
     var copy = this.clone();
-    this.doMap(copy, mapper);
+    mapTable[currentId] = copy;
+    this.doMap(copy, mapper, mapTable);
     return copy;
   },
   each: function(iteratee) {
@@ -62,12 +68,12 @@ var Component = function Component() {
       iteratee(subComponents[key]);
     }
   },
-  doMap: function(target, mapper) {
+  doMap: function(target, mapper, mapTable) {
     var subComponents = (this).subComponents;
     var newSubComponents = {};
     for (var key in subComponents) {
       var component = subComponents[key];
-      newSubComponents[key] = mapper(component);
+      newSubComponents[key] = mapper(component, mapTable);
     }
     target._subComponents = newSubComponents;
   },
@@ -80,16 +86,9 @@ var Component = function Component() {
   },
   fork: function() {
     var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
-    var originalId = this.id;
-    if (forkTable[originalId]) {
-      return forkTable[originalId];
-    }
-    var forkedInstance = this.clone();
-    forkTable[originalId] = forkedInstance;
-    this.doMap(forkedInstance, (function(component) {
-      return component.fork(forkTable);
-    }));
-    return forkedInstance;
+    return this.map((function(component, mapTable) {
+      return component.fork(mapTable);
+    }), forkTable);
   },
   implement: function(componentMap) {
     this.each((function(component) {

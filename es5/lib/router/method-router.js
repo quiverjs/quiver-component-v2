@@ -214,14 +214,14 @@ var $MethodRouter = MethodRouter;
     }
     $traceurRuntime.superGet(this, $MethodRouter.prototype, "each").call(this, iteratee);
   },
-  doMap: function(target, mapper) {
+  doMap: function(target, mapper, mapTable) {
     var methodMap = this._methodMap;
     var newMap = {};
     for (var key in methodMap) {
-      newMap[key] = mapper(methodMap[key]);
+      newMap[key] = mapper(methodMap[key], mapTable);
     }
     target._methodMap = newMap;
-    $traceurRuntime.superGet(this, $MethodRouter.prototype, "doMap").call(this, target, mapper);
+    $traceurRuntime.superGet(this, $MethodRouter.prototype, "doMap").call(this, target, mapper, mapTable);
   }
 }, {}, HttpHandlerBuilder);
 var methodRouter = (function(methodMap) {

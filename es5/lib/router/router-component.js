@@ -97,11 +97,13 @@ var $Router = Router;
     iteratee(this._defaultHandler);
     $traceurRuntime.superGet(this, $Router.prototype, "each").call(this, callback);
   },
-  doMap: function(target, mapper) {
-    target._routeLists = this._routeLists.map(mapper);
-    target._defaultRouteList = mapper(this._defaultRouteList);
-    target._defaultHandler = mapper(this._defaultHandler);
-    $traceurRuntime.superGet(this, $Router.prototype, "doMap").call(this, target, mapper);
+  doMap: function(target, mapper, mapTable) {
+    target._routeLists = this._routeLists.map((function(component) {
+      return mapper(component, mapTable);
+    }));
+    target._defaultRouteList = mapper(this._defaultRouteList, mapTable);
+    target._defaultHandler = mapper(this._defaultHandler, mapTable);
+    $traceurRuntime.superGet(this, $Router.prototype, "doMap").call(this, target, mapper, mapTable);
   },
   get type() {
     return 'router';

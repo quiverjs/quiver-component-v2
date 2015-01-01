@@ -32,11 +32,11 @@ var defineAbstractComponent = (function(Parent, mixin) {
       }
       $traceurRuntime.superGet(this, $AbstractComponent.prototype, "each").call(this, iteratee);
     },
-    doMap: function(target, mapper) {
+    doMap: function(target, mapper, mapTable) {
       if (this._concreteComponent) {
-        target._concreteComponent = mapper(this._concreteComponent);
+        target._concreteComponent = mapper(this._concreteComponent, mapTable);
       }
-      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "doMap").call(this, target, mapper);
+      $traceurRuntime.superGet(this, $AbstractComponent.prototype, "doMap").call(this, target, mapper, mapTable);
     },
     implement: function(componentMap) {
       if (!this._concreteComponent) {

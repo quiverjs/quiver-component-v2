@@ -168,40 +168,97 @@ describe('privatized component test', (function() {
         }
     }, $__6, this);
   })));
-  it('privatized middlewares', (function() {
-    var transformCase = simpleHandlerBuilder((function(config) {
-      var transform = config.transform;
-      var doTransform = transform == 'uppercase' ? (function(string) {
-        return string.toUpperCase();
-      }) : (function(string) {
-        return string.toLowerCase();
-      });
-      return (function(args, text) {
-        return doTransform(text);
-      });
-    }), 'text', 'text');
-    var filter = transformFilter(transformCase, 'out');
-    var greet = simpleHandler((function(args, name) {
-      return 'Hello, ' + name;
-    }), 'text', 'text').addMiddleware(filter);
-    var bundle1 = {};
-    var bundle2 = {};
-    var greet1 = greet.fork(bundle1);
-    var uppercase = transformCase.fork(bundle1);
-    var greet2 = greet.fork(bundle2);
-    var config = {transform: 'uppercase'};
-    return uppercase.loadHandler(config).then((function(handler) {
-      return handler({}, 'Test').should.eventually.equal('TEST');
-    })).then((function() {
-      config.transform = 'lowercase';
-      return greet1.loadHandler(config).then((function(handler) {
-        return handler({}, 'Alice').should.eventually.equal('HELLO, ALICE');
-      }));
-    })).then((function() {
-      config.transform = 'lowercase';
-      return greet2.loadHandler(config).then((function(handler) {
-        return handler({}, 'Bob').should.eventually.equal('hello, bob');
-      }));
-    }));
-  }));
+  it('privatized middlewares', async($traceurRuntime.initGeneratorFunction(function $__7() {
+    var transformCase,
+        filter,
+        greet,
+        bundle1,
+        bundle2,
+        greet1,
+        uppercase,
+        greet2,
+        config,
+        handler;
+    return $traceurRuntime.createGeneratorInstance(function($ctx) {
+      while (true)
+        switch ($ctx.state) {
+          case 0:
+            transformCase = simpleHandlerBuilder((function(config) {
+              var transform = config.transform;
+              var doTransform = transform == 'uppercase' ? (function(string) {
+                return string.toUpperCase();
+              }) : (function(string) {
+                return string.toLowerCase();
+              });
+              return (function(args, text) {
+                return doTransform(text);
+              });
+            }), 'text', 'text');
+            filter = transformFilter(transformCase, 'out');
+            greet = simpleHandler((function(args, name) {
+              return 'Hello, ' + name;
+            }), 'text', 'text').addMiddleware(filter);
+            bundle1 = {};
+            bundle2 = {};
+            greet1 = greet.fork(bundle1);
+            uppercase = transformCase.fork(bundle1);
+            greet2 = greet.fork(bundle2);
+            config = {transform: 'uppercase'};
+            $ctx.state = 26;
+            break;
+          case 26:
+            $ctx.state = 2;
+            return uppercase.loadHandler(config);
+          case 2:
+            handler = $ctx.sent;
+            $ctx.state = 4;
+            break;
+          case 4:
+            $ctx.state = 6;
+            return handler({}, 'Test').should.eventually.equal('TEST');
+          case 6:
+            $ctx.maybeThrow();
+            $ctx.state = 8;
+            break;
+          case 8:
+            config.transform = 'lowercase';
+            $ctx.state = 28;
+            break;
+          case 28:
+            $ctx.state = 10;
+            return greet1.loadHandler(config);
+          case 10:
+            handler = $ctx.sent;
+            $ctx.state = 12;
+            break;
+          case 12:
+            $ctx.state = 14;
+            return handler({}, 'Alice').should.eventually.equal('HELLO, ALICE');
+          case 14:
+            $ctx.maybeThrow();
+            $ctx.state = 16;
+            break;
+          case 16:
+            config.transform = 'lowercase';
+            $ctx.state = 30;
+            break;
+          case 30:
+            $ctx.state = 18;
+            return greet2.loadHandler(config);
+          case 18:
+            handler = $ctx.sent;
+            $ctx.state = 20;
+            break;
+          case 20:
+            $ctx.state = 22;
+            return handler({}, 'Bob').should.eventually.equal('hello, bob');
+          case 22:
+            $ctx.maybeThrow();
+            $ctx.state = -2;
+            break;
+          default:
+            return $ctx.end();
+        }
+    }, $__7, this);
+  })));
 }));

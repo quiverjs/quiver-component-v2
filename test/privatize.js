@@ -151,7 +151,7 @@ describe('privatized component test', () => {
       .should.eventually.equal('hello, alice')
   }))
 
-  it('privatized middlewares', () => {
+  it('privatized middlewares', async(function*() {
     var transformCase = simpleHandlerBuilder(
     config => {
       var { transform } = config
@@ -181,19 +181,23 @@ describe('privatized component test', () => {
 
     var config = { transform: 'uppercase' }
     
-    return uppercase.loadHandler(config).then(handler =>
-      handler({}, 'Test').should.eventually.equal('TEST'))
-    .then(() => {
-      config.transform = 'lowercase'
+    var handler = yield uppercase.loadHandler(config)
+    
+    yield handler({}, 'Test')
+      .should.eventually.equal('TEST')
 
-      return greet1.loadHandler(config).then(handler =>
-        handler({}, 'Alice').should.eventually.equal('HELLO, ALICE'))
-    })
-    .then(() => {
-      config.transform = 'lowercase'
+    config.transform = 'lowercase'
 
-      return greet2.loadHandler(config).then(handler =>
-        handler({}, 'Bob').should.eventually.equal('hello, bob'))
-    })
-  })
+    var handler = yield greet1.loadHandler(config)
+    
+    yield handler({}, 'Alice')
+      .should.eventually.equal('HELLO, ALICE')
+
+    config.transform = 'lowercase'
+
+    var handler = yield greet2.loadHandler(config)
+    
+    yield handler({}, 'Bob')
+      .should.eventually.equal('hello, bob')
+  }))
 })
