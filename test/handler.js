@@ -18,11 +18,11 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('handler test', () => {
   it('stream handler', () => {
-    var main = streamHandler(
+    let main = streamHandler(
       (args, streamable) =>
         streamableToText(streamable).then(input => {
           input.should.equal('hello')
@@ -31,8 +31,8 @@ describe('handler test', () => {
 
     return main.toHandleableBuilder()({})
       .then(handleable => {
-        var handler = handleable.streamHandler
-        var input = textToStreamable('hello')
+        let handler = handleable.streamHandler
+        let input = textToStreamable('hello')
         
         return handler({}, input).then(streamableToText)
           .should.eventually.equal('goodbye')
@@ -40,7 +40,7 @@ describe('handler test', () => {
   })
 
   it('simple handler', () => {
-    var main = simpleHandler(
+    let main = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return '<b>goodbye</b>'
@@ -51,13 +51,13 @@ describe('handler test', () => {
   })
 
   it('http builder', async(function*() {
-    var main = httpHandlerBuilder(
+    let main = httpHandlerBuilder(
       config => {
-        var greet = config.greet || 'hi'
+        let greet = config.greet || 'hi'
         config.modified = true
 
         return async(function*(requestHead, streamable) {
-          var input = yield streamableToText(streamable)
+          let input = yield streamableToText(streamable)
           input.should.equal('hello')
 
           return [
@@ -67,18 +67,18 @@ describe('handler test', () => {
         })
       })
 
-    var config = {
+    let config = {
       greet: 'goodbye'
     }
 
-    var handleable = yield main.loadHandleable(config)
+    let handleable = yield main.loadHandleable(config)
     should.not.exist(config.modified)
 
-    var handler = handleable.httpHandler
+    let handler = handleable.httpHandler
     should.exist(handler)
 
-    var input = textToStreamable('hello')
-    var [responseHead, responseStreamable] = 
+    let input = textToStreamable('hello')
+    let [responseHead, responseStreamable] = 
       yield handler(new RequestHead(), input)
 
     responseHead.statusCode.should.equal(200)

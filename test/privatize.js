@@ -11,20 +11,20 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('privatized component test', () => {
   it('single component test', () => {
-    var original = simpleHandlerBuilder(
+    let original = simpleHandlerBuilder(
     config => {
-      var { greet='Hello' } = config
+      let { greet='Hello' } = config
 
       return (args, name) =>
         greet + ', ' + name
     }, 'text', 'text')
 
-    var copy1 = original.fork()
-    var copy2 = original.fork()
+    let copy1 = original.fork()
+    let copy2 = original.fork()
 
     should.equal(Object.getPrototypeOf(copy1), original)
     should.equal(Object.getPrototypeOf(copy2), original)
@@ -33,7 +33,7 @@ describe('privatized component test', () => {
     should.not.equal(original.id, copy2.id)
     should.not.equal(copy1.id, copy2.id)
 
-    var config = { 
+    let config = { 
       greet: 'Hi'
     }
 
@@ -60,23 +60,23 @@ describe('privatized component test', () => {
   })
 
   it('private inheritance', () => {
-    var original = simpleHandlerBuilder(
+    let original = simpleHandlerBuilder(
     config => {
-      var { greet='Hello' } = config
+      let { greet='Hello' } = config
 
       return (args, name) =>
         greet + ', ' + name
     }, 'text', 'text')
 
-    var bundle1 = {}
-    var copy1 = original.fork(bundle1)
-    var copy11 = original.fork(bundle1)
+    let bundle1 = {}
+    let copy1 = original.fork(bundle1)
+    let copy11 = original.fork(bundle1)
     should.equal(copy1.id, copy11.id)
     should.equal(copy1, copy11)
 
     should.equal(Object.getPrototypeOf(copy1), original)
 
-    var copy2 = original.fork()
+    let copy2 = original.fork()
 
     should.equal(Object.getPrototypeOf(copy2), original)
 
@@ -84,9 +84,9 @@ describe('privatized component test', () => {
     should.not.equal(original.id, copy2.id)
     should.not.equal(copy1.id, copy2.id)
 
-    var bundle2 = {}
-    var copy21 = copy2.fork(bundle2)
-    var copy22 = copy2.fork(bundle2)
+    let bundle2 = {}
+    let copy21 = copy2.fork(bundle2)
+    let copy22 = copy2.fork(bundle2)
 
     should.equal(copy21.id, copy22.id)
     should.equal(copy21, copy22)
@@ -95,10 +95,10 @@ describe('privatized component test', () => {
   })
 
   it('nested privatize', async(function*() {
-    var transformCase = simpleHandlerBuilder(
+    let transformCase = simpleHandlerBuilder(
     config => {
-      var { transform } = config
-      var doTransform = transform == 'uppercase' ?
+      let { transform } = config
+      let doTransform = transform == 'uppercase' ?
         string => string.toUpperCase() :
         string => string.toLowerCase()
 
@@ -106,56 +106,56 @@ describe('privatized component test', () => {
         doTransform(text)
     }, 'text', 'text')
 
-    var filter = transformFilter(transformCase, 'out')
+    let filter = transformFilter(transformCase, 'out')
 
-    var filter1 = filter.fork()
-    var filter2 = filter.fork()
+    let filter1 = filter.fork()
+    let filter2 = filter.fork()
 
     should.not.equal(filter1.id, filter2.id)
     should.not.equal(filter1.transformComponent.id, 
       filter2.transformComponent.id)
 
-    var greet = simpleHandler(
+    let greet = simpleHandler(
       (args, name) =>
         'Hello, ' + name, 
       'text', 'text')
 
-    var greet1 = greet.fork()
+    let greet1 = greet.fork()
       .addMiddleware(filter1)
 
-    var greet2  = greet.fork()
+    let greet2  = greet.fork()
       .addMiddleware(filter1)
 
-    var greet3 = greet.fork()
+    let greet3 = greet.fork()
       .addMiddleware(filter2)
 
-    var config = { transform: 'uppercase' }
+    let config = { transform: 'uppercase' }
 
-    var handler = yield greet1.loadHandler(config)
+    let handler = yield greet1.loadHandler(config)
     
     yield handler({}, 'John')
       .should.eventually.equal('HELLO, JOHN')
 
     config.transform = 'lowercase'
 
-    var handler = yield greet2.loadHandler(config)
+    handler = yield greet2.loadHandler(config)
 
     yield handler({}, 'Bob')
       .should.eventually.equal('HELLO, BOB')
 
     config.transform = 'lowercase'
 
-    var handler = yield greet3.loadHandler(config)
+    handler = yield greet3.loadHandler(config)
 
     yield handler({}, 'Alice')
       .should.eventually.equal('hello, alice')
   }))
 
   it('privatized middlewares', async(function*() {
-    var transformCase = simpleHandlerBuilder(
+    let transformCase = simpleHandlerBuilder(
     config => {
-      var { transform } = config
-      var doTransform = transform == 'uppercase' ?
+      let { transform } = config
+      let doTransform = transform == 'uppercase' ?
         string => string.toUpperCase() :
         string => string.toLowerCase()
 
@@ -163,39 +163,39 @@ describe('privatized component test', () => {
         doTransform(text)
     }, 'text', 'text')
 
-    var filter = transformFilter(transformCase, 'out')
+    let filter = transformFilter(transformCase, 'out')
 
-    var greet = simpleHandler(
+    let greet = simpleHandler(
       (args, name) =>
         'Hello, ' + name, 
       'text', 'text')
     .addMiddleware(filter)
 
-    var bundle1 = { }
-    var bundle2 = { }
+    let bundle1 = { }
+    let bundle2 = { }
 
-    var greet1 = greet.fork(bundle1)
-    var uppercase = transformCase.fork(bundle1)
+    let greet1 = greet.fork(bundle1)
+    let uppercase = transformCase.fork(bundle1)
 
-    var greet2 = greet.fork(bundle2)
+    let greet2 = greet.fork(bundle2)
 
-    var config = { transform: 'uppercase' }
+    let config = { transform: 'uppercase' }
     
-    var handler = yield uppercase.loadHandler(config)
+    let handler = yield uppercase.loadHandler(config)
     
     yield handler({}, 'Test')
       .should.eventually.equal('TEST')
 
     config.transform = 'lowercase'
 
-    var handler = yield greet1.loadHandler(config)
+    handler = yield greet1.loadHandler(config)
     
     yield handler({}, 'Alice')
       .should.eventually.equal('HELLO, ALICE')
 
     config.transform = 'lowercase'
 
-    var handler = yield greet2.loadHandler(config)
+    handler = yield greet2.loadHandler(config)
     
     yield handler({}, 'Bob')
       .should.eventually.equal('hello, bob')

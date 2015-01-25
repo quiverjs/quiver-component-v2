@@ -10,21 +10,21 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('middleware test', () => {
   it('input handler', async(function*() {
-    var uppercase = simpleHandler(
+    let uppercase = simpleHandler(
       (args, input) =>  input.toUpperCase() + '!', 
       'text', 'text')
 
-    var main = simpleHandlerBuilder(
+    let main = simpleHandlerBuilder(
       config => {
-        var inHandler = config.inHandler
+        let inHandler = config.inHandler
         should.exist(inHandler)
 
         return async(function*(args, input) {
-          var result = yield inHandler(args, input)
+          let result = yield inHandler(args, input)
           
           return {
             status: 'ok',
@@ -34,15 +34,15 @@ describe('middleware test', () => {
       }, 'text', 'json')
     .inputHandler(uppercase, 'inHandler')
 
-    var handler = yield main.loadHandler({})
-    var json = yield handler({}, 'hello')
+    let handler = yield main.loadHandler({})
+    let json = yield handler({}, 'hello')
 
     json.status.should.equal('ok')
     json.result.should.equal('HELLO!')
   }))
 
   it('config override', async(function*() {
-    var main = simpleHandlerBuilder(
+    let main = simpleHandlerBuilder(
       config => {
         config.foo.should.equal('bar')
 
@@ -52,7 +52,7 @@ describe('middleware test', () => {
       foo: 'bar'
     })
 
-    var config = {
+    let config = {
       foo: 'foo'
     }
 
@@ -60,7 +60,7 @@ describe('middleware test', () => {
   }))
 
   it('config alias', async(function*() {
-    var main = simpleHandlerBuilder(
+    let main = simpleHandlerBuilder(
       config => {
         config.foo.should.equal('bar')
 
@@ -70,7 +70,7 @@ describe('middleware test', () => {
       foo: 'bar'
     })
 
-    var config = {
+    let config = {
       bar: 'bar'
     }
 

@@ -8,25 +8,25 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('pipeline handler test', () => {
   it('simple pipeline', () => {
-    var handler1 = simpleHandler(
+    let handler1 = simpleHandler(
       args => 'hello, ' + args.name, 
       'void', 'text')
 
-    var handler2 = simpleHandler(
+    let handler2 = simpleHandler(
       (args, input) => input.toUpperCase(), 
       'text', 'text')
 
-    var handler3 = simpleHandler(
+    let handler3 = simpleHandler(
       (args, input) => ({
         status: 'ok',
         result: input
       }), 'text', 'json')
 
-    var main = pipeline()
+    let main = pipeline()
       .addPipe(handler1)
       .addPipe(handler2)
       .addPipe(handler3)

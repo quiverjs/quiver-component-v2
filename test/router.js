@@ -24,21 +24,21 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-var should = chai.should()
+let should = chai.should()
 
 describe('router component test', () => {
   it('static route', async(function*() {
-    var handlerComponent = simpleHandler(
+    let handlerComponent = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye'
       }, 'text', 'text')
 
-    var router = makeRouter()
+    let router = makeRouter()
       .staticRoute('/foo', handlerComponent)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield router.loadHandler({})
+    let handler = yield router.loadHandler({})
 
     yield handler({ path: '/foo' }, 'hello')
       .should.eventually.equal('goodbye')
@@ -48,7 +48,7 @@ describe('router component test', () => {
   }))
 
   it('regex route', async(function*() {
-    var greet = simpleHandler(
+    let greet = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         args.name.should.equal('john')
@@ -56,35 +56,35 @@ describe('router component test', () => {
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
-    var router = makeRouter()
+    let router = makeRouter()
       .regexRoute(/^\/greet\/(\w+)$/, ['name'], greet)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield router.loadHandler({})
+    let handler = yield router.loadHandler({})
 
     yield handler({ path: '/greet/john' }, 'hello')
       .should.eventually.equal('goodbye, john')
   }))
 
   it('param route', async(function*() {
-    var greet = simpleHandler(
+    let greet = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
         return 'goodbye, ' + args.name
       }, 'text', 'text')
 
-    var router = makeRouter()
+    let router = makeRouter()
       .paramRoute('/greet/:name', greet)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield router.loadHandler({})
+    let handler = yield router.loadHandler({})
 
     yield handler({ path: '/greet/foo' }, 'hello')
       .should.eventually.equal('goodbye, foo')
   }))
 
   it('route list', async(function*() {
-    var foo = simpleHandlerBuilder(
+    let foo = simpleHandlerBuilder(
       config => {
         should.not.exist(config.barModified)
         config.fooModified = true
@@ -96,7 +96,7 @@ describe('router component test', () => {
         }
       }, 'void', 'text')
 
-    var bar = simpleHandlerBuilder(
+    let bar = simpleHandlerBuilder(
       config => {
         should.not.exist(config.fooModified)
         config.barModified = true
@@ -109,20 +109,20 @@ describe('router component test', () => {
         }
       }, 'void', 'text')
 
-    var defaultPage = simpleHandler(
+    let defaultPage = simpleHandler(
       args => 'default page', 
       'void', 'text')
 
-    var routeList = makeRouteList()
+    let routeList = makeRouteList()
       .staticRoute('/foo', foo)
       .paramRoute('/bar/:id/:restpath', bar)
 
-    var router = makeRouter()
+    let router = makeRouter()
       .routeList(routeList)
       .defaultRoute(defaultPage)
       .setLoader(simpleHandlerLoader('void', 'text'))
 
-    var handler = yield router.loadHandler({})
+    let handler = yield router.loadHandler({})
 
     yield handler({ path: '/foo' })
       .should.eventually.equal('foo')
@@ -135,7 +135,7 @@ describe('router component test', () => {
   }))
 
   it('nested router', async(function*() {
-    var post = simpleHandler(
+    let post = simpleHandler(
       (args, input) => {
         args.userId.should.equal('john')
         args.postId.should.equal('welcome-to-my-blog')
@@ -144,21 +144,21 @@ describe('router component test', () => {
         return 'Hello World!'
       }, 'text', 'text')
 
-    var defaultPage = simpleHandler(
+    let defaultPage = simpleHandler(
       args => 'default page', 
       'void', 'text')
 
-    var userRouter = makeRouter()
+    let userRouter = makeRouter()
       .paramRoute('/post/:postId', post)
 
-    var mainRouter = makeRouter()
+    let mainRouter = makeRouter()
       .paramRoute('/user/:userId/:restpath', userRouter)
       .defaultRoute(defaultPage)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    var handler = yield mainRouter.loadHandler({})
+    let handler = yield mainRouter.loadHandler({})
 
-    var path = '/user/john/post/welcome-to-my-blog'
+    let path = '/user/john/post/welcome-to-my-blog'
 
     yield handler({ path }, 'some comment')
       .should.eventually.equal('Hello World!')
@@ -171,7 +171,7 @@ describe('router component test', () => {
   }))
 
   it('http router test', async(function*() {
-    var foo = createHttpHandler(async(
+    let foo = createHttpHandler(async(
     function*(requestHead, streamable) {
       requestHead.method.should.equal('GET')
       requestHead.path.should.equal('/foo/john')
@@ -182,7 +182,7 @@ describe('router component test', () => {
       }), textToStreamable('foo')]
     }))
 
-    var bar = createHttpHandler(async(
+    let bar = createHttpHandler(async(
     function*(requestHead, streamable) {
       requestHead.method.should.equal('POST')
       requestHead.path.should.equal('/bar')
@@ -195,28 +195,28 @@ describe('router component test', () => {
       }), textToStreamable('Forbidden')]
     }))
 
-    var baz = simpleHandler((args, text) => {
+    let baz = simpleHandler((args, text) => {
       args.path.should.equal('/baz')
       text.should.equal('upload')
 
       return 'baz'
     }, 'text', 'text')
 
-    var router = makeRouter()
+    let router = makeRouter()
       .paramRoute('/foo/:name', foo)
       .staticRoute('/bar', bar)
       .staticRoute('/baz', baz)
 
-    var {
+    let {
       streamHandler,
       httpHandler
     } = yield router.loadHandleable({})
 
-    var request1 = new RequestHead({ 
+    let request1 = new RequestHead({ 
       url: '/foo/john?a=b' 
     })
 
-    var [
+    let [
       response1, streamable1
     ] = yield httpHandler(request1, emptyStreamable())
 
@@ -224,12 +224,12 @@ describe('router component test', () => {
     yield streamableToText(streamable1)
       .should.eventually.equal('foo')
 
-    var request2 = new RequestHead({
+    let request2 = new RequestHead({
       method: 'POST',
       url: '/bar?a=b'
     })
 
-    var [
+    let [
       response2, streamable2
     ] = yield httpHandler(request2, 
       textToStreamable('post content'))
@@ -238,12 +238,12 @@ describe('router component test', () => {
     yield streamableToText(streamable2)
       .should.eventually.equal('Forbidden')
 
-    var request3 = new RequestHead({
+    let request3 = new RequestHead({
       method: 'POST',
       url: '/baz?a=b'
     })
 
-    var [
+    let [
       response3, streamable3
     ] = yield httpHandler(request3, 
       textToStreamable('upload'))
@@ -253,7 +253,7 @@ describe('router component test', () => {
       .should.eventually.equal('baz')
 
 
-    var request4 = new RequestHead({
+    let request4 = new RequestHead({
       method: 'GET',
       url: '/not-exists'
     })
@@ -276,16 +276,16 @@ describe('router component test', () => {
   }))
 
   it('method router test 1', async(function*() {
-    var foo = simpleHandler(
+    let foo = simpleHandler(
       args => 'foo',
       'void', 'text')
 
-    var router = methodRouter({
+    let router = methodRouter({
       get: foo
     })
     .setLoader(loadHttpHandler)
 
-    var handler = yield router.loadHandler({})
+    let handler = yield router.loadHandler({})
 
     var [responseHead, responseStreamable] = 
       yield handler(new RequestHead({
@@ -306,22 +306,22 @@ describe('router component test', () => {
   }))
 
   it('method router test 2', async(function*() {
-    var foo = simpleHandler(
+    let foo = simpleHandler(
       args => 'foo',
       'void', 'text')
 
-    var bar = simpleHandler(
+    let bar = simpleHandler(
       args => 'bar',
       'void', 'text')
 
-    var router = makeRouter()
+    let router = makeRouter()
       .staticRoute('/', {
         get: foo,
         post: bar
       })
     .setLoader(loadHttpHandler)
 
-    var handler = yield router.loadHandler({})
+    let handler = yield router.loadHandler({})
 
     var [responseHead, responseStreamable] = 
       yield handler(new RequestHead({
