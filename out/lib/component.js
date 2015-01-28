@@ -5,22 +5,25 @@ Object.defineProperties(exports, {
     }},
   __esModule: {value: true}
 });
-var $__util_47_loader__;
-var loadHandleable = ($__util_47_loader__ = require("./util/loader"), $__util_47_loader__ && $__util_47_loader__.__esModule && $__util_47_loader__ || {default: $__util_47_loader__}).loadHandleable;
 let assertComponent = (function(component) {
   if (!component.isQuiverComponent) {
     throw new Error('object must be of type Component');
   }
 });
+let randomId = (function() {
+  return Symbol((Math.random() * 0x1000000 | 0).toString(16));
+});
 var Component = function Component() {
-  var $__4;
+  var $__3;
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
-  let $__3 = options,
-      name = $__3.name,
-      subComponents = ($__4 = $__3.subComponents) === void 0 ? {} : $__4;
-  this._name = name;
-  this._id = Symbol();
+  let $__2 = options,
+      name = $__2.name,
+      subComponents = ($__3 = $__2.subComponents) === void 0 ? {} : $__3;
+  this._id = randomId();
   this._options = options;
+  if (name) {
+    this.name = name;
+  }
   for (let key in subComponents) {
     let component = subComponents[key];
     assertComponent(component);
@@ -28,9 +31,6 @@ var Component = function Component() {
   this._subComponents = subComponents;
 };
 ($traceurRuntime.createClass)(Component, {
-  get name() {
-    return this._name;
-  },
   get id() {
     return this._id;
   },
@@ -43,24 +43,44 @@ var Component = function Component() {
   get subComponents() {
     return this._subComponents;
   },
+  addSubComponent: function(key, component) {
+    if (!component.isQuiverComponent) {
+      throw new Error('Subcomponent must be Quiver component');
+    }
+    let subComponents = (this).subComponents;
+    if (subComponents[key]) {
+      throw new Error('Subcomponent already registered at given key');
+    }
+    subComponents[key] = component;
+  },
+  getSubComponent: function(key) {
+    return this.subComponents[key];
+  },
+  setName: function(name) {
+    this.name = name;
+    return this;
+  },
   clone: function() {
     let newInstance = Object.create(this);
-    let privateId = Symbol();
+    let privateId = randomId();
     Object.defineProperty(newInstance, 'id', {get: function() {
         return privateId;
       }});
     return newInstance;
   },
-  map: function(mapper) {
+  applyMap: function(mapper) {
     var mapTable = arguments[1] !== (void 0) ? arguments[1] : {};
     let currentId = this.id;
     if (mapTable[currentId]) {
       return mapTable[currentId];
     }
-    let copy = this.clone();
-    mapTable[currentId] = copy;
-    this.doMap(copy, mapper, mapTable);
-    return copy;
+    return mapTable[currentId] = mapper(this, mapTable);
+  },
+  map: function(mapper) {
+    var mapTable = arguments[1] !== (void 0) ? arguments[1] : {};
+    let clone = this.clone();
+    this.doMap(clone, mapper, mapTable);
+    return clone;
   },
   each: function(iteratee) {
     let subComponents = (this).subComponents;
@@ -73,21 +93,23 @@ var Component = function Component() {
     let newSubComponents = {};
     for (let key in subComponents) {
       let component = subComponents[key];
-      newSubComponents[key] = mapper(component, mapTable);
+      newSubComponents[key] = component.applyMap(mapper, mapTable);
     }
     target._subComponents = newSubComponents;
   },
   factory: function() {
-    var $__1 = this;
+    var $__0 = this;
     return (function() {
       var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
-      return $__1.fork(forkTable);
+      return $__0.fork(forkTable);
     });
   },
   fork: function() {
     var forkTable = arguments[0] !== (void 0) ? arguments[0] : {};
-    return this.map((function(component, mapTable) {
-      return component.fork(mapTable);
+    return this.applyMap((function(component, mapTable) {
+      return component.map((function(subComponent, mapTable) {
+        return subComponent.fork(mapTable);
+      }), mapTable);
     }), forkTable);
   },
   implement: function(componentMap) {

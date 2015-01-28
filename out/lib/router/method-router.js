@@ -134,7 +134,7 @@ var $MethodRouter = MethodRouter;
     let methodMap = this._methodMap;
     let newMap = {};
     for (let key in methodMap) {
-      newMap[key] = mapper(methodMap[key], mapTable);
+      newMap[key] = methodMap[key].applyMap(mapper, mapTable);
     }
     target._methodMap = newMap;
     $traceurRuntime.superGet(this, $MethodRouter.prototype, "doMap").call(this, target, mapper, mapTable);

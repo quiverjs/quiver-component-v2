@@ -9,12 +9,13 @@ var async = ($__quiver_45_promise__ = require("quiver-promise"), $__quiver_45_pr
 var $__1 = ($___46__46__47_lib_47_export_46_js__ = require("../lib/export.js"), $___46__46__47_lib_47_export_46_js__ && $___46__46__47_lib_47_export_46_js__.__esModule && $___46__46__47_lib_47_export_46_js__ || {default: $___46__46__47_lib_47_export_46_js__}),
     simpleHandlerBuilder = $__1.simpleHandlerBuilder,
     simpleHandler = $__1.simpleHandler,
-    transformFilter = $__1.transformFilter;
+    transformFilter = $__1.transformFilter,
+    configMiddleware = $__1.configMiddleware;
 var chai = ($__chai__ = require("chai"), $__chai__ && $__chai__.__esModule && $__chai__ || {default: $__chai__}).default;
 var chaiAsPromised = ($__chai_45_as_45_promised__ = require("chai-as-promised"), $__chai_45_as_45_promised__ && $__chai_45_as_45_promised__.__esModule && $__chai_45_as_45_promised__ || {default: $__chai_45_as_45_promised__}).default;
 chai.use(chaiAsPromised);
 let should = chai.should();
-describe('privatized component test', (function() {
+describe('base component test', (function() {
   it('single component test', (function() {
     let original = simpleHandlerBuilder((function(config) {
       var $__5;
@@ -46,7 +47,7 @@ describe('privatized component test', (function() {
       }));
     }));
   }));
-  it('private inheritance', (function() {
+  it('basic fork', (function() {
     let original = simpleHandlerBuilder((function(config) {
       var $__5;
       let $__4 = config,
@@ -73,7 +74,7 @@ describe('privatized component test', (function() {
     should.equal(copy21, copy22);
     should.equal(Object.getPrototypeOf(copy21), copy2);
   }));
-  it('nested privatize', async(function*() {
+  it('nested fork', async(function*() {
     let transformCase = simpleHandlerBuilder((function(config) {
       let transform = config.transform;
       let doTransform = transform == 'uppercase' ? (function(string) {
@@ -93,9 +94,9 @@ describe('privatized component test', (function() {
     let greet = simpleHandler((function(args, name) {
       return 'Hello, ' + name;
     }), 'text', 'text');
-    let greet1 = greet.fork().addMiddleware(filter1);
-    let greet2 = greet.fork().addMiddleware(filter1);
-    let greet3 = greet.fork().addMiddleware(filter2);
+    let greet1 = greet.fork().middleware(filter1);
+    let greet2 = greet.fork().middleware(filter1);
+    let greet3 = greet.fork().middleware(filter2);
     let config = {transform: 'uppercase'};
     let handler = yield greet1.loadHandler(config);
     yield handler({}, 'John').should.eventually.equal('HELLO, JOHN');
@@ -106,7 +107,7 @@ describe('privatized component test', (function() {
     handler = yield greet3.loadHandler(config);
     yield handler({}, 'Alice').should.eventually.equal('hello, alice');
   }));
-  it('privatized middlewares', async(function*() {
+  it('forked middlewares', async(function*() {
     let transformCase = simpleHandlerBuilder((function(config) {
       let transform = config.transform;
       let doTransform = transform == 'uppercase' ? (function(string) {
@@ -121,12 +122,12 @@ describe('privatized component test', (function() {
     let filter = transformFilter(transformCase, 'out');
     let greet = simpleHandler((function(args, name) {
       return 'Hello, ' + name;
-    }), 'text', 'text').addMiddleware(filter);
-    let bundle1 = {};
-    let bundle2 = {};
-    let greet1 = greet.fork(bundle1);
-    let uppercase = transformCase.fork(bundle1);
-    let greet2 = greet.fork(bundle2);
+    }), 'text', 'text').middleware(filter);
+    let forkTable1 = {};
+    let forkTable2 = {};
+    let greet1 = greet.fork(forkTable1);
+    let uppercase = transformCase.fork(forkTable1);
+    let greet2 = greet.fork(forkTable2);
     let config = {transform: 'uppercase'};
     let handler = yield uppercase.loadHandler(config);
     yield handler({}, 'Test').should.eventually.equal('TEST');
@@ -136,5 +137,47 @@ describe('privatized component test', (function() {
     config.transform = 'lowercase';
     handler = yield greet2.loadHandler(config);
     yield handler({}, 'Bob').should.eventually.equal('hello, bob');
+  }));
+  it('map test', async(function*() {
+    let debugMiddleware = (function(component) {
+      let name = component.name || 'Unnamed Component';
+      return configMiddleware((function(config) {
+        if (!config.debugStack) {
+          config.debugStack = [];
+        }
+        config.debugStack.push(name);
+      }));
+    });
+    let debuggableComponent = (function(component) {
+      var mapTable = arguments[1] !== (void 0) ? arguments[1] : {};
+      var mapped = component.map(debuggableComponent, mapTable);
+      if (mapped.middleware) {
+        mapped.middleware(debugMiddleware(component));
+      }
+      return mapped;
+    });
+    let upperCase = simpleHandlerBuilder((function(config) {
+      var debugStack = config.debugStack;
+      should.equal(debugStack.length, 3);
+      debugStack[0].should.equal('Greet Handler');
+      debugStack[1].should.equal('UpperCase Filter');
+      debugStack[2].should.equal('UpperCase Handler');
+      return (function(args, text) {
+        return text.toUpperCase();
+      });
+    }), 'text', 'text').setName('UpperCase Handler');
+    let filter = transformFilter(upperCase, 'out').setName('UpperCase Filter');
+    let greet = simpleHandlerBuilder((function(config) {
+      var debugStack = config.debugStack;
+      should.equal(debugStack.length, 2);
+      debugStack[0].should.equal('Greet Handler');
+      debugStack[1].should.equal('UpperCase Filter');
+      return (function(args, name) {
+        return 'Hello, ' + name;
+      });
+    }), 'text', 'text').middleware(filter).setName('Greet Handler');
+    let debugged = debuggableComponent(greet);
+    let config = {};
+    let handler = yield debugged.loadHandler(config);
   }));
 }));

@@ -22,7 +22,7 @@ var $ComponentList = ComponentList;
   },
   doMap: function(target, mapper, mapTable) {
     target._componentArray = this._componentArray.map((function(component) {
-      return mapper(component, mapTable);
+      return component.applyMap(mapper, mapTable);
     }));
     $traceurRuntime.superGet(this, $ComponentList.prototype, "doMap").call(this, mapper, mapTable);
   },

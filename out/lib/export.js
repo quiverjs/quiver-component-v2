@@ -27,6 +27,18 @@ Object.defineProperties(exports, {
   handleableMiddleware: {get: function() {
       return $__handleable_45_middleware__.handleableMiddleware;
     }},
+  ExtendHandler: {get: function() {
+      return $__extend__.ExtendHandler;
+    }},
+  extendHandler: {get: function() {
+      return $__extend__.extendHandler;
+    }},
+  ExtendMiddleware: {get: function() {
+      return $__extend__.ExtendMiddleware;
+    }},
+  extendMiddleware: {get: function() {
+      return $__extend__.extendMiddleware;
+    }},
   ExtensibleComponent: {get: function() {
       return $__extensible_45_component__.ExtensibleComponent;
     }},
@@ -255,6 +267,7 @@ var $__component__,
     $__list__,
     $__handleable_45_builder__,
     $__handleable_45_middleware__,
+    $__extend__,
     $__extensible_45_component__,
     $__stream_45_handler__,
     $__http_45_handler__,
@@ -278,6 +291,7 @@ var $__component__ = ($__component__ = require("./component"), $__component__ &&
 var $__list__ = ($__list__ = require("./list"), $__list__ && $__list__.__esModule && $__list__ || {default: $__list__});
 var $__handleable_45_builder__ = ($__handleable_45_builder__ = require("./handleable-builder"), $__handleable_45_builder__ && $__handleable_45_builder__.__esModule && $__handleable_45_builder__ || {default: $__handleable_45_builder__});
 var $__handleable_45_middleware__ = ($__handleable_45_middleware__ = require("./handleable-middleware"), $__handleable_45_middleware__ && $__handleable_45_middleware__.__esModule && $__handleable_45_middleware__ || {default: $__handleable_45_middleware__});
+var $__extend__ = ($__extend__ = require("./extend"), $__extend__ && $__extend__.__esModule && $__extend__ || {default: $__extend__});
 var $__extensible_45_component__ = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__});
 var $__stream_45_handler__ = ($__stream_45_handler__ = require("./stream-handler"), $__stream_45_handler__ && $__stream_45_handler__.__esModule && $__stream_45_handler__ || {default: $__stream_45_handler__});
 var $__http_45_handler__ = ($__http_45_handler__ = require("./http-handler"), $__http_45_handler__ && $__http_45_handler__.__esModule && $__http_45_handler__ || {default: $__http_45_handler__});

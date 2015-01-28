@@ -25,7 +25,6 @@ describe('bundle component test', () => {
     let decrement = args => --count
 
     return { getCount, increment, decrement }
-
   })
   .simpleHandler('getCount', 'void', 'text')
   .simpleHandler('increment', 'void', 'void')
@@ -70,7 +69,7 @@ describe('bundle component test', () => {
     yield getCountHandler({}).should.eventually.equal('2')
   }))
 
-  it('privatized bundle test', async(function*() {
+  it('bundle fork test', async(function*() {
     let bundle2 = bundle.fork()
       
     let { 
@@ -132,7 +131,7 @@ describe('bundle component test', () => {
     yield getCountHandler2({}).should.eventually.equal('1')
   }))
 
-  it('privatized middleware test', async(function*() {
+  it('forked middleware test', async(function*() {
     let prefixer = simpleHandlerBuilder(config => {
       let prefix = config.prefix || ''
 
@@ -150,15 +149,12 @@ describe('bundle component test', () => {
 
     getCount2.addMiddleware(prefixFilter)
 
-    let bundle3 = bundle2.fork()
-      
-    let { 
-      getCount: getCount3, 
-      increment: increment3
-    } = bundle3.toHandlerComponents()
+    let forkTable = {}
+    let getCount3 = getCount2.fork(forkTable)
+    let increment3 = increment2.fork(forkTable)
 
     let config = { 
-      prefix: 'foo' 
+      prefix: 'foo'
     }
 
     let getCountHandler2 = yield getCount2.loadHandler(config)

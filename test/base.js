@@ -4,7 +4,7 @@ import { async } from 'quiver-promise'
 
 import {
   simpleHandlerBuilder, simpleHandler,
-  transformFilter
+  transformFilter, configMiddleware
 } from '../lib/export.js'
 
 import chai from 'chai'
@@ -13,7 +13,7 @@ import chaiAsPromised from 'chai-as-promised'
 chai.use(chaiAsPromised)
 let should = chai.should()
 
-describe('privatized component test', () => {
+describe('base component test', () => {
   it('single component test', () => {
     let original = simpleHandlerBuilder(
     config => {
@@ -59,7 +59,7 @@ describe('privatized component test', () => {
     })
   })
 
-  it('private inheritance', () => {
+  it('basic fork', () => {
     let original = simpleHandlerBuilder(
     config => {
       let { greet='Hello' } = config
@@ -94,7 +94,7 @@ describe('privatized component test', () => {
     should.equal(Object.getPrototypeOf(copy21), copy2)
   })
 
-  it('nested privatize', async(function*() {
+  it('nested fork', async(function*() {
     let transformCase = simpleHandlerBuilder(
     config => {
       let { transform } = config
@@ -121,13 +121,13 @@ describe('privatized component test', () => {
       'text', 'text')
 
     let greet1 = greet.fork()
-      .addMiddleware(filter1)
+      .middleware(filter1)
 
     let greet2  = greet.fork()
-      .addMiddleware(filter1)
+      .middleware(filter1)
 
     let greet3 = greet.fork()
-      .addMiddleware(filter2)
+      .middleware(filter2)
 
     let config = { transform: 'uppercase' }
 
@@ -151,7 +151,7 @@ describe('privatized component test', () => {
       .should.eventually.equal('hello, alice')
   }))
 
-  it('privatized middlewares', async(function*() {
+  it('forked middlewares', async(function*() {
     let transformCase = simpleHandlerBuilder(
     config => {
       let { transform } = config
@@ -169,15 +169,15 @@ describe('privatized component test', () => {
       (args, name) =>
         'Hello, ' + name, 
       'text', 'text')
-    .addMiddleware(filter)
+    .middleware(filter)
 
-    let bundle1 = { }
-    let bundle2 = { }
+    let forkTable1 = { }
+    let forkTable2 = { }
 
-    let greet1 = greet.fork(bundle1)
-    let uppercase = transformCase.fork(bundle1)
+    let greet1 = greet.fork(forkTable1)
+    let uppercase = transformCase.fork(forkTable1)
 
-    let greet2 = greet.fork(bundle2)
+    let greet2 = greet.fork(forkTable2)
 
     let config = { transform: 'uppercase' }
     
@@ -199,5 +199,64 @@ describe('privatized component test', () => {
     
     yield handler({}, 'Bob')
       .should.eventually.equal('hello, bob')
+  }))
+
+  it('map test', async(function*() {
+    let debugMiddleware = component => {
+      let name = component.name || 'Unnamed Component'
+      return configMiddleware(config => {
+        if(!config.debugStack) {
+          config.debugStack = []
+        }
+
+        config.debugStack.push(name)
+      })
+    }
+
+    let debuggableComponent = (component, mapTable={}) => {
+      var mapped = component.map(debuggableComponent, mapTable)
+      
+      if(mapped.middleware) {
+        mapped.middleware(debugMiddleware(component))
+      }
+
+      return mapped
+    }
+
+    let upperCase = simpleHandlerBuilder(
+      config => {
+        var { debugStack } = config
+
+        should.equal(debugStack.length, 3)
+        debugStack[0].should.equal('Greet Handler')
+        debugStack[1].should.equal('UpperCase Filter')
+        debugStack[2].should.equal('UpperCase Handler')
+
+        return (args, text) =>
+          text.toUpperCase()
+      }, 'text', 'text')
+      .setName('UpperCase Handler')
+
+    let filter = transformFilter(upperCase, 'out')
+      .setName('UpperCase Filter')
+
+    let greet = simpleHandlerBuilder(
+      config => {
+        var { debugStack } = config
+
+        should.equal(debugStack.length, 2)
+        debugStack[0].should.equal('Greet Handler')
+        debugStack[1].should.equal('UpperCase Filter')
+
+        return (args, name) =>
+          'Hello, ' + name
+      }, 'text', 'text')
+    .middleware(filter)
+    .setName('Greet Handler')
+
+    let debugged = debuggableComponent(greet)
+
+    let config = { }
+    let handler = yield debugged.loadHandler(config)
   }))
 })

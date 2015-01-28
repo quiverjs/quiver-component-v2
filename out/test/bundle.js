@@ -58,7 +58,7 @@ describe('bundle component test', (function() {
     let getCountHandler = yield getCount.loadHandler(config);
     yield getCountHandler({}).should.eventually.equal('2');
   }));
-  it('privatized bundle test', async(function*() {
+  it('bundle fork test', async(function*() {
     let bundle2 = bundle.fork();
     let $__5 = bundle2.toHandlerComponents(),
         getCount2 = $__5.getCount,
@@ -101,7 +101,7 @@ describe('bundle component test', (function() {
     yield getCountHandler({}).should.eventually.equal('2');
     yield getCountHandler2({}).should.eventually.equal('1');
   }));
-  it('privatized middleware test', async(function*() {
+  it('forked middleware test', async(function*() {
     let prefixer = simpleHandlerBuilder((function(config) {
       let prefix = config.prefix || '';
       return (function(args, text) {
@@ -114,10 +114,9 @@ describe('bundle component test', (function() {
         getCount2 = $__5.getCount,
         increment2 = $__5.increment;
     getCount2.addMiddleware(prefixFilter);
-    let bundle3 = bundle2.fork();
-    let $__6 = bundle3.toHandlerComponents(),
-        getCount3 = $__6.getCount,
-        increment3 = $__6.increment;
+    let forkTable = {};
+    let getCount3 = getCount2.fork(forkTable);
+    let increment3 = increment2.fork(forkTable);
     let config = {prefix: 'foo'};
     let getCountHandler2 = yield getCount2.loadHandler(config);
     let incrementHandler2 = yield increment2.loadHandler(config);
