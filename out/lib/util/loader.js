@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   loadHandleable: {get: function() {
       return loadHandleable;
     }},
@@ -43,7 +43,7 @@ let loadStreamHandler = (function() {
   for (var args = [],
       $__3 = 0; $__3 < arguments.length; $__3++)
     args[$__3] = arguments[$__3];
-  return loadHandleable.apply(null, $traceurRuntime.spread(args)).then((function(handleable) {
+  return loadHandleable.apply((void 0), $traceurRuntime.spread(args)).then((function(handleable) {
     let handler = handleable.streamHandler;
     if (!handler)
       return reject(new Error('handleable is not a stream handler'));
@@ -54,7 +54,7 @@ let loadHttpHandler = (function() {
   for (var args = [],
       $__4 = 0; $__4 < arguments.length; $__4++)
     args[$__4] = arguments[$__4];
-  return loadHandleable.apply(null, $traceurRuntime.spread(args)).then((function(handleable) {
+  return loadHandleable.apply((void 0), $traceurRuntime.spread(args)).then((function(handleable) {
     let handler = handleable.httpHandler;
     if (!handler)
       return reject(new Error('handleable is not a http handler'));

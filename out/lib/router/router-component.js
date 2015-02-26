@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   Router: {get: function() {
       return Router;
     }},
@@ -16,7 +16,7 @@ var $__quiver_45_object__,
     $___46__46__47_util_47_config__,
     $___46__46__47_extensible_45_component__,
     $___46__46__47_component__,
-    $___46__46__47_list__,
+    $___46__46__47_composite_47_list__,
     $__route_45_list_45_component__,
     $__route_45_specs__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
@@ -26,14 +26,14 @@ var ExtensibleHandler = ($___46__46__47_extensible_45_component__ = require("../
 var $__4 = ($___46__46__47_component__ = require("../component"), $___46__46__47_component__ && $___46__46__47_component__.__esModule && $___46__46__47_component__ || {default: $___46__46__47_component__}),
     Component = $__4.Component,
     HandlerComponent = $__4.HandlerComponent;
-var componentList = ($___46__46__47_list__ = require("../list"), $___46__46__47_list__ && $___46__46__47_list__.__esModule && $___46__46__47_list__ || {default: $___46__46__47_list__}).componentList;
+var listComponent = ($___46__46__47_composite_47_list__ = require("../composite/list"), $___46__46__47_composite_47_list__ && $___46__46__47_composite_47_list__.__esModule && $___46__46__47_composite_47_list__ || {default: $___46__46__47_composite_47_list__}).listComponent;
 var RouteList = ($__route_45_list_45_component__ = require("./route-list-component"), $__route_45_list_45_component__ && $__route_45_list_45_component__.__esModule && $__route_45_list_45_component__ || {default: $__route_45_list_45_component__}).RouteList;
 var routeBuildSpecsToRouterBuilder = ($__route_45_specs__ = require("./route-specs"), $__route_45_specs__ && $__route_45_specs__.__esModule && $__route_45_specs__ || {default: $__route_45_specs__}).routeBuildSpecsToRouterBuilder;
 var Router = function Router() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   $traceurRuntime.superConstructor($Router).call(this, options);
   this.subComponents.defaultRouteList = new RouteList();
-  this.subComponents.routeListList = componentList();
+  this.subComponents.routeListList = listComponent();
 };
 var $Router = Router;
 ($traceurRuntime.createClass)(Router, {

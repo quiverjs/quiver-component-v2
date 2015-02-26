@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   TransformFilter: {get: function() {
       return TransformFilter;
     }},
@@ -31,7 +31,7 @@ let wrapHandler = (function(handler) {
     for (var restArgs = [],
         $__6 = 1; $__6 < arguments.length; $__6++)
       restArgs[$__6 - 1] = arguments[$__6];
-    return handler.apply(null, $traceurRuntime.spread([copy(args)], restArgs));
+    return handler.apply((void 0), $traceurRuntime.spread([copy(args)], restArgs));
   });
 });
 let inTransformHandler = (function(handler, mode) {

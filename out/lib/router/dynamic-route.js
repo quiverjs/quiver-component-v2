@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   regexMatcher: {get: function() {
       return regexMatcher;
     }},

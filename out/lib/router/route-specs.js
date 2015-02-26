@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   routeSpecsToRouterHandleable: {get: function() {
       return routeSpecsToRouterHandleable;
     }},
@@ -23,13 +23,31 @@ let getHandlerFromPath = (function(routeIndex, path, args) {
   if (staticHandler)
     return staticHandler;
   let dynamicRoutes = routeIndex.dynamicRoutes;
-  for (var $__4 = dynamicRoutes[$traceurRuntime.toProperty(Symbol.iterator)](),
-      $__5; !($__5 = $__4.next()).done; ) {
-    let route = $__5.value;
-    {
-      let matched = route.matcher(path, args);
-      if (matched)
-        return route.handler;
+  var $__7 = true;
+  var $__8 = false;
+  var $__9 = undefined;
+  try {
+    for (var $__5,
+        $__4 = (dynamicRoutes)[$traceurRuntime.toProperty(Symbol.iterator)](); !($__7 = ($__5 = $__4.next()).done); $__7 = true) {
+      let route = $__5.value;
+      {
+        let matched = route.matcher(path, args);
+        if (matched)
+          return route.handler;
+      }
+    }
+  } catch ($__10) {
+    $__8 = true;
+    $__9 = $__10;
+  } finally {
+    try {
+      if (!$__7 && $__4.return != null) {
+        $__4.return();
+      }
+    } finally {
+      if ($__8) {
+        throw $__9;
+      }
     }
   }
   if (routeIndex.defaultRoute)
@@ -38,9 +56,9 @@ let getHandlerFromPath = (function(routeIndex, path, args) {
 });
 let httpRouterHandler = (function(routeIndex) {
   return (function(requestHead, requestStreamable) {
-    let $__6 = requestHead,
-        args = $__6.args,
-        path = $__6.path;
+    let $__11 = requestHead,
+        args = $__11.args,
+        path = $__11.path;
     let handler = getHandlerFromPath(routeIndex, path, args);
     if (!handler)
       return reject(error(404, 'not found'));
@@ -49,9 +67,9 @@ let httpRouterHandler = (function(routeIndex) {
 });
 let streamRouterHandler = (function(routeIndex) {
   return (function(args, streamable) {
-    var $__7;
-    let $__6 = args,
-        path = ($__7 = $__6.path) === void 0 ? '/' : $__7;
+    var $__12;
+    let $__11 = args,
+        path = ($__12 = $__11.path) === void 0 ? '/' : $__12;
     let handler = getHandlerFromPath(routeIndex, path, args);
     if (!handler)
       return reject(error(404, 'not found'));
@@ -73,9 +91,9 @@ let routeSpecsToRouteIndex = (function(routeSpecs, getHandler) {
   let dynamicRoutes = [];
   let defaultRoute = null;
   routeSpecs.forEach((function(routeSpec) {
-    let $__6 = routeSpec,
-        routeType = $__6.routeType,
-        handleable = $__6.handleable;
+    let $__11 = routeSpec,
+        routeType = $__11.routeType,
+        handleable = $__11.handleable;
     let handler = getHandler(handleable);
     if (!handler)
       return ;

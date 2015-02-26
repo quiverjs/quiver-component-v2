@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   RouteList: {get: function() {
       return RouteList;
     }},
@@ -9,12 +9,12 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $___46__46__47_component__,
-    $___46__46__47_list__,
+    $___46__46__47_composite_47_list__,
     $__route_45_component__,
     $___46__46__47_extensible_45_component__,
     $___46__46__47_util_47_middleware__;
 var Component = ($___46__46__47_component__ = require("../component"), $___46__46__47_component__ && $___46__46__47_component__.__esModule && $___46__46__47_component__ || {default: $___46__46__47_component__}).Component;
-var componentList = ($___46__46__47_list__ = require("../list"), $___46__46__47_list__ && $___46__46__47_list__.__esModule && $___46__46__47_list__ || {default: $___46__46__47_list__}).componentList;
+var listComponent = ($___46__46__47_composite_47_list__ = require("../composite/list"), $___46__46__47_composite_47_list__ && $___46__46__47_composite_47_list__.__esModule && $___46__46__47_composite_47_list__ || {default: $___46__46__47_composite_47_list__}).listComponent;
 var $__2 = ($__route_45_component__ = require("./route-component"), $__route_45_component__ && $__route_45_component__.__esModule && $__route_45_component__ || {default: $__route_45_component__}),
     Route = $__2.Route,
     StaticRoute = $__2.StaticRoute,
@@ -26,7 +26,7 @@ var combineBuilderWithMiddleware = ($___46__46__47_util_47_middleware__ = requir
 var RouteList = function RouteList() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   $traceurRuntime.superConstructor($RouteList).call(this, options);
-  this.subComponents.routeList = componentList();
+  this.subComponents.routeList = listComponent();
 };
 var $RouteList = RouteList;
 ($traceurRuntime.createClass)(RouteList, {

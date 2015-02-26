@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   SimpleHandlerBuilder: {get: function() {
       return SimpleHandlerBuilder;
     }},

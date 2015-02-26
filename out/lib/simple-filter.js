@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   ArgsBuilderFilter: {get: function() {
       return ArgsBuilderFilter;
     }},
@@ -55,7 +55,7 @@ let errorToFilter = (function(errorHandler) {
       for (var args = [],
           $__6 = 0; $__6 < arguments.length; $__6++)
         args[$__6] = arguments[$__6];
-      return handler.apply(null, $traceurRuntime.spread(args)).catch((function(err) {
+      return handler.apply((void 0), $traceurRuntime.spread(args)).catch((function(err) {
         return errorHandler(err).then((function(result) {
           if (!result)
             throw err;

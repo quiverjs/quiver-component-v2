@@ -1,13 +1,13 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   Component: {get: function() {
       return $__component__.Component;
     }},
-  ComponentList: {get: function() {
-      return $__list__.ComponentList;
+  ListComponent: {get: function() {
+      return $__composite_47_list__.ListComponent;
     }},
-  componentList: {get: function() {
-      return $__list__.componentList;
+  listComponent: {get: function() {
+      return $__composite_47_list__.listComponent;
     }},
   HandleableBuilder: {get: function() {
       return $__handleable_45_builder__.HandleableBuilder;
@@ -264,7 +264,7 @@ Object.defineProperties(exports, {
   __esModule: {value: true}
 });
 var $__component__,
-    $__list__,
+    $__composite_47_list__,
     $__handleable_45_builder__,
     $__handleable_45_middleware__,
     $__extend__,
@@ -288,7 +288,7 @@ var $__component__,
     $__util_47_loader__,
     $__util_47_config__;
 var $__component__ = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__});
-var $__list__ = ($__list__ = require("./list"), $__list__ && $__list__.__esModule && $__list__ || {default: $__list__});
+var $__composite_47_list__ = ($__composite_47_list__ = require("./composite/list"), $__composite_47_list__ && $__composite_47_list__.__esModule && $__composite_47_list__ || {default: $__composite_47_list__});
 var $__handleable_45_builder__ = ($__handleable_45_builder__ = require("./handleable-builder"), $__handleable_45_builder__ && $__handleable_45_builder__.__esModule && $__handleable_45_builder__ || {default: $__handleable_45_builder__});
 var $__handleable_45_middleware__ = ($__handleable_45_middleware__ = require("./handleable-middleware"), $__handleable_45_middleware__ && $__handleable_45_middleware__.__esModule && $__handleable_45_middleware__ || {default: $__handleable_45_middleware__});
 var $__extend__ = ($__extend__ = require("./extend"), $__extend__ && $__extend__.__esModule && $__extend__ || {default: $__extend__});

@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   Pipeline: {get: function() {
       return Pipeline;
     }},

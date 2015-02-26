@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   ExtensibleComponent: {get: function() {
       return ExtensibleComponent;
     }},
@@ -13,12 +13,12 @@ Object.defineProperties(exports, {
 });
 var $__quiver_45_object__,
     $__component__,
-    $__list__,
+    $__composite_47_list__,
     $__util_47_middleware__,
     $__util_47_loader__;
 var copy = ($__quiver_45_object__ = require("quiver-object"), $__quiver_45_object__ && $__quiver_45_object__.__esModule && $__quiver_45_object__ || {default: $__quiver_45_object__}).copy;
 var Component = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__}).Component;
-var componentList = ($__list__ = require("./list"), $__list__ && $__list__.__esModule && $__list__ || {default: $__list__}).componentList;
+var listComponent = ($__composite_47_list__ = require("./composite/list"), $__composite_47_list__ && $__composite_47_list__.__esModule && $__composite_47_list__ || {default: $__composite_47_list__}).listComponent;
 var $__3 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
     combineMiddlewares = $__3.combineMiddlewares,
     combineMiddlewareComponents = $__3.combineMiddlewareComponents,
@@ -33,14 +33,22 @@ var ExtensibleComponent = function ExtensibleComponent() {
   var options = arguments[0] !== (void 0) ? arguments[0] : {};
   this._middlewareComponents = [];
   $traceurRuntime.superConstructor($ExtensibleComponent).call(this, options);
-  this.subComponents.middlewareList = componentList();
+  this.subComponents.middlewareList = listComponent();
 };
 var $ExtensibleComponent = ExtensibleComponent;
 ($traceurRuntime.createClass)(ExtensibleComponent, {
   addMiddleware: function(middleware) {
-    if (!middleware.isMiddlewareComponent)
-      throw new TypeError('middleware must be ' + 'of type MiddlewareComponent');
+    if (!middleware.isMiddlewareComponent) {
+      throw new TypeError('middleware must be of type MiddlewareComponent');
+    }
     this.middlewareList.push(middleware);
+    return this;
+  },
+  prependMiddleware: function(middleware) {
+    if (!middleware.isMiddlewareComponent) {
+      throw new TypeError('middleware must be of type MiddlewareComponent');
+    }
+    this.middlewareList.unshift(middleware);
     return this;
   },
   middleware: function(middleware) {

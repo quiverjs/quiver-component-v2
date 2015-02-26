@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   safeHandler: {get: function() {
       return safeHandler;
     }},
@@ -40,6 +40,6 @@ let safeBuilder = (function(builder) {
     for (var args = [],
         $__1 = 0; $__1 < arguments.length; $__1++)
       args[$__1] = arguments[$__1];
-    return wrappedBuilder.apply(null, $traceurRuntime.spread(args)).then(safeHandler);
+    return wrappedBuilder.apply((void 0), $traceurRuntime.spread(args)).then(safeHandler);
   });
 });

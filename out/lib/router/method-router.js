@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperties(exports, {
+Object.defineProperties(module.exports, {
   MethodRouter: {get: function() {
       return MethodRouter;
     }},
@@ -12,6 +12,7 @@ var $__quiver_45_error__,
     $__quiver_45_promise__,
     $__quiver_45_stream_45_util__,
     $__quiver_45_http__,
+    $___46__46__47_composite_47_map__,
     $___46__46__47_http_45_handler__,
     $___46__46__47_util_47_loader__;
 var error = ($__quiver_45_error__ = require("quiver-error"), $__quiver_45_error__ && $__quiver_45_error__.__esModule && $__quiver_45_error__ || {default: $__quiver_45_error__}).error;
@@ -22,6 +23,7 @@ var emptyStreamable = ($__quiver_45_stream_45_util__ = require("quiver-stream-ut
 var $__3 = ($__quiver_45_http__ = require("quiver-http"), $__quiver_45_http__ && $__quiver_45_http__.__esModule && $__quiver_45_http__ || {default: $__quiver_45_http__}),
     ResponseHead = $__3.ResponseHead,
     streamToHttpHandler = $__3.streamToHttpHandler;
+var mapComponent = ($___46__46__47_composite_47_map__ = require("../composite/map"), $___46__46__47_composite_47_map__ && $___46__46__47_composite_47_map__.__esModule && $___46__46__47_composite_47_map__ || {default: $___46__46__47_composite_47_map__}).mapComponent;
 var HttpHandlerBuilder = ($___46__46__47_http_45_handler__ = require("../http-handler"), $___46__46__47_http_45_handler__ && $___46__46__47_http_45_handler__.__esModule && $___46__46__47_http_45_handler__ || {default: $___46__46__47_http_45_handler__}).HttpHandlerBuilder;
 var loadHandleable = ($___46__46__47_util_47_loader__ = require("../util/loader"), $___46__46__47_util_47_loader__ && $___46__46__47_util_47_loader__.__esModule && $___46__46__47_util_47_loader__ || {default: $___46__46__47_util_47_loader__}).loadHandleable;
 let headRequestHandler = (function(handler) {
@@ -29,12 +31,12 @@ let headRequestHandler = (function(handler) {
     if (requestHead.method != 'HEAD') {
       return handler(requestHead, requestStreamable);
     }
-    return handler(requestHead, requestStreamable).then((function($__7) {
-      var $__9,
-          $__10;
-      var $__8 = $__7,
-          responseHead = ($__9 = $__8[$traceurRuntime.toProperty(Symbol.iterator)](), ($__10 = $__9.next()).done ? void 0 : $__10.value),
-          responseStreamable = ($__10 = $__9.next()).done ? void 0 : $__10.value;
+    return handler(requestHead, requestStreamable).then((function($__15) {
+      var $__17,
+          $__18;
+      var $__16 = $__15,
+          responseHead = ($__17 = $__16[$traceurRuntime.toProperty(Symbol.iterator)](), ($__18 = $__17.next()).done ? void 0 : $__18.value),
+          responseStreamable = ($__18 = $__17.next()).done ? void 0 : $__18.value;
       return ([responseHead, emptyStreamable()]);
     }));
   });
@@ -94,50 +96,69 @@ let loadMethodHandlers = async(function*(config, methodMap) {
   }
   return handlerMap;
 });
-let normalizeMethodMap = (function(methodMap) {
-  let newMap = {};
+let methodObjectToMap = (function(methodMap) {
+  let map = new Map();
   for (let key in methodMap) {
-    newMap[key.toUpperCase()] = methodMap[key];
+    let handlerComponent = methodMap[key];
+    if (!handlerComponent.isHandlerComponent) {
+      throw new TypeError('Method map entry value must be handler component');
+    }
+    map.set(key.toUpperCase(), handlerComponent);
   }
-  return newMap;
+  return map;
 });
 var MethodRouter = function MethodRouter(methodMap) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
-  this._methodMap = normalizeMethodMap(methodMap);
   options.safeWrapped = true;
   $traceurRuntime.superConstructor($MethodRouter).call(this, null, options);
+  this.subComponents.methodMap = mapComponent(methodObjectToMap(methodMap));
 };
 var $MethodRouter = MethodRouter;
 ($traceurRuntime.createClass)(MethodRouter, {
   toHttpHandlerBuilder: function() {
-    let methodMap = this._methodMap;
+    var $__16,
+        $__17;
     let snapshot = {};
-    for (let key in methodMap) {
-      let component = methodMap[key];
-      snapshot[key] = {
-        id: component.id,
-        builder: component.toHandleableBuilder()
-      };
+    let methodMap = this.subComponents.methodMap.map;
+    var $__11 = true;
+    var $__12 = false;
+    var $__13 = undefined;
+    try {
+      for (var $__9,
+          $__8 = (methodMap.entries())[$traceurRuntime.toProperty(Symbol.iterator)](); !($__11 = ($__9 = $__8.next()).done); $__11 = true) {
+        let $__15 = $__9.value,
+            key = ($__16 = $__15[$traceurRuntime.toProperty(Symbol.iterator)](), ($__17 = $__16.next()).done ? void 0 : $__17.value),
+            component = ($__17 = $__16.next()).done ? void 0 : $__17.value;
+        {
+          snapshot[key] = {
+            id: component.id,
+            builder: component.toHandleableBuilder()
+          };
+        }
+      }
+    } catch ($__14) {
+      $__12 = true;
+      $__13 = $__14;
+    } finally {
+      try {
+        if (!$__11 && $__8.return != null) {
+          $__8.return();
+        }
+      } finally {
+        if ($__12) {
+          throw $__13;
+        }
+      }
     }
     return (function(config) {
       return loadMethodHandlers(config, snapshot).then(methodMapToHttpHandler);
     });
   },
-  each: function(iteratee) {
-    let methodMap = this._methodMap;
-    for (let key in methodMap) {
-      iteratee(methodMap[key]);
+  methodRoute: function(method, handlerComponent) {
+    if (!handlerComponent.isHandlerComponent) {
+      throw new TypeError('Method map entry value must be handler component');
     }
-    $traceurRuntime.superGet(this, $MethodRouter.prototype, "each").call(this, iteratee);
-  },
-  doMap: function(target, mapper, mapTable) {
-    let methodMap = this._methodMap;
-    let newMap = {};
-    for (let key in methodMap) {
-      newMap[key] = methodMap[key].applyMap(mapper, mapTable);
-    }
-    target._methodMap = newMap;
-    $traceurRuntime.superGet(this, $MethodRouter.prototype, "doMap").call(this, target, mapper, mapTable);
+    this.subComponents.methodMap.set(method.toUpperCase(), handlerComponent);
   }
 }, {}, HttpHandlerBuilder);
 let methodRouter = (function(methodMap) {
