@@ -6,19 +6,19 @@
   },
   "name": "quiver-component",
   "desription": "Component system to allow creation of complex interconnected components",
-  "version": "2.2.1",
+  "version": "2.2.0",
   "homepage": "https://github.com/quiverjs/quiver-component",
   "repository": {
     "url": "git@github.com:quiverjs/quiver-component.git"
   },
   "dependencies": {
     "traceur": "~0.0.85",
-    "quiver-http": "~1.3.0",
-    "quiver-error": "~1.1.0",
-    "quiver-object": "~1.3.0",
-    "quiver-promise": "~1.1.0",
-    "quiver-stream-util": "~1.3.1",
-    "quiver-simple-handler": "~1.3.0"
+    "quiver-http": "~1.3.1",
+    "quiver-error": "~1.1.1",
+    "quiver-object": "~1.3.1",
+    "quiver-promise": "~1.1.1",
+    "quiver-stream-util": "~1.3.2",
+    "quiver-simple-handler": "~1.3.1"
   },
   "devDependencies": {
     "chai": "^1.10.0",
@@ -39,6 +39,6 @@
     "prepublish": "make build"
   },
   "engines": {
-    "iojs": "^1.0.4"
+    "iojs": "^1.4.1"
   }
 }
