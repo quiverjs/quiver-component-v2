@@ -79,6 +79,6 @@ var $HandlerBundle = HandlerBundle;
     return this.bundleField(handlerName, simpleHandlerConverter(inType, outType), simpleHandlerLoader(inType, outType));
   }
 }, {}, HandleableBuilder);
-var handlerBundle = (function(bundleBuilder) {
+let handlerBundle = (function(bundleBuilder) {
   return new HandlerBundle(bundleBuilder);
 });

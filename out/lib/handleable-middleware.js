@@ -13,9 +13,7 @@ var $__util_47_wrap__,
     $__util_47_middleware__;
 var safeHandler = ($__util_47_wrap__ = require("./util/wrap"), $__util_47_wrap__ && $__util_47_wrap__.__esModule && $__util_47_wrap__ || {default: $__util_47_wrap__}).safeHandler;
 var ExtensibleMiddleware = ($__extensible_45_component__ = require("./extensible-component"), $__extensible_45_component__ && $__extensible_45_component__.__esModule && $__extensible_45_component__ || {default: $__extensible_45_component__}).ExtensibleMiddleware;
-var $__2 = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}),
-    combineMiddlewares = $__2.combineMiddlewares,
-    repeatOnceMiddleware = $__2.repeatOnceMiddleware;
+var combineMiddlewares = ($__util_47_middleware__ = require("./util/middleware"), $__util_47_middleware__ && $__util_47_middleware__.__esModule && $__util_47_middleware__ || {default: $__util_47_middleware__}).combineMiddlewares;
 var HandleableMiddleware = function HandleableMiddleware(handleableMiddleware) {
   var options = arguments[1] !== (void 0) ? arguments[1] : {};
   this._handleableMiddleware = safeHandler(handleableMiddleware, options);

@@ -214,7 +214,7 @@ describe('base component test', () => {
     }
 
     let debuggableComponent = (component, mapTable={}) => {
-      var mapped = component.map(debuggableComponent, mapTable)
+      let mapped = component.map(debuggableComponent, mapTable)
       
       if(mapped.middleware) {
         mapped.middleware(debugMiddleware(component))
@@ -225,7 +225,7 @@ describe('base component test', () => {
 
     let upperCase = simpleHandlerBuilder(
       config => {
-        var { debugStack } = config
+        let { debugStack } = config
 
         should.equal(debugStack.length, 3)
         debugStack[0].should.equal('Greet Handler')

@@ -15,9 +15,6 @@ Object.defineProperties(module.exports, {
   combineMiddlewareComponents: {get: function() {
       return combineMiddlewareComponents;
     }},
-  repeatOnceMiddleware: {get: function() {
-      return repeatOnceMiddleware;
-    }},
   __esModule: {value: true}
 });
 var $__config__;
@@ -50,12 +47,4 @@ let combineMiddlewareComponents = (function(components) {
   return combineMiddlewares(components.map((function(component) {
     return component.toHandleableMiddleware();
   })));
-});
-let repeatOnceMiddleware = (function(id, middleware) {
-  return (function(config, builder) {
-    let initTable = getInitTable(config);
-    if (initTable[id])
-      return builder(config);
-    return middleware(config, builder);
-  });
 });

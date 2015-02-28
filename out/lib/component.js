@@ -11,7 +11,7 @@ let assertComponent = (function(component) {
   }
 });
 let randomId = (function() {
-  return Symbol((Math.random() * 0x1000000 | 0).toString(16));
+  return Symbol((Math.random() * 0x10000000 | 0).toString(16));
 });
 var Component = function Component() {
   var $__3;

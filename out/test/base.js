@@ -150,14 +150,14 @@ describe('base component test', (function() {
     });
     let debuggableComponent = (function(component) {
       var mapTable = arguments[1] !== (void 0) ? arguments[1] : {};
-      var mapped = component.map(debuggableComponent, mapTable);
+      let mapped = component.map(debuggableComponent, mapTable);
       if (mapped.middleware) {
         mapped.middleware(debugMiddleware(component));
       }
       return mapped;
     });
     let upperCase = simpleHandlerBuilder((function(config) {
-      var debugStack = config.debugStack;
+      let debugStack = config.debugStack;
       should.equal(debugStack.length, 3);
       debugStack[0].should.equal('Greet Handler');
       debugStack[1].should.equal('UpperCase Filter');

@@ -9,6 +9,12 @@ Object.defineProperties(module.exports, {
   listComponent: {get: function() {
       return $__composite_47_list__.listComponent;
     }},
+  MapComponent: {get: function() {
+      return $__composite_47_map__.MapComponent;
+    }},
+  mapComponent: {get: function() {
+      return $__composite_47_map__.mapComponent;
+    }},
   HandleableBuilder: {get: function() {
       return $__handleable_45_builder__.HandleableBuilder;
     }},
@@ -265,6 +271,7 @@ Object.defineProperties(module.exports, {
 });
 var $__component__,
     $__composite_47_list__,
+    $__composite_47_map__,
     $__handleable_45_builder__,
     $__handleable_45_middleware__,
     $__extend__,
@@ -289,6 +296,7 @@ var $__component__,
     $__util_47_config__;
 var $__component__ = ($__component__ = require("./component"), $__component__ && $__component__.__esModule && $__component__ || {default: $__component__});
 var $__composite_47_list__ = ($__composite_47_list__ = require("./composite/list"), $__composite_47_list__ && $__composite_47_list__.__esModule && $__composite_47_list__ || {default: $__composite_47_list__});
+var $__composite_47_map__ = ($__composite_47_map__ = require("./composite/map"), $__composite_47_map__ && $__composite_47_map__.__esModule && $__composite_47_map__ || {default: $__composite_47_map__});
 var $__handleable_45_builder__ = ($__handleable_45_builder__ = require("./handleable-builder"), $__handleable_45_builder__ && $__handleable_45_builder__.__esModule && $__handleable_45_builder__ || {default: $__handleable_45_builder__});
 var $__handleable_45_middleware__ = ($__handleable_45_middleware__ = require("./handleable-middleware"), $__handleable_45_middleware__ && $__handleable_45_middleware__.__esModule && $__handleable_45_middleware__ || {default: $__handleable_45_middleware__});
 var $__extend__ = ($__extend__ = require("./extend"), $__extend__ && $__extend__.__esModule && $__extend__ || {default: $__extend__});
