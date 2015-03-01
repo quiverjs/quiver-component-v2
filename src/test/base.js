@@ -257,6 +257,9 @@ describe('base component test', () => {
     .setName('Greet Handler')
 
     const debugged = debuggableComponent(greet)
+    for(let component of greet) {
+      console.log('subcomponent:', component)
+    }
 
     const config = { }
     const handler = yield debugged.loadHandler(config)

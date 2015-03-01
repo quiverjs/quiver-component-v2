@@ -8,6 +8,15 @@ export class ListComponent extends Component {
     this[_componentArray] = componentList
   }
 
+  *[Symbol.iterator]() {
+    for(let subComponent of this[_componentArray]) {
+      yield subComponent
+      yield* subComponent
+    }
+
+    yield* super[Symbol.iterator]()
+  }
+
   each(iteratee) {
     this[_componentArray].forEach(iteratee)
     super.each(iteratee)
@@ -39,6 +48,10 @@ export class ListComponent extends Component {
 
   get array() {
     return this[_componentArray]
+  }
+
+  get type() {
+    return 'list component'
   }
 }
 

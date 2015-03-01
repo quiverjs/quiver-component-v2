@@ -100,6 +100,16 @@ export class Component {
     return clone
   }
 
+  *[Symbol.iterator]() {
+    let { subComponents } = this
+
+    for(let key in subComponents) {
+      let subComponent = subComponents[key]
+      yield subComponent
+      yield* subComponent
+    }
+  }
+
   each(iteratee) {
     const { subComponents } = this
 
@@ -138,8 +148,9 @@ export class Component {
   }
 
   implement(componentMap) {
-    this.each(component => 
-      component.implement(componentMap))
+    for(let subComponent of this) {
+      subComponent.implement(componentMap)
+    }
 
     return this
   }

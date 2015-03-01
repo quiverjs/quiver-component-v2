@@ -8,6 +8,15 @@ export class MapComponent extends Component {
     this[_componentMap] = componentMap
   }
 
+  *[Symbol.iterator]() {
+    for(let subComponent of this[_componentMap].values()) {
+      yield subComponent
+      yield* subComponent
+    }
+    
+    yield* super[Symbol.iterator]()
+  }
+
   each(iteratee) {
     for(let component of this[_componentMap].values()) {
       iteratee(component)
@@ -46,6 +55,10 @@ export class MapComponent extends Component {
 
   get map() {
     return this[_componentMap]
+  }
+
+  get type() {
+    return 'map component'
   }
 }
 
