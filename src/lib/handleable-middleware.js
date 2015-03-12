@@ -4,10 +4,12 @@ import { combineMiddlewares } from './util/middleware'
 
 export class HandleableMiddleware extends ExtensibleMiddleware {
   constructor(handleableMiddleware, options={}) {
-    this._handleableMiddleware = safeHandler(
+    handleableMiddleware = safeHandler(
       handleableMiddleware, options)
-
+    
     super(options)
+
+    this._handleableMiddleware = handleableMiddleware
   }
 
   toMainHandleableMiddleware() {

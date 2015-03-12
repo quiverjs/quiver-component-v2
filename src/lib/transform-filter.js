@@ -35,12 +35,11 @@ export class TransformFilter extends StreamFilter {
     if(!validModes[transformMode])
       throw new TypeError('invalid transform mode provided in options')
 
-    this._transformMode = transformMode
-
     options.safeWrapped = true
 
     super(null, options)
 
+    this._transformMode = transformMode
     this.subComponents.transformComponent = handlerComponent
   }
 

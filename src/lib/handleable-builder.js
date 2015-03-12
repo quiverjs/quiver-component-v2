@@ -5,10 +5,12 @@ import { ExtensibleHandler } from './extensible-component'
 
 export class HandleableBuilder extends ExtensibleHandler {
   constructor(handleableBuilder, options={}) {
-    this._mainHandleableBuilder = safeHandler(
+    let mainHandleableBuilder = safeHandler(
       handleableBuilder, options)
 
     super(options)
+
+    this._mainHandleableBuilder = mainHandleableBuilder
   }
 
   toMainHandleableBuilder() {
@@ -22,10 +24,10 @@ export class HandleableBuilder extends ExtensibleHandler {
 
 export class Handleable extends HandleableBuilder {
   constructor(handleable, options={}) {
-    this._handleable = handleable
     options.safeWrapped = true
-
     super(null, options)
+    
+    this._handleable = handleable
   }
 
   toMainHandleableBuilder() {

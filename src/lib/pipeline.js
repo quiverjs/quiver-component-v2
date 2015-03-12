@@ -52,10 +52,9 @@ export class Pipeline extends ExtensibleHandler {
   constructor(options={}) {
     let { pipelineCombinators=defaultCombinators } = options
 
-    this._pipelineCombinators = pipelineCombinators
-
     super(options)
     
+    this._pipelineCombinators = pipelineCombinators
     this.subComponents.pipelineHandlers = []
   }
 

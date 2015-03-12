@@ -61,9 +61,9 @@ export class Route extends Component {
     }
 
     let { urlBuilder } = options
-    this._urlBuilder = urlBuilder
-
     super(options)
+
+    this._urlBuilder = urlBuilder
     this.subComponents.routeHandler = handlerComponent
   }
 
@@ -111,12 +111,12 @@ export class StaticRoute extends Route {
     if(typeof(staticPath) != 'string')
       throw new TypeError('staticPath must be provided as string')
 
-    this._staticPath = staticPath
-
     let urlBuilder = () => staticPath
     options.urlBuilder = options.urlBuilder || urlBuilder
 
     super(handlerComponent, options)
+
+    this._staticPath = staticPath
   }
 
   get routeSpec() {
@@ -150,9 +150,9 @@ export class DynamicRoute extends Route {
     if(typeof(matcher) != 'function')
       throw new TypeError('matcher must be of type function')
 
-    this._matcher = matcher
-
     super(handlerComponent, options)
+
+    this._matcher = matcher
   }
 
   get routeSpec() {
@@ -180,11 +180,11 @@ export class RegexRoute extends DynamicRoute {
     if(!(regex instanceof RegExp))
       throw new TypeError('regex must be regular expression')
 
-    this._regex = regex
-
     let matcher = regexMatcher(regex, matchFields)
 
     super(handlerComponent, matcher, options)
+
+    this._regex = regex
   }
 
   get regex() {
@@ -201,13 +201,13 @@ export class ParamRoute extends DynamicRoute {
     if(typeof(paramPath) != 'string')
       throw new TypeError('param path must be of type string')
 
-    this._paramPath = paramPath
-
     let matcher = paramMatcher(paramPath)
 
     options.urlBuilder = options.urlBuilder || paramUrlBuilder(paramPath)
 
     super(handlerComponent, matcher, options)
+    
+    this._paramPath = paramPath
   }
 
   get paramPath() {

@@ -6,10 +6,12 @@ import { HandleableBuilder } from './handleable-builder'
 
 export class HttpHandlerBuilder extends HandleableBuilder {
   constructor(httpHandlerBuilder, options={}) {
-    this._httpHandlerBuilder = safeBuilder(
+    httpHandlerBuilder = safeBuilder(
       httpHandlerBuilder, options)
 
     super(null, options)
+
+    this._httpHandlerBuilder = httpHandlerBuilder
   }
 
   toMainHandleableBuilder() {
@@ -37,9 +39,10 @@ export class HttpHandlerBuilder extends HandleableBuilder {
 
 export class HttpHandler extends HttpHandlerBuilder {
   constructor(httpHandler, options={}) {
-    this._httpHandler = safeHandler(httpHandler, options)
+    httpHandler = safeHandler(httpHandler, options)
 
     super(null, options)
+    this._httpHandler = httpHandler
   }
 
   toHttpHandlerBuilder() {

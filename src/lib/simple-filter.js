@@ -38,12 +38,14 @@ let argsBuilderToFilter = argsBuilder =>
 
 export class ArgsBuilderFilter extends StreamFilter {
   constructor(argsBuilder, options={}) {
-    this._argsBuilder = safeBuilder(argsBuilder, options)
+    argsBuilder = safeBuilder(argsBuilder, options)
     
     if(options.copyConfig === undefined)
       options.copyConfig = true
 
     super(null, options)
+
+    this._argsBuilder = argsBuilder
   }
 
   toStreamFilter() {
@@ -64,10 +66,11 @@ export class ArgsBuilderFilter extends StreamFilter {
 
 export class ArgsFilter extends ArgsBuilderFilter {
   constructor(argsHandler, options={}) {
-    this._argsHandler = safeHandler(argsHandler, options)
+    argsHandler = safeHandler(argsHandler, options)
     options.copyConfig = false
 
     super(null, options)
+    this._argsHandler = argsHandler
   }
 
   toArgsBuilder() {
@@ -90,9 +93,10 @@ export class ArgsFilter extends ArgsBuilderFilter {
 
 export class ErrorFilter extends StreamFilter {
   constructor(errorHandler, options={}) {
-    this._errorHandler = safeHandler(errorHandler, options)
+    errorHandler = safeHandler(errorHandler, options)
 
     super(null, options)
+    this._errorHandler = errorHandler
   }
 
   toStreamFilter() {
@@ -113,9 +117,10 @@ export class ErrorFilter extends StreamFilter {
 
 export class ErrorBuilderFilter extends StreamFilter {
   constructor(errorBuilder, options={}) {
-    this._errorBuilder = safeBuilder(errorBuilder, options)
+    errorBuilder = safeBuilder(errorBuilder, options)
 
     super(null, options)
+    this._errorBuilder = errorBuilder
   }
 
   toStreamFilter() {

@@ -31,13 +31,14 @@ export let filterToMiddleware = (filter, copyConfig) =>
 
 export class HandleableFilter extends HandleableMiddleware {
   constructor(handleableFilter, options={}) {
+    handleableFilter = safeHandler(handleableFilter, options)
+
+    super(null, options)
+
     let { copyConfig=true } = options
     this._copyConfig = copyConfig
 
     this._handleableFilter = handleableFilter
-    this._handleableFilter = safeHandler(handleableFilter, options)
-
-    super(null, options)
   }
 
   toMainHandleableMiddleware() {
@@ -58,9 +59,10 @@ export class HandleableFilter extends HandleableMiddleware {
 
 export class StreamFilter extends HandleableFilter {
   constructor(filter, options={}) {
-    this._streamFilter = safeBuilder(filter, options)
-
+    let streamFilter = safeBuilder(filter, options)
     super(null, options)
+
+    this._streamFilter = streamFilter
   }
 
   toHandleableFilter() {
@@ -94,9 +96,10 @@ export class StreamFilter extends HandleableFilter {
 
 export class HttpFilter extends HandleableFilter {
   constructor(filter, options={}) {
-    this._httpFilter = safeBuilder(filter, options)
-
+    let httpFilter = safeBuilder(filter, options)
     super(null, options)
+
+    this._httpFilter = httpFilter
   }
 
   toHandleableFilter() {

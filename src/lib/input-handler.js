@@ -17,14 +17,13 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
       loader=handlerComponent.handlerLoader
     } = options
 
-    this._handlerLoader = loader
-    
-    this._toInputConfig = toConfig
-
     options.safeWrapped = true
 
     super(null, options)
     
+    this._handlerLoader = loader
+    this._toInputConfig = toConfig
+
     this.subComponents.inputHandler = handlerComponent
   }
 

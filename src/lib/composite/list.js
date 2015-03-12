@@ -4,8 +4,8 @@ let _componentArray = Symbol('@componentArray')
 
 export class ListComponent extends Component {
   constructor(componentList=[], options={}) {
-    this[_componentArray] = componentList
     super(options)
+    this[_componentArray] = componentList
   }
 
   each(iteratee) {

@@ -6,10 +6,11 @@ import { HandleableBuilder } from './handleable-builder'
 
 export class StreamHandlerBuilder extends HandleableBuilder {
   constructor(streamHandlerBuilder, options={}) {
-    this._streamHandlerBuilder = safeBuilder(
+    streamHandlerBuilder = safeBuilder(
       streamHandlerBuilder, options)
 
     super(null, options)
+    this._streamHandlerBuilder = streamHandlerBuilder
   }
 
   toMainHandleableBuilder() {
@@ -37,9 +38,10 @@ export class StreamHandlerBuilder extends HandleableBuilder {
 
 export class StreamHandler extends StreamHandlerBuilder {
   constructor(streamHandler, options={}) {
-    this._streamHandler = safeHandler(streamHandler, options)
+    streamHandler = safeHandler(streamHandler, options)
 
     super(null, options)
+    this._streamHandler = streamHandler
   }
 
   toStreamHandlerBuilder() {

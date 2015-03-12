@@ -4,8 +4,8 @@ let _componentMap = Symbol('@componentMap')
 
 export class MapComponent extends Component {
   constructor(componentMap=new Map(), options={}) {
-    this[_componentMap] = componentMap
     super(options)
+    this[_componentMap] = componentMap
   }
 
   each(iteratee) {

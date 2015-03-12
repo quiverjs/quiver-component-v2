@@ -10,16 +10,17 @@ import {
 
 import { loadHandleable } from './util/loader'
 
+let _middlewareComponents = Symbol('_middlewareComponents')
+
 let copyConfigBuilder = builder =>
   config =>
     builder(copy(config))
 
 export class ExtensibleComponent extends Component {
   constructor(options={}) {
-    this._middlewareComponents = []
-
     super(options)
 
+    this[_middlewareComponents] = []
     this.subComponents.middlewareList = 
       listComponent()
   }
@@ -65,11 +66,11 @@ export class ExtensibleComponent extends Component {
 }
 
 export class ExtensibleHandler extends ExtensibleComponent {
-  constructor(options) {
+  constructor(options={}) {
+    super(options)
+
     let { copyConfig=true } = options
     this._copyConfig = copyConfig
-
-    super(options)
   }
 
   toHandleableBuilder() {

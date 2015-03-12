@@ -2,17 +2,18 @@ import {
   ExtensibleHandler, ExtensibleMiddleware 
 } from './extensible-component'
 
+let _componentKey = Symbol('_componentKey')
+
 let defineAbstractComponent = (Parent, mixin) => {
   class AbstractComponent extends Parent {
     constructor(componentKey, options={}) {
-      this._componentKey = componentKey
-
       super(options)
+      this[_componentKey] = componentKey
     }
 
     implement(componentMap) {
       if(!this.concreteComponent) {
-        let componentKey = this._componentKey
+        let componentKey = this[_componentKey]
         let concreteComponent = componentMap[componentKey]
 
         if(concreteComponent) {
@@ -41,7 +42,7 @@ export let AbstractHandler = defineAbstractComponent(
 
       if(!concreteComponent) {
         throw new Error('Abstract handler component '+ 
-          'not implemented: ' + this._componentKey)
+          'not implemented: ' + this[_componentKey])
       }
 
       return concreteComponent.toHandleableBuilder()
@@ -63,7 +64,7 @@ export let AbstractMiddleware = defineAbstractComponent(
 
       if(!concreteComponent)
         throw new Error('Abstract middleware component ' + 
-          'not implemented: ' + this._componentKey)
+          'not implemented: ' + this[_componentKey])
 
       return concreteComponent.toMainHandleableMiddleware()
     },

@@ -13,9 +13,10 @@ let configHandlerToMiddleware = configHandler =>
 
 export class ConfigMiddleware extends HandleableMiddleware {
   constructor(configHandler, options={}) {
-    this._configHandler = safeHandler(configHandler, options)
+    configHandler = safeHandler(configHandler, options)
 
     super(null, options)
+    this._configHandler = configHandler
   }
 
   toMainHandleableMiddleware() {
@@ -38,10 +39,10 @@ export class ConfigMiddleware extends HandleableMiddleware {
 
 export class ConfigOverrideMiddleware extends ConfigMiddleware {
   constructor(overrideConfig, options={}) {
-    this._overrideConfig = overrideConfig
     options.safeWrapped = true
 
     super(null, options)
+    this._overrideConfig = overrideConfig
   }
 
   toConfigHandler() {
@@ -74,10 +75,10 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
 
 export class ConfigAliasMiddleware extends ConfigMiddleware {
   constructor(aliasConfig, options={}) {
-    this._aliasConfig = aliasConfig
     options.safeWrapped = true
 
     super(null, options)
+    this._aliasConfig = aliasConfig
   }
 
   toConfigHandler() {

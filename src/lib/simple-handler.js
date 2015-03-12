@@ -15,13 +15,14 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
     let err = validateSimpleTypes([inType, outType])
     if(err) throw err
 
-    this._inType = inType
-    this._outType = outType
-
-    this._simpleHandlerBuilder = safeBuilder(
+    simpleHandlerBuilder = safeBuilder(
       simpleHandlerBuilder, options)
 
     super(null, options)
+
+    this._inType = inType
+    this._outType = outType
+    this._simpleHandlerBuilder = simpleHandlerBuilder
   }
 
   toStreamHandlerBuilder() {
@@ -70,9 +71,10 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
 
 export class SimpleHandler extends SimpleHandlerBuilder {
   constructor(simpleHandler, inType, outType, options={}) {
-    this._simpleHandler = safeHandler(simpleHandler, options)
+    simpleHandler = safeHandler(simpleHandler, options)
 
     super(null, inType, outType, options)
+    this._simpleHandler = simpleHandler
   }
 
   toSimpleHandlerBuilder() {

@@ -41,8 +41,8 @@ let bundleFieldComponent =
 
 export class HandlerBundle extends HandleableBuilder {
   constructor(bundleBuilder, options={}) {
+    super(bundleBuilder, options)
     this[_bundleFields] = { }
-    super(bundleBuilder, options={})
   }
 
   toHandlerComponents() {
