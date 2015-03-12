@@ -1,47 +1,47 @@
 import { copy } from 'quiver-object'
 import { ExtensibleHandler } from './extensible-component'
 
-let combineStreamHandlers = (handler1, handler2) => 
+const combineStreamHandlers = (handler1, handler2) => 
   (args, streamable) =>
     handler1(copy(args), streamable).then(streamable =>
       handler2(args, streamable))
 
-let streamCombinator = {
+const streamCombinator = {
   field: 'streamHandler',
   combineHandlers: combineStreamHandlers
 }
 
-let defaultCombinators = [streamCombinator]
+const defaultCombinators = [streamCombinator]
 
-let combineHandleables = (handleable1, handleable2, combinators) => {
-  let newHandleable = { }
+const combineHandleables = (handleable1, handleable2, combinators) => {
+  const newHandleable = { }
 
   combinators.forEach(({ field, combineHandlers }) => {
-    let handler1 = handleable1[field]
-    let handler2 = handleable2[field]
+    const handler1 = handleable1[field]
+    const handler2 = handleable2[field]
 
     if(!handler1 || !handler2) return
 
-    let newHandler = combineHandlers(handler1, handler2)
+    const newHandler = combineHandlers(handler1, handler2)
     newHandleable[field] = newHandler
   })
 
   return newHandleable
 }
 
-let pipelineHandleables = (handleables, combinators) => {
+const pipelineHandleables = (handleables, combinators) => {
   if(handleables.length == 1) return handleables[0]
 
-  let [handleable1, handleable2, ...restHandleables] = handleables
+  const [handleable1, handleable2, ...restHandleables] = handleables
 
-  let newHandleable = combineHandleables(
+  const newHandleable = combineHandleables(
     handleable1, handleable2, combinators)
 
   return pipelineHandleables(
     [newHandleable, ...restHandleables], combinators)
 }
 
-let pipelineBuilder = (builders, combinators) =>
+const pipelineBuilder = (builders, combinators) =>
   config =>
     Promise.all(builders.map(
       builder => builder(config)))
@@ -50,7 +50,7 @@ let pipelineBuilder = (builders, combinators) =>
 
 export class Pipeline extends ExtensibleHandler {
   constructor(options={}) {
-    let { pipelineCombinators=defaultCombinators } = options
+    const { pipelineCombinators=defaultCombinators } = options
 
     super(options)
     
@@ -77,13 +77,13 @@ export class Pipeline extends ExtensibleHandler {
   }
 
   toMainHandleableBuilder() {
-    let builders = this.pipelineHandlers.map(
+    const builders = this.pipelineHandlers.map(
       component => component.toHandleableBuilder())
 
     if(builders.length == 0) throw new Error(
       'Pipeline must contain at least one handler component')
 
-    let combinators = this._pipelineCombinators
+    const combinators = this._pipelineCombinators
 
     return pipelineBuilder(builders, combinators)
   }
@@ -93,7 +93,7 @@ export class Pipeline extends ExtensibleHandler {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
     json.pipelines = this.pipelineHandlers.map(
       component => component.toJson())
 
@@ -101,5 +101,5 @@ export class Pipeline extends ExtensibleHandler {
   }
 }
 
-export let pipeline = options =>
+export const pipeline = options =>
   new Pipeline(options)

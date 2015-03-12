@@ -1,16 +1,16 @@
-let assertComponent = component => {
+const assertComponent = component => {
   if(!component.isQuiverComponent) {
     throw new Error('object must be of type Component')
   }
 }
 
 // Random ID for easier identifying
-let randomId = () =>
+const randomId = () =>
   Symbol((Math.random() * 0x10000000 | 0).toString(16))
 
 export class Component {
   constructor(options={}) {
-    let { 
+    const { 
       name,
       subComponents = { }
     } = options
@@ -23,7 +23,7 @@ export class Component {
     }
 
     for(let key in subComponents) {
-      let component = subComponents[key]
+      const component = subComponents[key]
       assertComponent(component)
     }
 
@@ -51,7 +51,7 @@ export class Component {
       throw new Error('Subcomponent must be Quiver component')
     }
 
-    let { subComponents } = this
+    const { subComponents } = this
 
     if(subComponents[key]) {
       throw new Error('Subcomponent already registered at given key')
@@ -70,9 +70,9 @@ export class Component {
   }
 
   clone() {
-    let newInstance = Object.create(this)
+    const newInstance = Object.create(this)
 
-    let privateId = randomId()
+    const privateId = randomId()
     Object.defineProperty(newInstance, 'id', {
       get() {
         return privateId
@@ -83,7 +83,7 @@ export class Component {
   }
 
   applyMap(mapper, mapTable={}) {
-    let currentId = this.id
+    const currentId = this.id
 
     if(mapTable[currentId]) {
       return mapTable[currentId]
@@ -93,13 +93,13 @@ export class Component {
   }
 
   map(mapper, mapTable={}) {
-    let clone = this.clone()
+    const clone = this.clone()
     this.doMap(clone, mapper, mapTable)
     return clone
   }
 
   each(iteratee) {
-    let { subComponents } = this
+    const { subComponents } = this
 
     for(let key in subComponents) {
       iteratee(subComponents[key])
@@ -107,11 +107,11 @@ export class Component {
   }
 
   doMap(target, mapper, mapTable) {
-    let { subComponents } = this
-    let newSubComponents = { }
+    const { subComponents } = this
+    const newSubComponents = { }
 
     for(let key in subComponents) {
-      let component = subComponents[key]
+      const component = subComponents[key]
 
       newSubComponents[key] = component.applyMap(
         mapper, mapTable)
@@ -143,7 +143,7 @@ export class Component {
   }
 
   toJson() {
-    let json = { 
+    const json = { 
       id: this.id.toString(),
       type: this.type
     }

@@ -5,26 +5,26 @@ import { StreamFilter } from './filter'
 import { HandlerComponent } from './component'
 import { loadStreamHandler } from './util/loader'
 
-let validModes = {
+const validModes = {
   'in': true,
   'out': true,
   'inout': true
 }
 
-let echoHandler = (args, streamable) =>
+const echoHandler = (args, streamable) =>
   resolve(streamable)
 
-let wrapHandler = handler =>
+const wrapHandler = handler =>
   (args, ...restArgs) =>
     handler(copy(args), ...restArgs)
 
-let inTransformHandler = (handler, mode) =>
+const inTransformHandler = (handler, mode) =>
   mode != 'out' ? wrapHandler(handler): echoHandler
 
-let wrapMainHandler = (handler, mode) =>
+const wrapMainHandler = (handler, mode) =>
   mode == 'in' ? handler : wrapHandler(handler)
 
-let outTransformHandler = (handler, mode) =>
+const outTransformHandler = (handler, mode) =>
   mode != 'in' ? handler : echoHandler
 
 export class TransformFilter extends StreamFilter {
@@ -44,23 +44,23 @@ export class TransformFilter extends StreamFilter {
   }
 
   toStreamFilter() {
-    let transformComponent = this.transformComponent
+    const transformComponent = this.transformComponent
 
-    let componentId = transformComponent.id
-    let builder = transformComponent.toHandleableBuilder()
+    const componentId = transformComponent.id
+    const builder = transformComponent.toHandleableBuilder()
 
-    let transformMode = this.transformMode
+    const transformMode = this.transformMode
 
     return (config, handler) => 
       loadStreamHandler(config, componentId, builder)
       .then(transformHandler => {
-        let transformIn = inTransformHandler(
+        const transformIn = inTransformHandler(
           transformHandler, transformMode)
 
-        let mainHandler = wrapMainHandler(
+        const mainHandler = wrapMainHandler(
           handler, transformMode)
 
-        let transformOut = outTransformHandler(
+        const transformOut = outTransformHandler(
           transformHandler, transformMode)
 
         return (args, streamable) => 
@@ -85,7 +85,7 @@ export class TransformFilter extends StreamFilter {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
 
     json.transformMode = this.transformMode
     json.transformHandler = this.transformComponent.toJson()
@@ -94,5 +94,5 @@ export class TransformFilter extends StreamFilter {
   }
 }
 
-export let transformFilter = (handler, mode, options) => 
+export const transformFilter = (handler, mode, options) => 
   new TransformFilter(handler, mode, options)

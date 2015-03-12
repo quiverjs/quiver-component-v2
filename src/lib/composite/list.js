@@ -1,6 +1,6 @@
 import { Component } from '../component'
 
-let _componentArray = Symbol('@componentArray')
+const _componentArray = Symbol('@componentArray')
 
 export class ListComponent extends Component {
   constructor(componentList=[], options={}) {
@@ -42,5 +42,5 @@ export class ListComponent extends Component {
   }
 }
 
-export let listComponent = (components=[]) =>
+export const listComponent = (components=[]) =>
   new ListComponent(components)

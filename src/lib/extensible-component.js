@@ -10,9 +10,9 @@ import {
 
 import { loadHandleable } from './util/loader'
 
-let _middlewareComponents = Symbol('_middlewareComponents')
+const _middlewareComponents = Symbol('_middlewareComponents')
 
-let copyConfigBuilder = builder =>
+const copyConfigBuilder = builder =>
   config =>
     builder(copy(config))
 
@@ -69,15 +69,15 @@ export class ExtensibleHandler extends ExtensibleComponent {
   constructor(options={}) {
     super(options)
 
-    let { copyConfig=true } = options
+    const { copyConfig=true } = options
     this._copyConfig = copyConfig
   }
 
   toHandleableBuilder() {
-    let copyConfig = this._copyConfig
+    const copyConfig = this._copyConfig
 
-    let mainBuilder = this.toMainHandleableBuilder()
-    let extendMiddleware = this.toExtendMiddleware()
+    const mainBuilder = this.toMainHandleableBuilder()
+    const extendMiddleware = this.toExtendMiddleware()
 
     let builder = combineBuilderWithMiddleware(
       mainBuilder, extendMiddleware)
@@ -98,7 +98,7 @@ export class ExtensibleHandler extends ExtensibleComponent {
   }
 
   loadHandler(config, options) {
-    let loader = this.handlerLoader
+    const loader = this.handlerLoader
     return loader(config, this.id, 
       this.toHandleableBuilder(), options)
   }
@@ -129,8 +129,8 @@ export class ExtensibleHandler extends ExtensibleComponent {
 
 export class ExtensibleMiddleware extends ExtensibleComponent {
   toHandleableMiddleware() {
-    let mainMiddleware = this.toMainHandleableMiddleware()
-    let extendMiddleware = this.toExtendMiddleware()
+    const mainMiddleware = this.toMainHandleableMiddleware()
+    const extendMiddleware = this.toExtendMiddleware()
 
     return combineMiddlewares([mainMiddleware, extendMiddleware])
   }

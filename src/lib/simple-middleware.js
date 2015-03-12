@@ -5,7 +5,7 @@ import { safeHandler } from './util/wrap'
 import { HandleableMiddleware } from './handleable-middleware'
 import { ExtensibleComponent } from './extensible-component'
 
-let configHandlerToMiddleware = configHandler =>
+const configHandlerToMiddleware = configHandler =>
   (config, builder) =>
     configHandler(config)
     .then((newConfig=config) =>
@@ -20,7 +20,7 @@ export class ConfigMiddleware extends HandleableMiddleware {
   }
 
   toMainHandleableMiddleware() {
-    let configHandler = this.toConfigHandler()
+    const configHandler = this.toConfigHandler()
 
     return configHandlerToMiddleware(configHandler)
   }
@@ -46,7 +46,7 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
   }
 
   toConfigHandler() {
-    let overrideConfig = this.overrideConfig
+    const overrideConfig = this.overrideConfig
 
     return config => {
       for(let key in overrideConfig) {
@@ -66,7 +66,7 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
 
     json.overrideConfig = this.overrideConfig
     return json
@@ -82,11 +82,11 @@ export class ConfigAliasMiddleware extends ConfigMiddleware {
   }
 
   toConfigHandler() {
-    let aliasConfig = this._aliasConfig
+    const aliasConfig = this._aliasConfig
 
     return config => {
       for(let key in aliasConfig) {
-        let aliasKey = aliasConfig[key]
+        const aliasKey = aliasConfig[key]
         config[key] = config[aliasKey]
       }
 
@@ -103,21 +103,21 @@ export class ConfigAliasMiddleware extends ConfigMiddleware {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
 
     json.aliasConfig = this.aliasConfig
     return json
   }
 }
 
-let mixinConfigOverride = prototype => {
+const mixinConfigOverride = prototype => {
   prototype.configOverride = function(config) {
     return this.addMiddleware(
       new ConfigOverrideMiddleware(config))
   }
 }
 
-let mixinConfigAlias = prototype => {
+const mixinConfigAlias = prototype => {
   prototype.configAlias = function(config) {
     return this.addMiddleware(
       new ConfigAliasMiddleware(config))
@@ -127,11 +127,11 @@ let mixinConfigAlias = prototype => {
 mixinConfigOverride(ExtensibleComponent.prototype)
 mixinConfigAlias(ExtensibleComponent.prototype)
 
-export let configMiddleware = (handler) =>
+export const configMiddleware = (handler) =>
   new ConfigMiddleware(handler)
 
-export let configOverrideMiddleware = (config) =>
+export const configOverrideMiddleware = (config) =>
   new ConfigOverrideMiddleware(config)
 
-export let configAliasMiddleware = (config) =>
+export const configAliasMiddleware = (config) =>
   new ConfigAliasMiddleware(config)

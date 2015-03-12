@@ -15,22 +15,22 @@ import {
   regexMatcher, paramMatcher, paramUrlBuilder
 } from './dynamic-route'
 
-let combineUrlBuilders = (urlBuilder1, urlBuilder2) => {
+const combineUrlBuilders = (urlBuilder1, urlBuilder2) => {
   if(!urlBuilder1 || !urlBuilder2) return null
 
   return (args, restPath='/') => {
-    let newRestPath = urlBuilder2(args, restPath)
+    const newRestPath = urlBuilder2(args, restPath)
 
     return urlBuilder1(args, newRestPath)
   }
 }
 
-let urlMiddleware = urlBuilder =>
+const urlMiddleware = urlBuilder =>
   async(function*(config, builder) {
-    let newUrlBuilder = config.urlBuilder = combineUrlBuilders(
+    const newUrlBuilder = config.urlBuilder = combineUrlBuilders(
       config.urlBuilder, urlBuilder)
 
-    let handleable = yield builder(config)
+    const handleable = yield builder(config)
     
     if(!handleable.urlBuilder) {
       handleable.urlBuilder = newUrlBuilder
@@ -39,9 +39,9 @@ let urlMiddleware = urlBuilder =>
     return handleable
   })
 
-let routeBuilder = (component, urlBuilder, middleware) => {
-  let mainBuilder = component.toHandleableBuilder()
-  let middlewares = []
+const routeBuilder = (component, urlBuilder, middleware) => {
+  const mainBuilder = component.toHandleableBuilder()
+  const middlewares = []
 
   if(urlBuilder) {
     middlewares.push(urlMiddleware(urlBuilder))
@@ -60,7 +60,7 @@ export class Route extends Component {
       handlerComponent = new MethodRouter(handlerComponent)
     }
 
-    let { urlBuilder } = options
+    const { urlBuilder } = options
     super(options)
 
     this._urlBuilder = urlBuilder
@@ -68,8 +68,8 @@ export class Route extends Component {
   }
 
   toHandleableBuilder() {
-    let mainBuilder = this.handlerComponent.toHandleableBuilder()
-    let urlBuilder = this.urlBuilder
+    const mainBuilder = this.handlerComponent.toHandleableBuilder()
+    const urlBuilder = this.urlBuilder
 
     if(urlBuilder) {
       return combineBuilderWithMiddleware(mainBuilder,
@@ -100,7 +100,7 @@ export class Route extends Component {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
     json.handler = this.handlerComponent.toJson()
     return json
   }
@@ -111,7 +111,7 @@ export class StaticRoute extends Route {
     if(typeof(staticPath) != 'string')
       throw new TypeError('staticPath must be provided as string')
 
-    let urlBuilder = () => staticPath
+    const urlBuilder = () => staticPath
     options.urlBuilder = options.urlBuilder || urlBuilder
 
     super(handlerComponent, options)
@@ -139,7 +139,7 @@ export class StaticRoute extends Route {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
     json.staticPath = this.staticPath
     return json
   }
@@ -180,7 +180,7 @@ export class RegexRoute extends DynamicRoute {
     if(!(regex instanceof RegExp))
       throw new TypeError('regex must be regular expression')
 
-    let matcher = regexMatcher(regex, matchFields)
+    const matcher = regexMatcher(regex, matchFields)
 
     super(handlerComponent, matcher, options)
 
@@ -201,7 +201,7 @@ export class ParamRoute extends DynamicRoute {
     if(typeof(paramPath) != 'string')
       throw new TypeError('param path must be of type string')
 
-    let matcher = paramMatcher(paramPath)
+    const matcher = paramMatcher(paramPath)
 
     options.urlBuilder = options.urlBuilder || paramUrlBuilder(paramPath)
 
@@ -219,20 +219,20 @@ export class ParamRoute extends DynamicRoute {
   }
   
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
     json.paramPath = this.paramPath
     return json
   }
 }
 
-export let staticRoute = (handler, path, options) =>
+export const staticRoute = (handler, path, options) =>
   new StaticRoute(handler, path, options)
 
-export let dynamicRoute = (handler, matcher, options) =>
+export const dynamicRoute = (handler, matcher, options) =>
   new DynamicRoute(handler, matcher, options)
 
-export let regexRoute = (handler, regex, fields, options) =>
+export const regexRoute = (handler, regex, fields, options) =>
   new RegexRoute(handler, regex, fields, options)
 
-export let paramRoute = (handler, path, options) =>
+export const paramRoute = (handler, path, options) =>
   new ParamRoute(handler, path, options)

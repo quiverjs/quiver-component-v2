@@ -1,5 +1,3 @@
-import 'traceur'
-
 import { async, resolve, reject } from 'quiver-promise'
 
 import {
@@ -10,21 +8,21 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-let should = chai.should()
+const should = chai.should()
 
 describe('middleware test', () => {
   it('input handler', async(function*() {
-    let uppercase = simpleHandler(
+    const uppercase = simpleHandler(
       (args, input) =>  input.toUpperCase() + '!', 
       'text', 'text')
 
-    let main = simpleHandlerBuilder(
+    const main = simpleHandlerBuilder(
       config => {
-        let inHandler = config.inHandler
+        const inHandler = config.inHandler
         should.exist(inHandler)
 
         return async(function*(args, input) {
-          let result = yield inHandler(args, input)
+          const result = yield inHandler(args, input)
           
           return {
             status: 'ok',
@@ -34,15 +32,15 @@ describe('middleware test', () => {
       }, 'text', 'json')
     .inputHandler(uppercase, 'inHandler')
 
-    let handler = yield main.loadHandler({})
-    let json = yield handler({}, 'hello')
+    const handler = yield main.loadHandler({})
+    const json = yield handler({}, 'hello')
 
     json.status.should.equal('ok')
     json.result.should.equal('HELLO!')
   }))
 
   it('config override', async(function*() {
-    let main = simpleHandlerBuilder(
+    const main = simpleHandlerBuilder(
       config => {
         config.foo.should.equal('bar')
 
@@ -52,7 +50,7 @@ describe('middleware test', () => {
       foo: 'bar'
     })
 
-    let config = {
+    const config = {
       foo: 'foo'
     }
 
@@ -60,7 +58,7 @@ describe('middleware test', () => {
   }))
 
   it('config alias', async(function*() {
-    let main = simpleHandlerBuilder(
+    const main = simpleHandlerBuilder(
       config => {
         config.foo.should.equal('bar')
 
@@ -70,7 +68,7 @@ describe('middleware test', () => {
       foo: 'bar'
     })
 
-    let config = {
+    const config = {
       bar: 'bar'
     }
 

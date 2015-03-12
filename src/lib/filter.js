@@ -5,11 +5,11 @@ import { streamToHttpHandler } from 'quiver-http'
 import { safeHandler, safeBuilder } from './util/wrap'
 import { HandleableMiddleware } from './handleable-middleware'
 
-let noCopy = config => config
+const noCopy = config => config
 
-export let filterToHandleableFilter = (filter, handlerKey) =>
+export const filterToHandleableFilter = (filter, handlerKey) =>
   (config, handleable) => {
-    let handler = handleable[handlerKey]
+    const handler = handleable[handlerKey]
     if(!handler) return resolve(handleable)
 
     return filter(config, handler).then(filteredHandler => {
@@ -18,13 +18,13 @@ export let filterToHandleableFilter = (filter, handlerKey) =>
     })
   }
 
-export let streamToHandleableFilter = filter =>
+export const streamToHandleableFilter = filter =>
   filterToHandleableFilter(filter, 'streamHandler')
 
-export let httpToHandleableFilter = filter =>
+export const httpToHandleableFilter = filter =>
   filterToHandleableFilter(filter, 'httpHandler')
 
-export let filterToMiddleware = (filter, copyConfig) =>
+export const filterToMiddleware = (filter, copyConfig) =>
   (config, builder) =>
     builder(copyConfig(config)).then(handler =>
       filter(config, handler))
@@ -35,15 +35,15 @@ export class HandleableFilter extends HandleableMiddleware {
 
     super(null, options)
 
-    let { copyConfig=true } = options
+    const { copyConfig=true } = options
     this._copyConfig = copyConfig
 
     this._handleableFilter = handleableFilter
   }
 
   toMainHandleableMiddleware() {
-    let copyConfig = this._copyConfig ? copy : noCopy
-    let handleableFilter = this.toHandleableFilter()
+    const copyConfig = this._copyConfig ? copy : noCopy
+    const handleableFilter = this.toHandleableFilter()
 
     return filterToMiddleware(
       handleableFilter, copyConfig)
@@ -59,17 +59,17 @@ export class HandleableFilter extends HandleableMiddleware {
 
 export class StreamFilter extends HandleableFilter {
   constructor(filter, options={}) {
-    let streamFilter = safeBuilder(filter, options)
+    const streamFilter = safeBuilder(filter, options)
     super(null, options)
 
     this._streamFilter = streamFilter
   }
 
   toHandleableFilter() {
-    let streamFilter = this.toStreamFilter()
+    const streamFilter = this.toStreamFilter()
 
     return (config, handleable) => {
-      let handler = handleable.streamHandler
+      const handler = handleable.streamHandler
       if(!handler) return resolve(handleable)
 
       return streamFilter(config, handler)
@@ -81,7 +81,7 @@ export class StreamFilter extends HandleableFilter {
   }
 
   toStreamFilter() {
-    let streamFilter = this._streamFilter
+    const streamFilter = this._streamFilter
 
     if(!streamFilter) throw new Error(
       'streamFilter is not defined')
@@ -96,19 +96,19 @@ export class StreamFilter extends HandleableFilter {
 
 export class HttpFilter extends HandleableFilter {
   constructor(filter, options={}) {
-    let httpFilter = safeBuilder(filter, options)
+    const httpFilter = safeBuilder(filter, options)
     super(null, options)
 
     this._httpFilter = httpFilter
   }
 
   toHandleableFilter() {
-    let httpFilter = this.toHttpFilter()
+    const httpFilter = this.toHttpFilter()
 
     return (config, handleable) => {
       let httpHandler = handleable.httpHandler
       if(!httpHandler) {
-        let streamHandler = handleable.streamHandler
+        const streamHandler = handleable.streamHandler
 
         if(!streamHandler)
           return resolve(handleable)
@@ -126,7 +126,7 @@ export class HttpFilter extends HandleableFilter {
   }
 
   toHttpFilter() {
-    let httpFilter = this._httpFilter
+    const httpFilter = this._httpFilter
 
     if(!httpFilter) throw new Error(
       'httpFilter is not defined')
@@ -139,11 +139,11 @@ export class HttpFilter extends HandleableFilter {
   }
 }
 
-export let handleableFilter = (filter, options) =>
+export const handleableFilter = (filter, options) =>
   new HandleableFilter(filter, options)
 
-export let streamFilter = (filter, options) =>
+export const streamFilter = (filter, options) =>
   new StreamFilter(filter, options)
 
-export let httpFilter = (filter, options) =>
+export const httpFilter = (filter, options) =>
   new HttpFilter(filter, options)

@@ -1,6 +1,6 @@
 import { Component } from '../component'
 
-let _componentMap = Symbol('@componentMap')
+const _componentMap = Symbol('@componentMap')
 
 export class MapComponent extends Component {
   constructor(componentMap=new Map(), options={}) {
@@ -17,14 +17,14 @@ export class MapComponent extends Component {
   }
 
   doMap(target, mapper, mapTable) {
-    let targetMap = new Map()
+    const targetMap = new Map()
 
     for(let [key, component] of this[_componentMap].entries()) {
       targetMap[key] = component.applyMap(mapper, mapTable)
     }
 
     allKeys(componentMap).forEach(key => {
-      let component = componentMap[key]
+      const component = componentMap[key]
       targetMap[key] = component.applyMap(mapper, mapTable)
     })
 
@@ -49,5 +49,5 @@ export class MapComponent extends Component {
   }
 }
 
-export let mapComponent = (components=new Map()) =>
+export const mapComponent = (components=new Map()) =>
   new MapComponent(components)

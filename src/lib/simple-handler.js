@@ -12,7 +12,7 @@ import { StreamHandler, StreamHandlerBuilder } from './stream-handler'
 
 export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   constructor(simpleHandlerBuilder, inType, outType, options={}) {
-    let err = validateSimpleTypes([inType, outType])
+    const err = validateSimpleTypes([inType, outType])
     if(err) throw err
 
     simpleHandlerBuilder = safeBuilder(
@@ -26,9 +26,9 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   }
 
   toStreamHandlerBuilder() {
-    let { inType, outType } = this
+    const { inType, outType } = this
 
-    let simpleHandlerBuilder = this.toSimpleHandlerBuilder()
+    const simpleHandlerBuilder = this.toSimpleHandlerBuilder()
 
     return config =>
       simpleHandlerBuilder(config)
@@ -60,7 +60,7 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
 
     json.inType = this.inType
     json.outType = this.outType
@@ -78,7 +78,7 @@ export class SimpleHandler extends SimpleHandlerBuilder {
   }
 
   toSimpleHandlerBuilder() {
-    let simpleHandler = this.toSimpleHandler()
+    const simpleHandler = this.toSimpleHandler()
 
     return config =>
       resolve(simpleHandler)
@@ -96,8 +96,8 @@ export class SimpleHandler extends SimpleHandlerBuilder {
   }
 }
 
-export let simpleHandlerBuilder = (builder, inType, outType, options) =>
+export const simpleHandlerBuilder = (builder, inType, outType, options) =>
   new SimpleHandlerBuilder(builder, inType, outType, options)
 
-export let simpleHandler = (handler, inType, outType, options) =>
+export const simpleHandler = (handler, inType, outType, options) =>
   new SimpleHandler(handler, inType, outType, options)

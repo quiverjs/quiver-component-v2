@@ -1,5 +1,3 @@
-import 'traceur'
-
 import { async, resolve, reject } from 'quiver-promise'
 import { streamToSimpleHandler } from 'quiver-simple-handler'
 import { 
@@ -20,58 +18,58 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
 chai.use(chaiAsPromised)
-let should = chai.should()
+const should = chai.should()
 
-let uppercaseStream = streamable =>
+const uppercaseStream = streamable =>
   streamableToText(streamable).then(text => {
-    let newText = text.toUpperCase() + '!'
+    const newText = text.toUpperCase() + '!'
     return textToStreamable(newText)
   })
 
 describe('filter test', () => {
   it('simple handler', async(function*() {
-    let filter = streamFilter(
+    const filter = streamFilter(
       (config, handler) =>
         (args, streamable) =>
           uppercaseStream(streamable).then(streamable =>
             handler(args, streamable).then(uppercaseStream)))
 
-    let main = simpleHandler(
+    const main = simpleHandler(
       (args, input) => {
         input.should.equal('HELLO!')
         return 'goodbye'
       }, 'text', 'text')
     .middleware(filter)
 
-    let handler = yield main.loadHandler({})
+    const handler = yield main.loadHandler({})
     
     yield handler({}, 'hello')
       .should.eventually.equal('GOODBYE!')
   }))
 
   it('transform filter', async(function*() {
-    let uppercase = simpleHandler(
+    const uppercase = simpleHandler(
       (args, input) =>
         input.toUpperCase() + '!', 
       'text', 'text')
 
-    let filter = transformFilter(uppercase, 'inout')
+    const filter = transformFilter(uppercase, 'inout')
 
-    let main = simpleHandler(
+    const main = simpleHandler(
       (args, input) => {
         input.should.equal('HELLO!')
         return 'goodbye'
       }, 'text', 'text')
     .middleware(filter)
 
-    let handler = yield main.loadHandler({})
+    const handler = yield main.loadHandler({})
     
     yield handler({}, 'hello')
       .should.eventually.equal('GOODBYE!')
   }))
 
   it('args filter', async(function*() {
-    let main = simpleHandler(
+    const main = simpleHandler(
       args => {
         args.foo.should.equal('bar')
         return 'foo'
@@ -80,25 +78,25 @@ describe('filter test', () => {
       args.foo = 'bar'
     })
 
-    let handler = yield main.loadHandler({})
+    const handler = yield main.loadHandler({})
 
     yield handler({}).should.eventually.equal('foo')
   }))
 
   it('args builder filter', async(function*() {
-    let filter = argsBuilderFilter(
+    const filter = argsBuilderFilter(
       config => {
         should.not.exist(config.handlerModified)
         config.filterModified = true
 
-        let fooValue = config.fooValue
+        const fooValue = config.fooValue
 
         return args => {
           args.foo = fooValue
         }
       })
 
-    let main = simpleHandlerBuilder(
+    const main = simpleHandlerBuilder(
       config => {
         should.not.exist(config.filterModified)
         config.handlerModified = true
@@ -110,40 +108,40 @@ describe('filter test', () => {
       }, 'void', 'text')
     .middleware(filter)
 
-    let config = { fooValue: 'bar' }
-    let handler = yield main.loadHandler(config)
+    const config = { fooValue: 'bar' }
+    const handler = yield main.loadHandler(config)
 
     yield handler({}).should.eventually.equal('foo')
   }))
 
   it('error filter', async(function*() {
-    let filter = errorFilter(
+    const filter = errorFilter(
       err => textToStreamable('error caught from filter'))
 
-    let main = simpleHandler(
+    const main = simpleHandler(
       args => {
         throw new Error('error in handler')
       }, 'void', 'text')
     .middleware(filter)
 
-    let handler = yield main.loadHandler({})
+    const handler = yield main.loadHandler({})
 
     yield handler({}).should.eventually.equal(
       'error caught from filter')
   }))
 
   it('stream handler on http filter', async(function*() {
-    let filter = httpFilter(
+    const filter = httpFilter(
       (config, handler) => handler)
 
-    let main = simpleHandler(
+    const main = simpleHandler(
       args => 'Hello World',
       'void', 'text')
     .middleware(filter)
 
-    let handleable = yield main.loadHandleable({})
+    const handleable = yield main.loadHandleable({})
 
-    let {
+    const {
       streamHandler,
       httpHandler
     } = handleable
@@ -151,7 +149,7 @@ describe('filter test', () => {
     should.not.exist(streamHandler)
     should.exist(httpHandler)
 
-    let [
+    const [
       responseHead, responseStreamable
     ] = yield httpHandler(new RequestHead(), emptyStreamable())
 

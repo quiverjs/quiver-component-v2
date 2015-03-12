@@ -1,17 +1,18 @@
 import { copy } from 'quiver-object'
 import { resolve } from 'quiver-promise'
+import assign from 'object.assign'
 
 import { StreamHandlerBuilder } from './stream-handler'
 import { StreamFilter, HttpFilter } from './filter'
 import { safeBuilder, safeHandler } from './util/wrap'
 
-let argsToStreamFilter = argsHandler =>
+const argsToStreamFilter = argsHandler =>
   (config, handler) =>
     resolve((args, inputStreamable) =>
       argsHandler(args).then(newArgs=args =>
         handler(newArgs, inputStreamable)))
 
-let errorToFilter = errorHandler =>
+const errorToFilter = errorHandler =>
   (config, handler) =>
     resolve((...args) =>
       handler(...args).catch(err => 
@@ -21,17 +22,17 @@ let errorToFilter = errorHandler =>
           return result
         })))
 
-let builderFilterConvert = (builder, filterConvert) =>
+const builderFilterConvert = (builder, filterConvert) =>
   (config, handler) =>
     builder(config).then(customHandler =>
       filterConvert(customHandler)(config, handler))
 
-let applyArgsFilter = (argsHandler, handler) =>
+const applyArgsFilter = (argsHandler, handler) =>
   (args, inputStreamable) =>
     argsHandler(args).then((newArgs=args) => 
       handler(newArgs, inputStreamable))
 
-let argsBuilderToFilter = argsBuilder =>
+const argsBuilderToFilter = argsBuilder =>
   (config, handler) =>
     argsBuilder(config).then(argsHandler =>
       applyArgsFilter(argsHandler, handler))
@@ -74,7 +75,7 @@ export class ArgsFilter extends ArgsBuilderFilter {
   }
 
   toArgsBuilder() {
-    let argsHandler = this.toArgsHandler()
+    const argsHandler = this.toArgsHandler()
 
     return config => resolve(argsHandler)
   }
@@ -140,25 +141,25 @@ export class ErrorBuilderFilter extends StreamFilter {
   }
 }
 
-let ArgsFilterMixin = {
+const ArgsFilterMixin = {
   argsFilter(argsHandler) {
     return this.middleware(new ArgsFilter(argsHandler))
   }
 }
 
-let mixinArgsFilter = prototype =>
-  Object.assign(prototype, ArgsFilterMixin)
+const mixinArgsFilter = prototype =>
+  assign(prototype, ArgsFilterMixin)
 
 mixinArgsFilter(StreamHandlerBuilder.prototype)
 
-export let argsFilter = (handler, options) =>
+export const argsFilter = (handler, options) =>
   new ArgsFilter(handler, options)
 
-export let argsBuilderFilter = (builder, options) =>
+export const argsBuilderFilter = (builder, options) =>
   new ArgsBuilderFilter(builder, options)
 
-export let errorFilter = (handler, options) =>
+export const errorFilter = (handler, options) =>
   new ErrorFilter(handler, options)
 
-export let errorBuilderFilter = (builder, options) =>
+export const errorBuilderFilter = (builder, options) =>
   new ErrorBuilderFilter(builder, options)

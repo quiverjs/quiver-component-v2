@@ -1,19 +1,19 @@
 import { getInitTable } from './config'
 
-let noopMiddleware = (config, builder) => builder(config)
+const noopMiddleware = (config, builder) => builder(config)
 
-export let combineBuilderWithMiddleware = (builder, middleware) =>
+export const combineBuilderWithMiddleware = (builder, middleware) =>
   config => middleware(config, builder)
 
-export let combineBuilderWithMiddlewares = (builder, middlewares) =>
+export const combineBuilderWithMiddlewares = (builder, middlewares) =>
   middlewares.reduce(combineBuilderWithMiddleware, builder)
 
-export let combineTwoMiddlewares = (middleware1, middleware2) =>
+export const combineTwoMiddlewares = (middleware1, middleware2) =>
   (config, builder) => middleware2(config, 
     combineBuilderWithMiddleware(builder, middleware1))
 
-export let combineMiddlewares = middlewares => {
-  let count = middlewares.length
+export const combineMiddlewares = middlewares => {
+  const count = middlewares.length
   
   if(count==0) return noopMiddleware
   if(count==1) return middlewares[0]
@@ -22,6 +22,6 @@ export let combineMiddlewares = middlewares => {
     combineTwoMiddlewares, middlewares[0])
 }
 
-export let combineMiddlewareComponents = components =>
+export const combineMiddlewareComponents = components =>
   combineMiddlewares(components.map(component => 
     component.toHandleableMiddleware()))

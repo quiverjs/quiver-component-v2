@@ -5,11 +5,11 @@ import {
 
 import { getHandlerMap } from './config'
 
-export let loadHandleable = 
+export const loadHandleable = 
 (config, componentId, builder) => {
-  let handlerMap = getHandlerMap(config)
+  const handlerMap = getHandlerMap(config)
 
-  let handleable = handlerMap[componentId]
+  const handleable = handlerMap[componentId]
   if(handleable) return resolve(handleable)
 
   return builder(config).then(handleable => {
@@ -22,27 +22,27 @@ export let loadHandleable =
   })
 }
 
-export let loadStreamHandler = (...args) =>
+export const loadStreamHandler = (...args) =>
   loadHandleable(...args).then(handleable => {
-    let handler = handleable.streamHandler
+    const handler = handleable.streamHandler
     if(!handler) return reject(new Error(
       'handleable is not a stream handler'))
 
     return handler
   })
 
-export let loadHttpHandler = (...args) =>
+export const loadHttpHandler = (...args) =>
   loadHandleable(...args).then(handleable => {
-    let handler = handleable.httpHandler
+    const handler = handleable.httpHandler
     if(!handler) return reject(new Error(
       'handleable is not a http handler'))
 
     return handler
   })
 
-export let loadSimpleHandler = 
+export const loadSimpleHandler = 
 (config, componentId, builder, inType, outType) =>  {
-  let err = validateSimpleTypes([inType, outType])
+  const err = validateSimpleTypes([inType, outType])
   if(err) return reject(err)
 
   return loadStreamHandler(config, componentId, builder)
@@ -50,6 +50,6 @@ export let loadSimpleHandler =
     streamToSimpleHandler(handler, inType, outType))
 }
 
-export let simpleHandlerLoader = (inType, outType) =>
+export const simpleHandlerLoader = (inType, outType) =>
   (config, componentId, builder) =>
     loadSimpleHandler(config, componentId, builder, inType, outType)

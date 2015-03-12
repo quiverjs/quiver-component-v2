@@ -1,11 +1,11 @@
 import { copy, noCopy } from 'quiver-object'
 
-let configNormalized = Symbol('ConfigNormalized')
-let handlerMap = Symbol('handlerMap')
-let bundleMap = Symbol('bundleMap')
-let initTable = Symbol('initTable')
+const configNormalized = Symbol('ConfigNormalized')
+const handlerMap = Symbol('handlerMap')
+const bundleMap = Symbol('bundleMap')
+const initTable = Symbol('initTable')
 
-export let globalConfig = config => {
+export const globalConfig = config => {
   if(!config.global) {
     config.global = noCopy({})
   }
@@ -13,8 +13,8 @@ export let globalConfig = config => {
   return config.global
 }
 
-export let normalizeConfig = config => {
-  let global = globalConfig(config)
+export const normalizeConfig = config => {
+  const global = globalConfig(config)
 
   if(global[configNormalized]) return
 
@@ -35,30 +35,30 @@ export let normalizeConfig = config => {
   return config
 }
 
-export let getHandlerMap = config => {
+export const getHandlerMap = config => {
   normalizeConfig(config)
 
   return config.global[handlerMap]
 }
 
-export let getBundleMap = config => {
+export const getBundleMap = config => {
   normalizeConfig(config)
 
   return config.global[bundleMap]
 }
 
-export let getInitTable = config => {
+export const getInitTable = config => {
   normalizeConfig(config)
 
   return config.global[initTable]
 }
 
-export let getHandleable = (config, component) => {
-  let handlerMap = getHandlerMap(config)
+export const getHandleable = (config, component) => {
+  const handlerMap = getHandlerMap(config)
   return handlerMap[component.id]
 }
 
-export let getBundle = (config, component) => {
-  let bundleMap = getBundleMap(config)
+export const getBundle = (config, component) => {
+  const bundleMap = getBundleMap(config)
   return bundleMap[component.id]
 }

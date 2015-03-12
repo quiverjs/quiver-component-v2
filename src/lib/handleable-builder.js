@@ -5,7 +5,7 @@ import { ExtensibleHandler } from './extensible-component'
 
 export class HandleableBuilder extends ExtensibleHandler {
   constructor(handleableBuilder, options={}) {
-    let mainHandleableBuilder = safeHandler(
+    const mainHandleableBuilder = safeHandler(
       handleableBuilder, options)
 
     super(options)
@@ -31,7 +31,7 @@ export class Handleable extends HandleableBuilder {
   }
 
   toMainHandleableBuilder() {
-    let handleable = this.toHandleable()
+    const handleable = this.toHandleable()
 
     return config => resolve(handleable)
   }
@@ -48,8 +48,8 @@ export class Handleable extends HandleableBuilder {
   }
 }
 
-export let handleableBuilder = (builder, options) =>
+export const handleableBuilder = (builder, options) =>
   new HandleableBuilder(builder, options)
 
-export let handleable = (handleable, options) =>
+export const handleable = (handleable, options) =>
   new Handleable(handleable, options)

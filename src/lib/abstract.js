@@ -1,10 +1,12 @@
+import assign from 'object.assign'
+
 import { 
   ExtensibleHandler, ExtensibleMiddleware 
 } from './extensible-component'
 
-let _componentKey = Symbol('_componentKey')
+const _componentKey = Symbol('_componentKey')
 
-let defineAbstractComponent = (Parent, mixin) => {
+const defineAbstractComponent = (Parent, mixin) => {
   class AbstractComponent extends Parent {
     constructor(componentKey, options={}) {
       super(options)
@@ -13,8 +15,8 @@ let defineAbstractComponent = (Parent, mixin) => {
 
     implement(componentMap) {
       if(!this.concreteComponent) {
-        let componentKey = this[_componentKey]
-        let concreteComponent = componentMap[componentKey]
+        const componentKey = this[_componentKey]
+        const concreteComponent = componentMap[componentKey]
 
         if(concreteComponent) {
           this.validateConcreteComponent(concreteComponent)
@@ -30,15 +32,15 @@ let defineAbstractComponent = (Parent, mixin) => {
     }
   }
 
-  Object.assign(AbstractComponent.prototype, mixin)
+  assign(AbstractComponent.prototype, mixin)
 
   return AbstractComponent
 }
 
-export let AbstractHandler = defineAbstractComponent(
+export const AbstractHandler = defineAbstractComponent(
   ExtensibleHandler, {
     toMainHandleableBuilder() {
-      let { concreteComponent } = this
+      const { concreteComponent } = this
 
       if(!concreteComponent) {
         throw new Error('Abstract handler component '+ 
@@ -57,10 +59,10 @@ export let AbstractHandler = defineAbstractComponent(
     }
   })
 
-export let AbstractMiddleware = defineAbstractComponent(
+export const AbstractMiddleware = defineAbstractComponent(
   ExtensibleMiddleware, {
     toMainHandleableMiddleware() {
-      let { concreteComponent } = this
+      const { concreteComponent } = this
 
       if(!concreteComponent)
         throw new Error('Abstract middleware component ' + 
@@ -78,8 +80,8 @@ export let AbstractMiddleware = defineAbstractComponent(
     }
   })
 
-export let abstractHandler = componentKey =>
+export const abstractHandler = componentKey =>
   new AbstractHandler(componentKey)
 
-export let abstractMiddleware = componentKey =>
+export const abstractMiddleware = componentKey =>
   new AbstractMiddleware(componentKey)

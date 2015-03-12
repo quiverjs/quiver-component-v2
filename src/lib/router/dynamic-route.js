@@ -1,20 +1,20 @@
-let paramRegexString = '([^\\/]+)'
-let restPathRegex = /\/:restpath$/
+const paramRegexString = '([^\\/]+)'
+const restPathRegex = /\/:restpath$/
 
-let escapeRegExp = string =>
+const escapeRegExp = string =>
   string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1")
 
-let invalidUrlRegex = /[^\w\$\-\_\.\+\!\*\'\(\)\,]/
-let invalidSubpathRegex = /[^\w\$\-\_\.\+\!\*\'\(\)\,\/]/
+const invalidUrlRegex = /[^\w\$\-\_\.\+\!\*\'\(\)\,]/
+const invalidSubpathRegex = /[^\w\$\-\_\.\+\!\*\'\(\)\,\/]/
 
-export let regexMatcher = (regex, fields=[]) =>
+export const regexMatcher = (regex, fields=[]) =>
   (path, args) => {
-    let matches = path.match(regex)
+    const matches = path.match(regex)
     if(!matches) return false
 
     for(let i=0; i<fields.length; i++) {
-      let key = fields[i]
-      let match = matches[i+1]
+      const key = fields[i]
+      const match = matches[i+1]
 
       args[key] = match
     }
@@ -22,20 +22,20 @@ export let regexMatcher = (regex, fields=[]) =>
     return true
   }
 
-export let paramMatcher = paramPath => {
-  let hasRestPath = restPathRegex.test(paramPath)
+export const paramMatcher = paramPath => {
+  const hasRestPath = restPathRegex.test(paramPath)
 
   if(hasRestPath)
     paramPath = paramPath.replace(restPathRegex, '')
 
-  let parts = paramPath.split(/(:\w+)/)
+  const parts = paramPath.split(/(:\w+)/)
 
   let regexString = '^'
   let matchFields = []
 
   parts.forEach(part => {
     if(part[0] == ':' && part.length > 1) {
-      let field = part.slice(1)
+      const field = part.slice(1)
       matchFields.push(field)
 
       regexString += paramRegexString
@@ -52,26 +52,26 @@ export let paramMatcher = paramPath => {
 
   regexString += '$'
 
-  let regex = new RegExp(regexString)
+  const regex = new RegExp(regexString)
 
   return regexMatcher(regex, matchFields)
 }
 
-export let paramUrlBuilder = (paramPath) => {
-  let hasRestPath = restPathRegex.test(paramPath)
+export const paramUrlBuilder = (paramPath) => {
+  const hasRestPath = restPathRegex.test(paramPath)
 
   if(hasRestPath)
     paramPath = paramPath.replace(restPathRegex, '')
 
-  let parts = paramPath.split(/(:\w+)/)
+  const parts = paramPath.split(/(:\w+)/)
 
   return (args, restPath='/') => {
-    let url = ''
+    const url = ''
 
     parts.forEach(part => {
       if(part[0] == ':' && part.length > 1) {
-        let field = part.slice(1)
-        let value = args[field]
+        const field = part.slice(1)
+        const value = args[field]
 
         if(typeof(value) != 'string')
           throw new Error('args value for subpath ' 

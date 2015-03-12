@@ -1,4 +1,5 @@
 import { assertString } from 'quiver-object'
+import assign from 'object.assign'
 
 import { ConfigMiddleware } from './simple-middleware'
 import { HandlerComponent } from './component'
@@ -13,7 +14,7 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
 
     assertString(toConfig, 'toConfig required to be string')
 
-    let { 
+    const { 
       loader=handlerComponent.handlerLoader
     } = options
 
@@ -28,13 +29,13 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
   }
 
   toConfigHandler() {
-    let handlerComponent = this.inputHandlerComponent
+    const handlerComponent = this.inputHandlerComponent
 
-    let componentId = handlerComponent.id
-    let builder = handlerComponent.toHandleableBuilder()
+    const componentId = handlerComponent.id
+    const builder = handlerComponent.toHandleableBuilder()
 
-    let loader = this._handlerLoader
-    let toConfig = this._toInputConfig
+    const loader = this._handlerLoader
+    const toConfig = this._toInputConfig
 
     return config =>
       loader(config, componentId, builder)
@@ -52,13 +53,13 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
     json.inputHandler = this.inputHandlerComponent.toJson()
     return json
   }
 }
 
-let InputHandlerMixin = {
+const InputHandlerMixin = {
   inputHandler(handler, toConfig, options={}) {
     return this.middleware(
       new InputHandlerMiddleware(
@@ -66,17 +67,17 @@ let InputHandlerMixin = {
   },
   inputHandlers(handlerMap) {
     for(let key in handlerMap) {
-      let handler = handlerMap[key]
+      const handler = handlerMap[key]
       this.inputHandler(handler, key)
     }
     return this
   }
 }
 
-let mixinInputHandler = prototype =>
-  Object.assign(prototype, InputHandlerMixin)
+const mixinInputHandler = prototype =>
+  assign(prototype, InputHandlerMixin)
 
 mixinInputHandler(ExtensibleComponent.prototype)
 
-export let inputHandlerMiddleware = (handler, toConfig, options) =>
+export const inputHandlerMiddleware = (handler, toConfig, options) =>
   new InputHandlerMiddleware(handler, toConfig, options)

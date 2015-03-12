@@ -13,7 +13,7 @@ export class HandleableMiddleware extends ExtensibleMiddleware {
   }
 
   toMainHandleableMiddleware() {
-    let middleware = this._handleableMiddleware
+    const middleware = this._handleableMiddleware
 
     if(!middleware) throw new Error(
       'mainHandleableMiddleware is not defined')
@@ -26,5 +26,5 @@ export class HandleableMiddleware extends ExtensibleMiddleware {
   }
 }
 
-export let handleableMiddleware = (middleware, options) =>
+export const handleableMiddleware = (middleware, options) =>
   new HandleableMiddleware(middleware, options)

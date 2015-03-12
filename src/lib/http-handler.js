@@ -15,7 +15,7 @@ export class HttpHandlerBuilder extends HandleableBuilder {
   }
 
   toMainHandleableBuilder() {
-    let builder = this.toHttpHandlerBuilder()
+    const builder = this.toHttpHandlerBuilder()
 
     return config =>
       builder(config).then(httpHandler => ({ httpHandler }))
@@ -46,7 +46,7 @@ export class HttpHandler extends HttpHandlerBuilder {
   }
 
   toHttpHandlerBuilder() {
-    let handler = this.toHttpHandler()
+    const handler = this.toHttpHandler()
 
     return config => resolve(handler)
   }
@@ -63,8 +63,8 @@ export class HttpHandler extends HttpHandlerBuilder {
   }
 }
 
-export let httpHandlerBuilder = (builder, options) =>
+export const httpHandlerBuilder = (builder, options) =>
   new HttpHandlerBuilder(builder, options)
 
-export let httpHandler = (handler, options) =>
+export const httpHandler = (handler, options) =>
   new HttpHandler(handler, options)

@@ -13,7 +13,7 @@ import {
   loadHandleable
 } from '../util/loader'
 
-let headRequestHandler = handler =>
+const headRequestHandler = handler =>
   (requestHead, requestStreamable) => {
     if(requestHead.method != 'HEAD') {
       return handler(requestHead, requestStreamable)
@@ -24,8 +24,8 @@ let headRequestHandler = handler =>
       ([responseHead, emptyStreamable()]))
   }
 
-let optionsHandler = methods => {
-  let allowedMethods = methods.join(', ') + ', OPTIONS'
+const optionsHandler = methods => {
+  const allowedMethods = methods.join(', ') + ', OPTIONS'
 
   return (requestHead, requestStreamable) => 
     resolve([
@@ -40,10 +40,10 @@ let optionsHandler = methods => {
     ])
 }
 
-let methodMapToHttpHandler = methodMap => {
-  let allowedMethods = Object.keys(methodMap).join(', ')
+const methodMapToHttpHandler = methodMap => {
+  const allowedMethods = Object.keys(methodMap).join(', ')
 
-  let methodNotAllowedResponse = () => ([
+  const methodNotAllowedResponse = () => ([
     new ResponseHead({
       statusCode: 405,
       statusMessage: 'Method Not Allowed',
@@ -56,8 +56,8 @@ let methodMapToHttpHandler = methodMap => {
   ])
 
   return (requestHead, requestStreamable) => {
-    let method = requestHead.method
-    let handler = methodMap[method]
+    const method = requestHead.method
+    const handler = methodMap[method]
 
     if(!handler) return methodNotAllowedResponse()
 
@@ -65,9 +65,9 @@ let methodMapToHttpHandler = methodMap => {
   }
 }
 
-let loadHttpHandler = async(
+const loadHttpHandler = async(
 function*(config, component) {
-  let handleable = yield loadHandleable(config, component.id, 
+  const handleable = yield loadHandleable(config, component.id, 
       component.builder)
 
   if(handleable.httpHandler) 
@@ -79,14 +79,14 @@ function*(config, component) {
   throw error(500, 'handleable is neither stream nor http handler')
 })
 
-let loadMethodHandlers = async(
+const loadMethodHandlers = async(
 function*(config, methodMap) {
-  let handlerMap = { }
+  const handlerMap = { }
 
   for(let key in methodMap) {
-    let component = methodMap[key]
+    const component = methodMap[key]
 
-    let handler = yield loadHttpHandler(config, component)
+    const handler = yield loadHttpHandler(config, component)
 
     handlerMap[key] = handler
   }
@@ -102,11 +102,11 @@ function*(config, methodMap) {
   return handlerMap
 })
 
-let methodObjectToMap = methodMap => {
-  let map = new Map()
+const methodObjectToMap = methodMap => {
+  const map = new Map()
 
   for(let key in methodMap) {
-    let handlerComponent = methodMap[key]
+    const handlerComponent = methodMap[key]
     if(!handlerComponent.isHandlerComponent) {
       throw new TypeError(
         'Method map entry value must be handler component')
@@ -128,8 +128,8 @@ export class MethodRouter extends HttpHandlerBuilder {
   }
 
   toHttpHandlerBuilder() {
-    let snapshot = {}
-    let methodMap = this.subComponents.methodMap.map
+    const snapshot = {}
+    const methodMap = this.subComponents.methodMap.map
 
     for(let [key, component] of methodMap.entries()) {
       snapshot[key] = {
@@ -154,5 +154,5 @@ export class MethodRouter extends HttpHandlerBuilder {
   }
 }
 
-export let methodRouter = methodMap =>
+export const methodRouter = methodMap =>
   new MethodRouter(methodMap)

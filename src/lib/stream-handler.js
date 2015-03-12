@@ -14,7 +14,7 @@ export class StreamHandlerBuilder extends HandleableBuilder {
   }
 
   toMainHandleableBuilder() {
-    let builder = this.toStreamHandlerBuilder()
+    const builder = this.toStreamHandlerBuilder()
 
     return config =>
       builder(config).then(streamHandler => ({ streamHandler }))
@@ -45,7 +45,7 @@ export class StreamHandler extends StreamHandlerBuilder {
   }
 
   toStreamHandlerBuilder() {
-    let handler = this.toStreamHandler()
+    const handler = this.toStreamHandler()
 
     return config => resolve(handler)
   }
@@ -62,8 +62,8 @@ export class StreamHandler extends StreamHandlerBuilder {
   }
 }
 
-export let streamHandlerBuilder = (builder, options) =>
+export const streamHandlerBuilder = (builder, options) =>
   new StreamHandlerBuilder(builder, options)
 
-export let streamHandler = (handler, options) =>
+export const streamHandler = (handler, options) =>
   new StreamHandler(handler, options)

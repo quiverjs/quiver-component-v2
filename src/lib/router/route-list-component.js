@@ -25,11 +25,11 @@ export class RouteList extends ExtensibleComponent {
   }
 
   toRouteBuildSpecs() {
-    let middleware = this.toExtendMiddleware()
+    const middleware = this.toExtendMiddleware()
 
     return this.routes.map(route => {
-      let builder = route.toHandleableBuilder()
-      let routeSpec = route.routeSpec
+      const builder = route.toHandleableBuilder()
+      const routeSpec = route.routeSpec
 
       routeSpec.builder = combineBuilderWithMiddleware(
         builder, middleware)
@@ -73,9 +73,9 @@ export class RouteList extends ExtensibleComponent {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
     
-    let routes = this.routes
+    const routes = this.routes
 
     if(routes.length > 0)
       json.routes = this.routes.map(route => route.toJson())
@@ -86,5 +86,5 @@ export class RouteList extends ExtensibleComponent {
   }
 }
 
-export let routeList = options =>
+export const routeList = options =>
   new RouteList(options)

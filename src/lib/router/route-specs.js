@@ -3,14 +3,14 @@ import { error } from 'quiver-error'
 import { async, reject } from 'quiver-promise'
 import { streamToHttpHandler } from 'quiver-http'
 
-let getHandlerFromPath = (routeIndex, path, args) => {
-  let staticHandler = routeIndex.staticRoutes[path]
+const getHandlerFromPath = (routeIndex, path, args) => {
+  const staticHandler = routeIndex.staticRoutes[path]
   if(staticHandler) return staticHandler
 
-  let dynamicRoutes = routeIndex.dynamicRoutes
+  const dynamicRoutes = routeIndex.dynamicRoutes
 
   for(let route of dynamicRoutes) {
-    let matched = route.matcher(path, args)
+    const matched = route.matcher(path, args)
     if(matched) return route.handler
   }
 
@@ -20,30 +20,30 @@ let getHandlerFromPath = (routeIndex, path, args) => {
   return null
 }
 
-let httpRouterHandler = routeIndex =>
+const httpRouterHandler = routeIndex =>
   (requestHead, requestStreamable) => {
-    let { args, path } = requestHead
+    const { args, path } = requestHead
 
-    let handler = getHandlerFromPath(routeIndex, path, args)
+    const handler = getHandlerFromPath(routeIndex, path, args)
     if(!handler) return reject(error(404, 'not found'))
 
     return handler(requestHead, requestStreamable)
   }
 
-let streamRouterHandler = routeIndex =>
+const streamRouterHandler = routeIndex =>
   (args, streamable) => {
-    let { path='/' } = args
+    const { path='/' } = args
 
-    let handler = getHandlerFromPath(routeIndex, path, args)
+    const handler = getHandlerFromPath(routeIndex, path, args)
     if(!handler) return reject(error(404, 'not found'))
 
     return handler(args, streamable)
   }
 
-let handleableToStreamHandler = handleable =>
+const handleableToStreamHandler = handleable =>
   handleable.streamHandler
 
-let handleableToHttpHandler = handleable => {
+const handleableToHttpHandler = handleable => {
   if(handleable.httpHandler) 
     return handleable.httpHandler
 
@@ -54,23 +54,23 @@ let handleableToHttpHandler = handleable => {
   return null
 }
 
-let routeSpecsToRouteIndex = (routeSpecs, getHandler) => {
-  let staticRoutes = {}
-  let dynamicRoutes = []
+const routeSpecsToRouteIndex = (routeSpecs, getHandler) => {
+  const staticRoutes = {}
+  const dynamicRoutes = []
   let defaultRoute = null
 
   routeSpecs.forEach(routeSpec => {
-    let { routeType, handleable } = routeSpec
+    const { routeType, handleable } = routeSpec
 
-    let handler = getHandler(handleable)
+    const handler = getHandler(handleable)
     if(!handler) return
 
     if(routeType == 'static') {
-      let { path } = routeSpec
+      const { path } = routeSpec
       staticRoutes[path] = handler
 
     } else if(routeType == 'dynamic') {
-      let { matcher } = routeSpec
+      const { matcher } = routeSpec
       dynamicRoutes.push({ matcher, handler })
 
     } else if(routeType == 'default') {
@@ -85,15 +85,15 @@ let routeSpecsToRouteIndex = (routeSpecs, getHandler) => {
   }
 }
 
-export let routeSpecsToRouterHandleable = routeSpecs => {
-  let streamIndex = routeSpecsToRouteIndex(routeSpecs,
+export const routeSpecsToRouterHandleable = routeSpecs => {
+  const streamIndex = routeSpecsToRouteIndex(routeSpecs,
     handleableToStreamHandler)
 
-  let httpIndex = routeSpecsToRouteIndex(routeSpecs,
+  const httpIndex = routeSpecsToRouteIndex(routeSpecs,
     handleableToHttpHandler)
 
-  let streamHandler = streamRouterHandler(streamIndex)
-  let httpHandler = httpRouterHandler(httpIndex)
+  const streamHandler = streamRouterHandler(streamIndex)
+  const httpHandler = httpRouterHandler(httpIndex)
 
   return {
     streamHandler,
@@ -101,14 +101,14 @@ export let routeSpecsToRouterHandleable = routeSpecs => {
   }
 }
 
-let routeBuildSpecsToRouteSpecs = async(
+const routeBuildSpecsToRouteSpecs = async(
 function*(config, routeBuildSpecs) {
-  let routeSpecs = []
+  const routeSpecs = []
 
   for(let i=0; i<routeBuildSpecs.length; i++) {
-    let routeBuildSpec = routeBuildSpecs[i]
-    let builder = routeBuildSpec.builder
-    let routeSpec = copy(routeBuildSpec)
+    const routeBuildSpec = routeBuildSpecs[i]
+    const builder = routeBuildSpec.builder
+    const routeSpec = copy(routeBuildSpec)
 
     routeSpec.handleable = yield builder(config)
     routeSpecs.push(routeSpec)
@@ -117,9 +117,9 @@ function*(config, routeBuildSpecs) {
   return routeSpecs
 })
 
-export let routeBuildSpecsToRouterBuilder = routeBuildSpecs =>
+export const routeBuildSpecsToRouterBuilder = routeBuildSpecs =>
   async(function*(config) {
-    let routeSpecs = yield routeBuildSpecsToRouteSpecs(
+    const routeSpecs = yield routeBuildSpecsToRouteSpecs(
       config, routeBuildSpecs)
 
     return routeSpecsToRouterHandleable(routeSpecs)

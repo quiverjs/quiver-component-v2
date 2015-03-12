@@ -9,22 +9,22 @@ import {
   loadStreamHandler, simpleHandlerLoader 
 } from './util/loader'
 
-let _bundleFields = Symbol('bundleFields')
+const _bundleFields = Symbol('bundleFields')
 
-let streamHandlerConverter = handler => ({
+const streamHandlerConverter = handler => ({
   streamHandler: safePromised(handler)
 })
 
-let simpleHandlerConverter = (inType, outType) =>
+const simpleHandlerConverter = (inType, outType) =>
   handler => ({
     streamHandler: simpleToStreamHandler(handler, inType, outType)
   })
 
-let bundleFieldMiddleware = (field, handlerConverter) =>
+const bundleFieldMiddleware = (field, handlerConverter) =>
   handleableMiddleware(async(
     function*(config, builder) {
-      let bundle = yield builder(config)
-      let handler = bundle[field]
+      const bundle = yield builder(config)
+      const handler = bundle[field]
 
       if(!handler) {
         throw new Error('missing handler field in bundle: ' + field)
@@ -33,7 +33,7 @@ let bundleFieldMiddleware = (field, handlerConverter) =>
       return handlerConverter(handler)
     }))
 
-let bundleFieldComponent = 
+const bundleFieldComponent = 
 (bundleComponent, field, handlerConverter, handlerLoader) =>
   extendHandler(bundleComponent)
     .middleware(bundleFieldMiddleware(field, handlerConverter))
@@ -46,11 +46,11 @@ export class HandlerBundle extends HandleableBuilder {
   }
 
   toHandlerComponents() {
-    let handlerComponents = {}
-    let bundleFields = this[_bundleFields]
+    const handlerComponents = {}
+    const bundleFields = this[_bundleFields]
 
     for(let field in bundleFields) {
-      let {
+      const {
         handlerConverter, handlerLoader 
       } = bundleFields[field]
       
@@ -62,7 +62,7 @@ export class HandlerBundle extends HandleableBuilder {
   }
 
   bundleField(handlerName, handlerConverter, handlerLoader) {
-    let bundleFields = this[_bundleFields]
+    const bundleFields = this[_bundleFields]
 
     if(bundleFields[handlerName]) throw new Error(
       'bundle field is already defined: ' + handlerName)
@@ -84,5 +84,5 @@ export class HandlerBundle extends HandleableBuilder {
   }
 }
 
-export let handlerBundle = bundleBuilder =>
+export const handlerBundle = bundleBuilder =>
   new HandlerBundle(bundleBuilder)

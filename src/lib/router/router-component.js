@@ -94,13 +94,13 @@ export class Router extends ExtensibleHandler {
   }
 
   toMainHandleableBuilder() {
-    let routeLists = this.routeLists
+    const routeLists = this.routeLists
 
-    let routeBuildSpecs = [].concat.apply([],
+    const routeBuildSpecs = [].concat.apply([],
       routeLists.map(routeList =>
         routeList.toRouteBuildSpecs()))
 
-    let defaultHandler = this.defaultHandler
+    const defaultHandler = this.defaultHandler
 
     if(defaultHandler) {
       routeBuildSpecs.push({
@@ -118,11 +118,11 @@ export class Router extends ExtensibleHandler {
   }
 
   toJson() {
-    let json = super.toJson()
+    const json = super.toJson()
 
     json.routeLists = this.routeLists.map(routeList => routeList.toJson())
 
-    let defaultHandler = this.defaultHandler
+    const defaultHandler = this.defaultHandler
     if(defaultHandler)
       json.defaultHandler = defaultHandler.toJson()
 
@@ -132,8 +132,8 @@ export class Router extends ExtensibleHandler {
   }
 }
 
-export let router = options =>
+export const router = options =>
   new Router(options)
 
-export let makeRouter = options =>
+export const makeRouter = options =>
   new Router(options)

@@ -15,9 +15,9 @@ export class ExtendHandler extends HandleableBuilder {
   }
 
   toMainHandleableBuilder() {
-    let extendHandler = this.getSubComponent('extendHandler')
-    let id = extendHandler.id
-    let builder = extendHandler.toHandleableBuilder()
+    const extendHandler = this.getSubComponent('extendHandler')
+    const id = extendHandler.id
+    const builder = extendHandler.toHandleableBuilder()
 
     return config =>
       loadHandleable(config, id, builder)
@@ -42,8 +42,8 @@ export class ExtendMiddleware extends HandleableMiddleware {
   }
 }
 
-export let extendHandler = handlerComponent =>
+export const extendHandler = handlerComponent =>
   new ExtendHandler(handlerComponent)
 
-export let extendMiddleware = middlewareComponent =>
+export const extendMiddleware = middlewareComponent =>
   new ExtendMiddleware(middlewareComponent)
