@@ -82,6 +82,10 @@ export class HandlerBundle extends HandleableBuilder {
       simpleHandlerConverter(inType, outType), 
       simpleHandlerLoader(inType, outType))
   }
+
+  get componentType() {
+    return 'HandlerBundle'
+  }
 }
 
 export const handlerBundle = bundleBuilder =>

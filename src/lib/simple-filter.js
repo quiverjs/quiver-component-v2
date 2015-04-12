@@ -60,8 +60,8 @@ export class ArgsBuilderFilter extends StreamFilter {
     return this._argsBuilder
   }
 
-  get type() {
-    return 'args builder filter'
+  get componentType() {
+    return 'ArgsBuilderFilter'
   }
 }
 
@@ -87,8 +87,8 @@ export class ArgsFilter extends ArgsBuilderFilter {
     return this._argsHandler
   }
 
-  get type() {
-    return 'args filter'
+  get componentType() {
+    return 'ArgsFilter'
   }
 }
 
@@ -111,8 +111,8 @@ export class ErrorFilter extends StreamFilter {
     return this._errorHandler
   }
 
-  get type() {
-    return 'error filter'
+  get componentType() {
+    return 'ErrorFilter'
   }
 }
 
@@ -136,8 +136,8 @@ export class ErrorBuilderFilter extends StreamFilter {
     return this._errorBuilder
   }
 
-  get type() {
-    return 'error builder filter'
+  get componentType() {
+    return 'ErrorBuilderFilter'
   }
 }
 

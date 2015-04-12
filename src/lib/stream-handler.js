@@ -31,8 +31,8 @@ export class StreamHandlerBuilder extends HandleableBuilder {
     return loadStreamHandler
   }
 
-  get type() {
-    return 'stream handler builder'
+  get componentType() {
+    return 'StreamHandlerBuilder'
   }
 }
 
@@ -57,8 +57,8 @@ export class StreamHandler extends StreamHandlerBuilder {
     return this._streamHandler
   }
 
-  get type() {
-    return 'stream handler'
+  get componentType() {
+    return 'StreamHandler'
   }
 }
 

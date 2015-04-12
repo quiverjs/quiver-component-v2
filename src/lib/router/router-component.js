@@ -27,7 +27,7 @@ export class Router extends ExtensibleHandler {
   }
 
   addRoute(route) {
-    if(!route.isRoute) {
+    if(!route.isRouteComponent) {
       throw new TypeError('route must be instance of Route')
     }
 
@@ -60,7 +60,7 @@ export class Router extends ExtensibleHandler {
   }
 
   routeList(routeList) {
-    if(!routeList.isRouteList) {
+    if(!routeList.isRouteListComponent) {
       throw new TypeError(
         'route list must be instance of RouteList')
     }
@@ -113,22 +113,8 @@ export class Router extends ExtensibleHandler {
       routeBuildSpecs)
   }
 
-  get type() {
-    return 'router'
-  }
-
-  toJson() {
-    const json = super.toJson()
-
-    json.routeLists = this.routeLists.map(routeList => routeList.toJson())
-
-    const defaultHandler = this.defaultHandler
-    if(defaultHandler)
-      json.defaultHandler = defaultHandler.toJson()
-
-    json.middlewares = this.middlewareJson()
-    
-    return json
+  get componentType() {
+    return 'RouterHandler'
   }
 }
 

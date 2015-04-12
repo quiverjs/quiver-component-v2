@@ -32,8 +32,8 @@ export class HttpHandlerBuilder extends HandleableBuilder {
     return loadHttpHandler
   }
 
-  get type() {
-    return 'Http Handler Builder'
+  get componentType() {
+    return 'HttpHandlerBuilder'
   }
 }
 
@@ -58,8 +58,8 @@ export class HttpHandler extends HttpHandlerBuilder {
     return this._httpHandler
   }
 
-  get type() {
-    return 'Http Handler'
+  get componentType() {
+    return 'HttpHandler'
   }
 }
 

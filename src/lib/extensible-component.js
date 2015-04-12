@@ -63,6 +63,10 @@ export class ExtensibleComponent extends Component {
   get middlewareComponents() {
     return this.middlewareList.array
   }
+
+  get componentType() {
+    return 'ExtensibleComponent'
+  }
 }
 
 export class ExtensibleHandler extends ExtensibleComponent {
@@ -118,8 +122,8 @@ export class ExtensibleHandler extends ExtensibleComponent {
     return loadHandleable
   }
 
-  get type() {
-    return 'handler'
+  get componentType() {
+    return 'HandlerComponent'
   }
 
   get isHandlerComponent() {

@@ -87,17 +87,8 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
     return this
   }
 
-  get type() {
-    return 'simple handler builder'
-  }
-
-  toJson() {
-    const json = super.toJson()
-
-    json.inType = this.inType
-    json.outType = this.outType
-
-    return json
+  get componentType() {
+    return 'SimpleHandlerBuilder'
   }
 }
 
@@ -123,8 +114,8 @@ export class SimpleHandler extends SimpleHandlerBuilder {
     return this._simpleHandler
   }
 
-  get type() {
-    return 'simple handler'
+  get componentType() {
+    return 'SimpleHandler'
   }
 }
 

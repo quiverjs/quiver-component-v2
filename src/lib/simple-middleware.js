@@ -32,8 +32,8 @@ export class ConfigMiddleware extends HandleableMiddleware {
     return this._configHandler
   }
 
-  get type() {
-    return 'config middleware'
+  get componentType() {
+    return 'ConfigMiddleware'
   }
 }
 
@@ -61,15 +61,8 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
     return this._overrideConfig
   }
 
-  get type() {
-    return 'config override middleware'
-  }
-
-  toJson() {
-    const json = super.toJson()
-
-    json.overrideConfig = this.overrideConfig
-    return json
+  get componentType() {
+    return 'ConfigOverrideMiddleware'
   }
 }
 
@@ -98,15 +91,8 @@ export class ConfigAliasMiddleware extends ConfigMiddleware {
     return copy(this._aliasConfig)
   }
 
-  get type() {
-    return 'config alias middleware'
-  }
-
-  toJson() {
-    const json = super.toJson()
-
-    json.aliasConfig = this.aliasConfig
-    return json
+  get componentType() {
+    return 'ConfigAliasMiddleware'
   }
 }
 

@@ -22,6 +22,10 @@ export class ExtendHandler extends HandleableBuilder {
     return config =>
       loadHandleable(config, id, builder)
   }
+
+  get componentType() {
+    return 'ExtendHandler'
+  }
 }
 
 export class ExtendMiddleware extends HandleableMiddleware {
@@ -39,6 +43,10 @@ export class ExtendMiddleware extends HandleableMiddleware {
   toMainHandleableBuilder() {
     return this.getSubComponent('extendMiddleware')
       .toHandleableMiddleware()
+  }
+
+  get componentType() {
+    return 'ExtendMiddleware'
   }
 }
 

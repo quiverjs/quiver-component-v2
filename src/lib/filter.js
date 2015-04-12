@@ -55,6 +55,10 @@ export class HandleableFilter extends HandleableMiddleware {
 
     return this._handleableFilter
   }
+
+  get componentType() {
+    return 'HandleableFilter'
+  }
 }
 
 export class StreamFilter extends HandleableFilter {
@@ -89,8 +93,8 @@ export class StreamFilter extends HandleableFilter {
     return streamFilter
   }
 
-  get type() {
-    return 'Stream Filter'
+  get componentType() {
+    return 'StreamFilter'
   }
 }
 
@@ -134,8 +138,8 @@ export class HttpFilter extends HandleableFilter {
     return httpFilter
   }
 
-  get type() {
-    return 'Http Filter'
+  get componentType() {
+    return 'HttpFilter'
   }
 }
 

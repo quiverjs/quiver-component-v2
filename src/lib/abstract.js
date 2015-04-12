@@ -30,6 +30,10 @@ const defineAbstractComponent = (Parent, mixin) => {
     get concreteComponent() {
       return this.subComponents.concreteComponent
     }
+
+    get componentType() {
+      return 'AbstractComponent'
+    }
   }
 
   assign(AbstractComponent.prototype, mixin)

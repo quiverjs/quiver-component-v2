@@ -48,14 +48,8 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
     return this.subComponents.inputHandler
   }
 
-  get type() {
-    return 'input handler middleware'
-  }
-
-  toJson() {
-    const json = super.toJson()
-    json.inputHandler = this.inputHandlerComponent.toJson()
-    return json
+  get componentType() {
+    return 'InputHandlerMiddleware'
   }
 }
 

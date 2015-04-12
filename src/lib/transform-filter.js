@@ -80,17 +80,8 @@ export class TransformFilter extends StreamFilter {
     return this._transformMode
   }
 
-  get type() {
-    return 'transform filter'
-  }
-
-  toJson() {
-    const json = super.toJson()
-
-    json.transformMode = this.transformMode
-    json.transformHandler = this.transformComponent.toJson()
-
-    return json
+  get componentType() {
+    return 'TransformFilter'
   }
 }
 

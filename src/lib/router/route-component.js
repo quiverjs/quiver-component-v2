@@ -91,18 +91,12 @@ export class Route extends Component {
     return this._urlBuilder
   }
 
-  get type() {
-    return 'route'
-  }
-
-  get isRoute() {
+  get isRouteComponent() {
     return true
   }
 
-  toJson() {
-    const json = super.toJson()
-    json.handler = this.handlerComponent.toJson()
-    return json
+  get componentType() {
+    return 'RouteComponent'
   }
 }
 
@@ -130,18 +124,12 @@ export class StaticRoute extends Route {
     return this._staticPath
   }
 
-  get type() {
-    return 'static route'
+  get componentType() {
+    return 'StaticRoute'
   }
 
   get routeType() {
     return 'static'
-  }
-
-  toJson() {
-    const json = super.toJson()
-    json.staticPath = this.staticPath
-    return json
   }
 }
 
@@ -166,8 +154,8 @@ export class DynamicRoute extends Route {
     return this._matcher
   }
 
-  get type() {
-    return 'dynamic route'
+  get componentType() {
+    return 'DynamicRoute'
   }
 
   get routeType() {
@@ -191,8 +179,8 @@ export class RegexRoute extends DynamicRoute {
     return this._regex
   }
 
-  get type() {
-    return 'regex route'
+  get componentType() {
+    return 'RegexRoute'
   }
 }
 
@@ -214,14 +202,8 @@ export class ParamRoute extends DynamicRoute {
     return this._paramPath
   }
 
-  get type() {
-    return 'param route'
-  }
-  
-  toJson() {
-    const json = super.toJson()
-    json.paramPath = this.paramPath
-    return json
+  get componentType() {
+    return 'ParamRoute'
   }
 }
 

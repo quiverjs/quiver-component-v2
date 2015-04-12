@@ -88,16 +88,8 @@ export class Pipeline extends ExtensibleHandler {
     return pipelineBuilder(builders, combinators)
   }
 
-  get type() {
-    return 'pipeline'
-  }
-
-  toJson() {
-    const json = super.toJson()
-    json.pipelines = this.pipelineHandlers.map(
-      component => component.toJson())
-
-    return json
+  get componentType() {
+    return 'PipelineHandler'
   }
 }
 

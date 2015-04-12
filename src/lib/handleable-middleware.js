@@ -21,8 +21,8 @@ export class HandleableMiddleware extends ExtensibleMiddleware {
     return middleware
   }
 
-  get type() {
-    return 'Handleable Middleware'
+  get componentType() {
+    return 'HandleableMiddleware'
   }
 }
 

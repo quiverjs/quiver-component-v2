@@ -34,8 +34,8 @@ export class Component {
     return this._id
   }
 
-  get type() {
-    return 'component'
+  get componentType() {
+    return 'Component'
   }
 
   get isQuiverComponent() {
@@ -140,26 +140,5 @@ export class Component {
       component.implement(componentMap))
 
     return this
-  }
-
-  toJson() {
-    const json = { 
-      id: this.id.toString(),
-      type: this.type
-    }
-
-    if(this.name) {
-      json.name = this.name
-    }
-    
-    return json
-  }
-
-  toString() {
-    return JSON.stringify(this.toJson(), undefined, 2)
-  }
-
-  inspect() {
-    return this.toString()
   }
 }

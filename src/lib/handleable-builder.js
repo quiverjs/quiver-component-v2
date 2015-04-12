@@ -17,8 +17,8 @@ export class HandleableBuilder extends ExtensibleHandler {
     return this._mainHandleableBuilder
   }
 
-  get type() {
-    return 'handleable builder'
+  get componentType() {
+    return 'HandleableBuilder'
   }
 }
 
@@ -43,8 +43,8 @@ export class Handleable extends HandleableBuilder {
     return this._handleable
   }
 
-  get type() {
-    return 'handleable'
+  get componentType() {
+    return 'Handleable'
   }
 }
 

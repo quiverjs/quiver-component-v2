@@ -39,7 +39,7 @@ export class RouteList extends ExtensibleComponent {
   }
 
   addRoute(route) {
-    if(!route.isRoute) {
+    if(!route.isRouteComponent) {
       throw new Error('route must be of type Route')
     }
 
@@ -64,25 +64,12 @@ export class RouteList extends ExtensibleComponent {
     return this.addRoute(new DynamicRoute(handler, matcher))
   }
 
-  get type() {
-    return 'route list'
+  get componentType() {
+    return 'RouteList'
   }
 
-  get isRouteList() {
+  get isRouteListComponent() {
     return true
-  }
-
-  toJson() {
-    const json = super.toJson()
-    
-    const routes = this.routes
-
-    if(routes.length > 0)
-      json.routes = this.routes.map(route => route.toJson())
-    
-    json.middlewares = this.middlewareJson()
-
-    return json
   }
 }
 
