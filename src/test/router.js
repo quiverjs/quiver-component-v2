@@ -295,7 +295,7 @@ describe('router component test', () => {
     yield streamableToText(responseStreamable)
       .should.eventually.equal('foo')
 
-    ;([responseHead, responseStreamable]) = 
+    ;[responseHead, responseStreamable] = 
       yield handler(new RequestHead({
         method: 'POST'
       }), emptyStreamable())
@@ -332,7 +332,7 @@ describe('router component test', () => {
     yield streamableToText(responseStreamable)
       .should.eventually.equal('foo')
 
-    ;([responseHead, responseStreamable]) = 
+    ;[responseHead, responseStreamable] = 
       yield handler(new RequestHead({
         method: 'POST',
         url: '/'
@@ -343,7 +343,7 @@ describe('router component test', () => {
     yield streamableToText(responseStreamable)
       .should.eventually.equal('bar')
 
-    ;([responseHead, responseStreamable]) = 
+    ;[responseHead, responseStreamable] = 
       yield handler(new RequestHead({
         method: 'HEAD',
         url: '/'
@@ -354,14 +354,14 @@ describe('router component test', () => {
     yield streamableToText(responseStreamable)
       .should.eventually.equal('')
 
-    ;([responseHead, responseStreamable]) = 
+    ;[responseHead, responseStreamable] = 
       yield handler(new RequestHead({
         method: 'PUT'
       }), emptyStreamable())
 
     responseHead.statusCode.should.equal(405)
 
-    ;([responseHead, responseStreamable]) = 
+    ;[responseHead, responseStreamable] = 
       yield handler(new RequestHead({
         method: 'OPTIONS'
       }), emptyStreamable())
