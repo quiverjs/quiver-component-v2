@@ -19,7 +19,9 @@ describe('base component test', () => {
 
       return (args, name) =>
         greet + ', ' + name
-    }, 'text', 'text')
+    })
+    .inputType('text')
+    .outputType('text')
 
     const copy1 = original.fork()
     const copy2 = original.fork()
@@ -64,7 +66,9 @@ describe('base component test', () => {
 
       return (args, name) =>
         greet + ', ' + name
-    }, 'text', 'text')
+    })
+    .inputType('text')
+    .outputType('text')
 
     const bundle1 = {}
     const copy1 = original.fork(bundle1)

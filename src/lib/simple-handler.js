@@ -10,18 +10,18 @@ import { simpleHandlerLoader } from './util/loader'
 import { safeBuilder, safeHandler } from './util/wrap'
 import { StreamHandler, StreamHandlerBuilder } from './stream-handler'
 
+const _inType = Symbol('inputType')
+const _outType = Symbol('outputType')
+
 export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   constructor(simpleHandlerBuilder, inType, outType, options={}) {
-    const err = validateSimpleTypes([inType, outType])
-    if(err) throw err
-
     simpleHandlerBuilder = safeBuilder(
       simpleHandlerBuilder, options)
 
     super(null, options)
 
-    this._inType = inType
-    this._outType = outType
+    this[_inType] = inType
+    this[_outType] = outType
     this._simpleHandlerBuilder = simpleHandlerBuilder
   }
 
@@ -40,6 +40,14 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
     if(!this._simpleHandlerBuilder) throw new Error(
       'simpleHandlerBuilder is not define')
 
+    const { 
+      [_inType]: inputType, 
+      [_outType]: outputType 
+    } = this
+
+    const err = validateSimpleTypes([inputType, outputType])
+    if(err) throw err
+
     return this._simpleHandlerBuilder
   }
 
@@ -48,11 +56,35 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   }
 
   get inType() {
-    return this._inType
+    return this[_inType]
   }
 
   get outType() {
-    return this._outType
+    return this[_outType]
+  }
+
+  inputType(inType) {
+    if(this[_inType]) {
+      throw new Error('simple input type is already defined as ' + this[_inType])
+    }
+
+    const err = validateSimpleTypes([inType])
+    if(err) throw err
+
+    this[_inType] = inType
+    return this
+  }
+
+  outputType(outType) {
+    if(this[_outType]) {
+      throw new Error('simple input type is already defined as ' + this[outType])
+    }
+
+    const err = validateSimpleTypes([outType])
+    if(err) throw err
+
+    this[_outType] = outType
+    return this
   }
 
   get type() {
