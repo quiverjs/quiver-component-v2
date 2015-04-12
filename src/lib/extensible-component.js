@@ -86,8 +86,9 @@ export class ExtensibleHandler extends ExtensibleComponent {
     let builder = combineBuilderWithMiddleware(
       mainBuilder, extendMiddleware)
 
-    if(copyConfig)
+    if(copyConfig) {
       builder = copyConfigBuilder(builder)
+    }
 
     return builder
   }

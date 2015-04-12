@@ -5,6 +5,10 @@ import { safeHandler } from './util/wrap'
 import { HandleableMiddleware } from './handleable-middleware'
 import { ExtensibleComponent } from './extensible-component'
 
+const _aliasConfig = Symbol('_aliasConfig')
+const _configHandler = Symbol('_configHandler')
+const _overrideConfig = Symbol('_overrideConfig')
+
 const configHandlerToMiddleware = configHandler =>
   (config, builder) =>
     configHandler(config)
@@ -13,10 +17,8 @@ const configHandlerToMiddleware = configHandler =>
 
 export class ConfigMiddleware extends HandleableMiddleware {
   constructor(configHandler, options={}) {
-    configHandler = safeHandler(configHandler, options)
-
     super(null, options)
-    this._configHandler = configHandler
+    this[_configHandler] = configHandler
   }
 
   toMainHandleableMiddleware() {
@@ -26,10 +28,7 @@ export class ConfigMiddleware extends HandleableMiddleware {
   }
 
   toConfigHandler() {
-    if(!this._configHandler) throw new Error(
-      'configHandler is not defined')
-
-    return this._configHandler
+    return safeHandler(this[_configHandler])
   }
 
   get componentType() {
@@ -39,14 +38,12 @@ export class ConfigMiddleware extends HandleableMiddleware {
 
 export class ConfigOverrideMiddleware extends ConfigMiddleware {
   constructor(overrideConfig, options={}) {
-    options.safeWrapped = true
-
     super(null, options)
-    this._overrideConfig = overrideConfig
+    this[_overrideConfig] = overrideConfig
   }
 
   toConfigHandler() {
-    const overrideConfig = this.overrideConfig
+    const overrideConfig = this[_overrideConfig]
 
     return config => {
       for(let key in overrideConfig) {
@@ -58,7 +55,7 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
   }
 
   get overrideConfig() {
-    return this._overrideConfig
+    return this[_overrideConfig]
   }
 
   get componentType() {
@@ -68,14 +65,12 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
 
 export class ConfigAliasMiddleware extends ConfigMiddleware {
   constructor(aliasConfig, options={}) {
-    options.safeWrapped = true
-
     super(null, options)
-    this._aliasConfig = aliasConfig
+    this[_aliasConfig] = aliasConfig
   }
 
   toConfigHandler() {
-    const aliasConfig = this._aliasConfig
+    const aliasConfig = this[_aliasConfig]
 
     return config => {
       for(let key in aliasConfig) {
@@ -88,7 +83,7 @@ export class ConfigAliasMiddleware extends ConfigMiddleware {
   }
 
   get aliasConfig() {
-    return copy(this._aliasConfig)
+    return this[_aliasConfig]
   }
 
   get componentType() {

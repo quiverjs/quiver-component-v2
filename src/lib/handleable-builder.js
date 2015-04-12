@@ -3,18 +3,18 @@ import { resolve } from 'quiver-promise'
 import { safeHandler } from './util/wrap'
 import { ExtensibleHandler } from './extensible-component'
 
+const _handleable = Symbol('_handleable')
+const _handleableBuilder = Symbol('_handleableBuilder')
+
 export class HandleableBuilder extends ExtensibleHandler {
   constructor(handleableBuilder, options={}) {
-    const mainHandleableBuilder = safeHandler(
-      handleableBuilder, options)
-
     super(options)
 
-    this._mainHandleableBuilder = mainHandleableBuilder
+    this[_handleableBuilder] = handleableBuilder
   }
 
   toMainHandleableBuilder() {
-    return this._mainHandleableBuilder
+    return safeHandler(this[_handleableBuilder])
   }
 
   get componentType() {
@@ -24,10 +24,9 @@ export class HandleableBuilder extends ExtensibleHandler {
 
 export class Handleable extends HandleableBuilder {
   constructor(handleable, options={}) {
-    options.safeWrapped = true
     super(null, options)
     
-    this._handleable = handleable
+    this[_handleable] = handleable
   }
 
   toMainHandleableBuilder() {
@@ -37,10 +36,10 @@ export class Handleable extends HandleableBuilder {
   }
 
   toHandleable() {
-    if(!this._handleable) throw new Error(
+    if(!this[_handleable]) throw new Error(
       'handleable is not defined')
 
-    return this._handleable
+    return this[_handleable]
   }
 
   get componentType() {

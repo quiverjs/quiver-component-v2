@@ -1,9 +1,11 @@
-import { resolve } from 'quiver-promise'
 import { copy } from 'quiver-object'
+import { async, resolve } from 'quiver-promise'
 
 import { StreamFilter } from './filter'
 import { HandlerComponent } from './component'
 import { loadStreamHandler } from './util/loader'
+
+const _transformMode = Symbol('_transformMode')
 
 const validModes = {
   'in': true,
@@ -35,11 +37,9 @@ export class TransformFilter extends StreamFilter {
     if(!validModes[transformMode])
       throw new TypeError('invalid transform mode provided in options')
 
-    options.safeWrapped = true
-
     super(null, options)
 
-    this._transformMode = transformMode
+    this[_transformMode] = transformMode
     this.subComponents.transformComponent = handlerComponent
   }
 
@@ -49,27 +49,26 @@ export class TransformFilter extends StreamFilter {
     const componentId = transformComponent.id
     const builder = transformComponent.toHandleableBuilder()
 
-    const transformMode = this.transformMode
+    const transformMode = this[_transformMode]
 
-    return (config, handler) => 
-      loadStreamHandler(config, componentId, builder)
-      .then(transformHandler => {
-        const transformIn = inTransformHandler(
-          transformHandler, transformMode)
+    return async(function*(config, handler) {
+      const transformHandler = yield loadStreamHandler(config, componentId, builder)
 
-        const mainHandler = wrapMainHandler(
-          handler, transformMode)
+      const transformIn = inTransformHandler(
+        transformHandler, transformMode)
 
-        const transformOut = outTransformHandler(
-          transformHandler, transformMode)
+      const mainHandler = wrapMainHandler(
+        handler, transformMode)
 
-        return (args, streamable) => 
-          transformIn(args, streamable)
-          .then(transformedIn =>
-            mainHandler(args, transformedIn)
-            .then(resultStreamable =>
-              transformOut(args, resultStreamable)))
+      const transformOut = outTransformHandler(
+        transformHandler, transformMode)
+
+      return async(function*(args, streamable) {
+        const transformedIn = yield transformIn(args, streamable)
+        const resultStreamable = yield mainHandler(args, transformedIn)
+        return transformOut(args, resultStreamable)
       })
+    })
   }
 
   get transformComponent() {
@@ -77,7 +76,7 @@ export class TransformFilter extends StreamFilter {
   }
 
   get transformMode() {
-    return this._transformMode
+    return this[_transformMode]
   }
 
   get componentType() {

@@ -12,17 +12,16 @@ import { StreamHandler, StreamHandlerBuilder } from './stream-handler'
 
 const _inType = Symbol('inputType')
 const _outType = Symbol('outputType')
+const _simpleHandler = Symbol('_simpleHandler')
+const _simpleHandlerBuilder = Symbol('_simpleHandlerBuilder')
 
 export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   constructor(simpleHandlerBuilder, inType, outType, options={}) {
-    simpleHandlerBuilder = safeBuilder(
-      simpleHandlerBuilder, options)
-
     super(null, options)
 
     this[_inType] = inType
     this[_outType] = outType
-    this._simpleHandlerBuilder = simpleHandlerBuilder
+    this[_simpleHandlerBuilder] = simpleHandlerBuilder
   }
 
   toStreamHandlerBuilder() {
@@ -37,9 +36,6 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
   }
 
   toSimpleHandlerBuilder() {
-    if(!this._simpleHandlerBuilder) throw new Error(
-      'simpleHandlerBuilder is not define')
-
     const { 
       [_inType]: inputType, 
       [_outType]: outputType 
@@ -48,11 +44,11 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
     const err = validateSimpleTypes([inputType, outputType])
     if(err) throw err
 
-    return this._simpleHandlerBuilder
+    return safeBuilder(this[_simpleHandlerBuilder])
   }
 
   get defaultLoader() {
-    return simpleHandlerLoader(this.inType, this.outType)
+    return simpleHandlerLoader(this[_inType], this[_outType])
   }
 
   get inType() {
@@ -94,10 +90,8 @@ export class SimpleHandlerBuilder extends StreamHandlerBuilder {
 
 export class SimpleHandler extends SimpleHandlerBuilder {
   constructor(simpleHandler, inType, outType, options={}) {
-    simpleHandler = safeHandler(simpleHandler, options)
-
     super(null, inType, outType, options)
-    this._simpleHandler = simpleHandler
+    this[_simpleHandler] = simpleHandler
   }
 
   toSimpleHandlerBuilder() {
@@ -108,10 +102,7 @@ export class SimpleHandler extends SimpleHandlerBuilder {
   }
 
   toSimpleHandler() {
-    if(!this._simpleHandler) throw new Error(
-      'simpleHandler is not defined')
-
-    return this._simpleHandler
+    return safeHandler(this[_simpleHandler])
   }
 
   get componentType() {

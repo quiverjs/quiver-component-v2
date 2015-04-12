@@ -7,8 +7,7 @@ export class ExtendHandler extends HandleableBuilder {
     if(!handlerComponent.isHandlerComponent) {
       throw new Error('Extended component must be handler component')
     }
-
-    options.safeWrapped = true
+    
     super(null, options)
 
     this.addSubComponent('extendHandler', handlerComponent)
@@ -34,7 +33,6 @@ export class ExtendMiddleware extends HandleableMiddleware {
       throw new Error('Extended component must be middleware component')
     }
 
-    options.safeWrapped = true
     super(null, options)
 
     this.addSubComponent('extendMiddleware', middlewareComponent)

@@ -120,7 +120,6 @@ const methodObjectToMap = methodMap => {
 
 export class MethodRouter extends HttpHandlerBuilder {
   constructor(methodMap, options={}) {
-    options.safeWrapped = true
     super(null, options)
 
     this.subComponents.methodMap = mapComponent(

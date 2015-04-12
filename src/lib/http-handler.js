@@ -4,14 +4,13 @@ import { loadHttpHandler } from './util/loader'
 import { safeBuilder, safeHandler } from './util/wrap'
 import { HandleableBuilder } from './handleable-builder'
 
+const _httpHandler = Symbol('_httpHandler')
+const _httpHandlerBuilder = Symbol('_httpHandlerBuilder')
+
 export class HttpHandlerBuilder extends HandleableBuilder {
   constructor(httpHandlerBuilder, options={}) {
-    httpHandlerBuilder = safeBuilder(
-      httpHandlerBuilder, options)
-
     super(null, options)
-
-    this._httpHandlerBuilder = httpHandlerBuilder
+    this[_httpHandlerBuilder] = httpHandlerBuilder
   }
 
   toMainHandleableBuilder() {
@@ -22,10 +21,7 @@ export class HttpHandlerBuilder extends HandleableBuilder {
   }
 
   toHttpHandlerBuilder() {
-    if(!this._httpHandlerBuilder) throw new Error(
-      'httpHandlerBuilder is not defined')
-
-    return this._httpHandlerBuilder
+    return safeBuilder(this[_httpHandlerBuilder])
   }
 
   get defaultLoader() {
@@ -39,10 +35,8 @@ export class HttpHandlerBuilder extends HandleableBuilder {
 
 export class HttpHandler extends HttpHandlerBuilder {
   constructor(httpHandler, options={}) {
-    httpHandler = safeHandler(httpHandler, options)
-
     super(null, options)
-    this._httpHandler = httpHandler
+    this[_httpHandler] = httpHandler
   }
 
   toHttpHandlerBuilder() {
@@ -52,10 +46,7 @@ export class HttpHandler extends HttpHandlerBuilder {
   }
 
   toHttpHandler() {
-    if(!this._httpHandler) throw new Error(
-      'httpHandler is not defined')
-
-    return this._httpHandler
+    return safeHandler(this[_httpHandler])
   }
 
   get componentType() {

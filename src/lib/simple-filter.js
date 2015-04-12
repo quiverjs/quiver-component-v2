@@ -6,6 +6,11 @@ import { StreamHandlerBuilder } from './stream-handler'
 import { StreamFilter, HttpFilter } from './filter'
 import { safeBuilder, safeHandler } from './util/wrap'
 
+const _argsBuilder = Symbol('_argsBuilder')
+const _argsHandler = Symbol('_argsHandler')
+const _errorHandler = Symbol('_errorHandler')
+const _errorBuilder = Symbol('_errorBuilder')
+
 const argsToStreamFilter = argsHandler =>
   (config, handler) =>
     resolve((args, inputStreamable) =>
@@ -39,14 +44,13 @@ const argsBuilderToFilter = argsBuilder =>
 
 export class ArgsBuilderFilter extends StreamFilter {
   constructor(argsBuilder, options={}) {
-    argsBuilder = safeBuilder(argsBuilder, options)
-    
-    if(options.copyConfig === undefined)
+    if(options.copyConfig === undefined) {
       options.copyConfig = true
+    }
 
     super(null, options)
 
-    this._argsBuilder = argsBuilder
+    this[_argsBuilder] = argsBuilder
   }
 
   toStreamFilter() {
@@ -54,10 +58,7 @@ export class ArgsBuilderFilter extends StreamFilter {
   }
 
   toArgsBuilder() {
-    if(!this._argsBuilder) throw new Error(
-      'argsBuilder is not defined')
-
-    return this._argsBuilder
+    return safeBuilder(this[_argsBuilder])
   }
 
   get componentType() {
@@ -67,11 +68,10 @@ export class ArgsBuilderFilter extends StreamFilter {
 
 export class ArgsFilter extends ArgsBuilderFilter {
   constructor(argsHandler, options={}) {
-    argsHandler = safeHandler(argsHandler, options)
     options.copyConfig = false
 
     super(null, options)
-    this._argsHandler = argsHandler
+    this[_argsHandler] = argsHandler
   }
 
   toArgsBuilder() {
@@ -81,10 +81,7 @@ export class ArgsFilter extends ArgsBuilderFilter {
   }
 
   toArgsHandler() {
-    if(!this._argsHandler) throw new Error(
-      'argsHandler is not defined')
-
-    return this._argsHandler
+    return safeHandler(this[_argsHandler])
   }
 
   get componentType() {
@@ -94,10 +91,8 @@ export class ArgsFilter extends ArgsBuilderFilter {
 
 export class ErrorFilter extends StreamFilter {
   constructor(errorHandler, options={}) {
-    errorHandler = safeHandler(errorHandler, options)
-
     super(null, options)
-    this._errorHandler = errorHandler
+    this[_errorHandler] = errorHandler
   }
 
   toStreamFilter() {
@@ -105,10 +100,7 @@ export class ErrorFilter extends StreamFilter {
   }
 
   toErrorHandler() {
-    if(!this._errorHandler) throw new Error(
-      'errorHandler is not defined')
-
-    return this._errorHandler
+    return safeHandler(this[_errorHandler])
   }
 
   get componentType() {
@@ -118,10 +110,8 @@ export class ErrorFilter extends StreamFilter {
 
 export class ErrorBuilderFilter extends StreamFilter {
   constructor(errorBuilder, options={}) {
-    errorBuilder = safeBuilder(errorBuilder, options)
-
     super(null, options)
-    this._errorBuilder = errorBuilder
+    this[_errorBuilder] = errorBuilder
   }
 
   toStreamFilter() {
@@ -130,10 +120,7 @@ export class ErrorBuilderFilter extends StreamFilter {
   }
 
   toErrorBuilder() {
-    if(!this._errorBuilder) throw new Error(
-      'errorBuilder is not defined')
-
-    return this._errorBuilder
+    return safeBuilder(this[_errorBuilder])
   }
 
   get componentType() {

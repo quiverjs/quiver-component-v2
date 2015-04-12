@@ -5,6 +5,9 @@ import { ConfigMiddleware } from './simple-middleware'
 import { HandlerComponent } from './component'
 import { ExtensibleComponent } from './extensible-component'
 
+const _handlerLoader = Symbol('_handlerLoader')
+const _toInputConfig = Symbol('_toInputConfig')
+
 export class InputHandlerMiddleware extends ConfigMiddleware {
   constructor(handlerComponent, toConfig, options={}) {
     if(!handlerComponent.isHandlerComponent) {
@@ -18,12 +21,10 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
       loader=handlerComponent.handlerLoader
     } = options
 
-    options.safeWrapped = true
-
     super(null, options)
     
-    this._handlerLoader = loader
-    this._toInputConfig = toConfig
+    this[_handlerLoader] = loader
+    this[_toInputConfig] = toConfig
 
     this.subComponents.inputHandler = handlerComponent
   }
@@ -34,8 +35,10 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
     const componentId = handlerComponent.id
     const builder = handlerComponent.toHandleableBuilder()
 
-    const loader = this._handlerLoader
-    const toConfig = this._toInputConfig
+    const {
+      [_handlerLoader]: loader,
+      [_toInputConfig]: toConfig
+    } = this
 
     return config =>
       loader(config, componentId, builder)

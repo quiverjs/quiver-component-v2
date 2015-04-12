@@ -1,22 +1,27 @@
 import { copy } from 'quiver-object'
-import { resolve } from 'quiver-promise'
+import { resolve, async } from 'quiver-promise'
 import { streamToHttpHandler } from 'quiver-http'
 
 import { safeHandler, safeBuilder } from './util/wrap'
 import { HandleableMiddleware } from './handleable-middleware'
 
+const _copyConfig = Symbol('_copyConfig')
+const _httpFilter = Symbol('_httpFilter')
+const _streamFilter = Symbol('_streamFilter')
+const _handleableFilter = Symbol('_handleableFilter')
+
 const noCopy = config => config
 
 export const filterToHandleableFilter = (filter, handlerKey) =>
-  (config, handleable) => {
+  async(function*(config, handleable) {
     const handler = handleable[handlerKey]
     if(!handler) return resolve(handleable)
 
-    return filter(config, handler).then(filteredHandler => {
-      handleable[handlerKey] = filteredHandler
-      return handleable
-    })
-  }
+    const filteredHandler = yield filter(config, handler)
+    handleable[handlerKey] = filteredHandler
+    
+    return handleable
+  })
 
 export const streamToHandleableFilter = filter =>
   filterToHandleableFilter(filter, 'streamHandler')
@@ -31,18 +36,16 @@ export const filterToMiddleware = (filter, copyConfig) =>
 
 export class HandleableFilter extends HandleableMiddleware {
   constructor(handleableFilter, options={}) {
-    handleableFilter = safeHandler(handleableFilter, options)
-
     super(null, options)
 
     const { copyConfig=true } = options
-    this._copyConfig = copyConfig
+    this[_copyConfig] = copyConfig
 
-    this._handleableFilter = handleableFilter
+    this[_handleableFilter] = handleableFilter
   }
 
   toMainHandleableMiddleware() {
-    const copyConfig = this._copyConfig ? copy : noCopy
+    const copyConfig = this[_copyConfig] ? copy : noCopy
     const handleableFilter = this.toHandleableFilter()
 
     return filterToMiddleware(
@@ -50,10 +53,7 @@ export class HandleableFilter extends HandleableMiddleware {
   }
 
   toHandleableFilter() {
-    if(!this._handleableFilter) throw new Error(
-      'handleableFilter is not defined')
-
-    return this._handleableFilter
+    return safeHandler(this[_handleableFilter])
   }
 
   get componentType() {
@@ -62,35 +62,27 @@ export class HandleableFilter extends HandleableMiddleware {
 }
 
 export class StreamFilter extends HandleableFilter {
-  constructor(filter, options={}) {
-    const streamFilter = safeBuilder(filter, options)
+  constructor(streamFilter, options={}) {
     super(null, options)
 
-    this._streamFilter = streamFilter
+    this[_streamFilter] = streamFilter
   }
 
   toHandleableFilter() {
     const streamFilter = this.toStreamFilter()
 
-    return (config, handleable) => {
+    return async(function*(config, handleable) {
       const handler = handleable.streamHandler
       if(!handler) return resolve(handleable)
 
-      return streamFilter(config, handler)
-      .then(filteredHandler => {
-        handleable.streamHandler = filteredHandler
-        return handleable
-      })
-    }
+      const filteredHandler = yield streamFilter(config, handler)
+      handleable.streamHandler = filteredHandler
+      return handleable
+    })
   }
 
   toStreamFilter() {
-    const streamFilter = this._streamFilter
-
-    if(!streamFilter) throw new Error(
-      'streamFilter is not defined')
-
-    return streamFilter
+    return safeBuilder(this[_streamFilter])
   }
 
   get componentType() {
@@ -99,17 +91,16 @@ export class StreamFilter extends HandleableFilter {
 }
 
 export class HttpFilter extends HandleableFilter {
-  constructor(filter, options={}) {
-    const httpFilter = safeBuilder(filter, options)
+  constructor(httpFilter, options={}) {
     super(null, options)
 
-    this._httpFilter = httpFilter
+    this[_httpFilter] = httpFilter
   }
 
   toHandleableFilter() {
     const httpFilter = this.toHttpFilter()
 
-    return (config, handleable) => {
+    return async(function*(config, handleable) {
       let httpHandler = handleable.httpHandler
       if(!httpHandler) {
         const streamHandler = handleable.streamHandler
@@ -121,21 +112,15 @@ export class HttpFilter extends HandleableFilter {
         handleable = { httpHandler }
       }
 
-      return httpFilter(config, httpHandler)
-      .then(filteredHandler => {
-        handleable.httpHandler = filteredHandler
-        return handleable
-      })
-    }
+      const filteredHandler = yield httpFilter(config, httpHandler)
+      handleable.httpHandler = filteredHandler
+
+      return handleable
+    })
   }
 
   toHttpFilter() {
-    const httpFilter = this._httpFilter
-
-    if(!httpFilter) throw new Error(
-      'httpFilter is not defined')
-
-    return httpFilter
+    return safeBuilder(this[_httpFilter])
   }
 
   get componentType() {

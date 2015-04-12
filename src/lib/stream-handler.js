@@ -4,13 +4,13 @@ import { loadStreamHandler } from './util/loader'
 import { safeBuilder, safeHandler } from './util/wrap'
 import { HandleableBuilder } from './handleable-builder'
 
+const _streamHandler = Symbol('_streamHandler')
+const _streamHandlerBuilder = Symbol('_streamHandlerBuilder')
+
 export class StreamHandlerBuilder extends HandleableBuilder {
   constructor(streamHandlerBuilder, options={}) {
-    streamHandlerBuilder = safeBuilder(
-      streamHandlerBuilder, options)
-
     super(null, options)
-    this._streamHandlerBuilder = streamHandlerBuilder
+    this[_streamHandlerBuilder] = streamHandlerBuilder
   }
 
   toMainHandleableBuilder() {
@@ -21,10 +21,7 @@ export class StreamHandlerBuilder extends HandleableBuilder {
   }
 
   toStreamHandlerBuilder() {
-    if(!this._streamHandlerBuilder) throw new Error(
-      'streamHandlerBuilder is not defined')
-
-    return this._streamHandlerBuilder
+    return safeBuilder(this[_streamHandlerBuilder])
   }
 
   get defaultLoader() {
@@ -38,10 +35,8 @@ export class StreamHandlerBuilder extends HandleableBuilder {
 
 export class StreamHandler extends StreamHandlerBuilder {
   constructor(streamHandler, options={}) {
-    streamHandler = safeHandler(streamHandler, options)
-
     super(null, options)
-    this._streamHandler = streamHandler
+    this[_streamHandler] = streamHandler
   }
 
   toStreamHandlerBuilder() {
@@ -51,10 +46,7 @@ export class StreamHandler extends StreamHandlerBuilder {
   }
 
   toStreamHandler() {
-    if(!this._streamHandler) throw new Error(
-      'streamHandler is not defined')
-
-    return this._streamHandler
+    return safeHandler(this[_streamHandler])
   }
 
   get componentType() {

@@ -2,23 +2,17 @@ import { safeHandler } from './util/wrap'
 import { ExtensibleMiddleware } from './extensible-component'
 import { combineMiddlewares } from './util/middleware'
 
+const _handleableMiddleware = Symbol('_handleableMiddleware')
+
 export class HandleableMiddleware extends ExtensibleMiddleware {
   constructor(handleableMiddleware, options={}) {
-    handleableMiddleware = safeHandler(
-      handleableMiddleware, options)
-    
     super(options)
 
-    this._handleableMiddleware = handleableMiddleware
+    this[_handleableMiddleware] = handleableMiddleware
   }
 
   toMainHandleableMiddleware() {
-    const middleware = this._handleableMiddleware
-
-    if(!middleware) throw new Error(
-      'mainHandleableMiddleware is not defined')
-
-    return middleware
+    return safeHandler(this[_handleableMiddleware])
   }
 
   get componentType() {
