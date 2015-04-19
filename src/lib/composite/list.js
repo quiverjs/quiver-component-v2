@@ -8,13 +8,12 @@ export class ListComponent extends Component {
     this[_componentArray] = componentList
   }
 
-  *[Symbol.iterator]() {
+  *ownSubComponents() {
     for(let subComponent of this[_componentArray]) {
       yield subComponent
-      yield* subComponent
     }
 
-    yield* super[Symbol.iterator]()
+    yield* super.ownSubComponents()
   }
 
   each(iteratee) {

@@ -1,5 +1,8 @@
+import { ownKeys } from 'quiver-object'
+
 const _id = Symbol('_id')
 const _options = Symbol('_options')
+const _subComponents = Symbol('_subComponents')
 
 // Random ID for easier identifying
 const randomId = () =>
@@ -26,7 +29,7 @@ export class Component {
       }
     }
 
-    this._subComponents = subComponents
+    this[_subComponents] = subComponents
   }
 
   get id() {
@@ -42,7 +45,7 @@ export class Component {
   }
 
   get subComponents() {
-    return this._subComponents
+    return this[_subComponents]
   }
 
   addSubComponent(key, component) {
@@ -70,12 +73,8 @@ export class Component {
 
   clone() {
     const newInstance = Object.create(Object.getPrototypeOf(this))
-    const allKeys = [
-      ...Object.getOwnPropertyNames(this), 
-      ...Object.getOwnPropertySymbols(this)
-    ]
 
-    for(let key of allKeys) {
+    for(let key of ownKeys(this)) {
       newInstance[key] = this[key]
     }
 
@@ -100,13 +99,18 @@ export class Component {
     return clone
   }
 
-  *[Symbol.iterator]() {
-    let { subComponents } = this
-
-    for(let key in subComponents) {
-      let subComponent = subComponents[key]
+  *allSubComponents() {
+    for(let subComponent of this.ownSubComponents()) {
       yield subComponent
-      yield* subComponent
+      yield* subComponent.allSubComponents()
+    }
+  }
+
+  *ownSubComponents() {
+    const { subComponents } = this
+
+    for(let key of ownKeys(subComponents)) {
+      yield subComponents[key]
     }
   }
 
@@ -122,14 +126,14 @@ export class Component {
     const { subComponents } = this
     const newSubComponents = { }
 
-    for(let key in subComponents) {
+    for(let key of ownKeys(subComponents)) {
       const component = subComponents[key]
 
       newSubComponents[key] = component.applyMap(
         mapper, mapTable)
     }
 
-    target._subComponents = newSubComponents
+    target[_subComponents] = newSubComponents
   }
 
   factory() {
@@ -148,7 +152,7 @@ export class Component {
   }
 
   implement(componentMap) {
-    for(let subComponent of this) {
+    for(let subComponent of this.allSubComponents()) {
       subComponent.implement(componentMap)
     }
 

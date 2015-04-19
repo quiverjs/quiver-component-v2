@@ -8,13 +8,12 @@ export class MapComponent extends Component {
     this[_componentMap] = componentMap
   }
 
-  *[Symbol.iterator]() {
+  *ownSubComponents() {
     for(let subComponent of this[_componentMap].values()) {
       yield subComponent
-      yield* subComponent
     }
-    
-    yield* super[Symbol.iterator]()
+
+    yield* super.ownSubComponents()
   }
 
   each(iteratee) {
@@ -31,11 +30,6 @@ export class MapComponent extends Component {
     for(let [key, component] of this[_componentMap].entries()) {
       targetMap[key] = component.applyMap(mapper, mapTable)
     }
-
-    allKeys(componentMap).forEach(key => {
-      const component = componentMap[key]
-      targetMap[key] = component.applyMap(mapper, mapTable)
-    })
 
     target[_componentMap] = targetMap
     super.doMap(target, mapper, mapTable)
