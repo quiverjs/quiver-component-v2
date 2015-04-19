@@ -26,8 +26,8 @@ describe('base component test', () => {
     const copy1 = original.fork()
     const copy2 = original.fork()
 
-    should.equal(Object.getPrototypeOf(copy1), original)
-    should.equal(Object.getPrototypeOf(copy2), original)
+    should.equal(Object.getPrototypeOf(copy1), Object.getPrototypeOf(original))
+    should.equal(Object.getPrototypeOf(copy2), Object.getPrototypeOf(original))
 
     should.not.equal(original.id, copy1.id)
     should.not.equal(original.id, copy2.id)
@@ -76,11 +76,11 @@ describe('base component test', () => {
     should.equal(copy1.id, copy11.id)
     should.equal(copy1, copy11)
 
-    should.equal(Object.getPrototypeOf(copy1), original)
+    should.equal(Object.getPrototypeOf(copy1), Object.getPrototypeOf(original))
 
     const copy2 = original.fork()
 
-    should.equal(Object.getPrototypeOf(copy2), original)
+    should.equal(Object.getPrototypeOf(copy2), Object.getPrototypeOf(original))
 
     should.not.equal(original.id, copy1.id)
     should.not.equal(original.id, copy2.id)
@@ -93,7 +93,7 @@ describe('base component test', () => {
     should.equal(copy21.id, copy22.id)
     should.equal(copy21, copy22)
 
-    should.equal(Object.getPrototypeOf(copy21), copy2)
+    should.equal(Object.getPrototypeOf(copy21), Object.getPrototypeOf(original))
   })
 
   it('nested fork', async(function*() {

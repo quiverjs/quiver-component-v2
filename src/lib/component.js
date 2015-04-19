@@ -1,8 +1,5 @@
-const assertComponent = component => {
-  if(!component.isQuiverComponent) {
-    throw new Error('object must be of type Component')
-  }
-}
+const _id = Symbol('_id')
+const _options = Symbol('_options')
 
 // Random ID for easier identifying
 const randomId = () =>
@@ -15,8 +12,8 @@ export class Component {
       subComponents = { }
     } = options
 
-    this._id = randomId()
-    this._options = options
+    this[_id] = randomId()
+    this[_options] = options
 
     if(name) {
       this.name = name
@@ -24,14 +21,16 @@ export class Component {
 
     for(let key in subComponents) {
       const component = subComponents[key]
-      assertComponent(component)
+      if(!component.isQuiverComponent) {
+        throw new Error('object must be of type Component')
+      }
     }
 
     this._subComponents = subComponents
   }
 
   get id() {
-    return this._id
+    return this[_id]
   }
 
   get componentType() {
@@ -70,14 +69,17 @@ export class Component {
   }
 
   clone() {
-    const newInstance = Object.create(this)
+    const newInstance = Object.create(Object.getPrototypeOf(this))
+    const allKeys = [
+      ...Object.getOwnPropertyNames(this), 
+      ...Object.getOwnPropertySymbols(this)
+    ]
 
-    const privateId = randomId()
-    Object.defineProperty(newInstance, 'id', {
-      get() {
-        return privateId
-      }
-    })
+    for(let key of allKeys) {
+      newInstance[key] = this[key]
+    }
+
+    newInstance[_id] = randomId()
 
     return newInstance
   }
