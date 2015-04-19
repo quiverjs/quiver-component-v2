@@ -8,12 +8,12 @@ export class MapComponent extends Component {
     this[_componentMap] = componentMap
   }
 
-  each(iteratee) {
-    for(let component of this[_componentMap].values()) {
-      iteratee(component)
+  *ownSubComponents() {
+    for(let subComponent of this[_componentMap].values()) {
+      yield subComponent
     }
 
-    super.each(iteratee)
+    yield* super.ownSubComponents()
   }
 
   doMap(target, mapper, mapTable) {
@@ -22,11 +22,6 @@ export class MapComponent extends Component {
     for(let [key, component] of this[_componentMap].entries()) {
       targetMap[key] = component.applyMap(mapper, mapTable)
     }
-
-    allKeys(componentMap).forEach(key => {
-      const component = componentMap[key]
-      targetMap[key] = component.applyMap(mapper, mapTable)
-    })
 
     target[_componentMap] = targetMap
     super.doMap(target, mapper, mapTable)
@@ -46,6 +41,10 @@ export class MapComponent extends Component {
 
   get map() {
     return this[_componentMap]
+  }
+
+  get componentType() {
+    return 'MapComponent'
   }
 }
 

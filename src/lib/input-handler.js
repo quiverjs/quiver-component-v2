@@ -63,7 +63,7 @@ const InputHandlerMixin = {
         handler, toConfig, options))
   },
   inputHandlers(handlerMap) {
-    for(let key in handlerMap) {
+    for(let key of ownKeys(handlerMap)) {
       const handler = handlerMap[key]
       this.inputHandler(handler, key)
     }

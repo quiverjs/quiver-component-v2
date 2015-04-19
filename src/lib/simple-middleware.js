@@ -1,4 +1,4 @@
-import { copy } from 'quiver-object'
+import { copy, ownKeys } from 'quiver-object'
 import { resolve } from 'quiver-promise'
 
 import { safeHandler } from './util/wrap'
@@ -46,7 +46,7 @@ export class ConfigOverrideMiddleware extends ConfigMiddleware {
     const overrideConfig = this[_overrideConfig]
 
     return config => {
-      for(let key in overrideConfig) {
+      for(let key of ownKeys(overrideConfig)) {
         config[key] = overrideConfig[key]
       }
 
@@ -73,7 +73,7 @@ export class ConfigAliasMiddleware extends ConfigMiddleware {
     const aliasConfig = this[_aliasConfig]
 
     return config => {
-      for(let key in aliasConfig) {
+      for(let key of ownKeys(aliasConfig)) {
         const aliasKey = aliasConfig[key]
         config[key] = config[aliasKey]
       }

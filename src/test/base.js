@@ -114,6 +114,10 @@ describe('base component test', () => {
     const filter2 = filter.fork()
 
     should.not.equal(filter1.id, filter2.id)
+
+    should.not.equal(filter.transformComponent.id, 
+      filter1.transformComponent.id)
+
     should.not.equal(filter1.transformComponent.id, 
       filter2.transformComponent.id)
 
@@ -257,7 +261,7 @@ describe('base component test', () => {
     .setName('Greet Handler')
 
     const debugged = debuggableComponent(greet)
-
+    
     const config = { }
     const handler = yield debugged.loadHandler(config)
   }))
