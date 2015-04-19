@@ -16,11 +16,6 @@ export class ListComponent extends Component {
     yield* super.ownSubComponents()
   }
 
-  each(iteratee) {
-    this[_componentArray].forEach(iteratee)
-    super.each(iteratee)
-  }
-
   doMap(target, mapper, mapTable) {
     target[_componentArray] = this[_componentArray].map(
       component =>
@@ -49,8 +44,8 @@ export class ListComponent extends Component {
     return this[_componentArray]
   }
 
-  get type() {
-    return 'list component'
+  get componentType() {
+    return 'ListComponent'
   }
 }
 

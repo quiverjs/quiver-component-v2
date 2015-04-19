@@ -114,14 +114,6 @@ export class Component {
     }
   }
 
-  each(iteratee) {
-    const { subComponents } = this
-
-    for(let key in subComponents) {
-      iteratee(subComponents[key])
-    }
-  }
-
   doMap(target, mapper, mapTable) {
     const { subComponents } = this
     const newSubComponents = { }
