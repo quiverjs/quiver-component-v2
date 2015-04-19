@@ -99,10 +99,13 @@ export class Component {
     return clone
   }
 
-  *allSubComponents() {
+  *allSubComponents(visitMap={}) {
     for(let subComponent of this.ownSubComponents()) {
-      yield subComponent
-      yield* subComponent.allSubComponents()
+      if(!visitMap[subComponent.id]) {
+        visitMap[subComponent.id] = true
+        yield subComponent
+        yield* subComponent.allSubComponents(visitMap)
+      }
     }
   }
 

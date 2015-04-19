@@ -15,7 +15,7 @@
     "object.assign": "^1.1.1",
     "quiver-http": "~1.4.1",
     "quiver-error": "~1.2.1",
-    "quiver-object": "~1.4.2",
+    "quiver-object": "~1.4.3",
     "quiver-promise": "~1.2.1",
     "quiver-stream-util": "~1.4.2",
     "quiver-simple-handler": "~1.4.1"
