@@ -1,88 +1,107 @@
-import { mixin as applyMixin } from 'quiver-object'
-
 import { 
   ExtensibleHandler, ExtensibleMiddleware 
 } from './extensible-component'
 
-const _componentKey = Symbol('_componentKey')
+const _componentKey = Symbol('@componentKey')
 
-const defineAbstractComponent = (Parent, mixin) => {
-  class AbstractComponent extends Parent {
-    constructor(componentKey, options={}) {
-      super(options)
-      this[_componentKey] = componentKey
-    }
-
-    implement(componentMap) {
-      if(!this.concreteComponent) {
-        const componentKey = this[_componentKey]
-        const concreteComponent = componentMap[componentKey]
-
-        if(concreteComponent) {
-          this.validateConcreteComponent(concreteComponent)
-          this.subComponents.concreteComponent = concreteComponent
-        }
-      }
-
-      return super.implement(componentMap)
-    }
-
-    get concreteComponent() {
-      return this.subComponents.concreteComponent
-    }
-
-    get componentType() {
-      return 'AbstractComponent'
+export const implementAbstract = (component, implMap) => {
+  for(let subComponent of component.allComponents()) {
+    if(subComponent.implement) {
+      subComponent.implement(implMap)
     }
   }
-
-  applyMixin(AbstractComponent.prototype, mixin)
-
-  return AbstractComponent
 }
 
-export const AbstractHandler = defineAbstractComponent(
-  ExtensibleHandler, {
-    toMainHandleableBuilder() {
-      const { concreteComponent } = this
+export class AbstractHandler extends ExtensibleHandler {
+  constructor(componentKey, options={}) {
+    super(options)
+    this[_componentKey] = componentKey
+  }
 
-      if(!concreteComponent) {
-        throw new Error('Abstract handler component '+ 
-          'not implemented: ' + this[_componentKey])
-      }
+  toMainHandleableBuilder() {
+    const { concreteComponent } = this
 
-      return concreteComponent.toHandleableBuilder()
-    },
-
-    validateConcreteComponent(component) {
-      if(!component.isHandlerComponent) {
-        throw new Error('Concrete component in ' +
-          'implementation map is not handler component: ' + 
-          componentKey)
-      }
+    if(!concreteComponent) {
+      throw new Error('Abstract handler component '+ 
+        'not implemented: ' + this[_componentKey])
     }
-  })
 
-export const AbstractMiddleware = defineAbstractComponent(
-  ExtensibleMiddleware, {
-    toMainHandleableMiddleware() {
-      const { concreteComponent } = this
+    return concreteComponent.toHandleableBuilder()
+  }
 
-      if(!concreteComponent)
-        throw new Error('Abstract middleware component ' + 
-          'not implemented: ' + this[_componentKey])
+  implement(implMap) {
+    // return if abstract component has been implemented before
+    if(this.concreteComponent) return
 
-      return concreteComponent.toMainHandleableMiddleware()
-    },
+    const componentKey = this[_componentKey]
+    const concreteComponent = implMap[componentKey]
 
-    validateConcreteComponent(component) {
-      if(!component.isMiddlewareComponent) {
-        throw new Error('Concrete component in ' +
-          'implementation map is not middleware component: ' + 
-          componentKey)
-      }
+    // return if provided map don't have the specific key
+    if(!concreteComponent) return 
+
+    if(!component.isHandlerComponent) {
+      throw new Error('Concrete component in ' +
+        'implementation map is not handler component: ' + 
+        componentKey)
     }
-  })
+
+    this.subComponents.concreteComponent = concreteComponent
+    return this
+  }
+
+  get concreteComponent() {
+    return this.subComponents.concreteComponent
+  }
+
+  get componentType() {
+    return 'AbstractHandler'
+  }
+}
+
+export class AbstractMiddleware extends ExtensibleMiddleware {
+  constructor(componentKey, options={}) {
+    super(options)
+    this[_componentKey] = componentKey
+  }
+
+  toMainHandleableMiddleware() {
+    const { concreteComponent } = this
+
+    if(!concreteComponent)
+      throw new Error('Abstract middleware component ' + 
+        'not implemented: ' + this[_componentKey])
+
+    return concreteComponent.toMainHandleableMiddleware()
+  }
+
+  implement(implMap) {
+    // return if abstract component has been implemented before
+    if(this.concreteComponent) return
+
+    const componentKey = this[_componentKey]
+    const concreteComponent = implMap[componentKey]
+
+    // return if provided map don't have the specific key
+    if(!concreteComponent) return 
+
+    if(!component.isMiddlewareComponent) {
+      throw new Error('Concrete component in ' +
+        'implementation map is not middleware component: ' + 
+        componentKey)
+    }
+
+    this.subComponents.concreteComponent = concreteComponent
+    return this
+  }
+
+  get concreteComponent() {
+    return this.subComponents.concreteComponent
+  }
+
+  get componentType() {
+    return 'AbstractMiddleware'
+  }
+}
 
 export const abstractHandler = componentKey =>
   new AbstractHandler(componentKey)

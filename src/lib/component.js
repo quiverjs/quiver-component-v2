@@ -1,8 +1,8 @@
 import { ownKeys } from 'quiver-object'
 
-const _id = Symbol('_id')
-const _options = Symbol('_options')
-const _subComponents = Symbol('_subComponents')
+const _id = Symbol('@id')
+const _options = Symbol('@options')
+const _subComponents = Symbol('@subComponents')
 
 // Random ID for easier identifying
 const randomId = () =>
@@ -53,17 +53,19 @@ export class Component {
       throw new Error('Subcomponent must be Quiver component')
     }
 
-    const { subComponents } = this
+    const subComponents = this[_subComponents]
 
     if(subComponents[key]) {
       throw new Error('Subcomponent already registered at given key')
     }
 
     subComponents[key] = component
+
+    return this
   }
 
   getSubComponent(key) {
-    return this.subComponents[key]
+    return this[_subComponents][key]
   }
 
   setName(name) {
@@ -144,13 +146,5 @@ export class Component {
             subComponent.fork(mapTable)
           , mapTable)
       , forkTable)
-  }
-
-  implement(componentMap) {
-    for(let subComponent of this.allSubComponents()) {
-      subComponent.implement(componentMap)
-    }
-
-    return this
   }
 }
