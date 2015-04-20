@@ -12,7 +12,6 @@
     "url": "git@github.com:quiverjs/quiver-component.git"
   },
   "dependencies": {
-    "object.assign": "^1.1.1",
     "quiver-http": "~1.4.1",
     "quiver-error": "~1.2.1",
     "quiver-object": "~1.4.3",

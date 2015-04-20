@@ -1,5 +1,4 @@
-import { assertString } from 'quiver-object'
-import assign from 'object.assign'
+import { mixin, assertString } from 'quiver-object'
 
 import { ConfigMiddleware } from './simple-middleware'
 import { HandlerComponent } from './component'
@@ -72,7 +71,7 @@ const InputHandlerMixin = {
 }
 
 const mixinInputHandler = prototype =>
-  assign(prototype, InputHandlerMixin)
+  mixin(prototype, InputHandlerMixin)
 
 mixinInputHandler(ExtensibleComponent.prototype)
 

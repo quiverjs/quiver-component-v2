@@ -1,4 +1,4 @@
-import assign from 'object.assign'
+import { mixin as applyMixin } from 'quiver-object'
 
 import { 
   ExtensibleHandler, ExtensibleMiddleware 
@@ -36,7 +36,7 @@ const defineAbstractComponent = (Parent, mixin) => {
     }
   }
 
-  assign(AbstractComponent.prototype, mixin)
+  applyMixin(AbstractComponent.prototype, mixin)
 
   return AbstractComponent
 }

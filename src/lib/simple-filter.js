@@ -1,6 +1,5 @@
-import { copy } from 'quiver-object'
+import { copy, mixin } from 'quiver-object'
 import { resolve } from 'quiver-promise'
-import assign from 'object.assign'
 
 import { StreamHandlerBuilder } from './stream-handler'
 import { StreamFilter, HttpFilter } from './filter'
@@ -135,7 +134,7 @@ const ArgsFilterMixin = {
 }
 
 const mixinArgsFilter = prototype =>
-  assign(prototype, ArgsFilterMixin)
+  mixin(prototype, ArgsFilterMixin)
 
 mixinArgsFilter(StreamHandlerBuilder.prototype)
 
