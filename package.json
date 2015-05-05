@@ -20,9 +20,9 @@
     "quiver-simple-handler": "~1.4.1"
   },
   "devDependencies": {
-    "chai": "^2.2.0",
+    "chai": "^2.3.0",
     "mocha": "^2.2.4",
-    "babel": "^5.1.10",
+    "babel": "^5.2.15",
     "chai-as-promised": "^4.3.0"
   },
   "bugs": {
@@ -39,6 +39,6 @@
     "prepublish": "make build"
   },
   "engines": {
-    "iojs": "^1.7.1"
+    "iojs": "^2.0.0"
   }
 }

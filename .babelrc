@@ -3,6 +3,8 @@
     "es6.blockScoping",
     "es6.constants",
     "es6.forOf",
+    "es6.tailCall",
+    "es6.classes",
     "regenerator" 
   ]
 }
