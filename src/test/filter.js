@@ -11,7 +11,7 @@ import {
   simpleHandler, simpleHandlerBuilder, 
   handleable as makeHandleable,
   streamFilter, httpFilter, transformFilter,
-  argsFilter, argsBuilderFilter, errorFilter,
+  filterArgs, argsBuilderFilter, errorFilter,
 } from '../lib/export.js'
 
 import chai from 'chai'
@@ -74,7 +74,7 @@ describe('filter test', () => {
         args.foo.should.equal('bar')
         return 'foo'
       }, 'void', 'text')
-    .argsFilter(args => {
+    ::filterArgs(args => {
       args.foo = 'bar'
     })
 

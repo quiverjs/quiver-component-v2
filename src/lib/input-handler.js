@@ -1,4 +1,4 @@
-import { mixin, assertString } from 'quiver-object'
+import { assertString } from 'quiver-object'
 
 import { ConfigMiddleware } from './simple-middleware'
 import { HandlerComponent } from './component'
@@ -55,25 +55,19 @@ export class InputHandlerMiddleware extends ConfigMiddleware {
   }
 }
 
-const InputHandlerMixin = {
-  inputHandler(handler, toConfig, options={}) {
-    return this.middleware(
-      new InputHandlerMiddleware(
-        handler, toConfig, options))
-  },
-  inputHandlers(handlerMap) {
-    for(let key of ownKeys(handlerMap)) {
-      const handler = handlerMap[key]
-      this.inputHandler(handler, key)
-    }
-    return this
-  }
+export const inputHandler = function(handler, toConfig, options={}) {
+  return this.middleware(
+    new InputHandlerMiddleware(
+      handler, toConfig, options))
 }
 
-const mixinInputHandler = prototype =>
-  mixin(prototype, InputHandlerMixin)
-
-mixinInputHandler(ExtensibleComponent.prototype)
+export const inputHandlers = function(handlerMap) {
+  for(let key of ownKeys(handlerMap)) {
+    const handler = handlerMap[key]
+    this::inputHandler(handler, key)
+  }
+  return this
+}
 
 export const inputHandlerMiddleware = (handler, toConfig, options) =>
   new InputHandlerMiddleware(handler, toConfig, options)

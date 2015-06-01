@@ -91,22 +91,15 @@ export class ConfigAliasMiddleware extends ConfigMiddleware {
   }
 }
 
-const mixinConfigOverride = prototype => {
-  prototype.configOverride = function(config) {
-    return this.addMiddleware(
-      new ConfigOverrideMiddleware(config))
-  }
+export const configOverride = function(config) {
+  return this.addMiddleware(
+    new ConfigOverrideMiddleware(config))
 }
 
-const mixinConfigAlias = prototype => {
-  prototype.configAlias = function(config) {
-    return this.addMiddleware(
-      new ConfigAliasMiddleware(config))
-  }
+export const configAlias = function(config) {
+  return this.addMiddleware(
+    new ConfigAliasMiddleware(config))
 }
-
-mixinConfigOverride(ExtensibleComponent.prototype)
-mixinConfigAlias(ExtensibleComponent.prototype)
 
 export const configMiddleware = (handler) =>
   new ConfigMiddleware(handler)

@@ -1,14 +1,14 @@
-import { copy, mixin } from 'quiver-object'
+import { copy } from 'quiver-object'
 import { resolve } from 'quiver-promise'
 
 import { StreamHandlerBuilder } from './stream-handler'
 import { StreamFilter, HttpFilter } from './filter'
 import { safeBuilder, safeHandler } from './util/wrap'
 
-const _argsBuilder = Symbol('_argsBuilder')
-const _argsHandler = Symbol('_argsHandler')
-const _errorHandler = Symbol('_errorHandler')
-const _errorBuilder = Symbol('_errorBuilder')
+const _argsBuilder = Symbol('@argsBuilder')
+const _argsHandler = Symbol('@argsHandler')
+const _errorHandler = Symbol('@errorHandler')
+const _errorBuilder = Symbol('@errorBuilder')
 
 const argsToStreamFilter = argsHandler =>
   (config, handler) =>
@@ -127,16 +127,9 @@ export class ErrorBuilderFilter extends StreamFilter {
   }
 }
 
-const ArgsFilterMixin = {
-  argsFilter(argsHandler) {
-    return this.middleware(new ArgsFilter(argsHandler))
-  }
+export const filterArgs = function(argsHandler) {
+  return this.middleware(new ArgsFilter(argsHandler))
 }
-
-const mixinArgsFilter = prototype =>
-  mixin(prototype, ArgsFilterMixin)
-
-mixinArgsFilter(StreamHandlerBuilder.prototype)
 
 export const argsFilter = (handler, options) =>
   new ArgsFilter(handler, options)

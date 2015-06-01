@@ -55,6 +55,7 @@ export {
 } from './filter'
 
 export {
+  filterArgs,
   ArgsFilter, ArgsBuilderFilter, ErrorFilter, ErrorBuilderFilter,
   argsFilter, argsBuilderFilter, errorFilter, errorBuilderFilter,
 } from './simple-filter'
@@ -64,13 +65,15 @@ export {
 } from './transform-filter'
 
 export {
-  InputHandlerMiddleware, inputHandlerMiddleware
+  InputHandlerMiddleware, inputHandlerMiddleware,
+  inputHandler, inputHandlers,
 } from './input-handler'
 
 export {
   ConfigMiddleware, configMiddleware,
   ConfigOverrideMiddleware, configOverrideMiddleware,
-  ConfigAliasMiddleware, configAliasMiddleware
+  ConfigAliasMiddleware, configAliasMiddleware,
+  configOverride, configAlias,
 } from './simple-middleware'
 
 export {

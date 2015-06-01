@@ -2,6 +2,7 @@ import { resolve, reject } from 'quiver-promise'
 
 import {
   simpleHandler, simpleHandlerBuilder, 
+  inputHandler, configOverride, configAlias
 } from '../lib/export.js'
 
 import chai from 'chai'
@@ -30,7 +31,7 @@ describe('middleware test', () => {
           }
         }
       }, 'text', 'json')
-    .inputHandler(uppercase, 'inHandler')
+    ::inputHandler(uppercase, 'inHandler')
 
     const handler = await main.loadHandler({})
     const json = await handler({}, 'hello')
@@ -46,7 +47,7 @@ describe('middleware test', () => {
 
         return args => 'hello'
       }, 'void', 'text')
-    .configOverride({
+    ::configOverride({
       foo: 'bar'
     })
 
@@ -64,7 +65,7 @@ describe('middleware test', () => {
 
         return args => 'hello'
       }, 'void', 'text')
-    .configAlias({
+    ::configAlias({
       foo: 'bar'
     })
 
