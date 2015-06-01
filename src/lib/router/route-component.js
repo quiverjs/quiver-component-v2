@@ -1,4 +1,3 @@
-import { async } from 'quiver-promise'
 import { loadHandleable } from '../util/loader'
 
 import { 
@@ -26,18 +25,18 @@ const combineUrlBuilders = (urlBuilder1, urlBuilder2) => {
 }
 
 const urlMiddleware = urlBuilder =>
-  async(function*(config, builder) {
+  async function(config, builder) {
     const newUrlBuilder = config.urlBuilder = combineUrlBuilders(
       config.urlBuilder, urlBuilder)
 
-    const handleable = yield builder(config)
+    const handleable = await builder(config)
     
     if(!handleable.urlBuilder) {
       handleable.urlBuilder = newUrlBuilder
     }
 
     return handleable
-  })
+  }
 
 const routeBuilder = (component, urlBuilder, middleware) => {
   const mainBuilder = component.toHandleableBuilder()

@@ -1,5 +1,5 @@
 import { error } from 'quiver-error'
-import { resolve, async } from 'quiver-promise'
+import { resolve } from 'quiver-promise'
 import { emptyStreamable } from 'quiver-stream-util'
 
 import {
@@ -65,9 +65,8 @@ const methodMapToHttpHandler = methodMap => {
   }
 }
 
-const loadHttpHandler = async(
-function*(config, component) {
-  const handleable = yield loadHandleable(config, component.id, 
+const loadHttpHandler = async function(config, component) {
+  const handleable = await loadHandleable(config, component.id, 
       component.builder)
 
   if(handleable.httpHandler) 
@@ -77,16 +76,15 @@ function*(config, component) {
     return streamToHttpHandler(handleable.streamHandler)
 
   throw error(500, 'handleable is neither stream nor http handler')
-})
+}
 
-const loadMethodHandlers = async(
-function*(config, methodMap) {
+const loadMethodHandlers = async function(config, methodMap) {
   const handlerMap = { }
 
   for(let key in methodMap) {
     const component = methodMap[key]
 
-    const handler = yield loadHttpHandler(config, component)
+    const handler = await loadHttpHandler(config, component)
 
     handlerMap[key] = handler
   }
@@ -100,7 +98,7 @@ function*(config, methodMap) {
   }
 
   return handlerMap
-})
+}
 
 const methodObjectToMap = methodMap => {
   const map = new Map()

@@ -1,5 +1,3 @@
-import { async } from 'quiver-promise'
-
 import {
   simpleHandlerBuilder, simpleHandler,
   transformFilter, configMiddleware
@@ -96,7 +94,7 @@ describe('base component test', () => {
     should.equal(Object.getPrototypeOf(copy21), Object.getPrototypeOf(original))
   })
 
-  it('nested fork', async(function*() {
+  it('nested fork', async function() {
     const transformCase = simpleHandlerBuilder(
     config => {
       const { transform } = config
@@ -137,27 +135,27 @@ describe('base component test', () => {
 
     const config = { transform: 'uppercase' }
 
-    let handler = yield greet1.loadHandler(config)
+    let handler = await greet1.loadHandler(config)
     
-    yield handler({}, 'John')
+    await handler({}, 'John')
       .should.eventually.equal('HELLO, JOHN')
 
     config.transform = 'lowercase'
 
-    handler = yield greet2.loadHandler(config)
+    handler = await greet2.loadHandler(config)
 
-    yield handler({}, 'Bob')
+    await handler({}, 'Bob')
       .should.eventually.equal('HELLO, BOB')
 
     config.transform = 'lowercase'
 
-    handler = yield greet3.loadHandler(config)
+    handler = await greet3.loadHandler(config)
 
-    yield handler({}, 'Alice')
+    await handler({}, 'Alice')
       .should.eventually.equal('hello, alice')
-  }))
+  })
 
-  it('forked middlewares', async(function*() {
+  it('forked middlewares', async function() {
     const transformCase = simpleHandlerBuilder(
     config => {
       const { transform } = config
@@ -187,27 +185,27 @@ describe('base component test', () => {
 
     const config = { transform: 'uppercase' }
     
-    let handler = yield uppercase.loadHandler(config)
+    let handler = await uppercase.loadHandler(config)
     
-    yield handler({}, 'Test')
+    await handler({}, 'Test')
       .should.eventually.equal('TEST')
 
     config.transform = 'lowercase'
 
-    handler = yield greet1.loadHandler(config)
+    handler = await greet1.loadHandler(config)
     
-    yield handler({}, 'Alice')
+    await handler({}, 'Alice')
       .should.eventually.equal('HELLO, ALICE')
 
     config.transform = 'lowercase'
 
-    handler = yield greet2.loadHandler(config)
+    handler = await greet2.loadHandler(config)
     
-    yield handler({}, 'Bob')
+    await handler({}, 'Bob')
       .should.eventually.equal('hello, bob')
-  }))
+  })
 
-  it('map test', async(function*() {
+  it('map test', async function() {
     const debugMiddleware = component => {
       const name = component.name || 'Unnamed Component'
       return configMiddleware(config => {
@@ -263,6 +261,6 @@ describe('base component test', () => {
     const debugged = debuggableComponent(greet)
     
     const config = { }
-    const handler = yield debugged.loadHandler(config)
-  }))
+    const handler = await debugged.loadHandler(config)
+  })
 })

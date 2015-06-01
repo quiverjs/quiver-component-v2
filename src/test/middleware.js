@@ -1,4 +1,4 @@
-import { async, resolve, reject } from 'quiver-promise'
+import { resolve, reject } from 'quiver-promise'
 
 import {
   simpleHandler, simpleHandlerBuilder, 
@@ -11,7 +11,7 @@ chai.use(chaiAsPromised)
 const should = chai.should()
 
 describe('middleware test', () => {
-  it('input handler', async(function*() {
+  it('input handler', async function() {
     const uppercase = simpleHandler(
       (args, input) =>  input.toUpperCase() + '!', 
       'text', 'text')
@@ -21,25 +21,25 @@ describe('middleware test', () => {
         const inHandler = config.inHandler
         should.exist(inHandler)
 
-        return async(function*(args, input) {
-          const result = yield inHandler(args, input)
+        return async function(args, input) {
+          const result = await inHandler(args, input)
           
           return {
             status: 'ok',
             result
           }
-        })
+        }
       }, 'text', 'json')
     .inputHandler(uppercase, 'inHandler')
 
-    const handler = yield main.loadHandler({})
-    const json = yield handler({}, 'hello')
+    const handler = await main.loadHandler({})
+    const json = await handler({}, 'hello')
 
     json.status.should.equal('ok')
     json.result.should.equal('HELLO!')
-  }))
+  })
 
-  it('config override', async(function*() {
+  it('config override', async function() {
     const main = simpleHandlerBuilder(
       config => {
         config.foo.should.equal('bar')
@@ -54,10 +54,10 @@ describe('middleware test', () => {
       foo: 'foo'
     }
 
-    yield main.loadHandler(config)
-  }))
+    await main.loadHandler(config)
+  })
 
-  it('config alias', async(function*() {
+  it('config alias', async function() {
     const main = simpleHandlerBuilder(
       config => {
         config.foo.should.equal('bar')
@@ -72,6 +72,6 @@ describe('middleware test', () => {
       bar: 'bar'
     }
 
-    yield main.loadHandler(config)
-  }))
+    await main.loadHandler(config)
+  })
 })

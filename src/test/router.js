@@ -7,8 +7,6 @@ import {
   loadHttpHandler,
 } from '../lib/export.js'
 
-import { async } from 'quiver-promise'
-
 import {
   streamableToText, textToStreamable,
   emptyStreamable
@@ -25,7 +23,7 @@ chai.use(chaiAsPromised)
 const should = chai.should()
 
 describe('router component test', () => {
-  it('static route', async(function*() {
+  it('static route', async function() {
     const handlerComponent = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
@@ -36,16 +34,16 @@ describe('router component test', () => {
       .staticRoute('/foo', handlerComponent)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    const handler = yield router.loadHandler({})
+    const handler = await router.loadHandler({})
 
-    yield handler({ path: '/foo' }, 'hello')
+    await handler({ path: '/foo' }, 'hello')
       .should.eventually.equal('goodbye')
 
-    yield handler({ path: '/bar' }, 'nothing')
+    await handler({ path: '/bar' }, 'nothing')
       .should.be.rejected
-  }))
+  })
 
-  it('regex route', async(function*() {
+  it('regex route', async function() {
     const greet = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
@@ -58,13 +56,13 @@ describe('router component test', () => {
       .regexRoute(/^\/greet\/(\w+)$/, ['name'], greet)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    const handler = yield router.loadHandler({})
+    const handler = await router.loadHandler({})
 
-    yield handler({ path: '/greet/john' }, 'hello')
+    await handler({ path: '/greet/john' }, 'hello')
       .should.eventually.equal('goodbye, john')
-  }))
+  })
 
-  it('param route', async(function*() {
+  it('param route', async function() {
     const greet = simpleHandler(
       (args, input) => {
         input.should.equal('hello')
@@ -75,13 +73,13 @@ describe('router component test', () => {
       .paramRoute('/greet/:name', greet)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    const handler = yield router.loadHandler({})
+    const handler = await router.loadHandler({})
 
-    yield handler({ path: '/greet/foo' }, 'hello')
+    await handler({ path: '/greet/foo' }, 'hello')
       .should.eventually.equal('goodbye, foo')
-  }))
+  })
 
-  it('route list', async(function*() {
+  it('route list', async function() {
     const foo = simpleHandlerBuilder(
       config => {
         should.not.exist(config.barModified)
@@ -120,19 +118,19 @@ describe('router component test', () => {
       .defaultRoute(defaultPage)
       .setLoader(simpleHandlerLoader('void', 'text'))
 
-    const handler = yield router.loadHandler({})
+    const handler = await router.loadHandler({})
 
-    yield handler({ path: '/foo' })
+    await handler({ path: '/foo' })
       .should.eventually.equal('foo')
 
-    yield handler({ path: '/bar/baz/subpath' })
+    await handler({ path: '/bar/baz/subpath' })
       .should.eventually.equal('bar')
 
-    yield handler({ path: '/baz' })
+    await handler({ path: '/baz' })
       .should.eventually.equal('default page')
-  }))
+  })
 
-  it('nested router', async(function*() {
+  it('nested router', async function() {
     const post = simpleHandler(
       (args, input) => {
         args.userId.should.equal('john')
@@ -154,23 +152,23 @@ describe('router component test', () => {
       .defaultRoute(defaultPage)
       .setLoader(simpleHandlerLoader('text', 'text'))
 
-    const handler = yield mainRouter.loadHandler({})
+    const handler = await mainRouter.loadHandler({})
 
     const path = '/user/john/post/welcome-to-my-blog'
 
-    yield handler({ path }, 'some comment')
+    await handler({ path }, 'some comment')
       .should.eventually.equal('Hello World!')
 
-    yield handler({ path: '/user/john/spam' }, 'spam')
+    await handler({ path: '/user/john/spam' }, 'spam')
       .should.be.rejected
 
-    yield handler({ path: '/other place' }, 'nothing')
+    await handler({ path: '/other place' }, 'nothing')
       .should.eventually.equal('default page')
-  }))
+  })
 
-  it('http router test', async(function*() {
-    const foo = createHttpHandler(async(
-    function*(requestHead, streamable) {
+  it('http router test', async function() {
+    const foo = createHttpHandler(
+    async function(requestHead, streamable) {
       requestHead.method.should.equal('GET')
       requestHead.path.should.equal('/foo/john')
       requestHead.args.name.should.equal('john')
@@ -178,20 +176,20 @@ describe('router component test', () => {
       return [new ResponseHead({
         statusCode: 202
       }), textToStreamable('foo')]
-    }))
+    })
 
-    const bar = createHttpHandler(async(
-    function*(requestHead, streamable) {
+    const bar = createHttpHandler(
+    async function(requestHead, streamable) {
       requestHead.method.should.equal('POST')
       requestHead.path.should.equal('/bar')
 
-      yield streamableToText(streamable)
+      await streamableToText(streamable)
         .should.eventually.equal('post content')
 
       return [new ResponseHead({
         statusCode: 401
       }), textToStreamable('Forbidden')]
-    }))
+    })
 
     const baz = simpleHandler((args, text) => {
       args.path.should.equal('/baz')
@@ -208,7 +206,7 @@ describe('router component test', () => {
     const {
       streamHandler,
       httpHandler
-    } = yield router.loadHandleable({})
+    } = await router.loadHandleable({})
 
     const request1 = new RequestHead({ 
       url: '/foo/john?a=b' 
@@ -216,10 +214,10 @@ describe('router component test', () => {
 
     const [
       response1, streamable1
-    ] = yield httpHandler(request1, emptyStreamable())
+    ] = await httpHandler(request1, emptyStreamable())
 
     response1.statusCode.should.equal(202)
-    yield streamableToText(streamable1)
+    await streamableToText(streamable1)
       .should.eventually.equal('foo')
 
     const request2 = new RequestHead({
@@ -229,11 +227,11 @@ describe('router component test', () => {
 
     const [
       response2, streamable2
-    ] = yield httpHandler(request2, 
+    ] = await httpHandler(request2, 
       textToStreamable('post content'))
 
     response2.statusCode.should.equal(401)
-    yield streamableToText(streamable2)
+    await streamableToText(streamable2)
       .should.eventually.equal('Forbidden')
 
     const request3 = new RequestHead({
@@ -243,11 +241,11 @@ describe('router component test', () => {
 
     const [
       response3, streamable3
-    ] = yield httpHandler(request3, 
+    ] = await httpHandler(request3, 
       textToStreamable('upload'))
 
     response3.statusCode.should.equal(200)
-    yield streamableToText(streamable3)
+    await streamableToText(streamable3)
       .should.eventually.equal('baz')
 
 
@@ -256,24 +254,24 @@ describe('router component test', () => {
       url: '/not-exists'
     })
 
-    yield httpHandler(request4, emptyStreamable())
+    await httpHandler(request4, emptyStreamable())
       .should.be.rejected
 
-    yield streamHandler({ path: '/baz'}, 
+    await streamHandler({ path: '/baz'}, 
       textToStreamable('upload'))
       .then(streamableToText)
       .should.eventually.equal('baz')
 
-    yield streamHandler({ path: '/foo/john' }, 
+    await streamHandler({ path: '/foo/john' }, 
       emptyStreamable())
       .should.be.rejected
 
-    yield streamHandler({ path: '/bar' }, 
+    await streamHandler({ path: '/bar' }, 
       emptyStreamable())
       .should.be.rejected
-  }))
+  })
 
-  it('method router test 1', async(function*() {
+  it('method router test 1', async function() {
     const foo = simpleHandler(
       args => 'foo',
       'void', 'text')
@@ -283,27 +281,27 @@ describe('router component test', () => {
     })
     .setLoader(loadHttpHandler)
 
-    const handler = yield router.loadHandler({})
+    const handler = await router.loadHandler({})
 
     let [responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'GET'
       }), emptyStreamable())
 
     responseHead.statusCode.should.equal(200)
 
-    yield streamableToText(responseStreamable)
+    await streamableToText(responseStreamable)
       .should.eventually.equal('foo')
 
     ;[responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'POST'
       }), emptyStreamable())
 
     responseHead.statusCode.should.equal(405)
-  }))
+  })
 
-  it('method router test 2', async(function*() {
+  it('method router test 2', async function() {
     const foo = simpleHandler(
       args => 'foo',
       'void', 'text')
@@ -319,55 +317,55 @@ describe('router component test', () => {
       })
     .setLoader(loadHttpHandler)
 
-    const handler = yield router.loadHandler({})
+    const handler = await router.loadHandler({})
 
     let [responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'GET',
         url: '/'
       }), emptyStreamable()) 
 
     responseHead.statusCode.should.equal(200)
 
-    yield streamableToText(responseStreamable)
+    await streamableToText(responseStreamable)
       .should.eventually.equal('foo')
 
     ;[responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'POST',
         url: '/'
       }), emptyStreamable()) 
 
     responseHead.statusCode.should.equal(200)
     
-    yield streamableToText(responseStreamable)
+    await streamableToText(responseStreamable)
       .should.eventually.equal('bar')
 
     ;[responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'HEAD',
         url: '/'
       }), emptyStreamable()) 
 
     responseHead.statusCode.should.equal(200)
 
-    yield streamableToText(responseStreamable)
+    await streamableToText(responseStreamable)
       .should.eventually.equal('')
 
     ;[responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'PUT'
       }), emptyStreamable())
 
     responseHead.statusCode.should.equal(405)
 
     ;[responseHead, responseStreamable] = 
-      yield handler(new RequestHead({
+      await handler(new RequestHead({
         method: 'OPTIONS'
       }), emptyStreamable())
 
     responseHead.statusCode.should.equal(200)
     responseHead.getHeader('allow').should.equal(
       'GET, POST, HEAD, OPTIONS')
-  }))
+  })
 })

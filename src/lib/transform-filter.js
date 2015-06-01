@@ -1,5 +1,5 @@
 import { copy } from 'quiver-object'
-import { async, resolve } from 'quiver-promise'
+import { resolve } from 'quiver-promise'
 
 import { StreamFilter } from './filter'
 import { HandlerComponent } from './component'
@@ -51,8 +51,8 @@ export class TransformFilter extends StreamFilter {
 
     const transformMode = this[_transformMode]
 
-    return async(function*(config, handler) {
-      const transformHandler = yield loadStreamHandler(config, componentId, builder)
+    return async function(config, handler) {
+      const transformHandler = await loadStreamHandler(config, componentId, builder)
 
       const transformIn = inTransformHandler(
         transformHandler, transformMode)
@@ -63,12 +63,12 @@ export class TransformFilter extends StreamFilter {
       const transformOut = outTransformHandler(
         transformHandler, transformMode)
 
-      return async(function*(args, streamable) {
-        const transformedIn = yield transformIn(args, streamable)
-        const resultStreamable = yield mainHandler(args, transformedIn)
+      return async function(args, streamable) {
+        const transformedIn = await transformIn(args, streamable)
+        const resultStreamable = await mainHandler(args, transformedIn)
         return transformOut(args, resultStreamable)
-      })
-    })
+      }
+    }
   }
 
   get transformComponent() {

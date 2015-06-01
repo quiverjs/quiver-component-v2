@@ -22,7 +22,7 @@
   "devDependencies": {
     "chai": "^2.3.0",
     "mocha": "^2.2.4",
-    "babel": "^5.2.15",
+    "babel": "^5.4.7",
     "chai-as-promised": "^4.3.0"
   },
   "bugs": {
@@ -39,6 +39,6 @@
     "prepublish": "make build"
   },
   "engines": {
-    "iojs": "^2.0.0"
+    "iojs": "^2.2.0"
   }
 }

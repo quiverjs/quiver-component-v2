@@ -1,4 +1,4 @@
-import { async, resolve } from 'quiver-promise'
+import { resolve } from 'quiver-promise'
 
 import { 
   RequestHead, ResponseHead 
@@ -48,28 +48,28 @@ describe('handler test', () => {
       handler({}, 'hello').should.eventually.equal('<b>goodbye</b>'))
   })
 
-  it('http builder', async(function*() {
+  it('http builder', async function() {
     const main = httpHandlerBuilder(
       config => {
         const greet = config.greet || 'hi'
         config.modified = true
 
-        return async(function*(requestHead, streamable) {
-          const input = yield streamableToText(streamable)
+        return async function(requestHead, streamable) {
+          const input = await streamableToText(streamable)
           input.should.equal('hello')
 
           return [
             new ResponseHead(),
             textToStreamable(greet)
           ]
-        })
+        }
       })
 
     const config = {
       greet: 'goodbye'
     }
 
-    const handleable = yield main.loadHandleable(config)
+    const handleable = await main.loadHandleable(config)
     should.not.exist(config.modified)
 
     const handler = handleable.httpHandler
@@ -77,11 +77,11 @@ describe('handler test', () => {
 
     const input = textToStreamable('hello')
     const [responseHead, responseStreamable] = 
-      yield handler(new RequestHead(), input)
+      await handler(new RequestHead(), input)
 
     responseHead.statusCode.should.equal(200)
 
-    yield streamableToText(responseStreamable)
+    await streamableToText(responseStreamable)
       .should.eventually.equal('goodbye')
-  }))
+  })
 })

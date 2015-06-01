@@ -1,5 +1,4 @@
 import { copy } from 'quiver-object'
-import { async } from 'quiver-promise'
 import { normalizeConfig } from '../util/config'
 
 import { 

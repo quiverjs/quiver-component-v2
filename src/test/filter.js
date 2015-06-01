@@ -1,4 +1,4 @@
-import { async, resolve, reject } from 'quiver-promise'
+import { resolve, reject } from 'quiver-promise'
 import { streamToSimpleHandler } from 'quiver-simple-handler'
 import { 
   streamableToText, textToStreamable, 
@@ -27,7 +27,7 @@ const uppercaseStream = streamable =>
   })
 
 describe('filter test', () => {
-  it('simple handler', async(function*() {
+  it('simple handler', async function() {
     const filter = streamFilter(
       (config, handler) =>
         (args, streamable) =>
@@ -41,13 +41,13 @@ describe('filter test', () => {
       }, 'text', 'text')
     .middleware(filter)
 
-    const handler = yield main.loadHandler({})
+    const handler = await main.loadHandler({})
     
-    yield handler({}, 'hello')
+    await handler({}, 'hello')
       .should.eventually.equal('GOODBYE!')
-  }))
+  })
 
-  it('transform filter', async(function*() {
+  it('transform filter', async function() {
     const uppercase = simpleHandler(
       (args, input) =>
         input.toUpperCase() + '!', 
@@ -62,13 +62,13 @@ describe('filter test', () => {
       }, 'text', 'text')
     .middleware(filter)
 
-    const handler = yield main.loadHandler({})
+    const handler = await main.loadHandler({})
     
-    yield handler({}, 'hello')
+    await handler({}, 'hello')
       .should.eventually.equal('GOODBYE!')
-  }))
+  })
 
-  it('args filter', async(function*() {
+  it('args filter', async function() {
     const main = simpleHandler(
       args => {
         args.foo.should.equal('bar')
@@ -78,12 +78,12 @@ describe('filter test', () => {
       args.foo = 'bar'
     })
 
-    const handler = yield main.loadHandler({})
+    const handler = await main.loadHandler({})
 
-    yield handler({}).should.eventually.equal('foo')
-  }))
+    await handler({}).should.eventually.equal('foo')
+  })
 
-  it('args builder filter', async(function*() {
+  it('args builder filter', async function() {
     const filter = argsBuilderFilter(
       config => {
         should.not.exist(config.handlerModified)
@@ -109,12 +109,12 @@ describe('filter test', () => {
     .middleware(filter)
 
     const config = { fooValue: 'bar' }
-    const handler = yield main.loadHandler(config)
+    const handler = await main.loadHandler(config)
 
-    yield handler({}).should.eventually.equal('foo')
-  }))
+    await handler({}).should.eventually.equal('foo')
+  })
 
-  it('error filter', async(function*() {
+  it('error filter', async function() {
     const filter = errorFilter(
       err => textToStreamable('error caught from filter'))
 
@@ -124,13 +124,13 @@ describe('filter test', () => {
       }, 'void', 'text')
     .middleware(filter)
 
-    const handler = yield main.loadHandler({})
+    const handler = await main.loadHandler({})
 
-    yield handler({}).should.eventually.equal(
+    await handler({}).should.eventually.equal(
       'error caught from filter')
-  }))
+  })
 
-  it('stream handler on http filter', async(function*() {
+  it('stream handler on http filter', async function() {
     const filter = httpFilter(
       (config, handler) => handler)
 
@@ -139,7 +139,7 @@ describe('filter test', () => {
       'void', 'text')
     .middleware(filter)
 
-    const handleable = yield main.loadHandleable({})
+    const handleable = await main.loadHandleable({})
 
     const {
       streamHandler,
@@ -151,11 +151,11 @@ describe('filter test', () => {
 
     const [
       responseHead, responseStreamable
-    ] = yield httpHandler(new RequestHead(), emptyStreamable())
+    ] = await httpHandler(new RequestHead(), emptyStreamable())
 
     responseHead.statusCode.should.equal(200)
 
-    yield streamableToText(responseStreamable)
+    await streamableToText(responseStreamable)
       .should.eventually.equal('Hello World')
-  }))
+  })
 })

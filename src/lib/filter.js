@@ -1,5 +1,5 @@
 import { copy } from 'quiver-object'
-import { resolve, async } from 'quiver-promise'
+import { resolve } from 'quiver-promise'
 import { streamToHttpHandler } from 'quiver-http'
 
 import { safeHandler, safeBuilder } from './util/wrap'
@@ -13,15 +13,15 @@ const _handleableFilter = Symbol('_handleableFilter')
 const noCopy = config => config
 
 export const filterToHandleableFilter = (filter, handlerKey) =>
-  async(function*(config, handleable) {
+  async function(config, handleable) {
     const handler = handleable[handlerKey]
     if(!handler) return resolve(handleable)
 
-    const filteredHandler = yield filter(config, handler)
+    const filteredHandler = await filter(config, handler)
     handleable[handlerKey] = filteredHandler
     
     return handleable
-  })
+  }
 
 export const streamToHandleableFilter = filter =>
   filterToHandleableFilter(filter, 'streamHandler')
@@ -71,14 +71,14 @@ export class StreamFilter extends HandleableFilter {
   toHandleableFilter() {
     const streamFilter = this.toStreamFilter()
 
-    return async(function*(config, handleable) {
+    return async function(config, handleable) {
       const handler = handleable.streamHandler
       if(!handler) return resolve(handleable)
 
-      const filteredHandler = yield streamFilter(config, handler)
+      const filteredHandler = await streamFilter(config, handler)
       handleable.streamHandler = filteredHandler
       return handleable
-    })
+    }
   }
 
   toStreamFilter() {
@@ -100,7 +100,7 @@ export class HttpFilter extends HandleableFilter {
   toHandleableFilter() {
     const httpFilter = this.toHttpFilter()
 
-    return async(function*(config, handleable) {
+    return async function(config, handleable) {
       let httpHandler = handleable.httpHandler
       if(!httpHandler) {
         const streamHandler = handleable.streamHandler
@@ -112,11 +112,11 @@ export class HttpFilter extends HandleableFilter {
         handleable = { httpHandler }
       }
 
-      const filteredHandler = yield httpFilter(config, httpHandler)
+      const filteredHandler = await httpFilter(config, httpHandler)
       handleable.httpHandler = filteredHandler
 
       return handleable
-    })
+    }
   }
 
   toHttpFilter() {

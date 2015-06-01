@@ -1,4 +1,3 @@
-import { async } from 'quiver-promise'
 import { simpleToStreamHandler } from 'quiver-simple-handler'
 
 import { extendHandler } from './extend'
@@ -21,9 +20,8 @@ const simpleHandlerConverter = (inType, outType) =>
   })
 
 const bundleFieldMiddleware = (field, handlerConverter) =>
-  handleableMiddleware(async(
-    function*(config, builder) {
-      const bundle = yield builder(config)
+  handleableMiddleware(async function(config, builder) {
+      const bundle = await builder(config)
       const handler = bundle[field]
 
       if(!handler) {
@@ -31,7 +29,7 @@ const bundleFieldMiddleware = (field, handlerConverter) =>
       }
 
       return handlerConverter(handler)
-    }))
+    })
 
 const bundleFieldComponent = 
 (bundleComponent, field, handlerConverter, handlerLoader) =>

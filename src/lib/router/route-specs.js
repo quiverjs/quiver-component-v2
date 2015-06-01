@@ -1,6 +1,6 @@
 import { copy } from 'quiver-object'
 import { error } from 'quiver-error'
-import { async, reject } from 'quiver-promise'
+import { reject } from 'quiver-promise'
 import { streamToHttpHandler } from 'quiver-http'
 
 const getHandlerFromPath = (routeIndex, path, args) => {
@@ -101,8 +101,7 @@ export const routeSpecsToRouterHandleable = routeSpecs => {
   }
 }
 
-const routeBuildSpecsToRouteSpecs = async(
-function*(config, routeBuildSpecs) {
+const routeBuildSpecsToRouteSpecs = async function(config, routeBuildSpecs) {
   const routeSpecs = []
 
   for(let i=0; i<routeBuildSpecs.length; i++) {
@@ -110,17 +109,17 @@ function*(config, routeBuildSpecs) {
     const builder = routeBuildSpec.builder
     const routeSpec = copy(routeBuildSpec)
 
-    routeSpec.handleable = yield builder(config)
+    routeSpec.handleable = await builder(config)
     routeSpecs.push(routeSpec)
   }
 
   return routeSpecs
-})
+}
 
 export const routeBuildSpecsToRouterBuilder = routeBuildSpecs =>
-  async(function*(config) {
-    const routeSpecs = yield routeBuildSpecsToRouteSpecs(
+  async function(config) {
+    const routeSpecs = await routeBuildSpecsToRouteSpecs(
       config, routeBuildSpecs)
 
     return routeSpecsToRouterHandleable(routeSpecs)
-  })
+  }

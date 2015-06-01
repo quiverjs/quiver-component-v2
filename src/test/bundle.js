@@ -3,8 +3,6 @@ import {
   transformFilter, handlerBundle
 } from '../lib/export.js'
 
-import { async } from 'quiver-promise'
-
 import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 
@@ -32,42 +30,42 @@ describe('bundle component test', () => {
     getCount, increment, decrement 
   } = bundle.toHandlerComponents()
 
-  it('basic test', async(function*() {
+  it('basic test', async function() {
     const config = { }
 
-    const getCountHandler = yield getCount.loadHandler(config)
-    const incrementHandler = yield increment.loadHandler(config)
-    const decrementHandler = yield decrement.loadHandler(config)
+    const getCountHandler = await getCount.loadHandler(config)
+    const incrementHandler = await increment.loadHandler(config)
+    const decrementHandler = await decrement.loadHandler(config)
 
-    yield getCountHandler({}).should.eventually.equal('0')
+    await getCountHandler({}).should.eventually.equal('0')
 
-    yield incrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('1')
+    await incrementHandler({})
+    await getCountHandler({}).should.eventually.equal('1')
 
-    yield incrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('2')
+    await incrementHandler({})
+    await getCountHandler({}).should.eventually.equal('2')
 
-    yield decrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('1')
+    await decrementHandler({})
+    await getCountHandler({}).should.eventually.equal('1')
 
-    yield decrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('0')
-  }))
+    await decrementHandler({})
+    await getCountHandler({}).should.eventually.equal('0')
+  })
 
-  it('initialize test', async(function*() {
+  it('initialize test', async function() {
     const config = {
       initial: 2
     }
 
-    const incrementHandler = yield increment.loadHandler(config)
+    const incrementHandler = await increment.loadHandler(config)
 
     config.initial = 4
-    const getCountHandler = yield getCount.loadHandler(config)
+    const getCountHandler = await getCount.loadHandler(config)
 
-    yield getCountHandler({}).should.eventually.equal('2')
-  }))
+    await getCountHandler({}).should.eventually.equal('2')
+  })
 
-  it('bundle fork test', async(function*() {
+  it('bundle fork test', async function() {
     const bundle2 = bundle.fork()
       
     const { 
@@ -77,29 +75,29 @@ describe('bundle component test', () => {
 
     const config = { }
 
-    const getCountHandler = yield getCount.loadHandler(config)
-    const incrementHandler = yield increment.loadHandler(config)
+    const getCountHandler = await getCount.loadHandler(config)
+    const incrementHandler = await increment.loadHandler(config)
 
-    const getCountHandler2 = yield getCount2.loadHandler(config)
-    const incrementHandler2 = yield increment2.loadHandler(config)
+    const getCountHandler2 = await getCount2.loadHandler(config)
+    const incrementHandler2 = await increment2.loadHandler(config)
     
-    yield getCountHandler({}).should.eventually.equal('0')
-    yield getCountHandler2({}).should.eventually.equal('0')
+    await getCountHandler({}).should.eventually.equal('0')
+    await getCountHandler2({}).should.eventually.equal('0')
 
-    yield incrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('1')
-    yield getCountHandler2({}).should.eventually.equal('0')
+    await incrementHandler({})
+    await getCountHandler({}).should.eventually.equal('1')
+    await getCountHandler2({}).should.eventually.equal('0')
 
-    yield incrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('2')
-    yield getCountHandler2({}).should.eventually.equal('0')
+    await incrementHandler({})
+    await getCountHandler({}).should.eventually.equal('2')
+    await getCountHandler2({}).should.eventually.equal('0')
 
-    yield incrementHandler2({})
-    yield getCountHandler({}).should.eventually.equal('2')
-    yield getCountHandler2({}).should.eventually.equal('1')
-  }))
+    await incrementHandler2({})
+    await getCountHandler({}).should.eventually.equal('2')
+    await getCountHandler2({}).should.eventually.equal('1')
+  })
 
-  it('privatized test', async(function*() {
+  it('privatized test', async function() {
     const forkTable = { }
     
     const getCount2 = getCount.fork(forkTable)
@@ -107,29 +105,29 @@ describe('bundle component test', () => {
 
     const config = { }
 
-    const getCountHandler = yield getCount.loadHandler(config)
-    const incrementHandler = yield increment.loadHandler(config)
+    const getCountHandler = await getCount.loadHandler(config)
+    const incrementHandler = await increment.loadHandler(config)
 
-    const getCountHandler2 = yield getCount2.loadHandler(config)
-    const incrementHandler2 = yield increment2.loadHandler(config)
+    const getCountHandler2 = await getCount2.loadHandler(config)
+    const incrementHandler2 = await increment2.loadHandler(config)
     
-    yield getCountHandler({}).should.eventually.equal('0')
-    yield getCountHandler2({}).should.eventually.equal('0')
+    await getCountHandler({}).should.eventually.equal('0')
+    await getCountHandler2({}).should.eventually.equal('0')
 
-    yield incrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('1')
-    yield getCountHandler2({}).should.eventually.equal('0')
+    await incrementHandler({})
+    await getCountHandler({}).should.eventually.equal('1')
+    await getCountHandler2({}).should.eventually.equal('0')
 
-    yield incrementHandler({})
-    yield getCountHandler({}).should.eventually.equal('2')
-    yield getCountHandler2({}).should.eventually.equal('0')
+    await incrementHandler({})
+    await getCountHandler({}).should.eventually.equal('2')
+    await getCountHandler2({}).should.eventually.equal('0')
 
-    yield incrementHandler2({})
-    yield getCountHandler({}).should.eventually.equal('2')
-    yield getCountHandler2({}).should.eventually.equal('1')
-  }))
+    await incrementHandler2({})
+    await getCountHandler({}).should.eventually.equal('2')
+    await getCountHandler2({}).should.eventually.equal('1')
+  })
 
-  it('forked middleware test', async(function*() {
+  it('forked middleware test', async function() {
     const prefixer = simpleHandlerBuilder(config => {
       const prefix = config.prefix || ''
 
@@ -155,27 +153,27 @@ describe('bundle component test', () => {
       prefix: 'foo'
     }
 
-    const getCountHandler2 = yield getCount2.loadHandler(config)
-    const incrementHandler2 = yield increment2.loadHandler(config)
+    const getCountHandler2 = await getCount2.loadHandler(config)
+    const incrementHandler2 = await increment2.loadHandler(config)
     
     config.prefix = 'bar'
 
-    const getCountHandler3 = yield getCount3.loadHandler(config)
-    const incrementHandler3 = yield increment3.loadHandler(config)
+    const getCountHandler3 = await getCount3.loadHandler(config)
+    const incrementHandler3 = await increment3.loadHandler(config)
     
-    yield getCountHandler2({}).should.eventually.equal('foo-0')
-    yield getCountHandler3({}).should.eventually.equal('bar-0')
+    await getCountHandler2({}).should.eventually.equal('foo-0')
+    await getCountHandler3({}).should.eventually.equal('bar-0')
 
-    yield incrementHandler2({})
-    yield getCountHandler2({}).should.eventually.equal('foo-1')
-    yield getCountHandler3({}).should.eventually.equal('bar-0')
+    await incrementHandler2({})
+    await getCountHandler2({}).should.eventually.equal('foo-1')
+    await getCountHandler3({}).should.eventually.equal('bar-0')
 
-    yield incrementHandler2({})
-    yield getCountHandler2({}).should.eventually.equal('foo-2')
-    yield getCountHandler3({}).should.eventually.equal('bar-0')
+    await incrementHandler2({})
+    await getCountHandler2({}).should.eventually.equal('foo-2')
+    await getCountHandler3({}).should.eventually.equal('bar-0')
 
-    yield incrementHandler3({})
-    yield getCountHandler2({}).should.eventually.equal('foo-2')
-    yield getCountHandler3({}).should.eventually.equal('bar-1')
-  }))
+    await incrementHandler3({})
+    await getCountHandler2({}).should.eventually.equal('foo-2')
+    await getCountHandler3({}).should.eventually.equal('bar-1')
+  })
 })
